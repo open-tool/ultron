@@ -1,0 +1,81 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+ext.versions = [
+        'minSdk'            : 21,
+        'compileSdk'        : 29,
+        'targetSdk'         : 29,
+        'buildTools'        : '29.0.3',
+        'coroutine'         : '1.3.3',
+        'appcompat'         : '1.2.0',
+        'ktx'               : '1.3.2',
+        'support_v4'        : '1.0.0',
+        'material'          : '1.2.1',
+        'constraintlayout'  : '2.0.4',
+        'recyclerview'      : '1.1.0',
+        'cardview'          : '1.0.0',
+        'espresso'          : '3.3.0',
+        'junit'             : '4.13',
+        'robolectric'       : '4.13',
+        'test'              : '1.3.0',
+        'mockito'           : '3.4.0',
+        'junit_ext'         : '1.1.2',
+        'truth'             : '4.13'
+]
+
+android {
+    compileSdkVersion versions.compileSdk
+    defaultConfig {
+        applicationId "com.atiurin.sampleapp"
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutine}"
+    implementation "androidx.appcompat:appcompat:${versions.appcompat}"
+    implementation "androidx.core:core-ktx:${versions.ktx}"
+    implementation "androidx.legacy:legacy-support-v4:${versions.support_v4}"
+    implementation "com.google.android.material:material:${versions.material}"
+    implementation "androidx.constraintlayout:constraintlayout:${versions.constraintlayout}"
+    implementation "androidx.recyclerview:recyclerview:${versions.recyclerview}"
+    implementation "androidx.test.espresso:espresso-idling-resource:${versions.espresso}"
+    implementation "androidx.cardview:cardview:${versions.cardview}"
+    // AndroidJUnitRunner and JUnit Rules
+
+    testImplementation "junit:junit:${versions.junit}"
+    testImplementation "org.robolectric:robolectric:${versions.robolectric}"
+    testImplementation "org.mockito:mockito-core:${versions.mockito}"
+    testImplementation "androidx.test:core:${versions.test}"
+
+    androidTestImplementation "androidx.test:core:${versions.test}"
+    androidTestImplementation "androidx.test:runner:${versions.test}"
+    androidTestImplementation "androidx.test:rules:${versions.test}"
+    androidTestImplementation "androidx.test.ext:truth:${versions.test}"
+    androidTestImplementation "androidx.test.ext:junit:${versions.junit_ext}"
+    // Espresso dependencies
+    androidTestImplementation "androidx.test.espresso:espresso-core:${versions.espresso}"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:${versions.espresso}"
+    androidTestImplementation "androidx.test.espresso:espresso-intents:${versions.espresso}"
+    androidTestImplementation "androidx.test.espresso:espresso-accessibility:${versions.espresso}"
+    androidTestImplementation "androidx.test.espresso:espresso-web:${versions.espresso}"
+    androidTestImplementation "androidx.test.espresso.idling:idling-concurrent:${versions.espresso}"
+
+    //magic has began
+    androidTestImplementation project(':ultron')
+}

@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">EspressoGuide</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_clear_history">Clear history</string>
+
+    <string name="menu_settings">Settings</string>
+    <string name="menu_saved_messages">Saved messages</string>
+    <string name="menu_profile">My Profile</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_ui_elements">UiElements</string>
+
+    <string name="title_friends_list">Friends</string>
+
+    <string name="button_text">Simple Button</string>
+    <string name="button_default_content_desc">Default content description</string>
+    <string name="radio_visible">VISIBLE</string>
+    <string name="radio_invisible">INVISIBLE</string>
+    <string name="radio_gone">GONE</string>
+    <string name="checkbox_enable">Enable button</string>
+    <string name="checkbox_clickable">Clickable button</string>
+    <string name="checkbox_selected">Selected button</string>
+    <string name="checkbox_focusable">Focusable button</string>
+    <string name="checkbox_js_enabled">WebView Javascript enabled</string>
+
+    <string name="button_event_click">Click</string>
+    <string name="button_event_long_click">Long Click</string>
+    <string name="button_event_double_click">Double Click</string>
+
+    <string name="app_compat_text">Default AppCompatTextView</string>
+
+</resources>

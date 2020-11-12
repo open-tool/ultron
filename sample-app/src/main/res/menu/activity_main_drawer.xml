@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_messages"
+                android:title="@string/menu_settings"/>
+        <item
+                android:id="@+id/nav_saved_messages"
+                android:icon="@drawable/ic_messages"
+                android:title="@string/menu_saved_messages"/>
+        <item
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_account"
+                android:title="@string/menu_profile"/>
+        <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_exit"
+                android:title="@string/menu_logout"/>
+
+        <item
+                android:id="@+id/ui_elements"
+                android:icon="@drawable/ic_exit"
+                android:title="@string/menu_ui_elements"/>
+    </group>
+
+    <!--<item android:title="Communicate">-->
+        <!--<menu>-->
+            <!--<item-->
+                    <!--android:id="@+id/nav_share"-->
+                    <!--android:icon="@drawable/ic_menu_share"-->
+                    <!--android:title="@string/menu_share"/>-->
+            <!--<item-->
+                    <!--android:id="@+id/nav_send"-->
+                    <!--android:icon="@drawable/ic_menu_send"-->
+                    <!--android:title="@string/menu_send"/>-->
+        <!--</menu>-->
+    <!--</item>-->
+
+</menu>

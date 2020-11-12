@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_header_height"
+        android:background="@drawable/side_nav_bar"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+        android:orientation="vertical"
+        android:gravity="bottom">
+
+    <com.atiurin.sampleapp.view.CircleImageView
+            android:layout_width="95dp"
+            android:layout_height="95dp"
+            android:src="@drawable/joey"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@android:color/background_light"
+            android:contentDescription="@string/nav_header_desc"
+            android:id="@+id/navigation_user_avatar"/>
+
+    <TextView
+            android:id="@+id/navigation_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:text="Joey Tribbiani"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+</LinearLayout>
