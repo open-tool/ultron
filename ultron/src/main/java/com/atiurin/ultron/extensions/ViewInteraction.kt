@@ -9,6 +9,8 @@ import androidx.test.espresso.matcher.ViewMatchers
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.action.*
 import com.atiurin.ultron.core.espresso.assertion.*
+import com.atiurin.ultron.core.config.UltronConfig.ViewActionConfig
+import com.atiurin.ultron.core.config.UltronConfig.ViewAssertionConfig
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
 
@@ -299,463 +301,462 @@ fun ViewInteraction.execute(
     )
 }
 //assertions
-
 fun ViewInteraction.isDisplayed(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.isDisplayed(),
-                name = "IsDisplayed of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_DISPLAYED,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_DISPLAYED}'. IsDisplayed of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.isDisplayed(),
+                            name = "IsDisplayed of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_DISPLAYED,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_DISPLAYED}'. IsDisplayed of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isNotDisplayed(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = not(ViewMatchers.isDisplayed()),
-                name = "IsNotDisplayed of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_NOT_DISPLAYED,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_NOT_DISPLAYED}'. IsNotDisplayed of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = not(ViewMatchers.isDisplayed()),
+                            name = "IsNotDisplayed of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_NOT_DISPLAYED,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_NOT_DISPLAYED}'. IsNotDisplayed of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isCompletelyDisplayed(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.isCompletelyDisplayed(),
-                name = "IsCompletelyDisplayed of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_COMPLETELY_DISPLAYED,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_COMPLETELY_DISPLAYED}'. IsCompletelyDisplayed of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.isCompletelyDisplayed(),
+                            name = "IsCompletelyDisplayed of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_COMPLETELY_DISPLAYED,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_COMPLETELY_DISPLAYED}'. IsCompletelyDisplayed of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isDisplayingAtLeast(
-    percentage: Int,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        percentage: Int,
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.isDisplayingAtLeast(percentage),
-                name = "IsDisplayingAtLeast '$percentage'% of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_DISPLAYING_AT_LEAST,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_DISPLAYING_AT_LEAST}'. IsDisplayingAtLeast '$percentage'% of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.isDisplayingAtLeast(percentage),
+                            name = "IsDisplayingAtLeast '$percentage'% of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_DISPLAYING_AT_LEAST,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_DISPLAYING_AT_LEAST}'. IsDisplayingAtLeast '$percentage'% of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isEnabled(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.isEnabled(),
-                name = "IsEnabled of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_ENABLED,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_ENABLED}'. IsEnabled of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.isEnabled(),
+                            name = "IsEnabled of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_ENABLED,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_ENABLED}'. IsEnabled of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isNotEnabled(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = not(ViewMatchers.isEnabled()),
-                name = "IsNotEnabled of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_NOT_ENABLED,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_NOT_ENABLED}'. IsNotEnabled of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = not(ViewMatchers.isEnabled()),
+                            name = "IsNotEnabled of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_NOT_ENABLED,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_NOT_ENABLED}'. IsNotEnabled of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isSelected(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.isSelected(),
-                name = "IsSelected of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_SELECTED,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_SELECTED}'. IsSelected of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.isSelected(),
+                            name = "IsSelected of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_SELECTED,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_SELECTED}'. IsSelected of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isNotSelected(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = not(ViewMatchers.isSelected()),
-                name = "IsNotSelected of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_NOT_SELECTED,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_NOT_SELECTED}'. IsNotSelected of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = not(ViewMatchers.isSelected()),
+                            name = "IsNotSelected of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_NOT_SELECTED,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_NOT_SELECTED}'. IsNotSelected of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isClickable(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.isClickable(),
-                name = "IsClickable of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_CLICKABLE,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_CLICKABLE}'. IsClickable of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.isClickable(),
+                            name = "IsClickable of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_CLICKABLE,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_CLICKABLE}'. IsClickable of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isNotClickable(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = not(ViewMatchers.isClickable()),
-                name = "IsNotClickable of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_NOT_CLICKABLE,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_NOT_CLICKABLE}'. IsNotClickable of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = not(ViewMatchers.isClickable()),
+                            name = "IsNotClickable of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_NOT_CLICKABLE,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_NOT_CLICKABLE}'. IsNotClickable of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isChecked(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.isChecked(),
-                name = "IsChecked of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_CHECKED,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_CHECKED}'. IsChecked of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.isChecked(),
+                            name = "IsChecked of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_CHECKED,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_CHECKED}'. IsChecked of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isNotChecked(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.isNotChecked(),
-                name = "IsNotChecked of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_NOT_CHECKED,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_NOT_CHECKED}'. IsNotChecked of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.isNotChecked(),
+                            name = "IsNotChecked of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_NOT_CHECKED,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_NOT_CHECKED}'. IsNotChecked of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isFocusable(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.isFocusable(),
-                name = "IsFocusable of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_FOCUSABLE,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_FOCUSABLE}'. IsFocusable of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.isFocusable(),
+                            name = "IsFocusable of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_FOCUSABLE,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_FOCUSABLE}'. IsFocusable of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isNotFocusable(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = not(ViewMatchers.isFocusable()),
-                name = "IsNotFocusable of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_NOT_FOCUSABLE,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_NOT_FOCUSABLE}'. IsNotFocusable of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = not(ViewMatchers.isFocusable()),
+                            name = "IsNotFocusable of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_NOT_FOCUSABLE,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_NOT_FOCUSABLE}'. IsNotFocusable of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.hasFocus(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.hasFocus(),
-                name = "HasFocus of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.HAS_FOCUS,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_FOCUS}'. HasFocus of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.hasFocus(),
+                            name = "HasFocus of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.HAS_FOCUS,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_FOCUS}'. HasFocus of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.isJavascriptEnabled(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.isJavascriptEnabled(),
-                name = "IsJavascriptEnabled of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.IS_JS_ENABLED,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_JS_ENABLED}'. IsJavascriptEnabled of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.isJavascriptEnabled(),
+                            name = "IsJavascriptEnabled of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.IS_JS_ENABLED,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.IS_JS_ENABLED}'. IsJavascriptEnabled of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.hasText(
-    text: String,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        text: String,
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.withText(text),
-                name = "HasText '$text' in ${this.getViewMatcher()}",
-                type = EspressoAssertionType.HAS_TEXT,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_TEXT}'. HasText '$text' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.withText(text),
+                            name = "HasText '$text' in ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.HAS_TEXT,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_TEXT}'. HasText '$text' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.hasText(
-    resourceId: Int,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        resourceId: Int,
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.withText(resourceId),
-                name = "HasText with resourceId '$resourceId' in ${this.getViewMatcher()}",
-                type = EspressoAssertionType.HAS_TEXT,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_TEXT}'. HasText with resourceId '$resourceId' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.withText(resourceId),
+                            name = "HasText with resourceId '$resourceId' in ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.HAS_TEXT,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_TEXT}'. HasText with resourceId '$resourceId' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 
 fun ViewInteraction.hasText(
-    stringMatcher: Matcher<String>,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        stringMatcher: Matcher<String>,
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.withText(stringMatcher),
-                name = "HasText with matcher '$stringMatcher' in ${this.getViewMatcher()}",
-                type = EspressoAssertionType.HAS_TEXT,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_TEXT}'. HasText with matcher '$stringMatcher' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.withText(stringMatcher),
+                            name = "HasText with matcher '$stringMatcher' in ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.HAS_TEXT,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_TEXT}'. HasText with matcher '$stringMatcher' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.containsText(
-    text: String,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        text: String,
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.withText(containsString(text)),
-                name = "ContainsText '$text' in ${this.getViewMatcher()}",
-                type = EspressoAssertionType.CONTAINS_TEXT,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.CONTAINS_TEXT}'. ContainsText '$text' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.withText(containsString(text)),
+                            name = "ContainsText '$text' in ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.CONTAINS_TEXT,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.CONTAINS_TEXT}'. ContainsText '$text' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.hasContentDescription(
-    text: String,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        text: String,
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.withContentDescription(text),
-                name = "HasContentDescription '$text' in ${this.getViewMatcher()}",
-                type = EspressoAssertionType.HAS_CONTENT_DESCRIPTION,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_CONTENT_DESCRIPTION}'. HasContentDescription '$text' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.withContentDescription(text),
+                            name = "HasContentDescription '$text' in ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.HAS_CONTENT_DESCRIPTION,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_CONTENT_DESCRIPTION}'. HasContentDescription '$text' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.hasContentDescription(
-    resourceId: Int,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        resourceId: Int,
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.withContentDescription(resourceId),
-                name = "HasContentDescription resourceId = '$resourceId' in ${this.getViewMatcher()}",
-                type = EspressoAssertionType.HAS_CONTENT_DESCRIPTION,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_CONTENT_DESCRIPTION}'. HasContentDescription resourceId = '$resourceId' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.withContentDescription(resourceId),
+                            name = "HasContentDescription resourceId = '$resourceId' in ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.HAS_CONTENT_DESCRIPTION,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_CONTENT_DESCRIPTION}'. HasContentDescription resourceId = '$resourceId' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.hasContentDescription(
-    charSequenceMatcher: Matcher<CharSequence>,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        charSequenceMatcher: Matcher<CharSequence>,
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.withContentDescription(charSequenceMatcher),
-                name = "HasContentDescription charSequenceMatcher = '$charSequenceMatcher' in ${this.getViewMatcher()}",
-                type = EspressoAssertionType.HAS_CONTENT_DESCRIPTION,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_CONTENT_DESCRIPTION}'. HasContentDescription charSequenceMatcher = '$charSequenceMatcher' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.withContentDescription(charSequenceMatcher),
+                            name = "HasContentDescription charSequenceMatcher = '$charSequenceMatcher' in ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.HAS_CONTENT_DESCRIPTION,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.HAS_CONTENT_DESCRIPTION}'. HasContentDescription charSequenceMatcher = '$charSequenceMatcher' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.contentDescriptionContains(
-    text: String,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        text: String,
+        timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = ViewMatchers.withContentDescription(containsString(text)),
-                name = "ContentDescriptionContains text '$text' in ${this.getViewMatcher()}",
-                type = EspressoAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT}'. ContentDescriptionContains text '$text' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = ViewMatchers.withContentDescription(containsString(text)),
+                            name = "ContentDescriptionContains text '$text' in ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT}'. ContentDescriptionContains text '$text' in ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }
 
 fun ViewInteraction.assertMatches(
-    condition: Matcher<View>, timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        condition: Matcher<View>, timeoutMs: Long =  ViewAssertionConfig.ASSERTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit =  ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
-        ViewInteractionAssertionExecutor(
-            ViewInteractionEspressoAssertion(
-                viewInteraction = this,
-                matcher = condition,
-                name = "Custom assertion with '$condition' of ${this.getViewMatcher()}",
-                type = EspressoAssertionType.ASSERT_MATCHES,
-                description = "ViewInteraction assertion with type '${EspressoAssertionType.ASSERT_MATCHES}'.Custom assertion with '$condition' of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
-                timeoutMs = timeoutMs
-            )
-        ), resultHandler
+            ViewInteractionAssertionExecutor(
+                    ViewInteractionEspressoAssertion(
+                            viewInteraction = this,
+                            matcher = condition,
+                            name = "Custom assertion with '$condition' of ${this.getViewMatcher()}",
+                            type = EspressoAssertionType.ASSERT_MATCHES,
+                            description = "ViewInteraction assertion with type '${EspressoAssertionType.ASSERT_MATCHES}'.Custom assertion with '$condition' of ${this.getViewMatcher()} with root ${this.getRootMatcher()} during $timeoutMs ms",
+                            timeoutMs = timeoutMs
+                    )
+            ), resultHandler
     )
 }

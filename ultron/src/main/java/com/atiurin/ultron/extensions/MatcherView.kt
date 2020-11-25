@@ -5,7 +5,8 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.EspressoKey
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
-import com.atiurin.ultron.core.espresso.action.ViewActionConfig
+import com.atiurin.ultron.core.config.UltronConfig.ViewActionConfig
+import com.atiurin.ultron.core.config.UltronConfig.ViewAssertionConfig
 import org.hamcrest.Matcher
 
 fun Matcher<View>.isSuccess(
@@ -15,8 +16,8 @@ fun Matcher<View>.isSuccess(
 }
 
 fun Matcher<View>.click(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+        timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
+        resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
 ) = apply {
     onView(this).click(timeoutMs, resultHandler)
 }
@@ -119,189 +120,188 @@ fun Matcher<View>.execute(
 ) {
     onView(this).execute(viewAction, timeoutMs, resultHandler)
 }
+
 //assertions
-
-
 fun Matcher<View>.isDisplayed(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isDisplayed(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isNotDisplayed(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isNotDisplayed(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isCompletelyDisplayed(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isCompletelyDisplayed(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isDisplayingAtLeast(
-    percentage: Int, timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    percentage: Int, timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isDisplayingAtLeast(percentage, timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isEnabled(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isEnabled(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isNotEnabled(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isNotEnabled(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isSelected(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isSelected(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isNotSelected(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isNotSelected(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isClickable(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isClickable(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isNotClickable(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isNotClickable(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isChecked(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isChecked(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isNotChecked(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isNotChecked(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isFocusable(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isFocusable(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isNotFocusable(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isNotFocusable(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.hasFocus(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).hasFocus(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.isJavascriptEnabled(
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).isJavascriptEnabled(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.hasText(
     text: String,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).hasText(text, timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.hasText(
     resourceId: Int,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).hasText(resourceId, timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.hasText(
     stringMatcher: Matcher<String>,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).hasText(stringMatcher, timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.containsText(
     text: String,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).containsText(text, timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.contentDescriptionContains(
     text: String,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).contentDescriptionContains(text, timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.hasContentDescription(
     text: String,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).hasContentDescription(text, timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.hasContentDescription(
     resourceId: Int,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).hasContentDescription(resourceId, timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.hasContentDescription(
     charSequenceMatcher: Matcher<CharSequence>,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).hasContentDescription(charSequenceMatcher, timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.assertMatches(
     condition: Matcher<View>,
-    timeoutMs: Long = ViewActionConfig.ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     onView(this).assertMatches(condition, timeoutMs, resultHandler)
 }

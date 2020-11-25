@@ -9,6 +9,8 @@ import androidx.test.espresso.matcher.ViewMatchers
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.action.*
 import com.atiurin.ultron.core.espresso.assertion.*
+import com.atiurin.ultron.core.config.UltronConfig.ViewActionConfig
+import com.atiurin.ultron.core.config.UltronConfig.ViewAssertionConfig
 import org.hamcrest.Matcher
 
 fun DataInteraction.isSuccess(
@@ -302,7 +304,7 @@ fun DataInteraction.execute(
 
 fun DataInteraction.isDisplayed(
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(
@@ -320,7 +322,7 @@ fun DataInteraction.isDisplayed(
 
 fun DataInteraction.isCompletelyDisplayed(
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(
@@ -339,7 +341,7 @@ fun DataInteraction.isCompletelyDisplayed(
 fun DataInteraction.isDisplayingAtLeast(
     percentage: Int,
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(
@@ -357,7 +359,7 @@ fun DataInteraction.isDisplayingAtLeast(
 
 fun DataInteraction.isEnabled(
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(
@@ -375,7 +377,7 @@ fun DataInteraction.isEnabled(
 
 fun DataInteraction.isSelected(
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(
@@ -393,7 +395,7 @@ fun DataInteraction.isSelected(
 
 fun DataInteraction.isClickable(
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(
@@ -411,7 +413,7 @@ fun DataInteraction.isClickable(
 
 fun DataInteraction.isChecked(
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(
@@ -429,7 +431,7 @@ fun DataInteraction.isChecked(
 
 fun DataInteraction.isNotChecked(
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(
@@ -447,7 +449,7 @@ fun DataInteraction.isNotChecked(
 
 fun DataInteraction.isFocusable(
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(
@@ -465,7 +467,7 @@ fun DataInteraction.isFocusable(
 
 fun DataInteraction.hasFocus(
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(
@@ -483,7 +485,7 @@ fun DataInteraction.hasFocus(
 
 fun DataInteraction.isJavascriptEnabled(
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(
@@ -502,7 +504,7 @@ fun DataInteraction.isJavascriptEnabled(
 fun DataInteraction.hasText(
     text: String,
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(
@@ -521,7 +523,7 @@ fun DataInteraction.hasText(
 fun DataInteraction.assertMatches(
     condition: Matcher<View>,
     timeoutMs: Long = ViewAssertionConfig.ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.defaultResultHandler
+    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.defaultResultHandler
 ) = apply {
     ViewAssertionLifecycle.assert(
         DataInteractionAssertionExecutor(

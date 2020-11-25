@@ -7,13 +7,13 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.*
 import com.atiurin.ultron.extensions.click
-import com.atiurin.ultron.extensions.hasText
-import com.atiurin.ultron.extensions.isDisplayed
 import com.atiurin.ultron.extensions.typeText
 import com.atiurin.ultron.page.Page
 import com.atiurin.ultron.recyclerview.RecyclerViewItem
 import com.atiurin.ultron.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.framework.utils.EspressoUtil
+import com.atiurin.ultron.extensions.hasText
+import com.atiurin.ultron.extensions.isDisplayed
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert

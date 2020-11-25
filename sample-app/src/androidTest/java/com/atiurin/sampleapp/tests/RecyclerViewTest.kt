@@ -2,14 +2,14 @@ package com.atiurin.sampleapp.tests
 
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
-import com.atiurin.ultron.extensions.assertMatches
-import com.atiurin.ultron.extensions.hasText
-import com.atiurin.ultron.extensions.isDisplayed
-import com.atiurin.ultron.extensions.isEnabled
 import com.atiurin.ultron.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.activity.MainActivity
 import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.pages.FriendsListPage
+import com.atiurin.ultron.extensions.assertMatches
+import com.atiurin.ultron.extensions.hasText
+import com.atiurin.ultron.extensions.isDisplayed
+import com.atiurin.ultron.extensions.isEnabled
 import org.junit.Assert
 import org.junit.Test
 

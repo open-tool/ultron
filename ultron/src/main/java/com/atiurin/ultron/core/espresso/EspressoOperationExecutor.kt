@@ -1,11 +1,10 @@
-package com.atiurin.ultron.core.espresso.action
+package com.atiurin.ultron.core.espresso
 
 import android.os.SystemClock
 import com.atiurin.ultron.core.common.Operation
-import com.atiurin.ultron.core.espresso.EspressoExecutor
-import com.atiurin.ultron.core.espresso.EspressoOperationResult
-import com.atiurin.ultron.core.espresso.EspressoOperationResultDescription
-import com.atiurin.ultron.core.espresso.assertion.ViewAssertionConfig
+import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.core.config.UltronConfig.ESPRESSO_OPERATION_POLLING_TIMEOUT
+import com.atiurin.ultron.core.espresso.action.EspressoAction
 import com.atiurin.ultron.extensions.isAssignedFrom
 
 abstract class EspressoOperationExecutor(
@@ -33,7 +32,7 @@ abstract class EspressoOperationExecutor(
                         throw error
                     }
                 }
-                if (success) SystemClock.sleep(50)
+                if (success) SystemClock.sleep(ESPRESSO_OPERATION_POLLING_TIMEOUT)
             } while (SystemClock.elapsedRealtime() < endTime && !success)
         } catch (th: Throwable) {
             success = false // just make sure we will have correct action status
@@ -65,8 +64,8 @@ abstract class EspressoOperationExecutor(
 
     private fun getAllowedExceptions(operation: Operation): List<Class<out Throwable>> {
         if (operation is EspressoAction) {
-            return ViewActionConfig.allowedExceptions
+            return UltronConfig.ViewActionConfig.allowedExceptions
         }
-        return ViewAssertionConfig.allowedExceptions
+        return UltronConfig.ViewAssertionConfig.allowedExceptions
     }
 }
