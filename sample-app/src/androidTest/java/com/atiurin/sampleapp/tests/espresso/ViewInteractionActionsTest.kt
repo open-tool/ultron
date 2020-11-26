@@ -1,4 +1,4 @@
-package com.atiurin.sampleapp.tests
+package com.atiurin.sampleapp.tests.espresso
 
 import android.os.SystemClock
 import android.view.KeyEvent
@@ -8,10 +8,14 @@ import com.atiurin.ultron.extensions.*
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
+import com.atiurin.sampleapp.pages.UiElementsPage
+import com.atiurin.sampleapp.tests.UiElementsTest
 import org.junit.Assert
 import org.junit.Test
 
 class ViewInteractionActionsTest : UiElementsTest() {
+    val page = UiElementsPage
+
     @Test
     fun click_onClickable() {
         page.button.click()

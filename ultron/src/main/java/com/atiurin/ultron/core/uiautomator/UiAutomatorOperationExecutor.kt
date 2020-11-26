@@ -1,17 +1,16 @@
-package com.atiurin.ultron.core.espresso
+package com.atiurin.ultron.core.uiautomator
 
 import android.os.SystemClock
 import com.atiurin.ultron.core.common.Operation
+import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.config.UltronConfig.Espresso
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.ESPRESSO_OPERATION_POLLING_TIMEOUT
-import com.atiurin.ultron.core.espresso.action.EspressoAction
+import com.atiurin.ultron.core.config.UltronConfig.UiAutomator.Companion.UIAUTOMATOR_OPERATION_POLLING_TIMEOUT
 import com.atiurin.ultron.extensions.isAssignedFrom
 
-abstract class EspressoOperationExecutor(
-    private val operation: Operation
-) : EspressoExecutor {
-    override fun execute(): EspressoOperationResult {
+abstract class UiAutomatorOperationExecutor(
+        private val operation: Operation
+) : UiAutomatorExecutor {
+    override fun execute(): OperationResult {
         var success = true
         var description = ""
         val exceptions: MutableList<Throwable> = mutableListOf()
@@ -22,7 +21,7 @@ abstract class EspressoOperationExecutor(
                 success = result.success
                 if (!success) {
                     val error =
-                        result.exception ?: UnknownError("Create an issue to espresso-page-object")
+                            result.exception ?: UnknownError("Create an issue to Ultron project")
                     if (error::class.java.isAssignedFrom(getAllowedExceptions(operation))) {
                         if (exceptions.find { it.javaClass.simpleName == error.javaClass.simpleName } == null) {
                             exceptions.add(error)
@@ -33,15 +32,15 @@ abstract class EspressoOperationExecutor(
                         throw error
                     }
                 }
-                if (success) SystemClock.sleep(ESPRESSO_OPERATION_POLLING_TIMEOUT)
+                if (success) SystemClock.sleep(UIAUTOMATOR_OPERATION_POLLING_TIMEOUT)
             } while (SystemClock.elapsedRealtime() < endTime && !success)
         } catch (th: Throwable) {
-            success = false // just make sure we will have correct action status
+            success = false // just make sure we will have correct operation status
         }
         if (!success && exceptions.isNotEmpty()) {
             description +=
-                """
-                |Espresso operation '${operation.name}' with type ${operation.type} during ${operation.timeoutMs} ms was failed. 
+                    """
+                |Operation '${operation.name}' with type ${operation.type} during ${operation.timeoutMs} ms was failed. 
                 |Operation description: ${operation.description}
                 |Errors were caught: 
                 |${exceptions.map { "- '${it.javaClass.simpleName}', cause: '${it.cause}'\n" }}
@@ -49,14 +48,14 @@ abstract class EspressoOperationExecutor(
                 """.trimMargin()
 
         }
-        return EspressoOperationResult(
-            operation = operation,
-            success = success,
-            exception = exceptions.lastOrNull()
+        return UiAutomatorOperationResult(
+                operation = operation,
+                success = success,
+                exception = exceptions.lastOrNull()
         ).apply {
-            this.resultDescription = EspressoOperationResultDescription(
-                this,
-                description
+            this.resultDescription = UiAutomatorOperationResultDescription(
+                    this,
+                    description
             )
         }
     }

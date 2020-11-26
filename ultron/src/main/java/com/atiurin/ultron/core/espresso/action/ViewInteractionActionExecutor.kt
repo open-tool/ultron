@@ -1,7 +1,13 @@
 package com.atiurin.ultron.core.espresso.action
 
+import com.atiurin.ultron.core.common.Operation
+import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.EspressoOperationExecutor
 
 open class ViewInteractionActionExecutor(
     action: ViewInteractionEspressoAction
-) : EspressoOperationExecutor(action)
+) : EspressoOperationExecutor(action) {
+    override fun getAllowedExceptions(operation: Operation): List<Class<out Throwable>> {
+        return UltronConfig.Espresso.ViewActionConfig.allowedExceptions
+    }
+}

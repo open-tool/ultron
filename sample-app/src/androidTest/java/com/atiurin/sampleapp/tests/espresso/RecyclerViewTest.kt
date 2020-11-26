@@ -1,4 +1,4 @@
-package com.atiurin.sampleapp.tests
+package com.atiurin.sampleapp.tests.espresso
 
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
@@ -6,6 +6,7 @@ import com.atiurin.ultron.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.activity.MainActivity
 import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.pages.FriendsListPage
+import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.extensions.assertMatches
 import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed

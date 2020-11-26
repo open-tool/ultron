@@ -1,4 +1,4 @@
-package com.atiurin.sampleapp.tests
+package com.atiurin.sampleapp.tests.espresso
 
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.atiurin.ultron.custom.espresso.matcher.hasAnyDrawable
@@ -7,12 +7,16 @@ import com.atiurin.ultron.extensions.*
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
+import com.atiurin.sampleapp.pages.UiElementsPage
+import com.atiurin.sampleapp.tests.UiElementsTest
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import org.junit.Assert
 import org.junit.Test
 
 class ViewInteractionAssertionsTest : UiElementsTest() {
+    val page = UiElementsPage
+
     //displayed
     @Test
     fun isDisplayed_ofDisplayedObject() {
