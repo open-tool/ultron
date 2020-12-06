@@ -13,14 +13,14 @@ class LogLifecycleListener : AbstractLifecycleListener() {
         )
     }
 
-    override fun <Op: Operation, OpRes : OperationResult<Op>> afterSuccess(operationResult: OpRes) {
+    override fun  afterSuccess(operationResult: OperationResult<Operation>) {
         Log.d(
             UltronConfig.LOGCAT_TAG,
             "Successfully executed ${operationResult.operation.name}."
         )
     }
 
-    override fun<Op: Operation, OpRes : OperationResult<Op>>  afterFailure(operationResult: OpRes) {
+    override fun afterFailure(operationResult: OperationResult<Operation>) {
         Log.d(
             UltronConfig.LOGCAT_TAG, "Failed execution of ${operationResult.operation.name}, " +
                     "description: ${operationResult.description}"

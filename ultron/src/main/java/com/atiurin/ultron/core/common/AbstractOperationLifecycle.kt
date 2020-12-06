@@ -21,7 +21,7 @@ abstract class AbstractOperationLifecycle {
     /**
      * @param executor contains all info for operation execution
      * @param resultHandler the point to access operation result by external analyzers
-     * @return [EspressoOperationResult] of espresso action execution
+     * @return [OperationResult] of operation execution
      */
     inline fun <Op : Operation, OpRes : OperationResult<Op>> execute(
         executor: OperationExecutor<Op, OpRes>,
@@ -31,11 +31,11 @@ abstract class AbstractOperationLifecycle {
         listeners.forEach { it.before(executor.operation) }
         val operationResult = operationProcessor.process(executor)
         if (operationResult.success) {
-            listeners.forEach { it.afterSuccess(operationResult) }
+            listeners.forEach { it.afterSuccess(operationResult as OperationResult<Operation>) }
         } else {
-            listeners.forEach { it.afterFailure(operationResult) }
+            listeners.forEach { it.afterFailure(operationResult as OperationResult<Operation>) }
         }
-        listeners.forEach { it.after(operationResult) }
+        listeners.forEach { it.after(operationResult as OperationResult<Operation>) }
         resultHandler(operationResult)
         return operationResult
     }

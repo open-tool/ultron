@@ -20,14 +20,6 @@ class ViewInteractionActionsTest : UiElementsTest() {
 
     @Test
     fun click_onClickable() {
-        UltronConfig.Espresso.setResultAnalyzer { result ->
-            if (!result.success) {
-                when (result.operation.type){
-                    EspressoActionType.CLICK -> throw RuntimeException("Invalid result of click action")
-                }
-            }
-            result.success
-        }
         page.button.click()
         page.eventStatus.containsText(getResourceString(R.string.button_event_click))
     }

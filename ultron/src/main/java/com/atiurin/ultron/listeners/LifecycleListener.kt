@@ -11,15 +11,15 @@ internal interface LifecycleListener{
     /**
      * called when action or assertion has been executed successfully
      */
-    fun <Op: Operation, OpRes : OperationResult<Op>> afterSuccess(operationResult: OpRes)
+    fun afterSuccess(operationResult: OperationResult<Operation>)
 
     /**
      * called when action or assertion failed
      */
-    fun <Op: Operation, OpRes : OperationResult<Op>> afterFailure(operationResult: OpRes)
+    fun  afterFailure(operationResult: OperationResult<Operation>)
 
     /**
      * called in any case of action or assertion result
      */
-    fun <Op: Operation, OpRes : OperationResult<Op>> after(operationResult: OpRes)
+    fun after(operationResult: OperationResult<Operation>)
 }

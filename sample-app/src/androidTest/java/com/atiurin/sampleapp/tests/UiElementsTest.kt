@@ -13,6 +13,4 @@ abstract class UiElementsTest : BaseTest() {
         ruleSequence.add(activityRule)
         UiAutomatorConfig.setIdlingTimeout(0L)
     }
-
-
 }

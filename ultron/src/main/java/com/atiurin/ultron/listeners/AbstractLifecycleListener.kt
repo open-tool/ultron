@@ -12,11 +12,11 @@ abstract class AbstractLifecycleListener : LifecycleListener{
         this.id = this::class.java.name
     }
 
-    override fun <Op: Operation, OpRes : OperationResult<Op>> after(operationResult: OpRes) = Unit
+    override fun after(operationResult: OperationResult<Operation>) = Unit
 
-    override fun <Op: Operation, OpRes : OperationResult<Op>> afterFailure(operationResult: OpRes) = Unit
+    override fun afterFailure(operationResult: OperationResult<Operation>) = Unit
 
-    override fun <Op: Operation, OpRes : OperationResult<Op>> afterSuccess(operationResult: OpRes) = Unit
+    override fun afterSuccess(operationResult: OperationResult<Operation>) = Unit
 
     override fun before(operation: Operation) = Unit
 }

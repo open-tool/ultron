@@ -9,7 +9,7 @@ class ScreenshotLifecycleListener : AbstractLifecycleListener(){
     override fun before(operation: Operation) {
     }
 
-    override fun <Op : Operation, OpRes : OperationResult<Op>> after(operationResult: OpRes) {
-
+    override fun after(operationResult: OperationResult<Operation>) {
+        operationResult.operation
     }
 }
