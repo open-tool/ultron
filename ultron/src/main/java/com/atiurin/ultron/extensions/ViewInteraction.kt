@@ -30,7 +30,7 @@ fun ViewInteraction.isSuccess(
 
 fun ViewInteraction.click(
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -48,7 +48,7 @@ fun ViewInteraction.click(
 
 fun ViewInteraction.doubleClick(
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -66,7 +66,7 @@ fun ViewInteraction.doubleClick(
 
 fun ViewInteraction.longClick(
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -85,7 +85,7 @@ fun ViewInteraction.longClick(
 fun ViewInteraction.typeText(
     text: String,
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -104,7 +104,7 @@ fun ViewInteraction.typeText(
 fun ViewInteraction.replaceText(
     text: String,
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -122,7 +122,7 @@ fun ViewInteraction.replaceText(
 
 fun ViewInteraction.clearText(
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -141,7 +141,7 @@ fun ViewInteraction.clearText(
 fun ViewInteraction.pressKey(
     keyCode: Int,
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -160,7 +160,7 @@ fun ViewInteraction.pressKey(
 fun ViewInteraction.pressKey(
     key: EspressoKey,
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -178,7 +178,7 @@ fun ViewInteraction.pressKey(
 
 fun ViewInteraction.closeSoftKeyboard(
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -196,7 +196,7 @@ fun ViewInteraction.closeSoftKeyboard(
 
 fun ViewInteraction.swipeLeft(
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -214,7 +214,7 @@ fun ViewInteraction.swipeLeft(
 
 fun ViewInteraction.swipeRight(
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -232,7 +232,7 @@ fun ViewInteraction.swipeRight(
 
 fun ViewInteraction.swipeUp(
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -250,7 +250,7 @@ fun ViewInteraction.swipeUp(
 
 fun ViewInteraction.swipeDown(
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -268,7 +268,7 @@ fun ViewInteraction.swipeDown(
 
 fun ViewInteraction.scrollTo(
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -287,7 +287,7 @@ fun ViewInteraction.scrollTo(
 fun ViewInteraction.execute(
     viewAction: ViewAction,
     timeoutMs: Long = ACTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewActionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) {
     ViewActionLifecycle.execute(
         ViewInteractionActionExecutor(
@@ -306,9 +306,9 @@ fun ViewInteraction.execute(
 //assertions
 fun ViewInteraction.isDisplayed(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -324,9 +324,9 @@ fun ViewInteraction.isDisplayed(
 
 fun ViewInteraction.isNotDisplayed(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -342,9 +342,9 @@ fun ViewInteraction.isNotDisplayed(
 
 fun ViewInteraction.isCompletelyDisplayed(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -361,9 +361,9 @@ fun ViewInteraction.isCompletelyDisplayed(
 fun ViewInteraction.isDisplayingAtLeast(
     percentage: Int,
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -379,9 +379,9 @@ fun ViewInteraction.isDisplayingAtLeast(
 
 fun ViewInteraction.isEnabled(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -397,9 +397,9 @@ fun ViewInteraction.isEnabled(
 
 fun ViewInteraction.isNotEnabled(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -415,9 +415,9 @@ fun ViewInteraction.isNotEnabled(
 
 fun ViewInteraction.isSelected(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -433,9 +433,9 @@ fun ViewInteraction.isSelected(
 
 fun ViewInteraction.isNotSelected(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -451,9 +451,9 @@ fun ViewInteraction.isNotSelected(
 
 fun ViewInteraction.isClickable(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -469,9 +469,9 @@ fun ViewInteraction.isClickable(
 
 fun ViewInteraction.isNotClickable(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -487,9 +487,9 @@ fun ViewInteraction.isNotClickable(
 
 fun ViewInteraction.isChecked(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -505,9 +505,9 @@ fun ViewInteraction.isChecked(
 
 fun ViewInteraction.isNotChecked(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -523,9 +523,9 @@ fun ViewInteraction.isNotChecked(
 
 fun ViewInteraction.isFocusable(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -541,9 +541,9 @@ fun ViewInteraction.isFocusable(
 
 fun ViewInteraction.isNotFocusable(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -559,9 +559,9 @@ fun ViewInteraction.isNotFocusable(
 
 fun ViewInteraction.hasFocus(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -577,9 +577,9 @@ fun ViewInteraction.hasFocus(
 
 fun ViewInteraction.isJavascriptEnabled(
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -596,9 +596,9 @@ fun ViewInteraction.isJavascriptEnabled(
 fun ViewInteraction.hasText(
     text: String,
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -615,9 +615,9 @@ fun ViewInteraction.hasText(
 fun ViewInteraction.hasText(
     resourceId: Int,
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -635,9 +635,9 @@ fun ViewInteraction.hasText(
 fun ViewInteraction.hasText(
     stringMatcher: Matcher<String>,
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -654,9 +654,9 @@ fun ViewInteraction.hasText(
 fun ViewInteraction.containsText(
     text: String,
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -673,9 +673,9 @@ fun ViewInteraction.containsText(
 fun ViewInteraction.hasContentDescription(
     text: String,
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -692,9 +692,9 @@ fun ViewInteraction.hasContentDescription(
 fun ViewInteraction.hasContentDescription(
     resourceId: Int,
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -711,9 +711,9 @@ fun ViewInteraction.hasContentDescription(
 fun ViewInteraction.hasContentDescription(
     charSequenceMatcher: Matcher<CharSequence>,
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -730,9 +730,9 @@ fun ViewInteraction.hasContentDescription(
 fun ViewInteraction.contentDescriptionContains(
     text: String,
     timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,
@@ -748,9 +748,9 @@ fun ViewInteraction.contentDescriptionContains(
 
 fun ViewInteraction.assertMatches(
     condition: Matcher<View>, timeoutMs: Long = ASSERTION_TIMEOUT,
-    resultHandler: (EspressoOperationResult) -> Unit = ViewAssertionConfig.resultHandler
+    resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    ViewAssertionLifecycle.assert(
+    ViewAssertionLifecycle.execute(
         ViewInteractionAssertionExecutor(
             ViewInteractionEspressoAssertion(
                 viewInteraction = this,

@@ -5,8 +5,8 @@ import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.EspressoOperationExecutor
 
 open class DataInteractionAssertionExecutor(
-    val assertion: EspressoAssertion
-) : EspressoOperationExecutor(assertion){
+    val assertion: DataInteractionEspressoAssertion
+) : EspressoOperationExecutor<DataInteractionEspressoAssertion>(assertion){
     override fun getAllowedExceptions(operation: Operation): List<Class<out Throwable>> {
         return UltronConfig.Espresso.ViewAssertionConfig.allowedExceptions
     }

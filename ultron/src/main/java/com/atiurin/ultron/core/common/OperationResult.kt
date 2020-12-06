@@ -1,11 +1,11 @@
 package com.atiurin.ultron.core.common
 
 /**
- * Interface contains references to [Operation] and [OperationResultDescription]
+ * Interface contains references to [Operation]
  */
-interface OperationResult {
-    val operation: Operation
+interface OperationResult<T : Operation> {
+    val operation: T
     val success: Boolean
     val exception: Throwable?
-    var resultDescription: OperationResultDescription?
+    var description: String
 }

@@ -6,7 +6,7 @@ import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationExecutor
 
 class UiAutomatorUiSelectorOperationExecutor (
         operation: UiAutomatorUiSelectorOperation
-): UiAutomatorOperationExecutor(operation) {
+): UiAutomatorOperationExecutor<UiAutomatorUiSelectorOperation>(operation) {
     override fun getAllowedExceptions(operation: Operation): List<Class<out Throwable>> {
         return UltronConfig.UiAutomator.UiObjectConfig.allowedExceptions
     }

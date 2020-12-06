@@ -1,8 +1,8 @@
 package com.atiurin.ultron.core.common
 
-interface OperationResultAnalyzer {
+interface OperationResultAnalyzer{
     /**
      * @return success status of operation execution
      */
-    fun analyze(operationResult: OperationResult) : Boolean
+    fun <Op : Operation, OpRes : OperationResult<Op>> analyze(operationResult: OpRes): Boolean
 }

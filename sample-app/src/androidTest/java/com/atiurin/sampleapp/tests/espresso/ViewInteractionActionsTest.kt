@@ -10,6 +10,8 @@ import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
+import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.core.espresso.action.EspressoActionType
 import org.junit.Assert
 import org.junit.Test
 
@@ -18,6 +20,14 @@ class ViewInteractionActionsTest : UiElementsTest() {
 
     @Test
     fun click_onClickable() {
+        UltronConfig.Espresso.setResultAnalyzer { result ->
+            if (!result.success) {
+                when (result.operation.type){
+                    EspressoActionType.CLICK -> throw RuntimeException("Invalid result of click action")
+                }
+            }
+            result.success
+        }
         page.button.click()
         page.eventStatus.containsText(getResourceString(R.string.button_event_click))
     }

@@ -1,11 +1,11 @@
 package com.atiurin.ultron.extensions
 
 import androidx.test.uiautomator.BySelector
-import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.uiautomator.UiAutomatorActionType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorAssertionType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorLifecycle
+import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.byselector.UiAutomatorBySelectorAction
 import com.atiurin.ultron.core.uiautomator.byselector.UiAutomatorBySelectorActionExecutor
 import com.atiurin.ultron.core.uiautomator.byselector.UiAutomatorBySelectorAssertion
@@ -26,7 +26,7 @@ fun BySelector.isSuccess(
 
 fun BySelector.click(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
-        resultHandler: (OperationResult) -> Unit = UltronConfig.UiAutomator.UiObject2Config.resultHandler
+        resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
 ){
     UiAutomatorLifecycle.execute(
             UiAutomatorBySelectorActionExecutor(
@@ -45,7 +45,7 @@ fun BySelector.click(
 fun BySelector.hasText(
     text: String,
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
-    resultHandler: (OperationResult) -> Unit = UltronConfig.UiAutomator.UiObject2Config.resultHandler
+    resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ){
     UiAutomatorLifecycle.execute(
         UiAutomatorBySelectorAssertionExecutor(
@@ -64,7 +64,7 @@ fun BySelector.hasText(
 fun BySelector.containsText(
     text: String,
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
-    resultHandler: (OperationResult) -> Unit = UltronConfig.UiAutomator.UiObject2Config.resultHandler
+    resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ){
     UiAutomatorLifecycle.execute(
         UiAutomatorBySelectorAssertionExecutor(
