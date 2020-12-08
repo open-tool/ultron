@@ -1,4 +1,4 @@
-package com.atiurin.ultron.core.exceptions
+package com.atiurin.ultron.core.common.exceptions
 
 import androidx.test.uiautomator.UiObjectNotFoundException
 

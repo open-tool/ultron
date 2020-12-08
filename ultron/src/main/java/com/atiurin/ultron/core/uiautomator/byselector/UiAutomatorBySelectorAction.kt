@@ -2,11 +2,10 @@ package com.atiurin.ultron.core.uiautomator.byselector
 
 import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.UiObject2
-import androidx.test.uiautomator.UiObjectNotFoundException
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.OperationType
-import com.atiurin.ultron.core.exceptions.UiObject2NotFoundException
+import com.atiurin.ultron.core.common.exceptions.UiObject2NotFoundException
 import com.atiurin.ultron.core.uiautomator.UiAutomatorConfig
 
 class UiAutomatorBySelectorAction (
@@ -16,6 +15,7 @@ class UiAutomatorBySelectorAction (
         override val description: String,
         override val type: OperationType,
         override val timeoutMs: Long) : Operation {
+
     override fun execute(): OperationIterationResult {
         var success = true
         var exception: Throwable? = null

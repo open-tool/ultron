@@ -29,7 +29,30 @@ class UiElementsActivity : AppCompatActivity() {
         val webView: WebView = findViewById(R.id.webview)
         val jsCheckBox: CheckBox = findViewById(R.id.checkbox_js_enabled)
         webView.settings.javaScriptEnabled = true
-        val customHtml = "<html><body>Hello, WebView</body></html>"
+        val customHtml = """
+            <!DOCTYPE html>                
+                <html>
+                <head>
+                  <title>Android Web View</title>
+                </head>
+                <body>
+                    <h1>Fruits</h1>
+                    <ol>
+                        <li><a href = "apple.html" id = "apple">Apple</a></li>
+                        <li><a href = "banana.html" id = "banana">Banana</a></li>
+                    </ol>
+                     <p>The button below activates a JavaScript when it is clicked.</p>
+                    <form>
+                        <input type="button" id="button1" value="Click me" onclick="msg()">
+                    </form>
+                    <script>
+                        function msg() {
+                            alert("Hello world!");
+                        }
+                    </script>
+               </body>
+            </html>
+            """
         webView.loadData(customHtml, "text/html", "UTF-8")
 
         simpleButton.setOnClickListener {
@@ -86,7 +109,13 @@ class UiElementsActivity : AppCompatActivity() {
                     setLastEvent(Event.CONTENT_DESC, text.toString())
                 }
 
-                override fun beforeTextChanged(s: CharSequence?,start: Int,count: Int,after: Int) {}
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             })
@@ -101,17 +130,17 @@ class UiElementsActivity : AppCompatActivity() {
         super.onResume()
     }
 
-    fun setLastEvent(event: Event, desc: String){
+    fun setLastEvent(event: Event, desc: String) {
         var status = desc
         lastEvent = event
-        if (lastEvent == Event.CLICK){
+        if (lastEvent == Event.CLICK) {
             clickedInRow++
             status += " $clickedInRow"
-        }  else clickedInRow = 0
+        } else clickedInRow = 0
         lastEventDescription?.text = "${event.name}: $status"
     }
 
-    enum class Event{
+    enum class Event {
         NO_EVENT, CLICK, LONG_CLICK, CLICKABLE, ENABLED, SELECTED, FOCUSABLE, DISPLAYED, JS_ENABLED, CONTENT_DESC
     }
 }
