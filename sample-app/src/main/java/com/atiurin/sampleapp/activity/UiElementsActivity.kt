@@ -29,30 +29,7 @@ class UiElementsActivity : AppCompatActivity() {
         val webView: WebView = findViewById(R.id.webview)
         val jsCheckBox: CheckBox = findViewById(R.id.checkbox_js_enabled)
         webView.settings.javaScriptEnabled = true
-        val customHtml = """
-            <!DOCTYPE html>                
-                <html>
-                <head>
-                  <title>Android Web View</title>
-                </head>
-                <body>
-                    <h1>Fruits</h1>
-                    <ol>
-                        <li><a href = "apple.html" id = "apple">Apple</a></li>
-                        <li><a href = "banana.html" id = "banana">Banana</a></li>
-                    </ol>
-                     <p>The button below activates a JavaScript when it is clicked.</p>
-                    <form>
-                        <input type="button" id="button1" value="Click me" onclick="msg()">
-                    </form>
-                    <script>
-                        function msg() {
-                            alert("Hello world!");
-                        }
-                    </script>
-               </body>
-            </html>
-            """
+        val customHtml = applicationContext.assets.open("webview.html").reader().readText()
         webView.loadData(customHtml, "text/html", "UTF-8")
 
         simpleButton.setOnClickListener {

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Android Web View</title>
+    </head>
+    <body>
+        <h1 id="title" class="css_title">WebView title</h1>
+        <ol>
+            <li><a href="fake_link.html" id="apple_link" onclick="updTitle()">Apple</a></li>
+            <li><a href="fake_link.html" id="banana">Banana</a></li>
+        </ol>
+        <p>The button below activates a JavaScript when it is clicked.</p>
+        <form>
+            <input type="button" id="button1" value="Rename title" onclick="updTitle()">
+        </form>
+        <input type="text" id="text_input" hint="input hint">
+        <script>
+            function updTitle() {
+                 var value = document.getElementById("text_input").value
+                 console.log(value)
+                 document.getElementById("title").innerHTML = value;
+            }
+            function msg() {
+                document.getElementById("title").innerHTML = "New title!";
+            }
+        </script>
+    </body>
+</html>

@@ -80,6 +80,7 @@ dependencies {
     implementation "androidx.test.espresso:espresso-core:${versions.espresso}"
     implementation "androidx.test.espresso:espresso-contrib:${versions.espresso}"
     implementation "androidx.test.uiautomator:uiautomator:${versions.uiautomator}"
+    implementation "androidx.test.espresso:espresso-web:${versions.espresso}"
     testImplementation "junit:junit:${versions.junit}"
 }
 

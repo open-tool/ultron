@@ -26,7 +26,7 @@ fun BySelector.isSuccess(
 }
 
 
-fun BySelector.click(
+fun BySelector.webClick(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
 ) {
@@ -44,7 +44,7 @@ fun BySelector.click(
     )
 }
 
-fun BySelector.click(
+fun BySelector.webClick(
     duration: Long,
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler

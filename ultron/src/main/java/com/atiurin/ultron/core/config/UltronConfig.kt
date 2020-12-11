@@ -1,7 +1,13 @@
 package com.atiurin.ultron.core.config
 
+import android.webkit.WebView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.PerformException
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.web.model.ElementReference
+import androidx.test.espresso.web.sugar.Web
+import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.Configurator
 import androidx.test.uiautomator.UiDevice
@@ -15,11 +21,16 @@ import com.atiurin.ultron.core.espresso.action.DataInteractionEspressoAction
 import com.atiurin.ultron.core.espresso.action.ViewInteractionEspressoAction
 import com.atiurin.ultron.core.espresso.assertion.DataInteractionEspressoAssertion
 import com.atiurin.ultron.core.espresso.assertion.ViewInteractionEspressoAssertion
+import com.atiurin.ultron.core.espressoweb.WebOperationResult
+import com.atiurin.ultron.core.espressoweb.action.WebInteractionAction
+import com.atiurin.ultron.core.espressoweb.assertion.WebInteractionAssertion
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.byselector.UiAutomatorBySelectorAction
 import com.atiurin.ultron.core.uiautomator.byselector.UiAutomatorBySelectorAssertion
 import com.atiurin.ultron.core.uiautomator.uiselector.UiAutomatorUiSelectorOperation
 import junit.framework.AssertionFailedError
+import org.hamcrest.CoreMatchers.allOf
+import java.lang.RuntimeException
 
 object UltronConfig {
     var LOGCAT_TAG = "Ultron"
@@ -30,15 +41,19 @@ object UltronConfig {
             var ACTION_TIMEOUT = 5_000L
             var ASSERTION_TIMEOUT = 5_000L
 
-            var resultAnalyzer : OperationResultAnalyzer = DefaultOperationResultAnalyzer()
+            var resultAnalyzer: OperationResultAnalyzer = DefaultOperationResultAnalyzer()
 
             inline fun setResultAnalyzer(crossinline block: (OperationResult<Operation>) -> Boolean) {
                 resultAnalyzer = object : OperationResultAnalyzer {
-                    override fun <Op : Operation, OpRes : OperationResult<Op>> analyze(operationResult: OpRes): Boolean {
+                    override fun <Op : Operation, OpRes : OperationResult<Op>> analyze(
+                        operationResult: OpRes
+                    ): Boolean {
                         return block(operationResult as OperationResult<Operation>)
                     }
                 }
             }
+
+            var webViewFinder : () -> Web.WebInteraction<Void> = { onWebView(allOf(isAssignableFrom(WebView::class.java), isDisplayed()))}
         }
 
         class ViewActionConfig {
@@ -76,6 +91,35 @@ object UltronConfig {
                     }
             }
         }
+
+        class WebInteractionActionConfig {
+            companion object {
+                var allowedExceptions = mutableListOf<Class<out Throwable>>(
+                    PerformException::class.java,
+                    NoMatchingViewException::class.java,
+                )
+                val resultHandler: (WebOperationResult<WebInteractionAction<*, *>>) -> Unit =
+                    {
+                        resultAnalyzer.analyze(it)
+                    }
+            }
+        }
+
+        class WebInteractionAssertionConfig {
+            companion object {
+                var allowedExceptions = mutableListOf<Class<out Throwable>>(
+                    PerformException::class.java,
+                    NoMatchingViewException::class.java,
+                    AssertionFailedError::class.java,
+                    RuntimeException::class.java
+                )
+
+                val resultHandler: (WebOperationResult<WebInteractionAssertion<*, *>>) -> Unit =
+                    {
+                        resultAnalyzer.analyze(it)
+                    }
+            }
+        }
     }
 
     class UiAutomator {
@@ -84,47 +128,56 @@ object UltronConfig {
             var ACTION_TIMEOUT = 5_000L
             var ASSERTION_TIMEOUT = 5_000L
 
-            var resultAnalyzer : OperationResultAnalyzer = DefaultOperationResultAnalyzer()
+            var resultAnalyzer: OperationResultAnalyzer = DefaultOperationResultAnalyzer()
 
             inline fun setResultAnalyzer(crossinline block: (OperationResult<Operation>) -> Boolean) {
                 resultAnalyzer = object : OperationResultAnalyzer {
-                    override fun <Op : Operation, OpRes : OperationResult<Op>> analyze(operationResult: OpRes): Boolean {
+                    override fun <Op : Operation, OpRes : OperationResult<Op>> analyze(
+                        operationResult: OpRes
+                    ): Boolean {
                         return block(operationResult as OperationResult<Operation>)
                     }
                 }
             }
-            val uiDevice: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-            fun setIdlingTimeout(timeoutMs: Long){
+            val uiDevice: UiDevice =
+                UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+            fun setIdlingTimeout(timeoutMs: Long) {
                 Configurator.getInstance().apply {
                     waitForIdleTimeout = timeoutMs
                     waitForSelectorTimeout = timeoutMs
                 }
             }
         }
+
         //UiSelector
         class UiObjectConfig {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     UiObjectNotFoundException::class.java
                 )
-                val resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = {
-                    resultAnalyzer.analyze(it)
-                }
+                val resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit =
+                    {
+                        resultAnalyzer.analyze(it)
+                    }
             }
         }
+
         //BySelector
         class UiObject2Config {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     UiObjectNotFoundException::class.java
                 )
-                val bySelectorActionResultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = {
-                    resultAnalyzer.analyze(it)
-                }
-                val bySelectorAssertionResultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = {
-                    resultAnalyzer.analyze(it)
-                }
+                val bySelectorActionResultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit =
+                    {
+                        resultAnalyzer.analyze(it)
+                    }
+                val bySelectorAssertionResultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit =
+                    {
+                        resultAnalyzer.analyze(it)
+                    }
             }
         }
     }

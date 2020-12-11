@@ -4,6 +4,8 @@ import android.view.View
 import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.Root
 import androidx.test.espresso.ViewInteraction
+import androidx.test.espresso.web.model.ElementReference
+import androidx.test.espresso.web.sugar.Web
 import org.hamcrest.Matcher
 import java.util.concurrent.atomic.AtomicReference
 
@@ -48,4 +50,11 @@ internal fun ViewInteraction.getRootMatcherRef(): AtomicReference<Matcher<Root>>
 
 internal fun ViewInteraction.getRootMatcher(): Matcher<Root>? {
     return this.getRootMatcherRef()?.get()
+}
+
+internal fun <T> Web.WebInteraction<T>.getViewMatcher(): Matcher<View>? {
+    return this["viewMatcher"]
+}
+internal fun <T> Web.WebInteraction<T>.getElementReference(): ElementReference? {
+    return this["element"]
 }

@@ -39,7 +39,7 @@ open class RecyclerViewItem {
     }
 
     //actions
-    fun click() = apply { this.get().click() }
+    fun click() = apply { this.get().webClick() }
     fun longClick() = apply { this.get().longClick() }
     fun doubleClick() = apply { this.get().doubleClick() }
     fun swipeDown() = apply { this.get().swipeDown() }
