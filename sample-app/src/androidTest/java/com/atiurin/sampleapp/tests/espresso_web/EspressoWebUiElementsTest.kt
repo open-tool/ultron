@@ -1,16 +1,21 @@
 package com.atiurin.sampleapp.tests.espresso_web
 
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
+import androidx.test.espresso.web.model.Atoms.script
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
 import androidx.test.espresso.web.webdriver.Locator
+import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.WebViewPage
 import com.atiurin.sampleapp.tests.UiElementsTest
+import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espressoweb.*
 import com.atiurin.ultron.extensions.*
+import kotlinx.android.synthetic.main.activity_uielements.view.*
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Test
 import java.lang.AssertionError
@@ -44,8 +49,19 @@ class EspressoWebUiElementsTest: UiElementsTest() {
     @Test
     fun jsEvaluationTest(){
         val jsTitle = "JS_TITLE"
-        id("button1").evalJS("document.getElementById(\"title\").innerHTML = '$jsTitle';")
+        val jsTitleNew = "JS_TITLE_NEW"
+        evalJS("document.getElementById(\"title\").innerHTML = '$jsTitle';")
         className("css_title").containsText(jsTitle)
+        onWebView(withId(R.id.webview)).evalJS("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
+        onWebView(withId(R.id.webview)).withElement(className("css_title")).containsText(jsTitleNew)
+    }
+
+    @Test
+    fun webViewFinderTest(){
+        val jsTitleNew = "JS_TITLE_NEW"
+        UltronConfig.Espresso.webViewFinder = {onWebView(withId(R.id.webview))}
+        evalJS("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
+        className("css_title").containsText(jsTitleNew)
     }
 
     @Test

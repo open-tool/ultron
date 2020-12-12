@@ -27,7 +27,7 @@ fun DataInteraction.isSuccess(
     return success
 }
 
-fun DataInteraction.webClick(
+fun DataInteraction.click(
     timeoutMs: Long = ACTION_TIMEOUT,
     resultHandler: (EspressoOperationResult<DataInteractionEspressoAction>) -> Unit = ViewActionConfig.dataInteractionResultHandler
 ) = apply {

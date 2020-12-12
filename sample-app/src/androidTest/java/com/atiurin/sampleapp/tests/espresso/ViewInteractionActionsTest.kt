@@ -18,7 +18,7 @@ class ViewInteractionActionsTest : UiElementsTest() {
 
     @Test
     fun click_onClickable() {
-        page.button.webClick()
+        page.button.click()
         page.eventStatus.containsText(getResourceString(R.string.button_event_click))
     }
 
@@ -31,12 +31,16 @@ class ViewInteractionActionsTest : UiElementsTest() {
     @Test
     fun doubleClick_onClickable() {
         page.button.doubleClick()
+
+        val suc = page.button.isDisplayed (1000)
+
         var success = false
         with(page.eventStatus){
             containsText(getResourceString(R.string.button_event_click))
             success = isSuccess { containsText("1", 3000) } ||  isSuccess { containsText("2", 3000) }
         }
         Assert.assertTrue(success)
+
     }
 
     @Test
@@ -68,7 +72,7 @@ class ViewInteractionActionsTest : UiElementsTest() {
         val expectedText = text.substring(0, text.length - 1)
         page.editTextContentDesc
             .replaceText(text)
-            .webClick()
+            .click()
             .pressKey(KeyEvent.KEYCODE_DEL)
             .hasText(expectedText)
     }
@@ -79,14 +83,14 @@ class ViewInteractionActionsTest : UiElementsTest() {
         val expectedText = text.substring(0, text.length - 1)
         page.editTextContentDesc
             .replaceText(text)
-            .webClick()
+            .click()
             .pressKey(EspressoKey.Builder().withKeyCode(KeyEvent.KEYCODE_DEL).build())
             .hasText(expectedText)
     }
 
     @Test
     fun closeSoftKeyboard_whenItOpened(){
-        page.editTextContentDesc.webClick()
+        page.editTextContentDesc.click()
         SystemClock.sleep(500)
         page.editTextContentDesc.closeSoftKeyboard()
     }

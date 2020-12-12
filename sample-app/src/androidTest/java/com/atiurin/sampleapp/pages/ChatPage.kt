@@ -6,7 +6,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.*
-import com.atiurin.ultron.extensions.webClick
+import com.atiurin.ultron.extensions.click
 import com.atiurin.ultron.extensions.typeText
 import com.atiurin.ultron.page.Page
 import com.atiurin.ultron.recyclerview.RecyclerViewItem
@@ -60,7 +60,7 @@ object ChatPage : Page<ChatPage>() {
     fun sendMessage(text: String) = apply {
         step("Send message with text '$text") {
             inputMessageText.typeText(text)
-            sendMessageBtn.webClick()
+            sendMessageBtn.click()
             this.getMessageListItem(text).text
                 .isDisplayed()
                 .hasText(text)
@@ -74,7 +74,7 @@ object ChatPage : Page<ChatPage>() {
     fun clearHistory() = apply {
         step("Clear chat history") {
             EspressoUtil.openOptionsMenu()
-            clearHistoryBtn.webClick()
+            clearHistoryBtn.click()
             Assert.assertEquals(0, withRecyclerView(messagesList).getSize())
         }
     }

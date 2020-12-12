@@ -8,7 +8,7 @@ import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.uiselector.UiAutomatorUiSelectorOperation
 import com.atiurin.ultron.core.uiautomator.uiselector.UiAutomatorUiSelectorOperationExecutor
 
-fun UiSelector.webClick(
+fun UiSelector.click(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {

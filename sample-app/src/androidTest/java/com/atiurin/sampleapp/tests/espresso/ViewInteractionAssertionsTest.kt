@@ -25,19 +25,19 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isDisplayed_ofNotDisplayedObject() {
-        page.radioInvisibleButton.webClick()
+        page.radioInvisibleButton.click()
         AssertUtils.assertException { page.button.isDisplayed(1000) }
     }
 
     @Test
     fun isNotDisplayed_ofDisplayedObject() {
-        page.radioVisibleButton.webClick()
+        page.radioVisibleButton.click()
         AssertUtils.assertException { page.button.isNotDisplayed(1000) }
     }
 
     @Test
     fun isNotDisplayed_ofNotDisplayedObject() {
-        page.radioInvisibleButton.webClick()
+        page.radioInvisibleButton.click()
         page.button.isNotDisplayed()
     }
 
@@ -66,7 +66,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     // selected
     @Test
     fun isSelected_ofSelected() {
-        page.checkBoxSelected.webClick()
+        page.checkBoxSelected.click()
         page.button.isSelected()
     }
 
@@ -77,7 +77,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isNotSelected_ofSelected() {
-        page.checkBoxSelected.webClick()
+        page.checkBoxSelected.click()
         AssertUtils.assertException { page.button.isNotSelected(1000) }
     }
 
@@ -94,7 +94,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isEnabled_ofNotEnabled() {
-        page.checkBoxEnabled.webClick()
+        page.checkBoxEnabled.click()
         AssertUtils.assertException { page.button.isEnabled(1000) }
     }
 
@@ -105,7 +105,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isNotEnabled_ofNotEnabled() {
-        page.checkBoxEnabled.webClick()
+        page.checkBoxEnabled.click()
         page.button.isNotEnabled()
     }
 
@@ -117,7 +117,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isClickable_ofNotClickable() {
-        page.checkBoxClickable.webClick()
+        page.checkBoxClickable.click()
         AssertUtils.assertException { page.button.isClickable(1000) }
     }
 
@@ -128,7 +128,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isNotClickable_ofNotClickable() {
-        page.checkBoxClickable.webClick()
+        page.checkBoxClickable.click()
         page.button.isNotClickable()
     }
 
@@ -140,7 +140,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isFocusable_ofNotFocusable() {
-        page.checkBoxFocusable.webClick()
+        page.checkBoxFocusable.click()
         AssertUtils.assertException { page.button.isFocusable(1000) }
     }
 
@@ -151,14 +151,14 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isNotFocusable_ofNotFocusable() {
-        page.checkBoxFocusable.webClick()
+        page.checkBoxFocusable.click()
         page.button.isNotFocusable()
     }
 
     //hasFocus
     @Test
     fun hasFocus_ofFocused() {
-        page.editTextContentDesc.webClick()
+        page.editTextContentDesc.click()
         page.editTextContentDesc.hasFocus()
     }
 
@@ -306,7 +306,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun assertMatches_ofNotMatched() {
-        page.checkBoxEnabled.webClick()
+        page.checkBoxEnabled.click()
         AssertUtils.assertException {
             page.button.assertMatches(
                 allOf(
@@ -326,7 +326,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun jsEnabled_ofNotEnabled() {
-        page.checkBoxJsEnabled.webClick()
+        page.checkBoxJsEnabled.click()
         AssertUtils.assertException { page.webView.isJavascriptEnabled(1000) }
     }
     //isSuccess

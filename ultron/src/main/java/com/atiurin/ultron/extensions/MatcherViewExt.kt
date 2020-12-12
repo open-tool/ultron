@@ -19,11 +19,11 @@ fun Matcher<View>.isSuccess(
     return onView(this).isSuccess { action() }
 }
 
-fun Matcher<View>.webClick(
+fun Matcher<View>.click(
     timeoutMs: Long = ACTION_TIMEOUT,
     resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
-    onView(this).webClick(timeoutMs, resultHandler)
+    onView(this).click(timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.doubleClick(

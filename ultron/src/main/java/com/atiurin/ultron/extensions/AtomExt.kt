@@ -7,6 +7,7 @@ import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.webViewFinder
 import com.atiurin.ultron.core.espressoweb.`$`
 
+
 fun `$`.webClick(){
     webViewFinder().withElement(this.atom).withNoTimeout().webClick()
 }
@@ -23,8 +24,8 @@ fun Atom<ElementReference>.webKeys(text: String){
     webViewFinder().withElement(this).withNoTimeout().webKeys(text)
 }
 
-fun Atom<ElementReference>.evalJS(script: String){
-    webViewFinder().withElement(this).withNoTimeout().evalJS(script)
+fun evalJS(script: String){
+    webViewFinder().withNoTimeout().evalJS(script)
 }
 
 fun Atom<ElementReference>.containsText(text: String){

@@ -28,7 +28,7 @@ fun ViewInteraction.isSuccess(
     return success
 }
 
-fun ViewInteraction.webClick(
+fun ViewInteraction.click(
     timeoutMs: Long = ACTION_TIMEOUT,
     resultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit = ViewActionConfig.viewInteractionResultHandler
 ) = apply {
