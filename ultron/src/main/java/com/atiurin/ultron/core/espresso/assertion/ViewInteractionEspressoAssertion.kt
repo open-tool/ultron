@@ -3,6 +3,7 @@ package com.atiurin.ultron.core.espresso.assertion
 import android.view.View
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.assertion.ViewAssertions
+import com.atiurin.ultron.core.common.DefaultOperationIterationResult
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.OperationType
 import org.hamcrest.Matcher
@@ -24,6 +25,6 @@ class ViewInteractionEspressoAssertion(
             success = false
             exception = error
         }
-        return OperationIterationResult(success, exception)
+        return DefaultOperationIterationResult(success, exception)
     }
 }

@@ -1,12 +1,11 @@
 package com.atiurin.sampleapp.tests.espresso_web
 
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
-import androidx.test.espresso.web.model.Atoms.script
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms
-import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
-import androidx.test.espresso.web.webdriver.DriverAtoms.webClick
+import androidx.test.espresso.web.webdriver.DriverAtoms.*
 import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.utils.AssertUtils
@@ -15,15 +14,17 @@ import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espressoweb.*
 import com.atiurin.ultron.extensions.*
-import kotlinx.android.synthetic.main.activity_uielements.view.*
 import org.hamcrest.CoreMatchers.containsString
+import org.junit.Assert
 import org.junit.Test
-import java.lang.AssertionError
 
 class EspressoWebUiElementsTest: UiElementsTest() {
     val page = WebViewPage()
     @Test
     fun simpleWebViewTest(){
+        val newTitle = "New title"
+        onWebView().withElement(findElement(Locator.ID, "text_input"))
+            .perform(webKeys(newTitle))
         onWebView().withElement(findElement(Locator.ID, "button1"))
             .perform(webClick())
         onWebView().withElement(findElement(Locator.ID, "title"))
@@ -32,14 +33,16 @@ class EspressoWebUiElementsTest: UiElementsTest() {
 
     @Test
     fun extWebViewTest(){
+        val newTitle = "New title"
+        `$`(Locator.ID, "text_input").webKeys(newTitle)
         `$`(Locator.ID, "button1").webClick()
-        `$`(Locator.ID, "title").containsText("New title")
+        `$`(Locator.ID, "title").containsText(newTitle)
     }
 
     @Test
     fun extVar2WebViewTest(){
         val newTitle = "New title"
-        id("text_input").webKeys(newTitle)
+        id("text_input1").webKeys(newTitle)
         id("button1").webClick()
         id("title").containsText(newTitle)
         className("css_title").containsText(newTitle)
@@ -50,17 +53,17 @@ class EspressoWebUiElementsTest: UiElementsTest() {
     fun jsEvaluationTest(){
         val jsTitle = "JS_TITLE"
         val jsTitleNew = "JS_TITLE_NEW"
-        evalJS("document.getElementById(\"title\").innerHTML = '$jsTitle';")
+        script("document.getElementById(\"title\").innerHTML = '$jsTitle';")
         className("css_title").containsText(jsTitle)
-        onWebView(withId(R.id.webview)).evalJS("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
-        onWebView(withId(R.id.webview)).withElement(className("css_title")).containsText(jsTitleNew)
+        onWebView(withId(R.id.webview)).script("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
+//        onWebView(withId(R.id.webview)).withElement(className("css_title")).containsText(jsTitleNew)
     }
 
     @Test
     fun webViewFinderTest(){
         val jsTitleNew = "JS_TITLE_NEW"
         UltronConfig.Espresso.webViewFinder = {onWebView(withId(R.id.webview))}
-        evalJS("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
+        script("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
         className("css_title").containsText(jsTitleNew)
     }
 
@@ -73,4 +76,21 @@ class EspressoWebUiElementsTest: UiElementsTest() {
         page.titleWithCss.containsText(newTitle)
         AssertUtils.assertException { page.appleLink.containsText("Apple12312") }
     }
+
+    @Test
+    fun getText2Test(){
+        val newTitle = "New title"
+        page.textInput.webKeys(newTitle)
+        page.button.webClick()
+//        page.title.hasText(newTitle)
+//        val titleText = page.title.getText()
+//        Assert.assertEquals(newTitle, titleText)
+    }
+
+    @Test
+    fun webInteractionLyambda(){
+        onWebView(withId(R.id.webview)).webKeys("asd")
+        id("123123123123").webKeys("asd");
+    }
+
 }

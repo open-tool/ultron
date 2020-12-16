@@ -8,34 +8,36 @@ class `$` (locator: Locator, matcher: String){
     val atom = findElement(locator, matcher)
 }
 
-fun className(value: String): Atom<ElementReference> {
-    return findElement(Locator.CLASS_NAME, value)
+fun className(value: String): `$` {
+    return `$`(Locator.CLASS_NAME, value)
 }
 
-fun cssSelector(value: String): Atom<ElementReference> {
-    return findElement(Locator.CSS_SELECTOR, value)
+fun cssSelector(value: String): `$` {
+    return `$`(Locator.CSS_SELECTOR, value)
 }
 
-fun id(value: String): Atom<ElementReference> {
-    return  findElement(Locator.ID, value)
+fun id(value: String): `$` {
+    return  `$`(Locator.ID, value)
 }
 
-fun linkText(value: String): Atom<ElementReference> {
-    return findElement(Locator.LINK_TEXT, value)
+fun linkText(value: String): `$` {
+    return `$`(Locator.LINK_TEXT, value)
 }
 
-fun name(value: String): Atom<ElementReference> {
-    return findElement(Locator.NAME, value)
+fun name(value: String): `$` {
+    return `$`(Locator.NAME, value)
 }
 
-fun partialLinkText(value: String): Atom<ElementReference> {
-    return findElement(Locator.PARTIAL_LINK_TEXT, value)
+fun partialLinkText(value: String): `$` {
+    return `$`(Locator.PARTIAL_LINK_TEXT, value)
 }
 
-fun tagName(value: String): Atom<ElementReference> {
-    return findElement(Locator.TAG_NAME, value)
+fun tagName(value: String): `$` {
+    return `$`(Locator.TAG_NAME, value)
 }
 
-fun xpath(value: String): Atom<ElementReference> {
-    return findElement(Locator.XPATH, value)
+fun xpath(value: String): `$` {
+    return `$`(Locator.XPATH, value)
 }
+
+

@@ -2,6 +2,7 @@ package com.atiurin.ultron.core.espressoweb
 
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationExecutor
+import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.config.UltronConfig
 
 abstract class WebOperationExecutor<T : Operation>(
@@ -13,13 +14,15 @@ abstract class WebOperationExecutor<T : Operation>(
     override fun generateResult(
         success: Boolean,
         exceptions: List<Throwable>,
-        description: String
+        description: String,
+        operationIterationResult: OperationIterationResult?
     ): WebOperationResult<T> {
         return WebOperationResult(
             operation = operation,
             success = success,
             exception = exceptions.lastOrNull(),
-            description = description
+            description = description,
+            operationIterationResult = operationIterationResult
         )
     }
 }

@@ -2,6 +2,7 @@ package com.atiurin.ultron.core.uiautomator.byselector
 
 import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.UiObject2
+import com.atiurin.ultron.core.common.DefaultOperationIterationResult
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.OperationType
@@ -23,6 +24,6 @@ class UiAutomatorBySelectorAssertion (
             success = false
             exception = error
         }
-        return OperationIterationResult(success, exception)
+        return DefaultOperationIterationResult(success, exception)
     }
 }

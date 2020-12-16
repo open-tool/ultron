@@ -7,12 +7,13 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
     val operation : Op
     val pollingTimeout: Long
     fun getAllowedExceptions(operation: Operation): List<Class<out Throwable>>
-    fun generateResult(success: Boolean, exceptions: List<Throwable>, description: String) : OpRes
+    fun generateResult(success: Boolean, exceptions: List<Throwable>, description: String, operationIterationResult: OperationIterationResult?) : OpRes
     fun execute() : OpRes {
         var success = true
         var description = ""
         val exceptions: MutableList<Throwable> = mutableListOf()
         val endTime = SystemClock.elapsedRealtime() + operation.timeoutMs
+        var lastIteration: OperationIterationResult? = null
         try {
             do {
                 val result = operation.execute()
@@ -30,10 +31,12 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
                         throw error
                     }
                 }
-                if (success) SystemClock.sleep(pollingTimeout)
+                if (!success) SystemClock.sleep(pollingTimeout)
+                else lastIteration = result
             } while (SystemClock.elapsedRealtime() < endTime && !success)
         } catch (th: Throwable) {
             success = false // just make sure we will have correct action status
+//            exceptions.add(th)
         }
         if (!success && exceptions.isNotEmpty()) {
             description +=
@@ -49,7 +52,8 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
         return generateResult(
             success = success,
             exceptions = exceptions,
-            description = description
+            description = description,
+            operationIterationResult = lastIteration
         )
     }
 }

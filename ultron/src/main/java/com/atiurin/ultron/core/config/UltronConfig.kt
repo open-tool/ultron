@@ -97,6 +97,7 @@ object UltronConfig {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     PerformException::class.java,
                     NoMatchingViewException::class.java,
+                    RuntimeException::class.java
                 )
                 val resultHandler: (WebOperationResult<WebInteractionAction<*, *>>) -> Unit =
                     {

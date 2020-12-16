@@ -9,7 +9,7 @@ import androidx.test.espresso.web.sugar.Web
 import org.hamcrest.Matcher
 import java.util.concurrent.atomic.AtomicReference
 
-internal inline operator fun <reified T> Any.get(propertyName: String): T? {
+internal inline fun <reified T> Any.getProperty(propertyName: String): T? {
     return try {
         val property = this.javaClass.getDeclaredField(propertyName)
         property.isAccessible = true
@@ -25,27 +25,27 @@ internal fun Class<*>.isAssignedFrom(klasses: List<Class<*>>): Boolean{
 }
 
 internal fun DataInteraction.getMatcher(propertyName: String): Matcher<View>? {
-    return this[propertyName]
+    return this.getProperty(propertyName)
 }
 
 internal fun DataInteraction.getRootMatcher(): Matcher<View>? {
-    return this["rootMatcher"]
+    return this.getProperty("rootMatcher")
 }
 
 internal fun DataInteraction.getDataMatcher(): Matcher<View>? {
-    return this["dataMatcher"]
+    return this.getProperty("dataMatcher")
 }
 
 internal fun ViewInteraction.getMatcher(propertyName: String): Matcher<View>? {
-    return this[propertyName]
+    return this.getProperty(propertyName)
 }
 
 internal fun ViewInteraction.getViewMatcher(): Matcher<View>? {
-    return this["viewMatcher"]
+    return this.getProperty("viewMatcher")
 }
 
 internal fun ViewInteraction.getRootMatcherRef(): AtomicReference<Matcher<Root>>? {
-    return this["rootMatcherRef"]
+    return this.getProperty("rootMatcherRef")
 }
 
 internal fun ViewInteraction.getRootMatcher(): Matcher<Root>? {
@@ -53,8 +53,8 @@ internal fun ViewInteraction.getRootMatcher(): Matcher<Root>? {
 }
 
 internal fun <T> Web.WebInteraction<T>.getViewMatcher(): Matcher<View>? {
-    return this["viewMatcher"]
+    return this.getProperty("viewMatcher")
 }
 internal fun <T> Web.WebInteraction<T>.getElementReference(): ElementReference? {
-    return this["element"]
+    return this.getProperty("element")
 }

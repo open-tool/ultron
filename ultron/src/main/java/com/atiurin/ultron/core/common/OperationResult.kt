@@ -8,4 +8,5 @@ interface OperationResult<T : Operation> {
     val success: Boolean
     val exception: Throwable?
     var description: String
+    var operationIterationResult: OperationIterationResult?
 }

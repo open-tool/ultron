@@ -4,17 +4,28 @@ import android.os.SystemClock
 import android.view.KeyEvent
 import androidx.test.espresso.action.EspressoKey
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.ultron.extensions.*
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
+import com.atiurin.ultron.core.config.UltronConfig
 import org.junit.Assert
 import org.junit.Test
 
 class ViewInteractionActionsTest : UiElementsTest() {
     val page = UiElementsPage
+
+    @Test
+    fun testNotExistedElement(){
+        val startTime = SystemClock.elapsedRealtime()
+        val result = withText("Some not exist text").isSuccess { isDisplayed() }
+        val endTime = SystemClock.elapsedRealtime()
+        Assert.assertTrue(endTime - startTime >= UltronConfig.Espresso.ACTION_TIMEOUT)
+    }
 
     @Test
     fun click_onClickable() {

@@ -2,6 +2,7 @@ package com.atiurin.ultron.core.espresso.action
 
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
+import com.atiurin.ultron.core.common.DefaultOperationIterationResult
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.OperationType
 
@@ -20,6 +21,6 @@ class ViewInteractionEspressoAction(
             success = false
             exception = error
         }.perform(viewAction)
-        return OperationIterationResult(success, exception)
+        return DefaultOperationIterationResult(success, exception)
     }
 }
