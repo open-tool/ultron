@@ -4,6 +4,7 @@ import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.model.*
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.webdriver.DriverAtoms
+import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espressoweb.WebInteractionOperationIterationResult
 import com.atiurin.ultron.core.espressoweb.WebLifecycle
@@ -130,7 +131,7 @@ fun <T> Web.WebInteraction<T>.selectActiveElement(
     return { this }.selectActiveElement(timeoutMs, resultHandler)
 }
 
-fun <T> (() -> Web.WebInteraction<T>).selectFrameByIndex(
+ fun <T> (() -> Web.WebInteraction<T>).selectFrameByIndex(
     index: Int,
     timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
     resultHandler: (WebOperationResult<WebInteractionAction<T, WindowReference>>) -> Unit =
@@ -155,7 +156,7 @@ fun <T> (() -> Web.WebInteraction<T>).selectFrameByIndex(
     return frame
 }
 
-fun <T> Web.WebInteraction<T>.selectFrameByIndex(
+ fun <T> Web.WebInteraction<T>.selectFrameByIndex(
     index: Int,
     timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
     resultHandler: (WebOperationResult<WebInteractionAction<T, WindowReference>>) -> Unit =
@@ -164,7 +165,7 @@ fun <T> Web.WebInteraction<T>.selectFrameByIndex(
     return { this }.selectFrameByIndex(index, timeoutMs, resultHandler)
 }
 
-fun <T> (() -> Web.WebInteraction<T>).selectFrameByIndex(
+ fun <T> (() -> Web.WebInteraction<T>).selectFrameByIndex(
     index: Int,
     root: WindowReference,
     timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
@@ -190,7 +191,7 @@ fun <T> (() -> Web.WebInteraction<T>).selectFrameByIndex(
     return frame
 }
 
-fun <T> Web.WebInteraction<T>.selectFrameByIndex(
+ fun <T> Web.WebInteraction<T>.selectFrameByIndex(
     index: Int,
     root: WindowReference,
     timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
@@ -200,7 +201,7 @@ fun <T> Web.WebInteraction<T>.selectFrameByIndex(
     return { this }.selectFrameByIndex(index, root, timeoutMs, resultHandler)
 }
 
-fun <T> (() -> Web.WebInteraction<T>).selectFrameByIdOrName(
+  fun <T> (() -> Web.WebInteraction<T>).selectFrameByIdOrName(
     idOrName: String,
     timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
     resultHandler: (WebOperationResult<WebInteractionAction<T, WindowReference>>) -> Unit =
@@ -235,7 +236,7 @@ fun <T> Web.WebInteraction<T>.selectFrameByIdOrName(
     return { this }.selectFrameByIdOrName(idOrName, timeoutMs, resultHandler)
 }
 
-fun <T> (() -> Web.WebInteraction<T>).selectFrameByIdOrName(
+ fun <T> (() -> Web.WebInteraction<T>).selectFrameByIdOrName(
     idOrName: String,
     root: WindowReference,
     timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
@@ -358,6 +359,29 @@ fun <T> Web.WebInteraction<T>.getText(
     return { this }.getText(timeoutMs, resultHandler)
 }
 
+fun <T> (() -> Web.WebInteraction<T>).findMultipleElements(
+    locator: Locator,
+    matcher: String,
+    timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
+    resultHandler: (WebOperationResult<WebInteractionAction<T, List<ElementReference>>>) -> Unit =
+        (UltronConfig.Espresso.WebInteractionActionConfig.resultHandler as (WebOperationResult<WebInteractionAction<T, List<ElementReference>>>) -> Unit)
+): List<ElementReference>? {
+    val result = WebLifecycle.execute(
+        WebInteractionActionExecutor(
+            WebInteractionAction(
+                webInteraction = this,
+                atomBlock = {
+                    DriverAtoms.findMultipleElements(locator, matcher)
+                },
+                name = "EspressoWeb findElement",
+                type = EspressoWebAssertionType.CONTAINS_TEXT,
+                description = "WebAssertion getText during $timeoutMs ms",
+                timeoutMs = timeoutMs
+            )
+        ), resultHandler
+    )
+    return (result.operationIterationResult as WebInteractionOperationIterationResult<List<ElementReference>>).webInteraction?.get()
+}
 
 fun <T> (() -> Web.WebInteraction<T>).containsText(
     text: String,

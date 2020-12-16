@@ -3,41 +3,49 @@ package com.atiurin.ultron.extensions
 import androidx.test.espresso.web.model.Atom
 import androidx.test.espresso.web.model.ElementReference
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.webViewFinder
-import com.atiurin.ultron.core.espressoweb.`$`
-
-
-fun `$`.webClick(){
-    webViewFinder().withElement(this.atom).withNoTimeout().webClick()
-}
-
-fun `$`.webKeys(text: String){
-    { webViewFinder().withElement(this.atom).withNoTimeout()}.webKeys(text)
-}
-
-fun `$`.containsText(text: String){
-    { webViewFinder().withElement(this.atom).withNoTimeout()}.containsText(text)
-}
+import com.atiurin.ultron.core.espressoweb.WebInteractionProvider
 
 fun Atom<ElementReference>.webClick(){
-    { webViewFinder().withElement(this).withNoTimeout() }.webClick()
+    WebInteractionProvider.getElementBlock(this).webClick()
 }
 
 fun Atom<ElementReference>.webKeys(text: String){
-    { webViewFinder().withElement(this).withNoTimeout()}.webKeys(text)
-}
-
-fun script(script: String){
-    {webViewFinder().withNoTimeout()}.script(script)
+    WebInteractionProvider.getElementBlock(this).webKeys(text)
 }
 
 fun Atom<ElementReference>.containsText(text: String){
-    {webViewFinder().withElement(this).withNoTimeout()}.containsText(text)
+    WebInteractionProvider.getElementBlock(this).containsText(text)
 }
 
 fun Atom<ElementReference>.hasText(text: String){
-    {webViewFinder().withElement(this).withNoTimeout()}.hasText(text)
+    WebInteractionProvider.getElementBlock(this).hasText(text)
 }
 
 fun Atom<ElementReference>.getText(): String? {
-    return {webViewFinder().withElement(this)}.getText()
+    return WebInteractionProvider.getElementBlock(this).getText()
 }
+
+fun ElementReference.webClick(){
+    WebInteractionProvider.getElementBlock(this).webClick()
+}
+
+fun ElementReference.webKeys(text: String){
+    WebInteractionProvider.getElementBlock(this).webKeys(text)
+}
+
+fun ElementReference.containsText(text: String){
+    WebInteractionProvider.getElementBlock(this).containsText(text)
+}
+
+fun ElementReference.hasText(text: String){
+    WebInteractionProvider.getElementBlock(this).hasText(text)
+}
+
+fun ElementReference.getText(): String? {
+    return WebInteractionProvider.getElementBlock(this).getText()
+}
+
+fun script(script: String){
+    WebInteractionProvider.getWebViewBlock().script(script)
+}
+

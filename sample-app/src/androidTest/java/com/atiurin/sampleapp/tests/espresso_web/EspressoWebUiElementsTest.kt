@@ -1,7 +1,6 @@
 package com.atiurin.sampleapp.tests.espresso_web
 
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms
@@ -13,15 +12,19 @@ import com.atiurin.sampleapp.pages.WebViewPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espressoweb.*
+import com.atiurin.ultron.core.espressoweb.`$`.Companion.className
+import com.atiurin.ultron.core.espressoweb.`$`.Companion.id
+import com.atiurin.ultron.core.espressoweb.`$`.Companion.linkText
 import com.atiurin.ultron.extensions.*
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert
 import org.junit.Test
 
-class EspressoWebUiElementsTest: UiElementsTest() {
+class EspressoWebUiElementsTest : UiElementsTest() {
     val page = WebViewPage()
+
     @Test
-    fun simpleWebViewTest(){
+    fun simpleWebViewTest() {
         val newTitle = "New title"
         onWebView().withElement(findElement(Locator.ID, "text_input"))
             .perform(webKeys(newTitle))
@@ -32,7 +35,23 @@ class EspressoWebUiElementsTest: UiElementsTest() {
     }
 
     @Test
-    fun extWebViewTest(){
+    fun multipleElementsWebViewTest() {
+        page.buttons.getElements().forEach {
+            it.webClick()
+        }
+//        `$$`(Locator.CLASS_NAME, "button").getElements().forEach {
+//            it.webClick()
+//        }
+//        onWebView().perform(findElement(Locator.ID, "title")).get()
+//        val elements = onWebView().perform(findMultipleElements(Locator.CLASS_NAME, "button"))
+//            .get()
+//            .forEach {
+//                onWebView().withElement(it).perform(webClick())
+//            }
+    }
+
+    @Test
+    fun extWebViewTest() {
         val newTitle = "New title"
         `$`(Locator.ID, "text_input").webKeys(newTitle)
         `$`(Locator.ID, "button1").webClick()
@@ -40,7 +59,7 @@ class EspressoWebUiElementsTest: UiElementsTest() {
     }
 
     @Test
-    fun extVar2WebViewTest(){
+    fun extVar2WebViewTest() {
         val newTitle = "New title"
         id("text_input1").webKeys(newTitle)
         id("button1").webClick()
@@ -50,7 +69,7 @@ class EspressoWebUiElementsTest: UiElementsTest() {
     }
 
     @Test
-    fun jsEvaluationTest(){
+    fun jsEvaluationTest() {
         val jsTitle = "JS_TITLE"
         val jsTitleNew = "JS_TITLE_NEW"
         script("document.getElementById(\"title\").innerHTML = '$jsTitle';")
@@ -60,15 +79,15 @@ class EspressoWebUiElementsTest: UiElementsTest() {
     }
 
     @Test
-    fun webViewFinderTest(){
+    fun webViewFinderTest() {
         val jsTitleNew = "JS_TITLE_NEW"
-        UltronConfig.Espresso.webViewFinder = {onWebView(withId(R.id.webview))}
+        UltronConfig.Espresso.webViewFinder = { onWebView(withId(R.id.webview)) }
         script("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
         className("css_title").containsText(jsTitleNew)
     }
 
     @Test
-    fun pageVar3WebViewTest(){
+    fun pageVar3WebViewTest() {
         val newTitle = "New title"
         page.textInput.webKeys(newTitle)
         page.button.webClick()
@@ -78,7 +97,7 @@ class EspressoWebUiElementsTest: UiElementsTest() {
     }
 
     @Test
-    fun getText2Test(){
+    fun getText2Test() {
         val newTitle = "New title"
         page.textInput.webKeys(newTitle)
         page.button.webClick()
@@ -88,7 +107,7 @@ class EspressoWebUiElementsTest: UiElementsTest() {
     }
 
     @Test
-    fun webInteractionLyambda(){
+    fun webInteractionLyambda() {
         onWebView(withId(R.id.webview)).webKeys("asd")
         id("123123123123").webKeys("asd");
     }
