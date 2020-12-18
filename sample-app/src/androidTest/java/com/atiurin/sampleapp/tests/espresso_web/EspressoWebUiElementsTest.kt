@@ -32,30 +32,43 @@ class EspressoWebUiElementsTest : UiElementsTest() {
             .perform(webClick())
         onWebView().withElement(findElement(Locator.ID, "title"))
             .check(webMatches(DriverAtoms.getText(), containsString("New title")))
+        onWebView().perform(findElement(Locator.ID, "title")).get()
+        //findMultipleElements
+        onWebView().perform(findMultipleElements(Locator.CLASS_NAME, "button"))
+            .get()
+            .forEach {
+                onWebView().withElement(it).perform(webClick())
+            }
     }
 
     @Test
     fun multipleElementsWebViewTest() {
-        page.buttons.getElements().forEach {
-            it.webClick()
-        }
 //        `$$`(Locator.CLASS_NAME, "button").getElements().forEach {
 //            it.webClick()
 //        }
-//        onWebView().perform(findElement(Locator.ID, "title")).get()
-//        val elements = onWebView().perform(findMultipleElements(Locator.CLASS_NAME, "button"))
-//            .get()
-//            .forEach {
-//                onWebView().withElement(it).perform(webClick())
-//            }
+        `$$`(Locator.CLASS_NAME, "link").getElements()
+            .filter {
+                it.isSuccess {
+                    hasText("Apple", 1000)
+                }
+            }
+            .forEach { it.webClick() }
+        page.title.containsText("apple")
+    }
+
+    @Test
+    fun pageMultipleElements() {
+        page.buttons.getElements().forEach {
+            it.webClick()
+        }
     }
 
     @Test
     fun extWebViewTest() {
         val newTitle = "New title"
-        `$`(Locator.ID, "text_input").webKeys(newTitle)
-        `$`(Locator.ID, "button1").webClick()
-        `$`(Locator.ID, "title").containsText(newTitle)
+        `$`.element(Locator.ID, "text_input").webKeys(newTitle)
+        `$`.element(Locator.ID, "button1").webClick()
+        `$`.element(Locator.ID, "title").containsText(newTitle)
     }
 
     @Test
@@ -101,15 +114,16 @@ class EspressoWebUiElementsTest : UiElementsTest() {
         val newTitle = "New title"
         page.textInput.webKeys(newTitle)
         page.button.webClick()
-//        page.title.hasText(newTitle)
-//        val titleText = page.title.getText()
-//        Assert.assertEquals(newTitle, titleText)
+        page.title.hasText(newTitle)
+        val titleText = page.title.getText()
+        Assert.assertEquals(newTitle, titleText)
     }
 
     @Test
     fun webInteractionLyambda() {
-        onWebView(withId(R.id.webview)).webKeys("asd")
-        id("123123123123").webKeys("asd");
+        Assert.assertTrue(id("button2").getText().isBlank())
+        Assert.assertEquals("Apple", id("apple_link").getText())
+        id("asdasdasd").getText()
     }
 
 }

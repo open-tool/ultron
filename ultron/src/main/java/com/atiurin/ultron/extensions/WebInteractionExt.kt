@@ -16,6 +16,18 @@ import com.atiurin.ultron.core.espressoweb.assertion.WebInteractionAssertionExec
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.containsString
 
+fun <T> (() -> Web.WebInteraction<T>).isSuccess(
+    action: (() -> Web.WebInteraction<T>).() -> Unit
+): Boolean {
+    var success = true
+    try {
+        action()
+    } catch (th: Throwable) {
+        success = false
+    }
+    return success
+}
+
 fun <T> (() -> Web.WebInteraction<T>).webClick(
     timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
     resultHandler: (WebOperationResult<WebInteractionAction<T, Evaluation>>) -> Unit =
@@ -24,7 +36,7 @@ fun <T> (() -> Web.WebInteraction<T>).webClick(
     WebLifecycle.execute(
         WebInteractionActionExecutor(
             WebInteractionAction(
-                webInteraction = this,
+                webInteractionBlock = this,
                 atomBlock = { DriverAtoms.webClick() },
                 name = "EspressoWeb webClick",
                 type = EspressoWebActionType.WEB_CLICK,
@@ -51,7 +63,7 @@ fun <T> (() -> Web.WebInteraction<T>).clearElement(
     WebLifecycle.execute(
         WebInteractionActionExecutor(
             WebInteractionAction(
-                webInteraction = this,
+                webInteractionBlock = this,
                 atomBlock = { DriverAtoms.clearElement() },
                 name = "EspressoWeb clearElement",
                 type = EspressoWebActionType.CLEAR_ELEMENT,
@@ -79,7 +91,7 @@ fun <T> (() -> Web.WebInteraction<T>).webKeys(
     WebLifecycle.execute(
         WebInteractionActionExecutor(
             WebInteractionAction(
-                webInteraction = this,
+                webInteractionBlock = this,
                 atomBlock = { DriverAtoms.webKeys(text) },
                 name = "EspressoWeb webKeys with text '$text'",
                 type = EspressoWebActionType.WEB_KEYS,
@@ -108,7 +120,7 @@ fun <T> (() -> Web.WebInteraction<T>).selectActiveElement(
     WebLifecycle.execute(
         WebInteractionActionExecutor(
             WebInteractionAction(
-                webInteraction = this,
+                webInteractionBlock = this,
                 atomBlock = {
                     element = DriverAtoms.selectActiveElement()
                     element
@@ -141,7 +153,7 @@ fun <T> Web.WebInteraction<T>.selectActiveElement(
     WebLifecycle.execute(
         WebInteractionActionExecutor(
             WebInteractionAction(
-                webInteraction = this,
+                webInteractionBlock = this,
                 atomBlock = {
                     frame = DriverAtoms.selectFrameByIndex(index)
                     frame
@@ -176,7 +188,7 @@ fun <T> Web.WebInteraction<T>.selectActiveElement(
     WebLifecycle.execute(
         WebInteractionActionExecutor(
             WebInteractionAction(
-                webInteraction = this,
+                webInteractionBlock = this,
                 atomBlock = {
                     frame = DriverAtoms.selectFrameByIndex(index, root)
                     frame
@@ -211,7 +223,7 @@ fun <T> Web.WebInteraction<T>.selectActiveElement(
     WebLifecycle.execute(
         WebInteractionActionExecutor(
             WebInteractionAction(
-                webInteraction = this,
+                webInteractionBlock = this,
                 atomBlock = {
                     frame = DriverAtoms.selectFrameByIdOrName(idOrName)
                     frame
@@ -246,7 +258,7 @@ fun <T> Web.WebInteraction<T>.selectFrameByIdOrName(
     val result = WebLifecycle.execute(
         WebInteractionActionExecutor(
             WebInteractionAction(
-                webInteraction = this,
+                webInteractionBlock = this,
                 atomBlock = {
                     DriverAtoms.selectFrameByIdOrName(idOrName, root)
                 },
@@ -278,7 +290,7 @@ fun <T> (() -> Web.WebInteraction<T>).webScrollIntoView(
     val result = WebLifecycle.execute(
         WebInteractionActionExecutor(
             WebInteractionAction(
-                webInteraction = this,
+                webInteractionBlock = this,
                 atomBlock = {
                     DriverAtoms.webScrollIntoView()
                 },
@@ -309,7 +321,7 @@ fun <T> (() -> Web.WebInteraction<T>).script(
     WebLifecycle.execute(
         WebInteractionActionExecutor(
             WebInteractionAction(
-                webInteraction = this,
+                webInteractionBlock = this,
                 atomBlock = { Atoms.script(script) },
                 name = "EspressoWeb Evaluate JS script",
                 type = EspressoWebActionType.SCRIPT,
@@ -333,11 +345,11 @@ fun <T> (() -> Web.WebInteraction<T>).getText(
     timeoutMs: Long = UltronConfig.Espresso.ASSERTION_TIMEOUT,
     resultHandler: (WebOperationResult<WebInteractionAction<T, String>>) -> Unit =
         (UltronConfig.Espresso.WebInteractionActionConfig.resultHandler as (WebOperationResult<WebInteractionAction<T, String>>) -> Unit)
-): String? {
+): String {
     val result = WebLifecycle.execute(
         WebInteractionActionExecutor(
             WebInteractionAction(
-                webInteraction = this,
+                webInteractionBlock = this,
                 atomBlock = {
                     DriverAtoms.getText()
                 },
@@ -348,7 +360,8 @@ fun <T> (() -> Web.WebInteraction<T>).getText(
             )
         ), resultHandler
     )
-    return (result.operationIterationResult as WebInteractionOperationIterationResult<String>).webInteraction?.get()
+    return (result.operationIterationResult as WebInteractionOperationIterationResult<String>)
+        .webInteraction?.get() ?: ""
 }
 
 fun <T> Web.WebInteraction<T>.getText(
@@ -369,7 +382,7 @@ fun <T> (() -> Web.WebInteraction<T>).findMultipleElements(
     val result = WebLifecycle.execute(
         WebInteractionActionExecutor(
             WebInteractionAction(
-                webInteraction = this,
+                webInteractionBlock = this,
                 atomBlock = {
                     DriverAtoms.findMultipleElements(locator, matcher)
                 },

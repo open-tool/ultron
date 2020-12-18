@@ -8,7 +8,7 @@ import com.atiurin.ultron.core.common.OperationType
 import com.atiurin.ultron.core.espressoweb.WebInteractionOperationIterationResult
 
 class WebInteractionAction<T, R>(
-    val webInteraction: () -> Web.WebInteraction<T>,
+    val webInteractionBlock: () -> Web.WebInteraction<T>,
     val atomBlock: () -> Atom<R>,
     override val name: String,
     override val type: OperationType,
@@ -20,7 +20,7 @@ class WebInteractionAction<T, R>(
         var exception: Throwable? = null
         var resultWebInteraction: Web.WebInteraction<R>? = null
         try {
-            resultWebInteraction = webInteraction().perform(atomBlock())
+            resultWebInteraction = webInteractionBlock().perform(atomBlock())
         }catch (error: Throwable){
             success = false
             exception = error
