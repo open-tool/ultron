@@ -36,7 +36,6 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
             } while (SystemClock.elapsedRealtime() < endTime && !success)
         } catch (th: Throwable) {
             success = false // just make sure we will have correct action status
-//            exceptions.add(th)
         }
         if (!success && exceptions.isNotEmpty()) {
             description +=

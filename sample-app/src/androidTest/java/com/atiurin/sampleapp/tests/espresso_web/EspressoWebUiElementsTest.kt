@@ -12,9 +12,12 @@ import com.atiurin.sampleapp.pages.WebViewPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espressoweb.*
+import com.atiurin.ultron.core.espressoweb.`$$`.Companion.classNames
 import com.atiurin.ultron.core.espressoweb.`$`.Companion.className
 import com.atiurin.ultron.core.espressoweb.`$`.Companion.id
 import com.atiurin.ultron.core.espressoweb.`$`.Companion.linkText
+import com.atiurin.ultron.core.espressoweb.`$`.Companion.script
+import com.atiurin.ultron.core.espressoweb.`$`.Companion.xpath
 import com.atiurin.ultron.extensions.*
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.Assert
@@ -43,10 +46,17 @@ class EspressoWebUiElementsTest : UiElementsTest() {
 
     @Test
     fun multipleElementsWebViewTest() {
-//        `$$`(Locator.CLASS_NAME, "button").getElements().forEach {
-//            it.webClick()
-//        }
+        `$$`(Locator.CLASS_NAME, "button").getElements().forEach {
+            it.webClick()
+        }
         `$$`(Locator.CLASS_NAME, "link").getElements()
+            .filter {
+                it.isSuccess {
+                    hasText("Apple", 1000)
+                }
+            }
+            .forEach { it.webClick() }
+        classNames("link").getElements()
             .filter {
                 it.isSuccess {
                     hasText("Apple", 1000)
@@ -62,21 +72,22 @@ class EspressoWebUiElementsTest : UiElementsTest() {
             it.webClick()
         }
     }
-
+//
     @Test
     fun extWebViewTest() {
         val newTitle = "New title"
-        `$`.element(Locator.ID, "text_input").webKeys(newTitle)
-        `$`.element(Locator.ID, "button1").webClick()
-        `$`.element(Locator.ID, "title").containsText(newTitle)
+        `$`(Locator.ID, "text_input").webKeys(newTitle)
+        `$`(Locator.ID, "button1").webClick()
+        id("title").webClick().containsText(newTitle)
     }
 
     @Test
     fun extVar2WebViewTest() {
         val newTitle = "New title"
-        id("text_input1").webKeys(newTitle)
+        id("text_input").webKeys(newTitle).webKeys("and more").setText(newTitle)
+        Thread.sleep(5000)
         id("button1").webClick()
-        id("title").containsText(newTitle)
+        id("title").hasText(newTitle)
         className("css_title").containsText(newTitle)
         linkText("Apple").containsText("Apple")
     }
@@ -86,15 +97,15 @@ class EspressoWebUiElementsTest : UiElementsTest() {
         val jsTitle = "JS_TITLE"
         val jsTitleNew = "JS_TITLE_NEW"
         script("document.getElementById(\"title\").innerHTML = '$jsTitle';")
-        className("css_title").containsText(jsTitle)
-        onWebView(withId(R.id.webview)).script("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
-//        onWebView(withId(R.id.webview)).withElement(className("css_title")).containsText(jsTitleNew)
+        className("css_title", withId(R.id.webview)).containsText(jsTitle)
+//        onWebView().script("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
+//        `$`(Locator.CLASS_NAME,"css_title", withId(R.id.webview)).containsText(jsTitleNew)
     }
 
     @Test
     fun webViewFinderTest() {
         val jsTitleNew = "JS_TITLE_NEW"
-        UltronConfig.Espresso.webViewFinder = { onWebView(withId(R.id.webview)) }
+        UltronConfig.Espresso.webViewMatcher = withId(R.id.webview)
         script("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
         className("css_title").containsText(jsTitleNew)
     }
@@ -120,10 +131,26 @@ class EspressoWebUiElementsTest : UiElementsTest() {
     }
 
     @Test
+    fun checkButtonTextTest(){
+        val buttonText = "Button3"
+        xpath("//form/input[@value='$buttonText']").exist()
+    }
+
+    @Test
     fun webInteractionLyambda() {
         Assert.assertTrue(id("button2").getText().isBlank())
         Assert.assertEquals("Apple", id("apple_link").getText())
-        id("asdasdasd").getText()
     }
 
+    @Test
+    fun elementNotPresentDefaultTimeout (){
+        AssertUtils.assertExecTimeMoreThen(5_000) { id("asdasdasd").getText() }
+        AssertUtils.assertExecTimeLessThen(7_000) { id("asdasdasd").getText() }
+    }
+
+    @Test
+    fun elementNotPresentCustomTimeout (){
+        AssertUtils.assertExecTimeMoreThen(1_000) { id("asdasdasd").getText(2000) }
+        AssertUtils.assertExecTimeLessThen(3_000) { id("asdasdasd").getText(2000) }
+    }
 }

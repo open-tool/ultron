@@ -1,5 +1,6 @@
 package com.atiurin.ultron.core.config
 
+import android.view.View
 import android.webkit.WebView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.PerformException
@@ -30,6 +31,7 @@ import com.atiurin.ultron.core.uiautomator.byselector.UiAutomatorBySelectorAsser
 import com.atiurin.ultron.core.uiautomator.uiselector.UiAutomatorUiSelectorOperation
 import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.Matcher
 import java.lang.RuntimeException
 
 object UltronConfig {
@@ -53,7 +55,7 @@ object UltronConfig {
                 }
             }
 
-            var webViewFinder : () -> Web.WebInteraction<Void> = { onWebView(allOf(isAssignableFrom(WebView::class.java), isDisplayed()))}
+            var webViewMatcher: Matcher<View> = allOf(isAssignableFrom(WebView::class.java), isDisplayed())
         }
 
         class ViewActionConfig {
@@ -99,7 +101,7 @@ object UltronConfig {
                     NoMatchingViewException::class.java,
                     RuntimeException::class.java
                 )
-                val resultHandler: (WebOperationResult<WebInteractionAction<*, *>>) -> Unit =
+                val resultHandler: (WebOperationResult<WebInteractionAction<*>>) -> Unit =
                     {
                         resultAnalyzer.analyze(it)
                     }
@@ -115,7 +117,7 @@ object UltronConfig {
                     RuntimeException::class.java
                 )
 
-                val resultHandler: (WebOperationResult<WebInteractionAssertion<*, *>>) -> Unit =
+                val resultHandler: (WebOperationResult<WebInteractionAssertion<*>>) -> Unit =
                     {
                         resultAnalyzer.analyze(it)
                     }

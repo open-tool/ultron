@@ -4,7 +4,7 @@ import com.atiurin.ultron.core.common.OperationType
 
 enum class EspressoWebActionType :
     OperationType {
-    WEB_CLICK,
+    WEB_CLICK, GET_TEXT,
     CLEAR_ELEMENT, WEB_KEYS,
     SCRIPT,
     SCROLL, CUSTOM
