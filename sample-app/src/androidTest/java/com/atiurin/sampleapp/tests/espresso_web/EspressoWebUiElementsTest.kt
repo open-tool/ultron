@@ -1,7 +1,10 @@
 package com.atiurin.sampleapp.tests.espresso_web
 
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.web.assertion.WebViewAssertions.webContent
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
+import androidx.test.espresso.web.matcher.DomMatchers.elementById
+import androidx.test.espresso.web.matcher.DomMatchers.withTextContent
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.DriverAtoms.*
@@ -11,15 +14,18 @@ import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.WebViewPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espressoweb.*
-import com.atiurin.ultron.core.espressoweb.`$$`.Companion.classNames
-import com.atiurin.ultron.core.espressoweb.`$`.Companion.className
-import com.atiurin.ultron.core.espressoweb.`$`.Companion.id
-import com.atiurin.ultron.core.espressoweb.`$`.Companion.linkText
-import com.atiurin.ultron.core.espressoweb.`$`.Companion.script
-import com.atiurin.ultron.core.espressoweb.`$`.Companion.xpath
-import com.atiurin.ultron.extensions.*
+import com.atiurin.ultron.core.espressoweb.webelement.WebElement
+import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.className
+import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.evalJS
+import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.id
+import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.linkText
+import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.xpath
+import com.atiurin.ultron.core.espressoweb.webelement.WebElementsList
+import com.atiurin.ultron.core.espressoweb.webelement.WebElementsList.Companion.classNames
+import com.atiurin.ultron.custom.espresso.matcher.ElementWithAttributeMatcher.Companion.withAttribute
 import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.Matchers
+import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Test
 
@@ -46,10 +52,10 @@ class EspressoWebUiElementsTest : UiElementsTest() {
 
     @Test
     fun multipleElementsWebViewTest() {
-        `$$`(Locator.CLASS_NAME, "button").getElements().forEach {
+        WebElementsList(Locator.CLASS_NAME, "button").getElements().forEach {
             it.webClick()
         }
-        `$$`(Locator.CLASS_NAME, "link").getElements()
+        WebElementsList(Locator.CLASS_NAME, "link").getElements()
             .filter {
                 it.isSuccess {
                     hasText("Apple", 1000)
@@ -76,8 +82,8 @@ class EspressoWebUiElementsTest : UiElementsTest() {
     @Test
     fun extWebViewTest() {
         val newTitle = "New title"
-        `$`(Locator.ID, "text_input").webKeys(newTitle)
-        `$`(Locator.ID, "button1").webClick()
+        WebElement(Locator.ID, "text_input").webKeys(newTitle)
+        WebElement(Locator.ID, "button1").webClick()
         id("title").webClick().containsText(newTitle)
     }
 
@@ -96,17 +102,17 @@ class EspressoWebUiElementsTest : UiElementsTest() {
     fun jsEvaluationTest() {
         val jsTitle = "JS_TITLE"
         val jsTitleNew = "JS_TITLE_NEW"
-        script("document.getElementById(\"title\").innerHTML = '$jsTitle';")
+        evalJS("document.getElementById(\"title\").innerHTML = '$jsTitle';")
         className("css_title", withId(R.id.webview)).containsText(jsTitle)
 //        onWebView().script("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
-//        `$`(Locator.CLASS_NAME,"css_title", withId(R.id.webview)).containsText(jsTitleNew)
+//        WebElement(Locator.CLASS_NAME,"css_title", withId(R.id.webview)).containsText(jsTitleNew)
     }
 
     @Test
     fun webViewFinderTest() {
         val jsTitleNew = "JS_TITLE_NEW"
         UltronConfig.Espresso.webViewMatcher = withId(R.id.webview)
-        script("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
+        evalJS("document.getElementById(\"title\").innerHTML = '$jsTitleNew';")
         className("css_title").containsText(jsTitleNew)
     }
 
@@ -152,5 +158,17 @@ class EspressoWebUiElementsTest : UiElementsTest() {
     fun elementNotPresentCustomTimeout (){
         AssertUtils.assertExecTimeMoreThen(1_000) { id("asdasdasd").getText(2000) }
         AssertUtils.assertExecTimeLessThen(3_000) { id("asdasdasd").getText(2000) }
+    }
+
+    @Test
+    fun customWebViewAssertionTest(){
+        WebElement.assertThat(webContent(elementById("apple_link", withTextContent("Apple"))))
+//        WebElement.assertThat(webContent(elementById("apple_link", withAttribute("href", `is`("fake_linkw312.html")))))
+        id("apple_link").hasAttribute("href", `is`("fake_link.html"))
+    }
+
+    @Test
+    fun customWebAssertionTest(){
+        id("apple_link").assertThat(webMatches(getText(), `is`("Apple")))
     }
 }
