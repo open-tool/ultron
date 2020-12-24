@@ -1,4 +1,4 @@
-package com.atiurin.ultron.core.espressoweb
+package com.atiurin.ultron.core.espressoweb.atom
 
 import androidx.test.espresso.remote.annotation.RemoteMsgConstructor
 import androidx.test.espresso.web.assertion.TagSoupDocumentParser

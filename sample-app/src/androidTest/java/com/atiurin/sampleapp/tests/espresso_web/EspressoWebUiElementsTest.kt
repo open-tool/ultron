@@ -14,17 +14,16 @@ import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.WebViewPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.core.espressoweb.webelement.WebDocument
+import com.atiurin.ultron.core.espressoweb.webelement.WebDocument.Companion.evalJS
 import com.atiurin.ultron.core.espressoweb.webelement.WebElement
 import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.className
-import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.evalJS
 import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.id
 import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.linkText
 import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.xpath
 import com.atiurin.ultron.core.espressoweb.webelement.WebElementsList
 import com.atiurin.ultron.core.espressoweb.webelement.WebElementsList.Companion.classNames
-import com.atiurin.ultron.custom.espresso.matcher.ElementWithAttributeMatcher.Companion.withAttribute
 import org.hamcrest.CoreMatchers.containsString
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Test
@@ -90,7 +89,7 @@ class EspressoWebUiElementsTest : UiElementsTest() {
     @Test
     fun extVar2WebViewTest() {
         val newTitle = "New title"
-        id("text_input").webKeys(newTitle).webKeys("and more").setText(newTitle)
+        id("text_input").webKeys(newTitle).webKeys("and more").replaceText(newTitle)
         Thread.sleep(5000)
         id("button1").webClick()
         id("title").hasText(newTitle)
@@ -139,7 +138,7 @@ class EspressoWebUiElementsTest : UiElementsTest() {
     @Test
     fun checkButtonTextTest(){
         val buttonText = "Button3"
-        xpath("//form/input[@value='$buttonText']").exist()
+        xpath("//form/input[@value='$buttonText']").exists()
     }
 
     @Test
@@ -162,8 +161,7 @@ class EspressoWebUiElementsTest : UiElementsTest() {
 
     @Test
     fun customWebViewAssertionTest(){
-        WebElement.assertThat(webContent(elementById("apple_link", withTextContent("Apple"))))
-//        WebElement.assertThat(webContent(elementById("apple_link", withAttribute("href", `is`("fake_linkw312.html")))))
+        WebDocument.assertThat(webContent(elementById("apple_link", withTextContent("Apple"))))
         id("apple_link").hasAttribute("href", `is`("fake_link.html"))
     }
 

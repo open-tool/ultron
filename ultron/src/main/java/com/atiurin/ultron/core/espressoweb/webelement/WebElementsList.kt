@@ -7,12 +7,8 @@ import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espressoweb.WebInteractionOperationIterationResult
 import com.atiurin.ultron.core.espressoweb.WebLifecycle
-import com.atiurin.ultron.core.espressoweb.WebOperationResult
-import com.atiurin.ultron.core.espressoweb.action.WebInteractionAction
-import com.atiurin.ultron.core.espressoweb.action.WebInteractionActionExecutor
-import com.atiurin.ultron.core.espressoweb.assertion.EspressoWebAssertionType
+import com.atiurin.ultron.core.espressoweb.operation.*
 import org.hamcrest.Matcher
 
 class WebElementsList(
@@ -27,8 +23,8 @@ class WebElementsList(
 
     fun getElements(
         timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionAction<List<ElementReference>>>) -> Unit =
-            (UltronConfig.Espresso.WebInteractionActionConfig.resultHandler as (WebOperationResult<WebInteractionAction<List<ElementReference>>>) -> Unit)
+        resultHandler: (WebOperationResult<WebInteractionOperation<List<ElementReference>>>) -> Unit =
+            (UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<List<ElementReference>>>) -> Unit)
     ): List<WebElement> {
         return findMultipleElements(locator, matcher, timeoutMs, resultHandler).map {
             WebElement(
@@ -48,19 +44,19 @@ class WebElementsList(
         locator: Locator,
         matcher: String,
         timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionAction<List<ElementReference>>>) -> Unit =
-            (UltronConfig.Espresso.WebInteractionActionConfig.resultHandler as (WebOperationResult<WebInteractionAction<List<ElementReference>>>) -> Unit)
+        resultHandler: (WebOperationResult<WebInteractionOperation<List<ElementReference>>>) -> Unit =
+            (UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<List<ElementReference>>>) -> Unit)
     ): List<ElementReference> {
         val result = WebLifecycle.execute(
-            WebInteractionActionExecutor(
-                WebInteractionAction(
+            WebInteractionOperationExecutor(
+                WebInteractionOperation(
                     webInteractionBlock = {
                         webViewInteraction.withNoTimeout()
                             .perform(DriverAtoms.findMultipleElements(locator, matcher))
                     },
-                    name = "EspressoWeb findElement",
-                    type = EspressoWebAssertionType.CONTAINS_TEXT,
-                    description = "WebAssertion getText during $timeoutMs ms",
+                    name = "WebElementsList(${locator.type} = '$matcher') findMultipleElements",
+                    type = EspressoWebOperationType.WEB_FIND_MULTIPLE_ELEMENTS,
+                    description = "WebElementsList(${locator.type} = '$matcher') findMultipleElements during $timeoutMs ms",
                     timeoutMs = timeoutMs
                 )
             ), resultHandler

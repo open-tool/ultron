@@ -6,9 +6,6 @@ import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.web.model.ElementReference
-import androidx.test.espresso.web.sugar.Web
-import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.Configurator
 import androidx.test.uiautomator.UiDevice
@@ -22,9 +19,8 @@ import com.atiurin.ultron.core.espresso.action.DataInteractionEspressoAction
 import com.atiurin.ultron.core.espresso.action.ViewInteractionEspressoAction
 import com.atiurin.ultron.core.espresso.assertion.DataInteractionEspressoAssertion
 import com.atiurin.ultron.core.espresso.assertion.ViewInteractionEspressoAssertion
-import com.atiurin.ultron.core.espressoweb.WebOperationResult
-import com.atiurin.ultron.core.espressoweb.action.WebInteractionAction
-import com.atiurin.ultron.core.espressoweb.assertion.WebInteractionAssertion
+import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
+import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.byselector.UiAutomatorBySelectorAction
 import com.atiurin.ultron.core.uiautomator.byselector.UiAutomatorBySelectorAssertion
@@ -94,21 +90,7 @@ object UltronConfig {
             }
         }
 
-        class WebInteractionActionConfig {
-            companion object {
-                var allowedExceptions = mutableListOf<Class<out Throwable>>(
-                    PerformException::class.java,
-                    NoMatchingViewException::class.java,
-                    RuntimeException::class.java
-                )
-                val resultHandler: (WebOperationResult<WebInteractionAction<*>>) -> Unit =
-                    {
-                        resultAnalyzer.analyze(it)
-                    }
-            }
-        }
-
-        class WebInteractionAssertionConfig {
+        class WebInteractionOperationConfig {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     PerformException::class.java,
@@ -116,8 +98,7 @@ object UltronConfig {
                     AssertionFailedError::class.java,
                     RuntimeException::class.java
                 )
-
-                val resultHandler: (WebOperationResult<WebInteractionAssertion<*>>) -> Unit =
+                val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit =
                     {
                         resultAnalyzer.analyze(it)
                     }

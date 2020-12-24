@@ -1,4 +1,4 @@
-package com.atiurin.ultron.core.espressoweb
+package com.atiurin.ultron.core.espressoweb.operation
 
 import androidx.test.espresso.web.sugar.Web
 import com.atiurin.ultron.core.common.OperationIterationResult

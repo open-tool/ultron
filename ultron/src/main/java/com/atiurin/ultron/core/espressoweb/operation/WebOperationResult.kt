@@ -1,4 +1,4 @@
-package com.atiurin.ultron.core.espressoweb
+package com.atiurin.ultron.core.espressoweb.operation
 
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationIterationResult
