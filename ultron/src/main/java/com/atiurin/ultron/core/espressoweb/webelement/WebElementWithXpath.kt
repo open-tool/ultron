@@ -14,9 +14,9 @@ import org.w3c.dom.Document
 
 class WebElementWithXpath(
     override val value: String,
-    override val webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
-    override val elementReference: ElementReference? = null,
-    override val windowReference: WindowReference? = null
+    webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+    elementReference: ElementReference? = null,
+    windowReference: WindowReference? = null
 ) : WebElement(Locator.XPATH, value, webViewMatcher, elementReference, windowReference) {
     fun hasAttribute(
         attributeName: String,

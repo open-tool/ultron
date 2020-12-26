@@ -77,7 +77,8 @@ class EspressoWebUiElementsTest : UiElementsTest() {
             it.webClick()
         }
     }
-//
+
+    //
     @Test
     fun extWebViewTest() {
         val newTitle = "New title"
@@ -136,7 +137,7 @@ class EspressoWebUiElementsTest : UiElementsTest() {
     }
 
     @Test
-    fun checkButtonTextTest(){
+    fun checkButtonTextTest() {
         val buttonText = "Button3"
         xpath("//form/input[@value='$buttonText']").exists()
     }
@@ -148,25 +149,32 @@ class EspressoWebUiElementsTest : UiElementsTest() {
     }
 
     @Test
-    fun elementNotPresentDefaultTimeout (){
+    fun elementNotPresentDefaultTimeout() {
         AssertUtils.assertExecTimeMoreThen(5_000) { id("asdasdasd").getText() }
         AssertUtils.assertExecTimeLessThen(7_000) { id("asdasdasd").getText() }
     }
 
     @Test
-    fun elementNotPresentCustomTimeout (){
+    fun elementNotPresentCustomTimeout() {
         AssertUtils.assertExecTimeMoreThen(1_000) { id("asdasdasd").getText(2000) }
         AssertUtils.assertExecTimeLessThen(3_000) { id("asdasdasd").getText(2000) }
     }
 
     @Test
-    fun customWebViewAssertionTest(){
+    fun customWebViewAssertionTest() {
         WebDocument.assertThat(webContent(elementById("apple_link", withTextContent("Apple"))))
         id("apple_link").hasAttribute("href", `is`("fake_link.html"))
     }
 
     @Test
-    fun customWebAssertionTest(){
+    fun customWebAssertionTest() {
         id("apple_link").assertThat(webMatches(getText(), `is`("Apple")))
+    }
+
+    @Test
+    fun contextualElement() {
+        id("student")
+            .withContextual(className("person_name"))
+            .hasText("Plato")
     }
 }

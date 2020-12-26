@@ -14,9 +14,9 @@ import org.w3c.dom.Document
 
 class WebElementWithId(
     override val value: String,
-    override val webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
-    override val elementReference: ElementReference? = null,
-    override val windowReference: WindowReference? = null
+    webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+    elementReference: ElementReference? = null,
+    windowReference: WindowReference? = null
 ) : WebElement(Locator.ID, value, webViewMatcher, elementReference, windowReference) {
     fun hasAttribute(
         attributeName: String,

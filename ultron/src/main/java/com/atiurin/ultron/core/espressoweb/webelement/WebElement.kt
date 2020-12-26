@@ -25,10 +25,16 @@ import org.w3c.dom.Document
 open class WebElement(
     open val locator: Locator,
     open val value: String,
-    open val webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
-    open val elementReference: ElementReference? = null,
-    open val windowReference: WindowReference? = null
+    private val webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+    private val elementReference: ElementReference? = null,
+    private val windowReference: WindowReference? = null
 ) {
+    private val contextualElements = mutableListOf<WebElement>()
+
+    fun withContextual(webElement: WebElement) = apply {
+        contextualElements.add(webElement)
+    }
+
     internal val webViewInteraction: Web.WebInteraction<Void>
         get() {
             return if (windowReference != null) onWebView(webViewMatcher).inWindow(windowReference)
@@ -36,11 +42,18 @@ open class WebElement(
         }
 
 
-    internal val webInteractionBlock = {
-        if (elementReference == null) {
-            webViewInteraction.withElement(findElement(locator, value))
-        } else webViewInteraction.withElement(elementReference)
-    }
+    internal val webInteractionBlock: () -> Web.WebInteraction<Void>
+        get() = {
+            var wvi = if (elementReference == null) {
+                webViewInteraction.withElement(findElement(locator, value))
+            } else webViewInteraction.withElement(elementReference)
+            contextualElements.forEach {
+                wvi = wvi.withContextualElement(
+                    findElement(it.locator, it.value)
+                )
+            }
+            wvi
+        }
 
     /** Clears content from an editable element. */
     fun clearElement(
@@ -286,7 +299,7 @@ open class WebElement(
     }
 
     /** Transforms any action or assertion to Boolean value */
-    fun isSuccess(block: WebElement.() -> Unit) : Boolean = this.methodToBoolean(block)
+    fun isSuccess(block: WebElement.() -> Unit): Boolean = this.methodToBoolean(block)
 
     /** Removes the Element and Window references from this interaction */
     fun reset() = apply { webViewInteraction.reset() }
@@ -397,7 +410,12 @@ open class WebElement(
             elementReference: ElementReference? = null,
             windowReference: WindowReference? = null
         ): WebElementWithXpath {
-            return WebElementWithXpath(value, webViewMatcher, elementReference, windowReference)
+            return WebElementWithXpath(
+                value,
+                webViewMatcher,
+                elementReference,
+                windowReference
+            )
         }
 
         fun element(
@@ -407,7 +425,13 @@ open class WebElement(
             elementReference: ElementReference? = null,
             windowReference: WindowReference? = null
         ): WebElement {
-            return WebElement(locator, value, webViewMatcher, elementReference, windowReference)
+            return WebElement(
+                locator,
+                value,
+                webViewMatcher,
+                elementReference,
+                windowReference
+            )
         }
     }
 }

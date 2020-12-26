@@ -13,23 +13,25 @@ import org.hamcrest.Matcher
 
 class WebElementsList(
     val locator: Locator,
-    val matcher: String,
-    val webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
-    val windowReference: WindowReference? = null
+    val value: String,
+    internal val webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+    internal val windowReference: WindowReference? = null
 ) {
-    private val webViewInteraction =
-        if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
-        else Web.onWebView(webViewMatcher)
+    private val webViewInteraction: Web.WebInteraction<Void>
+        get() {
+            return if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
+            else Web.onWebView(webViewMatcher)
+        }
 
     fun getElements(
         timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
         resultHandler: (WebOperationResult<WebInteractionOperation<List<ElementReference>>>) -> Unit =
             (UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<List<ElementReference>>>) -> Unit)
     ): List<WebElement> {
-        return findMultipleElements(locator, matcher, timeoutMs, resultHandler).map {
+        return findMultipleElements(locator, value, timeoutMs, resultHandler).map {
             WebElement(
                 locator,
-                matcher,
+                value,
                 webViewMatcher,
                 it
             )
