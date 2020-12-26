@@ -70,66 +70,75 @@ class WebElementsList(
     companion object {
         fun classNames(
             value: String,
-            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): WebElementsList {
-            return WebElementsList(Locator.CLASS_NAME, value)
+            return WebElementsList(Locator.CLASS_NAME, value, webViewMatcher, windowReference)
         }
 
         fun cssSelectors(
             value: String,
-            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): WebElementsList {
-            return WebElementsList(Locator.CSS_SELECTOR, value)
+            return WebElementsList(Locator.CSS_SELECTOR, value, webViewMatcher, windowReference)
         }
 
         fun ids(
             value: String,
-            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): WebElementsList {
-            return WebElementsList(Locator.ID, value)
+            return WebElementsList(Locator.ID, value, webViewMatcher, windowReference)
         }
 
         fun linkTexts(
             value: String,
-            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): WebElementsList {
-            return WebElementsList(Locator.LINK_TEXT, value)
+            return WebElementsList(Locator.LINK_TEXT, value, webViewMatcher, windowReference)
         }
 
         fun names(
             value: String,
-            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): WebElementsList {
-            return WebElementsList(Locator.NAME, value)
+            return WebElementsList(Locator.NAME, value, webViewMatcher, windowReference)
         }
 
         fun partialLinkTexts(
             value: String,
-            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): WebElementsList {
-            return WebElementsList(Locator.PARTIAL_LINK_TEXT, value)
+            return WebElementsList(Locator.PARTIAL_LINK_TEXT, value, webViewMatcher, windowReference)
         }
 
         fun tagNames(
             value: String,
-            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): WebElementsList {
-            return WebElementsList(Locator.TAG_NAME, value)
+            return WebElementsList(Locator.TAG_NAME, value, webViewMatcher, windowReference)
         }
 
         fun xpaths(
             value: String,
-            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): WebElementsList {
-            return WebElementsList(Locator.XPATH, value)
+            return WebElementsList(Locator.XPATH, value, webViewMatcher, windowReference)
         }
 
         fun elements(
             locator: Locator,
             matcher: String,
-            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): WebElementsList {
-            return WebElementsList(locator, matcher, webViewMatcher)
+            return WebElementsList(locator, matcher, webViewMatcher, windowReference)
         }
     }
 }
