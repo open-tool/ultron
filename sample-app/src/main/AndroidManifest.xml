@@ -43,6 +43,10 @@
                 android:name="com.atiurin.sampleapp.activity.UiElementsActivity"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name="com.atiurin.sampleapp.activity.WebViewActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

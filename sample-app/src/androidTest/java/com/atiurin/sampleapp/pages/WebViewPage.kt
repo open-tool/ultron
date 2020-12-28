@@ -7,8 +7,14 @@ import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.linkT
 import com.atiurin.ultron.page.Page
 
 class WebViewPage : Page<WebViewPage>() {
+    companion object{
+        const val BUTTON2_TITLE = "button2 clicked"
+        const val BUTTON3_TITLE = "button3 clicked"
+    }
     val textInput = id("text_input")
-    val button = id("button1")
+    val buttonUpdTitle = id("button1")
+    val buttonSetTitle2 = id("button2")
+    val buttonSetTitle3 = id("button3")
     val title = id("title")
     val titleWithCss = className("css_title")
     val appleLink = linkText("Apple")

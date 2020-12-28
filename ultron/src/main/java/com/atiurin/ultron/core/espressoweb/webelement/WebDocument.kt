@@ -17,8 +17,38 @@ import org.hamcrest.Matcher
 class WebDocument {
     companion object {
         /**
+         * Performs a force enable of Javascript on a WebView.
+         *
+         * <p>All WebView interactions are done via Javascript - therefore the WebView we are working on
+         * must support Javascript evaluation.
+         *
+         * <p>Enabling Javascript may cause the WebView under test to be reloaded. This is necessary to
+         * ensure the test infrastructure javascript bridges are loaded by the WebView.
+         */
+        @JvmStatic @JvmOverloads
+        fun forceJavascriptEnabled(
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
+            resultHandler: (WebOperationResult<WebInteractionOperation<Void>>) -> Unit =
+                UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Void>>) -> Unit
+        ) {
+            val webViewInteraction = Web.onWebView(webViewMatcher)
+            WebLifecycle.execute(
+                WebInteractionOperationExecutor(
+                    WebInteractionOperation(
+                        webInteractionBlock = { webViewInteraction.forceJavascriptEnabled() },
+                        name = "WebView forceJavascriptEnabled on $webViewMatcher",
+                        type = EspressoWebOperationType.WEB_EVAL_JS_SCRIPT,
+                        description = "WebDocument forceJavascriptEnabled' on $webViewMatcher during $timeoutMs ms",
+                        timeoutMs = timeoutMs
+                    )
+                ), resultHandler
+            )
+        }
+        /**
          * Evaluate JS on webView
          */
+        @JvmStatic @JvmOverloads
         fun evalJS(
             script: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
@@ -44,6 +74,7 @@ class WebDocument {
         }
 
         /** use any webAssertion to assert it safely */
+        @JvmStatic @JvmOverloads
         fun <T> assertThat(
             webAssertion: WebAssertion<T>,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
@@ -71,6 +102,7 @@ class WebDocument {
         }
 
         /** Finds the currently active element in the document. */
+        @JvmStatic @JvmOverloads
         fun selectActiveElement(
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             windowReference: WindowReference? = null,
@@ -97,6 +129,7 @@ class WebDocument {
         }
 
         /** Selects a subframe of the currently selected window by it's index. */
+        @JvmStatic @JvmOverloads
         fun selectFrameByIndex(
             index: Int,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
@@ -130,6 +163,7 @@ class WebDocument {
         }
 
         /** Selects a subframe of the given window by it's index. */
+        @JvmStatic @JvmOverloads
         fun selectFrameByIndex(
             index: Int,
             root: WindowReference,
@@ -165,6 +199,7 @@ class WebDocument {
         }
 
         /** Selects a subframe of the current window by it's name or id. */
+        @JvmStatic @JvmOverloads
         fun selectFrameByIdOrName(
             idOrName: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
@@ -198,6 +233,7 @@ class WebDocument {
         }
 
         /** Selects a subframe of the given window by it's name or id. */
+        @JvmStatic @JvmOverloads
         fun selectFrameByIdOrName(
             idOrName: String,
             root: WindowReference,

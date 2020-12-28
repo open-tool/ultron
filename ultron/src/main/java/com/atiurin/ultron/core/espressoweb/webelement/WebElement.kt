@@ -104,7 +104,9 @@ open class WebElement(
         WebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
-                    webInteractionBlock = { webInteractionBlock().perform(DriverAtoms.webClick()) },
+                    webInteractionBlock = {
+                        webInteractionBlock().perform(DriverAtoms.webClick())
+                    },
                     name = "WebClick on WebElement(${locator.type} = '$value')",
                     type = EspressoWebOperationType.WEB_CLICK,
                     description = "WebClick on WebElement(${locator.type} = '$value') during $timeoutMs ms",
@@ -124,7 +126,9 @@ open class WebElement(
         WebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
-                    webInteractionBlock = { webInteractionBlock().perform(DriverAtoms.webKeys(text)) },
+                    webInteractionBlock = {
+                        webInteractionBlock().perform(DriverAtoms.webKeys(text))
+                    },
                     name = "WebKeys text '$text' on WebElement(${locator.type} = '$value')",
                     type = EspressoWebOperationType.WEB_KEYS,
                     description = "WebKeys text '$text' on  WebElement(${locator.type} = '$value') during $timeoutMs ms",

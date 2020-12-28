@@ -29,7 +29,7 @@ class UiElementsActivity : AppCompatActivity() {
         val webView: WebView = findViewById(R.id.webview)
         val jsCheckBox: CheckBox = findViewById(R.id.checkbox_js_enabled)
         webView.settings.javaScriptEnabled = true
-        val customHtml = applicationContext.assets.open("webview.html").reader().readText()
+        val customHtml = applicationContext.assets.open("webview_small.html").reader().readText()
         webView.loadData(customHtml, "text/html", "UTF-8")
 
         simpleButton.setOnClickListener {

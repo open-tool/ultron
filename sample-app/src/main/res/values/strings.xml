@@ -14,6 +14,7 @@
     <string name="menu_profile">My Profile</string>
     <string name="menu_logout">Logout</string>
     <string name="menu_ui_elements">UiElements</string>
+    <string name="menu_web_view">Web View</string>
 
     <string name="title_friends_list">Friends</string>
 

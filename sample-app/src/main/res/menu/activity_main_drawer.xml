@@ -25,6 +25,11 @@
                 android:id="@+id/ui_elements"
                 android:icon="@drawable/ic_exit"
                 android:title="@string/menu_ui_elements"/>
+
+        <item
+            android:id="@+id/web_view_nav_item"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="@string/menu_web_view"/>
     </group>
 
     <!--<item android:title="Communicate">-->
