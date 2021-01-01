@@ -4,6 +4,7 @@ import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationExecutor
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.exceptions.UltronWrapperException
 
 abstract class WebOperationExecutor<T : Operation>(
     override val operation: T
@@ -24,5 +25,14 @@ abstract class WebOperationExecutor<T : Operation>(
             description = description,
             operationIterationResult = operationIterationResult
         )
+    }
+
+    override fun getWrapperException(originalException: Throwable): Throwable {
+        var modifiedException: Throwable? = null
+        val isMessageContains = originalException.message?.contains("Atom evaluation returned null!")
+        if (isMessageContains != null && isMessageContains){
+            modifiedException = UltronWrapperException("Element not found in WebView!", originalException)
+        }
+        return modifiedException ?: originalException
     }
 }

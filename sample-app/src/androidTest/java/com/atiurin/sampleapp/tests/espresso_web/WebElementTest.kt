@@ -14,6 +14,6 @@ class WebElementTest : BaseWebViewTest() {
 
     @Test
     fun webClick_onNotExistedElement(){
-        AssertUtils.assertException { id("notExistId").webClick(timeoutMs = 100) }
+        AssertUtils.assertException {  id("notExistId").webClick(timeoutMs = 100) }
     }
 }
