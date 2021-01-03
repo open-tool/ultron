@@ -14,6 +14,10 @@ import com.atiurin.ultron.core.espressoweb.operation.*
 import com.atiurin.ultron.exceptions.UltronException
 import org.hamcrest.Matcher
 
+/**
+ * Represents document of webView
+ * Provides methods for interaction with document
+ */
 class WebDocument {
     companion object {
         /**

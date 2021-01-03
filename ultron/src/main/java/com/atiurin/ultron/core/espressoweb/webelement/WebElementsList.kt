@@ -12,6 +12,10 @@ import com.atiurin.ultron.core.espressoweb.WebLifecycle
 import com.atiurin.ultron.core.espressoweb.operation.*
 import org.hamcrest.Matcher
 
+/**
+ * It is recommended to create WebElementsList object using method in Companion object
+ * like [WebElementsList.Companion.ids], [WebElementsList.Companion.xpaths], [WebElementsList.Companion.elements] and etc
+ */
 class WebElementsList(
     val locator: Locator,
     val value: String,

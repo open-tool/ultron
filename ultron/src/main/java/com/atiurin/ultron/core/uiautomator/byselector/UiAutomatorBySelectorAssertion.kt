@@ -6,7 +6,7 @@ import com.atiurin.ultron.core.common.DefaultOperationIterationResult
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.OperationType
-import com.atiurin.ultron.core.uiautomator.UiAutomatorConfig
+import com.atiurin.ultron.core.config.UltronConfig.UiAutomator.Companion.uiDevice
 
 class UiAutomatorBySelectorAssertion (
         val block: UiObject2.() -> Boolean,
@@ -19,7 +19,7 @@ class UiAutomatorBySelectorAssertion (
         var success = true
         var exception: Throwable? = null
         try {
-            success = UiAutomatorConfig.uiDevice.findObject(bySelector).block()
+            success = uiDevice.findObject(bySelector).block()
         } catch (error: Throwable) {
             success = false
             exception = error

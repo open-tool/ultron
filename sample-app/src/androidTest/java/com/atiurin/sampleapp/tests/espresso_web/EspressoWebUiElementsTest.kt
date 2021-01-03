@@ -38,7 +38,6 @@ class EspressoWebUiElementsTest : BaseWebViewTest() {
             .perform(webClick())
             .withElement(findElement(Locator.ID, "title"))
             .check(webMatches(getText(), containsString("New title")))
-//        onWebView().perform(findElement(Locator.ID, "title")).get()
         //findMultipleElements
 //        onWebView().perform(findMultipleElements(Locator.CLASS_NAME, "button"))
 //            .get()

@@ -1,8 +1,6 @@
 package com.atiurin.sampleapp.tests.uiautomator
 
-import androidx.test.platform.app.InstrumentationRegistry
 import com.atiurin.sampleapp.R
-import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.utils.TestDataUtils
 import com.atiurin.sampleapp.pages.BySelectorUiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
@@ -21,17 +19,18 @@ class UiElementsUiAutomatorTest: UiElementsTest() {
 
     @Before
     fun speedUpAutomator(){
-        UltronConfig.UiAutomator.setIdlingTimeout(0)
+        UltronConfig.UiAutomator.speedUp()
     }
     @Test
     fun click_onClickable() {
         page.button.click()
         page.eventStatus.containsText(TestDataUtils.getResourceString(R.string.button_event_click))
+        page.editTextContentDesc.hasText("Default content description")
     }
 
     @Test
     fun hasText_CorrectText_withResourceId() {
-        Thread.sleep(2000)
+//        Thread.sleep(2000)
         page.editTextContentDesc.hasText("Default content description")
     }
 

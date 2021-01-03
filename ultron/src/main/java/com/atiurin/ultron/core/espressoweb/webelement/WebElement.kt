@@ -22,6 +22,10 @@ import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.containsString
 import org.w3c.dom.Document
 
+/**
+ * It is recommended to create WebElement object using method in Companion object
+ * like [WebElement.Companion.id], [WebElement.Companion.xpath], [WebElement.Companion.element] and etc
+ */
 open class WebElement(
     open val locator: Locator,
     open val value: String,

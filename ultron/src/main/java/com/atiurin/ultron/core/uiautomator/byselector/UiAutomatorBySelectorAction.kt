@@ -7,7 +7,7 @@ import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.OperationType
 import com.atiurin.ultron.core.common.exceptions.UiObject2NotFoundException
-import com.atiurin.ultron.core.uiautomator.UiAutomatorConfig
+import com.atiurin.ultron.core.config.UltronConfig.UiAutomator.Companion.uiDevice
 
 class UiAutomatorBySelectorAction (
         val block: UiObject2.() -> Unit,
@@ -21,7 +21,7 @@ class UiAutomatorBySelectorAction (
         var success = true
         var exception: Throwable? = null
         try {
-            val uiObject2 = UiAutomatorConfig.uiDevice.findObject(bySelector)
+            val uiObject2 = uiDevice.findObject(bySelector)
             if (uiObject2 != null){
                 uiObject2.block()
             } else throw UiObject2NotFoundException("No object with bySelector: $bySelector")

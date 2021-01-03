@@ -51,7 +51,8 @@ object UltronConfig {
                 }
             }
 
-            var webViewMatcher: Matcher<View> = allOf(isAssignableFrom(WebView::class.java), isDisplayed())
+            var webViewMatcher: Matcher<View> =
+                allOf(isAssignableFrom(WebView::class.java), isDisplayed())
         }
 
         class ViewActionConfig {
@@ -124,14 +125,18 @@ object UltronConfig {
                 }
             }
 
-            val uiDevice: UiDevice =
+            var uiDevice: UiDevice =
                 UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
-            fun setIdlingTimeout(timeoutMs: Long) {
+            fun setTimeout(timeoutMs: Long) {
                 Configurator.getInstance().apply {
                     waitForIdleTimeout = timeoutMs
                     waitForSelectorTimeout = timeoutMs
                 }
+            }
+
+            fun speedUp(){
+                setTimeout(0)
             }
         }
 
@@ -156,6 +161,7 @@ object UltronConfig {
                 )
                 val bySelectorActionResultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit =
                     {
+
                         resultAnalyzer.analyze(it)
                     }
                 val bySelectorAssertionResultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit =
