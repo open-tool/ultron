@@ -3,7 +3,7 @@
 <head>
     <title>Android Web View</title>
 </head>
-<b ody>
+<body>
     <h1 id="title" class="css_title">WebView title</h1>
     <textarea id="title_changer" name="title_changer"
               rows="5" cols="33">
@@ -20,8 +20,8 @@ Some defaule title
         <input type="button" class="button" id="button1" value="Rename title" onclick="updTitle()">
         <input type="button" class="button" id="button2" value="Button2"
                onclick="setTitle('button2 clicked')">
-        <input type="button" class="button" id="button3" value="Button3"
-               onclick="setTitle('button3 clicked')">
+        <input type="button" class="button" id="button3" value="Set title active"
+               onclick="setTitleActive()">
     </form>
     <input type="text" id="text_input" hint="input hint">
     <div id="teacher">
@@ -36,6 +36,7 @@ Some defaule title
             <p>Plato</p>
         </div>
     </div>
+    <iframe src="demo.htm" id="iframe" height="200" width="300" title="Iframe Example"></iframe>
     <div id="list_element_1" desc="some desc 1"><p>list_element_1</p></div>
     <div id="list_element_1" desc="some desc 2"><p>list_element_2</p></div>
     <div id="list_element_3"><p>list_element_3</p></div>
@@ -51,6 +52,7 @@ Some defaule title
 
 
     <script>
+
             function updTitle() {
                  var value = document.getElementById("text_input").value
                  console.log(value)
@@ -59,8 +61,10 @@ Some defaule title
             function setTitle(newTitle) {
                 document.getElementById("title").innerHTML = newTitle;
             }
-
-
+            function setTitleActive() {
+                document.getElementById("title").setActive();
+                document.getElementById("title").focus();
+            }
     </script>
     </body>
 </html>

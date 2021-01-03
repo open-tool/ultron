@@ -9,7 +9,6 @@ import com.atiurin.ultron.page.Page
 class WebViewPage : Page<WebViewPage>() {
     companion object{
         const val BUTTON2_TITLE = "button2 clicked"
-        const val BUTTON3_TITLE = "button3 clicked"
         const val APPLE_LINK_TEXT = "Apple"
         const val APPLE_LINK_HREF = "fake_link.html"
 
@@ -17,7 +16,7 @@ class WebViewPage : Page<WebViewPage>() {
     val textInput = id("text_input")
     val buttonUpdTitle = id("button1")
     val buttonSetTitle2 = id("button2")
-    val buttonSetTitle3 = id("button3")
+    val buttonSetTitleActive = id("button3")
     val title = id("title")
     val titleWithCss = className("css_title")
     val appleLink = id("apple_link")

@@ -136,8 +136,10 @@ class EspressoWebUiElementsTest : BaseWebViewTest() {
 
     @Test
     fun checkButtonTextTest() {
-        val buttonText = "Button3"
-        xpath("//form/input[@value='$buttonText']").exists()
+        xpath(".//*[@id='button3']").apply {
+            exists()
+            hasAttribute("value", "Set title active")
+        }
     }
 
     @Test

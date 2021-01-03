@@ -4,6 +4,7 @@ import android.view.View
 import androidx.test.espresso.web.model.ElementReference
 import androidx.test.espresso.web.model.WindowReference
 import androidx.test.espresso.web.sugar.Web
+import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.ultron.core.config.UltronConfig
@@ -19,10 +20,13 @@ class WebElementsList(
 ) {
     private val webViewInteraction: Web.WebInteraction<Void>
         get() {
-            return if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
-            else Web.onWebView(webViewMatcher)
+            return if (windowReference != null) onWebView(webViewMatcher).inWindow(windowReference)
+            else onWebView(webViewMatcher)
         }
 
+    /**
+     * @return list of [WebElement], empty list if no elements found
+     */
     fun getElements(
         timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
         resultHandler: (WebOperationResult<WebInteractionOperation<List<ElementReference>>>) -> Unit =
@@ -38,6 +42,9 @@ class WebElementsList(
         }
     }
 
+    /**
+     * @return size of elements, 0 if no elements found
+     */
     fun getSize(): Int {
         return getElements().size
     }
