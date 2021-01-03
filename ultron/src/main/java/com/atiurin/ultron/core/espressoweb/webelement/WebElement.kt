@@ -163,11 +163,11 @@ open class WebElement(
     }
 
     /** Returns {@code true} if the desired element is in view after scrolling. */
-    fun webScrollIntoView(
+    fun webScrollIntoViewBoolean(
         timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
         resultHandler: (WebOperationResult<WebInteractionOperation<Boolean>>) -> Unit =
             UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Boolean>>) -> Unit
-    ): Boolean {
+    ) : Boolean{
         val result = WebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
@@ -181,6 +181,27 @@ open class WebElement(
         )
         return (result.operationIterationResult as WebInteractionOperationIterationResult<Boolean>).webInteraction?.get()
             ?: false
+    }
+
+    /**
+     * Returns webElement after scroll
+     */
+    fun webScrollIntoView(
+        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
+        resultHandler: (WebOperationResult<WebInteractionOperation<Boolean>>) -> Unit =
+            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Boolean>>) -> Unit
+    ) = apply {
+        val result = WebLifecycle.execute(
+            WebInteractionOperationExecutor(
+                WebInteractionOperation(
+                    webInteractionBlock = { webInteractionBlock().perform(DriverAtoms.webScrollIntoView()) },
+                    name = " WebElement(${locator.type} = '$value') WebScrollIntoView",
+                    type = EspressoWebOperationType.WEB_SCROLL_INTO_VIEW,
+                    description = " WebElement(${locator.type} = '$value') WebScrollIntoView during $timeoutMs ms",
+                    timeoutMs = timeoutMs
+                )
+            ), resultHandler
+        )
     }
 
     /** Asserts that DOM element contains visible text beneath it self. */

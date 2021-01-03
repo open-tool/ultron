@@ -3,35 +3,54 @@
 <head>
     <title>Android Web View</title>
 </head>
-<body>
-<h1 id="title" class="css_title">WebView title</h1>
-<ol>
-    <li><a href="fake_link.html" class="link" id="apple_link" onclick="setTitle('apple clicked')">Apple</a>
-    </li>
-    <li><a href="fake_link.html" class="link" id="banana">Banana</a></li>
-</ol>
-<p>The button below activates a JavaScript when it is clicked.</p>
-<form id="buttons_from">
-    <input type="button" class="button" id="button1" value="Rename title" onclick="updTitle()">
-    <input type="button" class="button" id="button2" value="Button2"
-           onclick="setTitle('button2 clicked')">
-    <input type="button" class="button" id="button3" value="Button3"
-           onclick="setTitle('button3 clicked')">
-</form>
-<input type="text" id="text_input" hint="input hint">
-<div id="teacher">
-    <p>Teachers</p>
-    <div class="person_name">
-        <p>Socrates</p>
+<b ody>
+    <h1 id="title" class="css_title">WebView title</h1>
+    <textarea id="title_changer" name="title_changer"
+              rows="5" cols="33">
+Some defaule title
+</textarea>
+    <ol>
+        <li><a href="fake_link.html" class="link" id="apple_link"
+               onclick="setTitle('apple clicked')">Apple</a>
+        </li>
+        <li><a href="fake_link.html" class="link" id="banana">Banana</a></li>
+    </ol>
+    <p>The button below activates a JavaScript when it is clicked.</p>
+    <form id="buttons_from">
+        <input type="button" class="button" id="button1" value="Rename title" onclick="updTitle()">
+        <input type="button" class="button" id="button2" value="Button2"
+               onclick="setTitle('button2 clicked')">
+        <input type="button" class="button" id="button3" value="Button3"
+               onclick="setTitle('button3 clicked')">
+    </form>
+    <input type="text" id="text_input" hint="input hint">
+    <div id="teacher">
+        <p>Teachers</p>
+        <div class="person_name">
+            <p>Socrates</p>
+        </div>
     </div>
-</div>
-<div id="student">
-    <p>Students</p>
-    <div class="person_name">
-        <p>Plato</p>
+    <div id="student">
+        <p>Students</p>
+        <div class="person_name">
+            <p>Plato</p>
+        </div>
     </div>
-</div>
-<script>
+    <div id="list_element_1" desc="some desc 1"><p>list_element_1</p></div>
+    <div id="list_element_1" desc="some desc 2"><p>list_element_2</p></div>
+    <div id="list_element_3"><p>list_element_3</p></div>
+    <div id="list_element_4"><p>list_element_4</p></div>
+    <div id="list_element_5"><p>list_element_5</p></div>
+    <div id="list_element_6"><p>list_element_6</p></div>
+    <div id="list_element_7"><p>list_element_7</p></div>
+    <div id="list_element_8"><p>list_element_8</p></div>
+    <div id="list_element_9"><p>list_element_9</p></div>
+    <div id="list_element_10"><p>list_element_10</p></div>
+    <div id="list_element_11"><p>list_element_11</p></div>
+    <div id="list_element_12"><p>list_element_12</p></div>
+
+
+    <script>
             function updTitle() {
                  var value = document.getElementById("text_input").value
                  console.log(value)
@@ -41,6 +60,7 @@
                 document.getElementById("title").innerHTML = newTitle;
             }
 
-</script>
-</body>
+
+    </script>
+    </body>
 </html>

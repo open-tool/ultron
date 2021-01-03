@@ -10,6 +10,7 @@ import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
 import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.custom.espresso.matcher.ElementWithAttributeMatcher.Companion.withAttribute
 import org.hamcrest.Matcher
+import org.hamcrest.Matchers.`is`
 import org.w3c.dom.Document
 
 class WebElementWithId(
@@ -30,6 +31,24 @@ class WebElementWithId(
                 value, withAttribute(
                     attributeName,
                     attributeValueMatcher
+                )
+            )
+        )
+    }
+
+    fun hasAttribute(
+        attributeName: String,
+        attributeValue: String,
+        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
+        resultHandler: (WebOperationResult<WebInteractionOperation<Document>>) -> Unit =
+            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Document>>) -> Unit
+    ) = apply {
+        val matcher = `is`(attributeValue)
+        this.hasElementAttribute(
+            attributeName, matcher, timeoutMs, resultHandler, elementById(
+                value, withAttribute(
+                    attributeName,
+                    matcher
                 )
             )
         )
