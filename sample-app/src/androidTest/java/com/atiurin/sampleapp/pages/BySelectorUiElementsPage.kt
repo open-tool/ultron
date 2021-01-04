@@ -1,5 +1,6 @@
 package com.atiurin.sampleapp.pages
 
+import androidx.test.uiautomator.By
 import com.atiurin.sampleapp.R
 import com.atiurin.ultron.extensions.ByExt
 
