@@ -262,12 +262,12 @@ fun Matcher<View>.hasText(
     onView(this).hasText(stringMatcher, timeoutMs, resultHandler)
 }
 
-fun Matcher<View>.containsText(
+fun Matcher<View>.textContains(
     text: String,
     timeoutMs: Long = ASSERTION_TIMEOUT,
     resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
 ) = apply {
-    onView(this).containsText(text, timeoutMs, resultHandler)
+    onView(this).textContains(text, timeoutMs, resultHandler)
 }
 
 fun Matcher<View>.contentDescriptionContains(

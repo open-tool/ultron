@@ -4,7 +4,6 @@ import android.os.SystemClock
 import android.view.KeyEvent
 import androidx.test.espresso.action.EspressoKey
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.ultron.extensions.*
 import com.atiurin.sampleapp.R
@@ -30,13 +29,13 @@ class ViewInteractionActionsTest : UiElementsTest() {
     @Test
     fun click_onClickable() {
         page.button.click()
-        page.eventStatus.containsText(getResourceString(R.string.button_event_click))
+        page.eventStatus.textContains(getResourceString(R.string.button_event_click))
     }
 
     @Test
     fun longClick_onLongClickable() {
         page.button.longClick()
-        page.eventStatus.containsText(getResourceString(R.string.button_event_long_click))
+        page.eventStatus.textContains(getResourceString(R.string.button_event_long_click))
     }
 
     @Test
@@ -47,8 +46,8 @@ class ViewInteractionActionsTest : UiElementsTest() {
 
         var success = false
         with(page.eventStatus){
-            containsText(getResourceString(R.string.button_event_click))
-            success = isSuccess { containsText("1", 3000) } ||  isSuccess { containsText("2", 3000) }
+            textContains(getResourceString(R.string.button_event_click))
+            success = isSuccess { textContains("1", 3000) } ||  isSuccess { textContains("2", 3000) }
         }
         Assert.assertTrue(success)
 
@@ -109,6 +108,6 @@ class ViewInteractionActionsTest : UiElementsTest() {
     @Test
     fun executeCustomClick_onClickable(){
         page.button.execute(click())
-        page.eventStatus.containsText(getResourceString(R.string.button_event_click))
+        page.eventStatus.textContains(getResourceString(R.string.button_event_click))
     }
 }

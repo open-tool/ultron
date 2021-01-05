@@ -227,14 +227,14 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun containsText_CorrectText_withResourceId() {
         val text = getResourceString(R.string.button_default_content_desc)
-        page.editTextContentDesc.containsText(text.substring(3))
+        page.editTextContentDesc.textContains(text.substring(3))
     }
 
     @Test
     fun containsText_InvalidSubstringText() {
         val text = getResourceString(R.string.button_default_content_desc)
         AssertUtils.assertException {
-            page.editTextContentDesc.containsText(
+            page.editTextContentDesc.textContains(
                 "${text.substring(3)} to be invalid",
                 1000
             )

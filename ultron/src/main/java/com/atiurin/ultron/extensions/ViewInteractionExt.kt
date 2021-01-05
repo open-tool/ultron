@@ -651,7 +651,7 @@ fun ViewInteraction.hasText(
     )
 }
 
-fun ViewInteraction.containsText(
+fun ViewInteraction.textContains(
     text: String,
     timeoutMs: Long = ASSERTION_TIMEOUT,
     resultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit = ViewAssertionConfig.viewInteractionResultHandler
