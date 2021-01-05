@@ -452,6 +452,11 @@ internal class UiObject2Operation {
             )
         }
 
+        /**
+         * Drags this object to the specified location.
+         *
+         * @param dest The end point that this object should be dragged to.
+         */
         fun drag(
             block: () -> UiObject2,
             selectorDesc: String,
@@ -473,6 +478,12 @@ internal class UiObject2Operation {
             )
         }
 
+        /**
+         * Drags this object to the specified location.
+         *
+         * @param dest The end point that this object should be dragged to.
+         * @param speed The speed at which to perform this gesture in pixels per second.
+         */
         fun drag(
             block: () -> UiObject2,
             selectorDesc: String,

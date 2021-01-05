@@ -186,6 +186,11 @@ fun BySelector.replaceText(
     return UiObject2Operation.replaceText({ uiDevice.findObject(this) }, this.toString(), text, timeoutMs, resultHandler)
 }
 
+/**
+ * Drags this object to the specified location.
+ *
+ * @param dest The end point that this object should be dragged to.
+ */
 fun BySelector.drag(
     dest: Point,
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
@@ -194,6 +199,12 @@ fun BySelector.drag(
     UiObject2Operation.drag({ uiDevice.findObject(this) }, this.toString(), dest, timeoutMs, resultHandler)
 }
 
+/**
+ * Drags this object to the specified location.
+ *
+ * @param dest The end point that this object should be dragged to.
+ * @param speed The speed at which to perform this gesture in pixels per second.
+ */
 fun BySelector.drag(
     dest: Point,
     speed: Int,
@@ -357,6 +368,7 @@ fun BySelector.fling(
 
 
 //asserts
+/** Assert view.text has value equals [text] */
 fun BySelector.hasText(
     text: String,
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
@@ -365,6 +377,7 @@ fun BySelector.hasText(
     UiObject2Operation.hasText({ uiDevice.findObject(this) }, this.toString(), text, timeoutMs, resultHandler)
 }
 
+/** Assert view.text value matching [textMatcher] */
 fun BySelector.hasText(
     textMatcher: Matcher<String>,
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
@@ -373,14 +386,16 @@ fun BySelector.hasText(
     UiObject2Operation.hasText({ uiDevice.findObject(this) }, this.toString(), textMatcher, timeoutMs, resultHandler)
 }
 
+/** Assert view.text value contains substring [textSubstring] */
 fun BySelector.textContains(
-    text: String,
+    textSubstring: String,
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
-    UiObject2Operation.textContains({ uiDevice.findObject(this) }, this.toString(), text, timeoutMs, resultHandler)
+    UiObject2Operation.textContains({ uiDevice.findObject(this) }, this.toString(), textSubstring, timeoutMs, resultHandler)
 }
 
+/** Assert view.contentDescription has value equals [contentDesc] */
 fun BySelector.hasContentDescription(
     contentDesc: String,
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
@@ -389,6 +404,7 @@ fun BySelector.hasContentDescription(
     UiObject2Operation.hasContentDescription({ uiDevice.findObject(this) }, this.toString(), contentDesc, timeoutMs, resultHandler)
 }
 
+/** Assert view.contentDescription value matching [contentDescMatcher] */
 fun BySelector.hasContentDescription(
     contentDescMatcher: Matcher<String>,
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
@@ -397,6 +413,7 @@ fun BySelector.hasContentDescription(
     UiObject2Operation.hasContentDescription({ uiDevice.findObject(this) }, this.toString(), contentDescMatcher, timeoutMs, resultHandler)
 }
 
+/** Assert view.contentDescription value contains substring [contentDescSubstring] */
 fun BySelector.contentDescriptionContains(
     contentDescSubstring: String,
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
@@ -405,108 +422,143 @@ fun BySelector.contentDescriptionContains(
     UiObject2Operation.contentDescriptionContains({ uiDevice.findObject(this) }, this.toString(), contentDescSubstring, timeoutMs, resultHandler)
 }
 
+/** Assert this object is checkable. */
 fun BySelector.isCheckable(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isCheckable({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is not checkable. */
 fun BySelector.isNotCheckable(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isNotCheckable({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is checked. */
 fun BySelector.isChecked(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isChecked({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is not checked. */
 fun BySelector.isNotChecked(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isNotChecked({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is clickable. */
 fun BySelector.isClickable(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isClickable({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is not clickable. */
 fun BySelector.isNotClickable(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isNotClickable({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is enabled. */
 fun BySelector.isEnabled(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isEnabled({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is not enabled. */
 fun BySelector.isNotEnabled(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isNotEnabled({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is focusable. */
 fun BySelector.isFocusable(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isFocusable({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is not focusable. */
 fun BySelector.isNotFocusable(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isNotFocusable({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is focused. */
 fun BySelector.isFocused(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isFocused({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is not focused. */
 fun BySelector.isNotFocused(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isNotFocused({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is longClickable. */
 fun BySelector.isLongClickable(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isLongClickable({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is not longClickable. */
 fun BySelector.isNotLongClickable(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isNotLongClickable({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is scrollable. */
 fun BySelector.isScrollable(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isScrollable({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is not scrollable. */
 fun BySelector.isNotScrollable(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isNotScrollable({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is selected. */
 fun BySelector.isSelected(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
 ) {
     UiObject2Operation.isSelected({ uiDevice.findObject(this) }, this.toString(), timeoutMs, resultHandler)
 }
+
+/** Assert this object is not selected. */
 fun BySelector.isNotSelected(
     timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
