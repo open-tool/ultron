@@ -1,9 +1,5 @@
 package com.atiurin.ultron.core.common
 
-import com.atiurin.ultron.core.espresso.EspressoOperationResult
-import com.atiurin.ultron.core.espresso.action.EspressoAction
-import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
-import com.atiurin.ultron.core.uiautomator.byselector.UiAutomatorBySelectorAction
 import com.atiurin.ultron.listeners.AbstractLifecycleListener
 import com.atiurin.ultron.listeners.LogLifecycleListener
 

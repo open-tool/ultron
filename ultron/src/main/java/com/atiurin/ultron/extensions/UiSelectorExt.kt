@@ -5,8 +5,8 @@ import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.uiautomator.UiAutomatorActionType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorLifecycle
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
-import com.atiurin.ultron.core.uiautomator.uiselector.UiAutomatorUiSelectorOperation
-import com.atiurin.ultron.core.uiautomator.uiselector.UiAutomatorUiSelectorOperationExecutor
+import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
+import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperationExecutor
 
 fun UiSelector.click(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,

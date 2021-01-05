@@ -1,4 +1,4 @@
-package com.atiurin.ultron.core.uiautomator.uiselector
+package com.atiurin.ultron.core.uiautomator.uiobject
 
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.config.UltronConfig

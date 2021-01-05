@@ -22,9 +22,9 @@ import com.atiurin.ultron.core.espresso.assertion.ViewInteractionEspressoAsserti
 import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
-import com.atiurin.ultron.core.uiautomator.byselector.UiAutomatorBySelectorAction
-import com.atiurin.ultron.core.uiautomator.byselector.UiAutomatorBySelectorAssertion
-import com.atiurin.ultron.core.uiautomator.uiselector.UiAutomatorUiSelectorOperation
+import com.atiurin.ultron.core.uiautomator.uiobject2.UiAutomatorBySelectorAction
+import com.atiurin.ultron.core.uiautomator.uiobject2.UiAutomatorBySelectorAssertion
+import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
 import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
@@ -157,7 +157,8 @@ object UltronConfig {
         class UiObject2Config {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
-                    UiObjectNotFoundException::class.java
+                    UiObjectNotFoundException::class.java,
+                    NullPointerException::class.java
                 )
                 val bySelectorActionResultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit =
                     {

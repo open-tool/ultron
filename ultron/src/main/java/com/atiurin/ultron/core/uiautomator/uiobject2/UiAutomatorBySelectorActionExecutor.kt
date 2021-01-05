@@ -1,12 +1,12 @@
-package com.atiurin.ultron.core.uiautomator.byselector
+package com.atiurin.ultron.core.uiautomator.uiobject2
 
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationExecutor
 
-class UiAutomatorBySelectorAssertionExecutor(
-        assertion: UiAutomatorBySelectorAssertion
-) : UiAutomatorOperationExecutor<UiAutomatorBySelectorAssertion>(assertion) {
+class UiAutomatorBySelectorActionExecutor (
+    action: UiAutomatorBySelectorAction
+) : UiAutomatorOperationExecutor<UiAutomatorBySelectorAction>(action) {
     override fun getAllowedExceptions(operation: Operation): List<Class<out Throwable>> {
         return UltronConfig.UiAutomator.UiObject2Config.allowedExceptions
     }
