@@ -681,7 +681,7 @@ fun UiSelector.assertThat(
 fun UiSelector.perform(
     actionBlock: UiObject.() -> Boolean,
     actionDescription: String = "NO_DESCRIPTION_SPECIFIED",
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UiObjectOperations.perform(actionBlock, actionDescription, {uiDevice.findObject(this)}, this.toString(), timeoutMs, resultHandler)

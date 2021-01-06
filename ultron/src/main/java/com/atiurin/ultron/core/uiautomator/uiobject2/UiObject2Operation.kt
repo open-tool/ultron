@@ -4,11 +4,14 @@ import android.graphics.Point
 import android.graphics.Rect
 import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.Direction
+import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiObject2
 import com.atiurin.ultron.core.uiautomator.UiAutomatorActionType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorAssertionType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorLifecycle
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
+import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
+import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperationExecutor
 import com.atiurin.ultron.exceptions.UltronException
 import org.hamcrest.Matcher
 
@@ -323,9 +326,9 @@ internal class UiObject2Operation {
         }
 
         fun click(
+            duration: Long,
             block: () -> UiObject2,
             selectorDesc: String,
-            duration: Long,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ) {
@@ -385,9 +388,9 @@ internal class UiObject2Operation {
 
         /** Add the text content if this object is an editable field. */
         fun addText(
+            text: String,
             block: () -> UiObject2,
             selectorDesc: String,
-            text: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ) {
@@ -410,9 +413,9 @@ internal class UiObject2Operation {
          * @hide
          */
         fun legacySetText(
+            text: String,
             block: () -> UiObject2,
             selectorDesc: String,
-            text: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ) {
@@ -432,9 +435,9 @@ internal class UiObject2Operation {
 
         /** Sets the text content if this object is an editable field. */
         fun replaceText(
+            text: String,
             block: () -> UiObject2,
             selectorDesc: String,
-            text: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ) {
@@ -458,9 +461,9 @@ internal class UiObject2Operation {
          * @param dest The end point that this object should be dragged to.
          */
         fun drag(
+            dest: Point,
             block: () -> UiObject2,
             selectorDesc: String,
-            dest: Point,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ) {
@@ -485,10 +488,10 @@ internal class UiObject2Operation {
          * @param speed The speed at which to perform this gesture in pixels per second.
          */
         fun drag(
-            block: () -> UiObject2,
-            selectorDesc: String,
             dest: Point,
             speed: Int,
+            block: () -> UiObject2,
+            selectorDesc: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ) {
@@ -512,9 +515,9 @@ internal class UiObject2Operation {
          * @param percent The size of the pinch as a percentage of this object's size.
          */
         fun pinchClose(
+            percent: Float,
             block: () -> UiObject2,
             selectorDesc: String,
-            percent: Float,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ) {
@@ -539,10 +542,10 @@ internal class UiObject2Operation {
          * @param speed The speed at which to perform this gesture in pixels per second.
          */
         fun pinchClose(
-            block: () -> UiObject2,
-            selectorDesc: String,
             percent: Float,
             speed: Int,
+            block: () -> UiObject2,
+            selectorDesc: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ) {
@@ -566,9 +569,9 @@ internal class UiObject2Operation {
          * @param percent The size of the pinch as a percentage of this object's size.
          */
         fun pinchOpen(
+            percent: Float,
             block: () -> UiObject2,
             selectorDesc: String,
-            percent: Float,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ) {
@@ -593,10 +596,10 @@ internal class UiObject2Operation {
          * @param speed The speed at which to perform this gesture in pixels per second.
          */
         fun pinchOpen(
-            block: () -> UiObject2,
-            selectorDesc: String,
             percent: Float,
             speed: Int,
+            block: () -> UiObject2,
+            selectorDesc: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ) {
@@ -621,10 +624,10 @@ internal class UiObject2Operation {
          * @param percent The length of the swipe as a percentage of this object's size.
          */
         fun swipe(
-            block: () -> UiObject2,
-            selectorDesc: String,
             direction: Direction,
             percent: Float,
+            block: () -> UiObject2,
+            selectorDesc: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ) {
@@ -650,11 +653,11 @@ internal class UiObject2Operation {
          * @param speed The speed at which to perform this gesture in pixels per second.
          */
         fun swipe(
-            block: () -> UiObject2,
-            selectorDesc: String,
             direction: Direction,
             percent: Float,
             speed: Int,
+            block: () -> UiObject2,
+            selectorDesc: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ) {
@@ -680,10 +683,10 @@ internal class UiObject2Operation {
          * @return Whether the object can still scroll in the given direction.
          */
         fun scroll(
-            block: () -> UiObject2,
-            selectorDesc: String,
             direction: Direction,
             percent: Float,
+            block: () -> UiObject2,
+            selectorDesc: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ): Boolean {
@@ -712,11 +715,11 @@ internal class UiObject2Operation {
          * @return Whether the object can still scroll in the given direction.
          */
         fun scroll(
-            block: () -> UiObject2,
-            selectorDesc: String,
             direction: Direction,
             percent: Float,
             speed: Int,
+            block: () -> UiObject2,
+            selectorDesc: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ): Boolean {
@@ -743,9 +746,9 @@ internal class UiObject2Operation {
          * @return Whether the object can still scroll in the given direction.
          */
         fun fling(
+            direction: Direction,
             block: () -> UiObject2,
             selectorDesc: String,
-            direction: Direction,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ): Boolean {
@@ -773,10 +776,10 @@ internal class UiObject2Operation {
          * @return Whether the object can still scroll in the given direction.
          */
         fun fling(
-            block: () -> UiObject2,
-            selectorDesc: String,
             direction: Direction,
             speed: Int,
+            block: () -> UiObject2,
+            selectorDesc: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
         ): Boolean {
@@ -796,12 +799,33 @@ internal class UiObject2Operation {
             return result
         }
 
+        fun perform(
+            actionBlock: UiObject2.() -> Unit,
+            actionDescription: String,
+            block: () -> UiObject2,
+            selectorDesc: String,
+            timeoutMs: Long,
+            resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
+        ) {
+            UiAutomatorLifecycle.execute(
+                UiAutomatorBySelectorActionExecutor(
+                    UiAutomatorBySelectorAction(
+                        objectBlock = block,
+                        actionBlock = actionBlock,
+                        name = "Perform custom action '$actionDescription' on $selectorDesc.",
+                        type = UiAutomatorActionType.PERFORM,
+                        description = "UiObject2 action '${UiAutomatorActionType.PERFORM}'. Perform custom action '$actionDescription' on $selectorDesc during $timeoutMs ms",
+                        timeoutMs = timeoutMs
+                    )
+                ), resultHandler
+            )
+        }
 
         //asserts
         fun hasText(
+            text: String,
             block: () -> UiObject2,
             selectorDesc: String,
-            text: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit
         ) {
@@ -809,7 +833,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.text == text },
+                        assertionBlock = { this.text == text },
                         name = "HasText $text in $selectorDesc",
                         type = UiAutomatorAssertionType.HAS_TEXT,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_TEXT}'. HasText '$text' in $selectorDesc during $timeoutMs ms",
@@ -820,9 +844,9 @@ internal class UiObject2Operation {
         }
 
         fun hasText(
+            textMatcher: Matcher<String>,
             block: () -> UiObject2,
             selectorDesc: String,
-            textMatcher: Matcher<String>,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit
         ) {
@@ -830,7 +854,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { textMatcher.matches(this.text) },
+                        assertionBlock = { textMatcher.matches(this.text) },
                         name = "HasText $textMatcher in $selectorDesc",
                         type = UiAutomatorAssertionType.HAS_TEXT,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_TEXT}'.  HasText matches '$textMatcher' in $selectorDesc during $timeoutMs ms",
@@ -841,9 +865,9 @@ internal class UiObject2Operation {
         }
 
         fun textContains(
+            textSubstring: String,
             block: () -> UiObject2,
             selectorDesc: String,
-            textSubstring: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit
         ) {
@@ -851,7 +875,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.text.contains(textSubstring) },
+                        assertionBlock = { this.text.contains(textSubstring) },
                         name = "TextContains $textSubstring in $selectorDesc",
                         type = UiAutomatorAssertionType.CONTAINS_TEXT,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.CONTAINS_TEXT}'. TextContains '$textSubstring' in $selectorDesc during $timeoutMs ms",
@@ -862,9 +886,9 @@ internal class UiObject2Operation {
         }
 
         fun hasContentDescription(
+            contentDesc: String,
             block: () -> UiObject2,
             selectorDesc: String,
-            contentDesc: String,
             timeoutMs: Long ,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit
         ) {
@@ -872,7 +896,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.contentDescription == contentDesc },
+                        assertionBlock = { this.contentDescription == contentDesc },
                         name = "HasContentDescription $contentDesc in $selectorDesc",
                         type = UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION}'. HasContentDescription '$contentDesc' in $selectorDesc during $timeoutMs ms",
@@ -883,9 +907,9 @@ internal class UiObject2Operation {
         }
 
         fun hasContentDescription(
+            contentDescMatcher: Matcher<String>,
             block: () -> UiObject2,
             selectorDesc: String,
-            contentDescMatcher: Matcher<String>,
             timeoutMs: Long ,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit
         ) {
@@ -893,7 +917,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { contentDescMatcher.matches(this.contentDescription) },
+                        assertionBlock = { contentDescMatcher.matches(this.contentDescription) },
                         name = "HasContentDescription $contentDescMatcher in $selectorDesc",
                         type = UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION}'. HasContentDescription matches '$contentDescMatcher' in $selectorDesc during $timeoutMs ms",
@@ -904,9 +928,9 @@ internal class UiObject2Operation {
         }
 
         fun contentDescriptionContains(
+            contentDescSubstring: String,
             block: () -> UiObject2,
             selectorDesc: String,
-            contentDescSubstring: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit
         ) {
@@ -914,7 +938,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.contentDescription.contains(contentDescSubstring) },
+                        assertionBlock = { this.contentDescription.contains(contentDescSubstring) },
                         name = "ContentDescriptionContains $contentDescSubstring in $selectorDesc",
                         type = UiAutomatorAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT}'. ContentDescriptionContains '$contentDescSubstring' in $selectorDesc during $timeoutMs ms",
@@ -934,7 +958,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.isCheckable },
+                        assertionBlock = { this.isCheckable },
                         name = "IsCheckable of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_CHECKABLE,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_CHECKABLE}'. IsCheckable of $selectorDesc during $timeoutMs ms",
@@ -954,7 +978,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { !this.isCheckable },
+                        assertionBlock = { !this.isCheckable },
                         name = "IsNotCheckable of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_NOT_CHECKABLE,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_CHECKABLE}'. IsNotCheckable of $selectorDesc during $timeoutMs ms",
@@ -974,7 +998,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.isChecked },
+                        assertionBlock = { this.isChecked },
                         name = "IsChecked of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_CHECKED,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_CHECKED}'. IsChecked of $selectorDesc during $timeoutMs ms",
@@ -994,7 +1018,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { !this.isChecked },
+                        assertionBlock = { !this.isChecked },
                         name = "IsNotChecked of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_NOT_CHECKED,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_CHECKED}'. IsNotChecked of $selectorDesc during $timeoutMs ms",
@@ -1014,7 +1038,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.isClickable },
+                        assertionBlock = { this.isClickable },
                         name = "IsClickable of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_CLICKABLE,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_CLICKABLE}'. IsClickable of $selectorDesc during $timeoutMs ms",
@@ -1034,7 +1058,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { !this.isClickable },
+                        assertionBlock = { !this.isClickable },
                         name = "IsNotClickable of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_NOT_CLICKABLE,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_CLICKABLE}'. IsNotClickable of $selectorDesc during $timeoutMs ms",
@@ -1054,7 +1078,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.isEnabled },
+                        assertionBlock = { this.isEnabled },
                         name = "IsEnabled of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_ENABLED,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_ENABLED}'. IsEnabled of $selectorDesc during $timeoutMs ms",
@@ -1074,7 +1098,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { !this.isEnabled },
+                        assertionBlock = { !this.isEnabled },
                         name = "IsNotEnabled of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_NOT_ENABLED,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_ENABLED}'. IsNotEnabled of $selectorDesc during $timeoutMs ms",
@@ -1094,7 +1118,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.isFocusable },
+                        assertionBlock = { this.isFocusable },
                         name = "IsFocusable of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_FOCUSABLE,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_FOCUSABLE}'. IsFocusable of $selectorDesc during $timeoutMs ms",
@@ -1114,7 +1138,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { !this.isFocusable },
+                        assertionBlock = { !this.isFocusable },
                         name = "IsNotFocusable of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_NOT_FOCUSABLE,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_FOCUSABLE}'. IsNotFocusable of $selectorDesc during $timeoutMs ms",
@@ -1134,7 +1158,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.isFocused },
+                        assertionBlock = { this.isFocused },
                         name = "IsFocused of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_FOCUSED,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_FOCUSED}'. IsFocused of $selectorDesc during $timeoutMs ms",
@@ -1154,7 +1178,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { !this.isFocused },
+                        assertionBlock = { !this.isFocused },
                         name = "IsNotFocused of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_NOT_FOCUSED,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_FOCUSED}'. IsNotFocused of $selectorDesc during $timeoutMs ms",
@@ -1174,7 +1198,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.isLongClickable },
+                        assertionBlock = { this.isLongClickable },
                         name = "IsLongClickable of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_LONG_CLICKABLE,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_LONG_CLICKABLE}'. IsLongClickable of $selectorDesc during $timeoutMs ms",
@@ -1194,7 +1218,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { !this.isLongClickable },
+                        assertionBlock = { !this.isLongClickable },
                         name = "IsNotLongClickable of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_NOT_LONG_CLICKABLE,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_LONG_CLICKABLE}'. IsNotLongClickable of $selectorDesc during $timeoutMs ms",
@@ -1214,7 +1238,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.isScrollable },
+                        assertionBlock = { this.isScrollable },
                         name = "IsScrollable of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_SCROLLABLE,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_SCROLLABLE}'. IsScrollable of $selectorDesc during $timeoutMs ms",
@@ -1234,7 +1258,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { !this.isScrollable },
+                        assertionBlock = { !this.isScrollable },
                         name = "IsNotScrollable of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_NOT_SCROLLABLE,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_SCROLLABLE}'. IsNotScrollable of $selectorDesc during $timeoutMs ms",
@@ -1254,7 +1278,7 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.isSelected },
+                        assertionBlock = { this.isSelected },
                         name = "IsSelected of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_SELECTED,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_SELECTED}'. IsSelected of $selectorDesc during $timeoutMs ms",
@@ -1274,10 +1298,32 @@ internal class UiObject2Operation {
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { !this.isSelected },
+                        assertionBlock = { !this.isSelected },
                         name = "IsNotSelected of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_NOT_SELECTED,
                         description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_SELECTED}'. IsNotSelected of $selectorDesc during $timeoutMs ms",
+                        timeoutMs = timeoutMs
+                    )
+                ), resultHandler
+            )
+        }
+
+        fun assertThat(
+            assertBlock: UiObject2.() -> Boolean,
+            assertionDescription: String,
+            block: () -> UiObject2,
+            selectorDesc: String,
+            timeoutMs: Long,
+            resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit
+        ) {
+            UiAutomatorLifecycle.execute(
+                UiAutomatorBySelectorAssertionExecutor(
+                    UiAutomatorBySelectorAssertion(
+                        objectBlock = block,
+                        assertionBlock = assertBlock,
+                        name = "AssertThat $assertionDescription in $selectorDesc",
+                        type = UiAutomatorAssertionType.ASSERT_THAT,
+                        description = "UiObject2 assertion '${UiAutomatorAssertionType.ASSERT_THAT}'. AssertThat $assertionDescription in $selectorDesc during $timeoutMs ms",
                         timeoutMs = timeoutMs
                     )
                 ), resultHandler
