@@ -3,18 +3,20 @@ package com.atiurin.ultron.core.uiautomator.uiobject
 import android.graphics.Rect
 import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiSelector
+import com.atiurin.ultron.core.common.OperationType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorActionType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorAssertionType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorLifecycle
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.exceptions.UltronException
+import org.hamcrest.Matcher
 
 internal class UiObjectOperations {
     companion object {
         fun getChild(
+            uiSelector: UiSelector,
             block: () -> UiObject,
             selectorDesc: String,
-            uiSelector: UiSelector,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
         ): UiObject {
@@ -39,9 +41,9 @@ internal class UiObjectOperations {
         }
 
         fun getFromParent(
+            uiSelector: UiSelector,
             block: () -> UiObject,
             selectorDesc: String,
-            uiSelector: UiSelector,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
         ): UiObject {
@@ -265,9 +267,9 @@ internal class UiObjectOperations {
         }
 
         fun replaceText(
+            text: String,
             block: () -> UiObject,
             selectorDesc: String,
-            text: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
         ) {
@@ -289,9 +291,9 @@ internal class UiObjectOperations {
         }
 
         fun legacySetText(
+            text: String,
             block: () -> UiObject,
             selectorDesc: String,
-            text: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
         ) {
@@ -333,29 +335,9 @@ internal class UiObjectOperations {
         }
 
         fun clickAndWaitForNewWindow(
-            block: () -> UiObject,
-            selectorDesc: String,
-            timeoutMs: Long,
-            resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
-        ) {
-            UiAutomatorLifecycle.execute(
-                UiAutomatorUiSelectorOperationExecutor(
-                    UiAutomatorUiSelectorOperation(
-                        objectBlock = block,
-                        operationBlock = { clickAndWaitForNewWindow() },
-                        name = "ClickAndWaitForNewWindow to $selectorDesc",
-                        type = UiAutomatorActionType.CLICK_AND_WAIT_FOR_NEW_WINDOW,
-                        description = "UiObject action '${UiAutomatorActionType.CLICK_AND_WAIT_FOR_NEW_WINDOW}'. ClickAndWaitForNewWindow to $selectorDesc during $timeoutMs ms",
-                        timeoutMs = timeoutMs
-                    )
-                ), resultHandler
-            )
-        }
-
-        fun clickAndWaitForNewWindow(
-            block: () -> UiObject,
-            selectorDesc: String,
             waitWindowTimeout: Long,
+            block: () -> UiObject,
+            selectorDesc: String,
             timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
         ) {
@@ -646,6 +628,29 @@ internal class UiObjectOperations {
             )
         }
 
+        fun perform(
+            actionBlock: UiObject.() -> Boolean,
+            actionDescription: String,
+            block: () -> UiObject,
+            selectorDesc: String,
+            timeoutMs: Long,
+            resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
+        ) {
+            UiAutomatorLifecycle.execute(
+                UiAutomatorUiSelectorOperationExecutor(
+                    UiAutomatorUiSelectorOperation(
+                        objectBlock = block,
+                        operationBlock = actionBlock,
+                        name = "Perform custom action '$actionDescription' on $selectorDesc.",
+                        type = UiAutomatorActionType.PERFORM,
+                        description = "UiObject action '${UiAutomatorActionType.PERFORM}'. Perform custom action '$actionDescription' on $selectorDesc during $timeoutMs ms",
+                        timeoutMs = timeoutMs
+                    )
+                ), resultHandler
+            )
+        }
+
+        //asserts
 
         fun exists(
             block: () -> UiObject,
@@ -1045,6 +1050,154 @@ internal class UiObjectOperations {
                         name = "IsNotSelected of $selectorDesc",
                         type = UiAutomatorAssertionType.IS_NOT_SELECTED,
                         description = "UiObject assertion '${UiAutomatorAssertionType.IS_NOT_SELECTED}'. IsNotSelected of $selectorDesc during $timeoutMs ms",
+                        timeoutMs = timeoutMs
+                    )
+                ), resultHandler
+            )
+        }
+
+        fun hasText(
+            text: String,
+            block: () -> UiObject,
+            selectorDesc: String,
+            timeoutMs: Long,
+            resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
+        ) {
+            UiAutomatorLifecycle.execute(
+                UiAutomatorUiSelectorOperationExecutor(
+                    UiAutomatorUiSelectorOperation(
+                        objectBlock = block,
+                        operationBlock = { this.text == text },
+                        name = "HasText $text in $selectorDesc",
+                        type = UiAutomatorAssertionType.HAS_TEXT,
+                        description = "UiObject assertion '${UiAutomatorAssertionType.HAS_TEXT}'. HasText '$text' in $selectorDesc during $timeoutMs ms",
+                        timeoutMs = timeoutMs
+                    )
+                ), resultHandler
+            )
+        }
+
+        fun hasText(
+            textMatcher: Matcher<String>,
+            block: () -> UiObject,
+            selectorDesc: String,
+            timeoutMs: Long,
+            resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
+        ) {
+            UiAutomatorLifecycle.execute(
+                UiAutomatorUiSelectorOperationExecutor(
+                    UiAutomatorUiSelectorOperation(
+                        objectBlock = block,
+                        operationBlock = { textMatcher.matches(this.text) },
+                        name = "HasText $textMatcher in $selectorDesc",
+                        type = UiAutomatorAssertionType.HAS_TEXT,
+                        description = "UiObject assertion '${UiAutomatorAssertionType.HAS_TEXT}'. HasText matches '$textMatcher' in $selectorDesc during $timeoutMs ms",
+                        timeoutMs = timeoutMs
+                    )
+                ), resultHandler
+            )
+        }
+
+        fun textContains(
+            textSubstring: String,
+            block: () -> UiObject,
+            selectorDesc: String,
+            timeoutMs: Long,
+            resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
+        ) {
+            UiAutomatorLifecycle.execute(
+                UiAutomatorUiSelectorOperationExecutor(
+                    UiAutomatorUiSelectorOperation(
+                        objectBlock = block,
+                        operationBlock = { this.text.contains(textSubstring) },
+                        name = "TextContains $textSubstring in $selectorDesc",
+                        type = UiAutomatorAssertionType.CONTAINS_TEXT,
+                        description = "UiObject assertion '${UiAutomatorAssertionType.CONTAINS_TEXT}'. TextContains '$textSubstring' in $selectorDesc during $timeoutMs ms",
+                        timeoutMs = timeoutMs
+                    )
+                ), resultHandler
+            )
+        }
+
+        fun hasContentDescription(
+            contentDesc: String,
+            block: () -> UiObject,
+            selectorDesc: String,
+            timeoutMs: Long,
+            resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
+        ) {
+            UiAutomatorLifecycle.execute(
+                UiAutomatorUiSelectorOperationExecutor(
+                    UiAutomatorUiSelectorOperation(
+                        objectBlock = block,
+                        operationBlock = { this.text == contentDesc },
+                        name = "HasContentDescription $contentDesc in $selectorDesc",
+                        type = UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION,
+                        description = "UiObject assertion '${UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION}'. HasContentDescription '$contentDesc' in $selectorDesc during $timeoutMs ms",
+                        timeoutMs = timeoutMs
+                    )
+                ), resultHandler
+            )
+        }
+
+        fun hasContentDescription(
+            contentDescMatcher: Matcher<String>,
+            block: () -> UiObject,
+            selectorDesc: String,
+            timeoutMs: Long,
+            resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
+        ) {
+            UiAutomatorLifecycle.execute(
+                UiAutomatorUiSelectorOperationExecutor(
+                    UiAutomatorUiSelectorOperation(
+                        objectBlock = block,
+                        operationBlock = { contentDescMatcher.matches(this.text) },
+                        name = "HasContentDescription $contentDescMatcher in $selectorDesc",
+                        type = UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION,
+                        description = "UiObject assertion '${UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION}'. HasContentDescription matches '$contentDescMatcher' in $selectorDesc during $timeoutMs ms",
+                        timeoutMs = timeoutMs
+                    )
+                ), resultHandler
+            )
+        }
+
+        fun contentDescriptionContains(
+            contentDescSubstring: String,
+            block: () -> UiObject,
+            selectorDesc: String,
+            timeoutMs: Long,
+            resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
+        ) {
+            UiAutomatorLifecycle.execute(
+                UiAutomatorUiSelectorOperationExecutor(
+                    UiAutomatorUiSelectorOperation(
+                        objectBlock = block,
+                        operationBlock = { this.text.contains(contentDescSubstring) },
+                        name = "ContentDescriptionContains $contentDescSubstring in $selectorDesc",
+                        type = UiAutomatorAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT,
+                        description = "UiObject assertion '${UiAutomatorAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT}'. ContentDescriptionContains '$contentDescSubstring' in $selectorDesc during $timeoutMs ms",
+                        timeoutMs = timeoutMs
+                    )
+                ), resultHandler
+            )
+        }
+
+        fun assertThat(
+            assertBlock: UiObject.() -> Boolean,
+            assertionDescription: String,
+            block: () -> UiObject,
+            selectorDesc: String,
+            timeoutMs: Long,
+            resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
+        ) {
+            UiAutomatorLifecycle.execute(
+                UiAutomatorUiSelectorOperationExecutor(
+                    UiAutomatorUiSelectorOperation(
+                        objectBlock = block,
+                        operationBlock = assertBlock,
+                        name = "AssertThat $assertionDescription in $selectorDesc",
+                        type = UiAutomatorAssertionType.ASSERT_THAT,
+                        description = "UiObject assertion '${UiAutomatorAssertionType.ASSERT_THAT}'. AssertThat $assertionDescription in $selectorDesc during $timeoutMs ms",
                         timeoutMs = timeoutMs
                     )
                 ), resultHandler

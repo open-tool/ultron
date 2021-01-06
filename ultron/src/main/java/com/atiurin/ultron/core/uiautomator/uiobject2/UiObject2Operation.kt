@@ -812,7 +812,7 @@ internal class UiObject2Operation {
                         actionBlock = { this.text == text },
                         name = "HasText $text in $selectorDesc",
                         type = UiAutomatorAssertionType.HAS_TEXT,
-                        description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_TEXT}'. Check $selectorDesc hasText $text during $timeoutMs ms",
+                        description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_TEXT}'. HasText '$text' in $selectorDesc during $timeoutMs ms",
                         timeoutMs = timeoutMs
                     )
                 ), resultHandler
@@ -833,7 +833,7 @@ internal class UiObject2Operation {
                         actionBlock = { textMatcher.matches(this.text) },
                         name = "HasText $textMatcher in $selectorDesc",
                         type = UiAutomatorAssertionType.HAS_TEXT,
-                        description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_TEXT}'. Check $selectorDesc hasText $textMatcher during $timeoutMs ms",
+                        description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_TEXT}'.  HasText matches '$textMatcher' in $selectorDesc during $timeoutMs ms",
                         timeoutMs = timeoutMs
                     )
                 ), resultHandler
@@ -843,18 +843,18 @@ internal class UiObject2Operation {
         fun textContains(
             block: () -> UiObject2,
             selectorDesc: String,
-            text: String,
-            timeoutMs: Long ,
+            textSubstring: String,
+            timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit
         ) {
             UiAutomatorLifecycle.execute(
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.text.contains(text) },
-                        name = "ContainsText $text in $selectorDesc",
+                        actionBlock = { this.text.contains(textSubstring) },
+                        name = "TextContains $textSubstring in $selectorDesc",
                         type = UiAutomatorAssertionType.CONTAINS_TEXT,
-                        description = "UiObject2 assertion '${UiAutomatorAssertionType.CONTAINS_TEXT}'. Check $selectorDesc containsText $text during $timeoutMs ms",
+                        description = "UiObject2 assertion '${UiAutomatorAssertionType.CONTAINS_TEXT}'. TextContains '$textSubstring' in $selectorDesc during $timeoutMs ms",
                         timeoutMs = timeoutMs
                     )
                 ), resultHandler
@@ -875,7 +875,7 @@ internal class UiObject2Operation {
                         actionBlock = { this.contentDescription == contentDesc },
                         name = "HasContentDescription $contentDesc in $selectorDesc",
                         type = UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION,
-                        description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION}'. Check $selectorDesc HasContentDescription $contentDesc during $timeoutMs ms",
+                        description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION}'. HasContentDescription '$contentDesc' in $selectorDesc during $timeoutMs ms",
                         timeoutMs = timeoutMs
                     )
                 ), resultHandler
@@ -896,7 +896,7 @@ internal class UiObject2Operation {
                         actionBlock = { contentDescMatcher.matches(this.contentDescription) },
                         name = "HasContentDescription $contentDescMatcher in $selectorDesc",
                         type = UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION,
-                        description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION}'. Check $selectorDesc hasText $contentDescMatcher during $timeoutMs ms",
+                        description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION}'. HasContentDescription matches '$contentDescMatcher' in $selectorDesc during $timeoutMs ms",
                         timeoutMs = timeoutMs
                     )
                 ), resultHandler
@@ -906,18 +906,18 @@ internal class UiObject2Operation {
         fun contentDescriptionContains(
             block: () -> UiObject2,
             selectorDesc: String,
-            contentDesc: String,
-            timeoutMs: Long ,
+            contentDescSubstring: String,
+            timeoutMs: Long,
             resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit
         ) {
             UiAutomatorLifecycle.execute(
                 UiAutomatorBySelectorAssertionExecutor(
                     UiAutomatorBySelectorAssertion(
                         objectBlock = block,
-                        actionBlock = { this.contentDescription.contains(contentDesc) },
-                        name = "ContentDescriptionContains $contentDesc in $selectorDesc",
+                        actionBlock = { this.contentDescription.contains(contentDescSubstring) },
+                        name = "ContentDescriptionContains $contentDescSubstring in $selectorDesc",
                         type = UiAutomatorAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT,
-                        description = "UiObject2 assertion '${UiAutomatorAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT}'. Check $selectorDesc ContentDescriptionContains $contentDesc during $timeoutMs ms",
+                        description = "UiObject2 assertion '${UiAutomatorAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT}'. ContentDescriptionContains '$contentDescSubstring' in $selectorDesc during $timeoutMs ms",
                         timeoutMs = timeoutMs
                     )
                 ), resultHandler
