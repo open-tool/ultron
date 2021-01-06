@@ -144,7 +144,8 @@ object UltronConfig {
         class UiObjectConfig {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
-                    UiObjectNotFoundException::class.java
+                    UiObjectNotFoundException::class.java,
+                    NullPointerException::class.java
                 )
                 val resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit =
                     {
