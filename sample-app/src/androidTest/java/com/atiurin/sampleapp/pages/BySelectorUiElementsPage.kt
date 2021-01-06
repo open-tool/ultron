@@ -5,7 +5,7 @@ import com.atiurin.sampleapp.R
 import com.atiurin.ultron.extensions.ByExt
 
 class BySelectorUiElementsPage {
-//    val button = By.res("com.atiurin.sampleapp","button1")
+    val notExistedObject = By.res("com.atiurin.sampleapp","123123123123")
     val button = ByExt.resId(R.id.button1)
     val eventStatus = ByExt.resId(R.id.last_event_status)
     val radioVisibleButton = ByExt.resId(R.id.radio_visible)

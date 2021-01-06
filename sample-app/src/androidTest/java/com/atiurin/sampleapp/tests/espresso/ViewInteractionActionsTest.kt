@@ -4,6 +4,7 @@ import android.os.SystemClock
 import android.view.KeyEvent
 import androidx.test.espresso.action.EspressoKey
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.ultron.extensions.*
 import com.atiurin.sampleapp.R
@@ -12,6 +13,7 @@ import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
 import org.junit.Test
 
@@ -29,13 +31,13 @@ class ViewInteractionActionsTest : UiElementsTest() {
     @Test
     fun click_onClickable() {
         page.button.click()
-        page.eventStatus.textContains(getResourceString(R.string.button_event_click))
+        page.eventStatus.textContains(getTargetString(R.string.button_event_click))
     }
 
     @Test
     fun longClick_onLongClickable() {
         page.button.longClick()
-        page.eventStatus.textContains(getResourceString(R.string.button_event_long_click))
+        page.eventStatus.textContains(getTargetString(R.string.button_event_long_click))
     }
 
     @Test
