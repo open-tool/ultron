@@ -65,7 +65,7 @@ fun UiSelector.getFromParent(
 fun UiSelector.getClassName(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
-): String {
+): String? {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getClassName( timeoutMs, resultHandler)
 }
 
@@ -78,14 +78,14 @@ fun UiSelector.getClassName(
 fun UiSelector.getContentDescription(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
-): String {
+): String? {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getContentDescription( timeoutMs, resultHandler)
 }
 
 fun UiSelector.getPackageName(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
-): String {
+): String? {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getPackageName( timeoutMs, resultHandler)
 }
 
@@ -96,7 +96,7 @@ fun UiSelector.getPackageName(
 fun UiSelector.getVisibleBounds(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
-): Rect {
+): Rect? {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getVisibleBounds( timeoutMs, resultHandler)
 }
 
@@ -109,7 +109,7 @@ fun UiSelector.getVisibleBounds(
 fun UiSelector.getBounds(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
-): Rect {
+): Rect? {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getBounds( timeoutMs, resultHandler)
 }
 
@@ -122,7 +122,7 @@ fun UiSelector.getBounds(
 fun UiSelector.getText(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
-): String {
+): String? {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getText( timeoutMs, resultHandler)
 }
 

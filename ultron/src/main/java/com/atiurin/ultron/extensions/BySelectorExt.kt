@@ -110,7 +110,7 @@ fun BySelector.clear(
 fun BySelector.getText(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-): String {
+): String? {
     return UltronUiObject2({ uiDevice.findObject(this) }, this.toString()).getText(timeoutMs, resultHandler)
 }
 
@@ -118,7 +118,7 @@ fun BySelector.getText(
 fun BySelector.getApplicationPackage(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-): String {
+): String? {
     return UltronUiObject2({ uiDevice.findObject(this) }, this.toString()).getApplicationPackage(timeoutMs, resultHandler)
 }
 
@@ -126,7 +126,7 @@ fun BySelector.getApplicationPackage(
 fun BySelector.getVisibleBounds(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-): Rect {
+): Rect? {
     return UltronUiObject2({ uiDevice.findObject(this) }, this.toString()).getVisibleBounds(timeoutMs, resultHandler)
 }
 
@@ -134,7 +134,7 @@ fun BySelector.getVisibleBounds(
 fun BySelector.getVisibleCenter(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-): Point {
+): Point? {
     return UltronUiObject2({ uiDevice.findObject(this) }, this.toString()).getVisibleCenter(timeoutMs, resultHandler)
 }
 
@@ -142,7 +142,7 @@ fun BySelector.getVisibleCenter(
 fun BySelector.getResourceName(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-): String {
+): String? {
     return UltronUiObject2({ uiDevice.findObject(this) }, this.toString()).getResourceName(timeoutMs, resultHandler)
 }
 
@@ -152,7 +152,7 @@ fun BySelector.getResourceName(
 fun BySelector.getClassName(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-): String {
+): String? {
     return UltronUiObject2({ uiDevice.findObject(this) }, this.toString()).getClassName(timeoutMs, resultHandler)
 }
 
@@ -160,7 +160,7 @@ fun BySelector.getClassName(
 fun BySelector.getContentDescription(
     timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-) : String {
+) : String? {
     return UltronUiObject2({ uiDevice.findObject(this) }, this.toString()).getContentDescription(timeoutMs, resultHandler)
 }
 
@@ -574,6 +574,12 @@ fun BySelector.isNotSelected(
     UltronUiObject2({ uiDevice.findObject(this) }, this.toString()).isNotSelected(timeoutMs, resultHandler)
 }
 
+fun BySelector.isDisplayed(
+    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
+) {
+    UltronUiObject2({ uiDevice.findObject(this) }, this.toString()).isDisplayed(timeoutMs, resultHandler)
+}
 /**
  * Execute custom assertion on UiObject2
  * if [assertBlock] returns true, the assertion will be executed successfully without any exception

@@ -133,13 +133,14 @@ class UltronUiObject2(
 
     // Attribute accessors
     /**
-     * @return view text
+     * @return view.text or null if view has no text
+     * if you would like to assert view.text use [hasText] and [textContains]
      */
     fun getText(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-    ): String {
-        var text: String = ""
+    ): String? {
+        var text: String? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorBySelectorActionExecutor(
                 UiAutomatorBySelectorAction(
@@ -155,10 +156,12 @@ class UltronUiObject2(
         return text
     }
 
+    /** @return the class name of the view represented by this object.
+     *  or null if it impossible to get className */
     fun getClassName(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-    ): String {
+    ): String? {
         var className: String? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorBySelectorActionExecutor(
@@ -172,15 +175,17 @@ class UltronUiObject2(
                 )
             ), resultHandler
         )
-        return className ?: throw UltronException("Couldn't getClassName of $selectorDesc")
+        return className
     }
 
-    /** Returns the package name of the app that this object belongs to. */
+    /** @return the package name of the app that this object belongs to.
+     * or null if it is impossible to identify app
+     * */
     fun getApplicationPackage(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-    ): String {
-        var packageName: String = ""
+    ): String? {
+        var packageName: String? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorBySelectorActionExecutor(
                 UiAutomatorBySelectorAction(
@@ -196,11 +201,11 @@ class UltronUiObject2(
         return packageName
     }
 
-    /** Returns the visible bounds of this object in screen coordinates. */
+    /**  @return the visible bounds of this object in screen coordinates. */
     fun getVisibleBounds(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-    ): Rect {
+    ): Rect? {
         var visibleBounds: Rect? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorBySelectorActionExecutor(
@@ -214,14 +219,14 @@ class UltronUiObject2(
                 )
             ), resultHandler
         )
-        return visibleBounds ?: throw UltronException("Couldn't get visibleBounds of $this")
+        return visibleBounds
     }
 
-    /** Returns a point in the center of the visible bounds of this object. */
+    /**  @return a point in the center of the visible bounds of this object. */
     fun getVisibleCenter(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-    ): Point {
+    ): Point? {
         var visibleCenter: Point? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorBySelectorActionExecutor(
@@ -235,14 +240,17 @@ class UltronUiObject2(
                 )
             ), resultHandler
         )
-        return visibleCenter ?: throw UltronException("Couldn't get visibleCenter of $this")
+        return visibleCenter
     }
 
-    /** Returns the fully qualified resource name for this object's id.  */
+    /**
+     * @return the fully qualified resource name for this object's id.
+     * or null if resource name isn't specified
+     */
     fun getResourceName(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-    ): String {
+    ): String? {
         var resName: String? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorBySelectorActionExecutor(
@@ -256,14 +264,17 @@ class UltronUiObject2(
                 )
             ), resultHandler
         )
-        return resName ?: throw UltronException("Couldn't getResourceName of $this")
+        return resName
     }
 
-    /** Returns the content description for this object. */
+    /**
+     * @return the content description for this object
+     * or null if it isn't specified for view
+     */
     fun getContentDescription(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
-    ): String {
+    ): String? {
         var contentDesc: String? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorBySelectorActionExecutor(
@@ -277,7 +288,7 @@ class UltronUiObject2(
                 )
             ), resultHandler
         )
-        return contentDesc ?: throw UltronException("Couldn't getContentDescription of $this")
+        return contentDesc
     }
 
     // Actions
@@ -300,6 +311,7 @@ class UltronUiObject2(
         )
     }
 
+    /** Clicks on object. */
     fun click(
         duration: Long,
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
@@ -319,6 +331,7 @@ class UltronUiObject2(
         )
     }
 
+    /** Performs a long click on object. */
     fun longClick(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
@@ -337,6 +350,7 @@ class UltronUiObject2(
         )
     }
 
+    /** Clears the text content if object is an editable field. */
     fun clear(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
@@ -355,7 +369,7 @@ class UltronUiObject2(
         )
     }
 
-    /** Add the text content if this object is an editable field. */
+    /** Add the text content if object is an editable field. */
     fun addText(
         text: String,
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
@@ -375,10 +389,7 @@ class UltronUiObject2(
         )
     }
 
-    /**
-     * Set the text content by sending individual key codes.
-     * @hide
-     */
+    /** Set the text content by sending individual key codes. */
     fun legacySetText(
         text: String,
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
@@ -398,7 +409,7 @@ class UltronUiObject2(
         )
     }
 
-    /** Sets the text content if this object is an editable field. */
+    /** Sets the text content if object is an editable field. */
     fun replaceText(
         text: String,
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
@@ -419,9 +430,9 @@ class UltronUiObject2(
     }
 
     /**
-     * Drags this object to the specified location.
+     * Drags object to the specified location.
      *
-     * @param dest The end point that this object should be dragged to.
+     * @param dest The end point that object should be dragged to.
      */
     fun drag(
         dest: Point,
@@ -443,7 +454,7 @@ class UltronUiObject2(
     }
 
     /**
-     * Drags this object to the specified location.
+     * Drags object to the specified location.
      *
      * @param dest The end point that this object should be dragged to.
      * @param speed The speed at which to perform this gesture in pixels per second.
@@ -1188,6 +1199,24 @@ class UltronUiObject2(
                 UiAutomatorBySelectorAssertion(
                     objectBlock = uiObject2ProviderBlock,
                     assertionBlock = { !this.isSelected },
+                    name = "IsNotSelected of $selectorDesc",
+                    type = UiAutomatorAssertionType.IS_NOT_SELECTED,
+                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_SELECTED}'. IsNotSelected of $selectorDesc during $timeoutMs ms",
+                    timeoutMs = timeoutMs
+                )
+            ), resultHandler
+        )
+    }
+
+    fun isDisplayed(
+        timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+        resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
+    ){
+        UiAutomatorLifecycle.execute(
+            UiAutomatorBySelectorAssertionExecutor(
+                UiAutomatorBySelectorAssertion(
+                    objectBlock = uiObject2ProviderBlock,
+                    assertionBlock = { true },
                     name = "IsNotSelected of $selectorDesc",
                     type = UiAutomatorAssertionType.IS_NOT_SELECTED,
                     description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_SELECTED}'. IsNotSelected of $selectorDesc during $timeoutMs ms",

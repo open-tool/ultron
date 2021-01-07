@@ -7,10 +7,7 @@ import com.atiurin.sampleapp.framework.utils.TestDataUtils
 import com.atiurin.sampleapp.pages.BySelectorUiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.extensions.click
-import com.atiurin.ultron.extensions.getParent
-import com.atiurin.ultron.extensions.getText
-import com.atiurin.ultron.extensions.hasText
+import com.atiurin.ultron.extensions.*
 import com.atiurin.ultron.utils.getTargetString
 import junit.framework.Assert
 import org.junit.Before
@@ -28,6 +25,7 @@ class BySelectorTest: UiElementsTest() {
     fun getParent(){
         Log.debug(">>>> ${page.button.getParent()?.getResourceName()} ${page.button.getParent()?.getClassName()}")
     }
+
     @Test
     fun click_onClickable() {
         page.button.click()
@@ -52,5 +50,12 @@ class BySelectorTest: UiElementsTest() {
     @Test
     fun getTextTest(){
         Assert.assertEquals(getTargetString(R.string.button_text), page.button.getText())
+    }
+
+    @Test
+    fun perfTest() {
+        page.radioInvisibleButton.click()
+        page.button.isDisplayed()
+        page.editTextContentDesc.replaceText("asdasd")
     }
 }

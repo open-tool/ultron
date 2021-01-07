@@ -35,8 +35,7 @@ class UltronUiObject(
                 )
             ), resultHandler
         )
-        return uiObject
-            ?: throw UltronException("Couldn't getChild of $selectorDesc with selector $uiSelector")
+        return uiObject ?: throw UltronException("Couldn't getChild of $selectorDesc with selector $uiSelector")
     }
 
     fun getFromParent(
@@ -89,7 +88,7 @@ class UltronUiObject(
     fun getClassName(
         timeoutMs: Long,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
-    ): String {
+    ): String? {
         var className: String? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorUiSelectorOperationExecutor(
@@ -106,13 +105,13 @@ class UltronUiObject(
                 )
             ), resultHandler
         )
-        return className ?: throw UltronException("Couldn't get className of $selectorDesc")
+        return className
     }
 
     fun getContentDescription(
         timeoutMs: Long,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
-    ): String {
+    ): String? {
         var contentDesc: String? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorUiSelectorOperationExecutor(
@@ -130,13 +129,13 @@ class UltronUiObject(
             ), resultHandler
         )
         return contentDesc
-            ?: throw UltronException("Couldn't get contentDescription of $selectorDesc")
+
     }
 
     fun getPackageName(
         timeoutMs: Long,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
-    ): String {
+    ): String? {
         var packageName: String? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorUiSelectorOperationExecutor(
@@ -153,13 +152,13 @@ class UltronUiObject(
                 )
             ), resultHandler
         )
-        return packageName ?: throw UltronException("Couldn't get packageName of $selectorDesc")
+        return packageName
     }
 
     fun getVisibleBounds(
         timeoutMs: Long,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
-    ): Rect {
+    ): Rect? {
         var bounds: Rect? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorUiSelectorOperationExecutor(
@@ -176,13 +175,13 @@ class UltronUiObject(
                 )
             ), resultHandler
         )
-        return bounds ?: throw UltronException("Couldn't get visibleBounds of $selectorDesc")
+        return bounds
     }
 
     fun getBounds(
         timeoutMs: Long,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
-    ): Rect {
+    ): Rect? {
         var bounds: Rect? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorUiSelectorOperationExecutor(
@@ -199,13 +198,13 @@ class UltronUiObject(
                 )
             ), resultHandler
         )
-        return bounds ?: throw UltronException("Couldn't get bounds of $selectorDesc")
+        return bounds
     }
 
     fun getText(
         timeoutMs: Long,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
-    ): String {
+    ): String? {
         var text: String? = null
         UiAutomatorLifecycle.execute(
             UiAutomatorUiSelectorOperationExecutor(
@@ -222,7 +221,7 @@ class UltronUiObject(
                 )
             ), resultHandler
         )
-        return text ?: throw UltronException("Couldn't get text of $selectorDesc")
+        return text
     }
 
     fun clearTextField(
