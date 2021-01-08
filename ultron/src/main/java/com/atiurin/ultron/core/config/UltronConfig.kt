@@ -25,6 +25,7 @@ import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.uiobject2.UiAutomatorBySelectorAction
 import com.atiurin.ultron.core.uiautomator.uiobject2.UiAutomatorBySelectorAssertion
 import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
+import com.atiurin.ultron.exceptions.UltronException
 import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
@@ -159,7 +160,8 @@ object UltronConfig {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     UiObjectNotFoundException::class.java,
-                    NullPointerException::class.java
+                    NullPointerException::class.java,
+                    UltronException::class.java
                 )
                 val bySelectorActionResultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit =
                     {

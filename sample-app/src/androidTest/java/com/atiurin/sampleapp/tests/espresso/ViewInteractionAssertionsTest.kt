@@ -9,9 +9,11 @@ import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
+import com.atiurin.ultron.core.config.UltronConfig
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
 class ViewInteractionAssertionsTest : UiElementsTest() {
@@ -26,13 +28,13 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun isDisplayed_ofNotDisplayedObject() {
         page.radioInvisibleButton.click()
-        AssertUtils.assertException { page.button.isDisplayed(1000) }
+        AssertUtils.assertException { page.button.isDisplayed(100) }
     }
 
     @Test
     fun isNotDisplayed_ofDisplayedObject() {
         page.radioVisibleButton.click()
-        AssertUtils.assertException { page.button.isNotDisplayed(1000) }
+        AssertUtils.assertException { page.button.isNotDisplayed(100) }
     }
 
     @Test
@@ -50,12 +52,12 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isChecked_ofNotChecked() {
-        AssertUtils.assertException { page.checkBoxSelected.isChecked(1000) }
+        AssertUtils.assertException { page.checkBoxSelected.isChecked(100) }
     }
 
     @Test
     fun isNotChecked_ofChecked() {
-        AssertUtils.assertException { page.checkBoxClickable.isNotChecked(1000) }
+        AssertUtils.assertException { page.checkBoxClickable.isNotChecked(100) }
     }
 
     @Test
@@ -72,13 +74,13 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isSelected_ofNotSelected() {
-        AssertUtils.assertException { page.button.isSelected(1000) }
+        AssertUtils.assertException { page.button.isSelected(100) }
     }
 
     @Test
     fun isNotSelected_ofSelected() {
         page.checkBoxSelected.click()
-        AssertUtils.assertException { page.button.isNotSelected(1000) }
+        AssertUtils.assertException { page.button.isNotSelected(100) }
     }
 
     @Test
@@ -95,12 +97,12 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun isEnabled_ofNotEnabled() {
         page.checkBoxEnabled.click()
-        AssertUtils.assertException { page.button.isEnabled(1000) }
+        AssertUtils.assertException { page.button.isEnabled(100) }
     }
 
     @Test
     fun isNotEnabled_ofEnabled() {
-        AssertUtils.assertException { page.button.isNotEnabled(1000) }
+        AssertUtils.assertException { page.button.isNotEnabled(100) }
     }
 
     @Test
@@ -118,12 +120,12 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun isClickable_ofNotClickable() {
         page.checkBoxClickable.click()
-        AssertUtils.assertException { page.button.isClickable(1000) }
+        AssertUtils.assertException { page.button.isClickable(100) }
     }
 
     @Test
     fun isNotClickable_ofClickable() {
-        AssertUtils.assertException { page.button.isNotClickable(1000) }
+        AssertUtils.assertException { page.button.isNotClickable(100) }
     }
 
     @Test
@@ -141,12 +143,12 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun isFocusable_ofNotFocusable() {
         page.checkBoxFocusable.click()
-        AssertUtils.assertException { page.button.isFocusable(1000) }
+        AssertUtils.assertException { page.button.isFocusable(100) }
     }
 
     @Test
     fun isNotFocusable_ofFocusable() {
-        AssertUtils.assertException { page.button.isNotFocusable(1000) }
+        AssertUtils.assertException { page.button.isNotFocusable(100) }
     }
 
     @Test
@@ -164,7 +166,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun hasFocus_ofNotFocused() {
-        AssertUtils.assertException { page.editTextContentDesc.hasFocus(1000) }
+        AssertUtils.assertException { page.editTextContentDesc.hasFocus(100) }
     }
 
     //hasText
@@ -176,7 +178,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun hasText_InvalidSubstringText() {
         val text = getResourceString(R.string.button_default_content_desc)
-        AssertUtils.assertException { page.editTextContentDesc.hasText(text.substring(3), 1000) }
+        AssertUtils.assertException { page.editTextContentDesc.hasText(text.substring(3), 100) }
     }
 
     @Test
@@ -250,7 +252,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun hasContentDescription_InvalidSubstringText() {
         val text = getResourceString(R.string.button_default_content_desc)
-        AssertUtils.assertException { page.button.hasContentDescription(text.substring(3), 1000) }
+        AssertUtils.assertException { page.button.hasContentDescription(text.substring(3), 100) }
     }
 
     @Test
@@ -284,7 +286,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun contentDescriptionContains_CorrectText_withString() {
         val text = getResourceString(R.string.button_default_content_desc)
-        page.button.contentDescriptionContains(text.substring(2), 1000)
+        page.button.contentDescriptionContains(text.substring(2), 100)
     }
 
     @Test
@@ -327,19 +329,19 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun jsEnabled_ofNotEnabled() {
         page.checkBoxJsEnabled.click()
-        AssertUtils.assertException { page.webView.isJavascriptEnabled(1000) }
+        AssertUtils.assertException { page.webView.isJavascriptEnabled(100) }
     }
     //isSuccess
 
     @Test
     fun isSuccess_FalseTest() {
-        val success = page.button.isSuccess { isNotDisplayed(1000) }
+        val success = page.button.isSuccess { isNotDisplayed(100) }
         Assert.assertFalse(success)
     }
 
     @Test
     fun isSuccess_TrueTest() {
-        val success = page.button.isSuccess { isDisplayed(1000) }
+        val success = page.button.isSuccess { isDisplayed(100) }
         Assert.assertTrue(success)
     }
 
@@ -359,7 +361,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun hasDrawable_viewHasNoDrawable() {
-        AssertUtils.assertException { page.emptyImageView.assertMatches(hasAnyDrawable(), 1000) }
+        AssertUtils.assertException { page.emptyImageView.assertMatches(hasAnyDrawable(), 100) }
     }
 
     @Test
@@ -372,7 +374,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
         AssertUtils.assertException {
             page.imageView.assertMatches(
                 withDrawable(R.drawable.ic_attach_file),
-                1000
+                100
             )
         }
     }

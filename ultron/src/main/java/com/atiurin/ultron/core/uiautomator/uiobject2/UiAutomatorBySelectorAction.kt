@@ -7,20 +7,17 @@ import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.OperationType
 
 class UiAutomatorBySelectorAction(
-    private val actionBlock: UiObject2.() -> Unit,
-    private val objectBlock: ()-> UiObject2,
+    private val actionBlock: () -> Unit,
     override val name: String,
     override val description: String,
     override val type: OperationType,
     override val timeoutMs: Long
 ) : Operation {
-
     override fun execute(): OperationIterationResult {
         var success = true
         var exception: Throwable? = null
         try {
-            val uiObject2 = objectBlock()
-            uiObject2.actionBlock()
+            actionBlock()
         } catch (error: Throwable) {
             success = false
             exception = error

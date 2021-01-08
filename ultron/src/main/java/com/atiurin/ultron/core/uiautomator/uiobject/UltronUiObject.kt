@@ -3,7 +3,6 @@ package com.atiurin.ultron.core.uiautomator.uiobject
 import android.graphics.Rect
 import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiSelector
-import com.atiurin.ultron.core.common.OperationType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorActionType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorAssertionType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorLifecycle
@@ -993,8 +992,8 @@ class UltronUiObject(
                     objectBlock = block,
                     operationBlock = { this.text.contains(textSubstring) },
                     name = "TextContains $textSubstring in $selectorDesc",
-                    type = UiAutomatorAssertionType.CONTAINS_TEXT,
-                    description = "UiObject assertion '${UiAutomatorAssertionType.CONTAINS_TEXT}'. TextContains '$textSubstring' in $selectorDesc during $timeoutMs ms",
+                    type = UiAutomatorAssertionType.TEXT_CONTAINS,
+                    description = "UiObject assertion '${UiAutomatorAssertionType.TEXT_CONTAINS}'. TextContains '$textSubstring' in $selectorDesc during $timeoutMs ms",
                     timeoutMs = timeoutMs
                 )
             ), resultHandler

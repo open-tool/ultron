@@ -170,7 +170,7 @@ class WebElementTest : BaseWebViewTest() {
                 webMatches(
                     getText(),
                     `is`("Apple")
-                )
+                ), timeoutMs = 100
             )
         }
     }

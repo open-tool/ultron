@@ -88,7 +88,6 @@ class EspressoWebUiElementsTest : BaseWebViewTest() {
     fun extVar2WebViewTest() {
         val newTitle = "New title"
         id("text_input").webKeys(newTitle).webKeys("and more").replaceText(newTitle)
-        Thread.sleep(5000)
         id("button1").webClick()
         id("title").hasText(newTitle)
         className("css_title").containsText(newTitle)
@@ -120,7 +119,7 @@ class EspressoWebUiElementsTest : BaseWebViewTest() {
         page.buttonUpdTitle.webClick()
         page.title.containsText(newTitle)
         page.titleWithCss.containsText(newTitle)
-        AssertUtils.assertException { page.appleLink.containsText("Apple12312") }
+        AssertUtils.assertException { page.appleLink.containsText("Apple12312", 100) }
     }
 
     @Test

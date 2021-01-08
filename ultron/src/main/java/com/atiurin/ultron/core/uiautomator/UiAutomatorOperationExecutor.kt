@@ -5,6 +5,8 @@ import com.atiurin.ultron.core.common.OperationExecutor
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.config.UltronConfig.UiAutomator.Companion.UIAUTOMATOR_OPERATION_POLLING_TIMEOUT
+import com.atiurin.ultron.exceptions.UltronWrapperException
+import java.lang.NullPointerException
 
 abstract class UiAutomatorOperationExecutor<T : Operation>(
         override val operation: T
@@ -25,5 +27,15 @@ abstract class UiAutomatorOperationExecutor<T : Operation>(
             description = description,
             operationIterationResult = operationIterationResult
         )
+    }
+
+    override fun getWrapperException(originalException: Throwable): Throwable {
+        return if (originalException is NullPointerException){
+             UltronWrapperException("""
+                |Looks like UI element not found for execution of [${operation.description}]. 
+                |Original error NullPointerException[${originalException.message}] 
+                |Usually it happens while searching for an object 
+             """.trimMargin())
+        } else UltronWrapperException("${operation.description} failed", originalException)
     }
 }
