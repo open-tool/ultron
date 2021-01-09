@@ -20,14 +20,6 @@ import org.junit.Test
 class UltronUiObject2ActionsTest: UiElementsTest() {
     val page = UiObject2ElementsPage()
 
-    companion object{
-        @BeforeClass @JvmStatic
-        fun speedUpAutomator(){
-            UltronConfig.UiAutomator.UIAUTOMATOR_OPERATION_POLLING_TIMEOUT = 50L
-            UltronConfig.UiAutomator.speedUp()
-        }
-    }
-
     //getParent
     @Test
     fun getParent_parentExist(){

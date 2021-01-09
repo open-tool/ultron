@@ -89,6 +89,85 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
         AssertUtils.assertException { page.editTextContentDesc.clear().textIsNotNullOrEmpty(100) }
     }
 
+    //contentDescription
+
+    //hasContentDescription
+    @Test
+    fun hasContentDescription_CorrectText_withResourceId() {
+        page.button.hasContentDescription(getTargetString(R.string.button_default_content_desc))
+    }
+
+    @Test
+    fun hasContentDescription_InvalidText_withResourceId() {
+        AssertUtils.assertException { page.button.hasContentDescription("invalid text", 100) }
+    }
+
+    @Test
+    fun hasContentDescription_notExisted(){
+        AssertUtils.assertException { page.notExistedObject.hasContentDescription("asd", 100) }
+    }
+
+    //contentDescription matcher
+    @Test
+    fun hasContentDescription_matcher_CorrectText() {
+        page.button.hasContentDescription(containsString(getTargetString(R.string.button_default_content_desc).substring(0, 5)))
+    }
+
+    @Test
+    fun hasContentDescription_matcher_InvalidText() {
+        AssertUtils.assertException { page.button.hasContentDescription(equalToIgnoringCase("invalid text"), 100) }
+    }
+
+    @Test
+    fun hasContentDescription_matcher_notExisted(){
+        AssertUtils.assertException { page.notExistedObject.hasContentDescription(containsString("asd"), 100) }
+    }
+
+    //contentDescriptionContains
+    @Test
+    fun contentDescriptionContains_validText(){
+        val substring = getTargetString(R.string.button_default_content_desc).substring(0, 5)
+        page.button.contentDescriptionContains(substring)
+    }
+
+    @Test
+    fun contentDescriptionContains_invalidText(){
+        AssertUtils.assertException { page.button.contentDescriptionContains("invalid substring", 100) }
+    }
+
+    @Test
+    fun contentDescriptionContains_notExisted(){
+        AssertUtils.assertException { page.notExistedObject.contentDescriptionContains("invalid substring", 100) }
+    }
+
+    //contentDescriptionIsNullOrEmpty
+    @Test
+    fun contentDescriptionIsNullOrEmpty_nullText(){
+        page.editTextContentDesc.clear()
+        page.button.contentDescriptionIsNullOrEmpty()
+    }
+
+    @Test
+    fun contentDescriptionIsNullOrEmpty_notEmptyText(){
+        AssertUtils.assertException { page.button.contentDescriptionIsNullOrEmpty(100) }
+    }
+
+    @Test
+    fun contentDescriptionIsNullOrEmpty_notExisted(){
+        AssertUtils.assertException { page.notExistedObject.contentDescriptionIsNullOrEmpty(100) }
+    }
+
+    //contentDescriptionIsNotNullOrEmpty
+    @Test
+    fun contentDescriptionIsNotNullOrEmpty_notEmptyText(){
+        page.editTextContentDesc.contentDescriptionIsNotNullOrEmpty()
+    }
+
+    @Test
+    fun contentDescriptionIsNotNullOrEmpty_nullText(){
+        page.editTextContentDesc.clear()
+        AssertUtils.assertException { page.button.contentDescriptionIsNotNullOrEmpty(100) }
+    }
     //isDisplayed
     @Test
     fun isDisplayed_ofDisplayedObject() {
