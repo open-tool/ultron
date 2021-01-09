@@ -273,8 +273,21 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
         val btnText = getTargetString(R.string.button_text)
         page.button.replaceText("some new text", 1000).hasText(btnText)
     }
+
     @Test
     fun replaceText_toNotExistedObject(){
         AssertUtils.assertException { page.notExistedObject.replaceText("some new text", 100) }
+    }
+
+    //perform
+    @Test
+    fun perform_existedObject(){
+        page.button.perform({ this.click() }, "Click on button")
+        page.eventStatus.textContains(TestDataUtils.getResourceString(R.string.button_event_click))
+    }
+
+    @Test
+    fun perform_notExistedObject(){
+        AssertUtils.assertException { page.notExistedObject.perform({this.click()}, "Click on button", timeoutMs = 100) }
     }
 }

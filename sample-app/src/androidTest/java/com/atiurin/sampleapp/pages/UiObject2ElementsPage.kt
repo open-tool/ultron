@@ -2,6 +2,8 @@ package com.atiurin.sampleapp.pages
 
 import androidx.test.uiautomator.By
 import com.atiurin.sampleapp.R
+import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2
 import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2.Companion.by
 import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2.Companion.resId
 

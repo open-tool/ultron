@@ -16,9 +16,11 @@ import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.methodToBoolean
 import com.atiurin.ultron.utils.getTargetResourceName
 import org.hamcrest.Matcher
+import org.hamcrest.Matchers
+import org.hamcrest.Matchers.containsString
 
 
-class UltronUiObject2(
+class UltronUiObject2 internal constructor(
     val uiObject2ProviderBlock: () -> UiObject2?,
     val selectorDesc: String
 ) {
@@ -772,23 +774,7 @@ class UltronUiObject2(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = {
-                        val actualText = uiObject2ProviderBlock()!!.text
-                        if (!actualText.contains(textSubstring)) {
-                            throw UltronException("Expected: text contains '$textSubstring', got '$actualText'.")
-                        }
-                        true
-                    },
-                    name = "TextContains '$textSubstring' in $selectorDesc",
-                    type = UiAutomatorAssertionType.TEXT_CONTAINS,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.TEXT_CONTAINS}' '$textSubstring' in $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
-        )
+        hasText(containsString(textSubstring), timeoutMs, resultHandler)
     }
 
     fun textIsNullOrEmpty(
@@ -867,23 +853,7 @@ class UltronUiObject2(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = {
-                        val actualContentDesc = uiObject2ProviderBlock()!!.contentDescription
-                        if (!actualContentDesc.contains(contentDescSubstring)) {
-                            throw UltronException("Expected: contentDescription contains '$contentDescSubstring', got '$actualContentDesc'.")
-                        }
-                        true
-                    },
-                    name = "ContentDescriptionContains '$contentDescSubstring' in $selectorDesc",
-                    type = UiAutomatorAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT}'. ContentDescriptionContains '$contentDescSubstring' in $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
-        )
+        hasContentDescription(containsString(contentDescSubstring), timeoutMs, resultHandler)
     }
 
     fun contentDescriptionIsNullOrEmpty(
