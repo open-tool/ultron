@@ -109,10 +109,9 @@
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_margin="10dp"
-        android:clickable="false"
         android:src="@drawable/ic_account" />
 
     <ImageView
@@ -120,5 +119,6 @@
         android:layout_width="10dp"
         android:layout_height="10dp"
         android:layout_margin="10dp"
+        android:clickable="false"
         android:background="@color/colorAccent" />
 </LinearLayout>

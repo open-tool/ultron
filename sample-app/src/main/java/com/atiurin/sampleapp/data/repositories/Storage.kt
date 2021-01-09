@@ -17,7 +17,22 @@ val CONTACTS = arrayListOf(
     Contact(8, "Janice", "Oh. My. God", Avatars.JANICE.drawable),
     Contact(9, "Bob", "I wanna drink", Avatars.DEFAULT.drawable),
     Contact(10, "Marty McFly", "Back to the ...", Avatars.DEFAULT.drawable),
-    Contact(11, "Emmet Brown", "Time fluid capacitor", Avatars.DEFAULT.drawable)
+    Contact(12, "Emmet Brown", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(13, "Friend1", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(14, "Friend2", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(15, "Friend3", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(16, "Friend4", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(17, "Friend5", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(18, "Friend6", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(19, "Friend7", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(20, "Friend8", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(21, "Friend9", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(22, "Friend10", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(23, "Friend11", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(24, "Friend12", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(25, "Friend13", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(26, "Friend14", "Time fluid capacitor", Avatars.DEFAULT.drawable)
+
 )
 
 enum class Avatars(val drawable: Int) {

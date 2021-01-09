@@ -16,5 +16,12 @@ object ContactRepositoty {
         return contacts.find { it.id == id }!!
     }
 
+    fun getFirst(): Contact {
+        return contacts.first()
+    }
+    fun getLast() : Contact{
+        return contacts.last()
+    }
+
     private val contacts = CONTACTS
 }

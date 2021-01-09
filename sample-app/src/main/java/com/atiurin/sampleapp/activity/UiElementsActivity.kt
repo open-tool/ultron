@@ -1,20 +1,24 @@
 package com.atiurin.sampleapp.activity
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.View.*
 import android.webkit.WebView
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.atiurin.sampleapp.R
+import com.atiurin.sampleapp.view.listeners.OnSwipeTouchListener
 
 class UiElementsActivity : AppCompatActivity() {
     var lastEventDescription: TextView? = null
     var clickedInRow = 0
     var lastEvent = Event.NO_EVENT
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_uielements)
@@ -28,6 +32,7 @@ class UiElementsActivity : AppCompatActivity() {
         val etContentDescription: EditText = findViewById(R.id.et_contentDesc)
         val webView: WebView = findViewById(R.id.webview)
         val jsCheckBox: CheckBox = findViewById(R.id.checkbox_js_enabled)
+        val imageView : ImageView = findViewById(R.id.image_view)
         webView.settings.javaScriptEnabled = true
         val customHtml = applicationContext.assets.open("webview_small.html").reader().readText()
         webView.loadData(customHtml, "text/html", "UTF-8")
@@ -96,6 +101,29 @@ class UiElementsActivity : AppCompatActivity() {
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
             })
+        val context = this
+        imageView.setOnTouchListener(object : OnSwipeTouchListener(context) {
+            override fun onSwipeUp() {
+                setLastEvent(Event.SWIPE_UP)
+                Log.d("Ultron", "onSwipeTop")
+            }
+
+            override fun onSwipeRight() {
+                setLastEvent(Event.SWIPE_RIGHT)
+                Log.d("Ultron", "onSwipeRight")
+            }
+
+            override fun onSwipeLeft() {
+                setLastEvent(Event.SWIPE_LEFT)
+                Log.d("Ultron", "onSwipeLeft")
+            }
+
+            override fun onSwipeDown() {
+                setLastEvent(Event.SWIPE_DOWN)
+                Log.d("Ultron", "onSwipeBottom")
+            }
+
+        })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -107,17 +135,19 @@ class UiElementsActivity : AppCompatActivity() {
         super.onResume()
     }
 
-    fun setLastEvent(event: Event, desc: String) {
+    @SuppressLint("SetTextI18n")
+    fun setLastEvent(event: Event, desc: String? = null) {
         var status = desc
         lastEvent = event
         if (lastEvent == Event.CLICK) {
             clickedInRow++
             status += " $clickedInRow"
         } else clickedInRow = 0
-        lastEventDescription?.text = "${event.name}: $status"
+        lastEventDescription?.text = "${event.name}${if (desc != null) ": $status" else ""}"
     }
 
     enum class Event {
-        NO_EVENT, CLICK, LONG_CLICK, CLICKABLE, ENABLED, SELECTED, FOCUSABLE, DISPLAYED, JS_ENABLED, CONTENT_DESC
+        NO_EVENT, CLICK, LONG_CLICK, CLICKABLE, ENABLED, SELECTED, FOCUSABLE, DISPLAYED, JS_ENABLED, CONTENT_DESC,
+        SWIPE_LEFT, SWIPE_RIGHT, SWIPE_UP, SWIPE_DOWN
     }
 }

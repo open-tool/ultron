@@ -22,6 +22,6 @@ class UiObject2ElementsPage {
     val editTextContentDesc = resId(R.id.et_contentDesc)
     val webView = resId(R.id.webview)
     val appCompatTextView = resId(R.id.app_compat_text)
-    val imageView = resId(R.id.image_view)
+    val swipableImageView = resId(R.id.image_view)
     val emptyImageView = resId(R.id.empty_image_view)
 }

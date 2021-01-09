@@ -132,13 +132,13 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
     }
     @Test
     fun isCheckable_ofNotCheckable(){
-        AssertUtils.assertException { page.imageView.isCheckable(100) }
+        AssertUtils.assertException { page.emptyImageView.isCheckable(100) }
     }
 
     //isNotCheckable
     @Test
     fun isNotCheckable_ofNotCheckable(){
-        page.imageView.isNotCheckable()
+        page.emptyImageView.isNotCheckable()
     }
 
     @Test
@@ -269,13 +269,13 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isLongClickable_ofNotLongClickable(){
-        AssertUtils.assertException { page.imageView.isLongClickable(100) }
+        AssertUtils.assertException { page.emptyImageView.isLongClickable(100) }
     }
 
     //isNotLongClickable
     @Test
     fun isNotLongClickable_ofNotLongClickable(){
-        page.imageView.isNotLongClickable()
+        page.emptyImageView.isNotLongClickable()
     }
 
     @Test

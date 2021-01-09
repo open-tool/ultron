@@ -3,6 +3,7 @@ package com.atiurin.sampleapp.tests.uiautomator
 import android.widget.LinearLayout
 import androidx.test.platform.app.InstrumentationRegistry
 import com.atiurin.sampleapp.R
+import com.atiurin.sampleapp.activity.UiElementsActivity
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils
@@ -13,16 +14,20 @@ import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2.Companion.b
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
 
 class UltronUiObject2ActionsTest: UiElementsTest() {
     val page = UiObject2ElementsPage()
 
-    @Before
-    fun speedUpAutomator(){
-//        UltronConfig.UiAutomator.UIAUTOMATOR_OPERATION_POLLING_TIMEOUT = 50L
-        UltronConfig.UiAutomator.speedUp()
+    companion object{
+        @BeforeClass @JvmStatic
+        fun speedUpAutomator(){
+            UltronConfig.UiAutomator.UIAUTOMATOR_OPERATION_POLLING_TIMEOUT = 50L
+            UltronConfig.UiAutomator.speedUp()
+        }
     }
+
     //getParent
     @Test
     fun getParent_parentExist(){
@@ -112,7 +117,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun getText_objectHasNoText(){
-        Assert.assertEquals(null, page.imageView.getText())
+        Assert.assertEquals(null, page.swipableImageView.getText())
     }
 
     @Test
@@ -317,5 +322,30 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
     @Test
     fun perform_notExistedObject(){
         AssertUtils.assertException { page.notExistedObject.perform({this.click()}, "Click on button", timeoutMs = 100) }
+    }
+
+    //swipe
+    @Test
+    fun swipeUpTest(){
+        page.swipableImageView.swipeUp()
+        page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_UP.name)
+    }
+
+    @Test
+    fun swipeDownTest(){
+        page.swipableImageView.swipeDown()
+        page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_DOWN.name)
+    }
+
+    @Test
+    fun swipeRightTest(){
+        page.swipableImageView.swipeRight()
+        page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
+    }
+
+    @Test
+    fun swipeLeftTest(){
+        page.swipableImageView.swipeLeft()
+        page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_LEFT.name)
     }
 }
