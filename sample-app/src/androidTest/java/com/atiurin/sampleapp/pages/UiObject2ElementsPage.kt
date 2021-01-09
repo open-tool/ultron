@@ -2,8 +2,6 @@ package com.atiurin.sampleapp.pages
 
 import androidx.test.uiautomator.By
 import com.atiurin.sampleapp.R
-import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2
 import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2.Companion.by
 import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2.Companion.resId
 
@@ -20,6 +18,7 @@ class UiObject2ElementsPage {
     val checkBoxSelected = resId(R.id.checkbox_selected)
     val checkBoxFocusable = resId(R.id.checkbox_focusable)
     val checkBoxJsEnabled = resId(R.id.checkbox_js_enabled)
+    val checkBoxUnavailable = resId(R.id.checkbox_unavailable)
     val editTextContentDesc = resId(R.id.et_contentDesc)
     val webView = resId(R.id.webview)
     val appCompatTextView = resId(R.id.app_compat_text)

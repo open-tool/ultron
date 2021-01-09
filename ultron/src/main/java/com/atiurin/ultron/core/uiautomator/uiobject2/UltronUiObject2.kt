@@ -17,7 +17,7 @@ import com.atiurin.ultron.extensions.methodToBoolean
 import com.atiurin.ultron.utils.getTargetResourceName
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
-import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.*
 
 
 class UltronUiObject2 internal constructor(
@@ -722,30 +722,6 @@ class UltronUiObject2 internal constructor(
 
     //asserts
     fun hasText(
-        text: String?,
-        timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
-        resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
-    ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = {
-                        val actualText = uiObject2ProviderBlock()!!.text
-                        if (actualText != text) {
-                            throw UltronException("Expected: '$text', got '$actualText'.")
-                        }
-                        true
-                    },
-                    name = "HasText '$text' in $selectorDesc",
-                    type = UiAutomatorAssertionType.HAS_TEXT,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_TEXT}' = '$text' in $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
-        )
-    }
-
-    fun hasText(
         textMatcher: Matcher<String>,
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
@@ -769,6 +745,14 @@ class UltronUiObject2 internal constructor(
         )
     }
 
+    fun hasText(
+        text: String,
+        timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+        resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
+    ) = apply {
+        hasText(equalTo(text), timeoutMs, resultHandler)
+    }
+
     fun textContains(
         textSubstring: String,
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
@@ -781,49 +765,15 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = {
-                        val actualText = uiObject2ProviderBlock()!!.text
-                        if (!uiObject2ProviderBlock()!!.text.isNullOrEmpty()) {
-                            throw UltronException("Expected: text isNullOrEmpty, got '$actualText'.")
-                        }
-                        true
-                    },
-                    name = "TextIsNullOrEmpty in $selectorDesc",
-                    type = UiAutomatorAssertionType.TEST_IS_NULL_OR_EMPTY,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.TEST_IS_NULL_OR_EMPTY}' in $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
-        )
+        hasText(isEmptyOrNullString(), timeoutMs, resultHandler)
     }
 
-    fun hasContentDescription(
-        contentDesc: String,
+    fun textIsNotNullOrEmpty(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = {
-                        val actualContentDesc = uiObject2ProviderBlock()!!.contentDescription
-                        if (actualContentDesc != contentDesc) {
-                            throw UltronException("Expected: '$contentDesc', got '$actualContentDesc'.")
-                        }
-                        true
-                    },
-                    name = "HasContentDescription '$contentDesc' in $selectorDesc",
-                    type = UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION}' '$contentDesc' in $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
-        )
+        hasText(not(isEmptyOrNullString()), timeoutMs, resultHandler)
     }
-
     fun hasContentDescription(
         contentDescMatcher: Matcher<String>,
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
@@ -848,6 +798,15 @@ class UltronUiObject2 internal constructor(
         )
     }
 
+    fun hasContentDescription(
+        contentDesc: String,
+        timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+        resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
+    ) = apply {
+        hasContentDescription(equalTo(contentDesc), timeoutMs, resultHandler)
+    }
+
+
     fun contentDescriptionContains(
         contentDescSubstring: String,
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
@@ -860,46 +819,14 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = {
-                        val actualContentDesc = uiObject2ProviderBlock()!!.contentDescription
-                        if (!actualContentDesc.isNullOrEmpty()) {
-                            throw UltronException("Expected: contentDescription isNullOrEmpty, got '$actualContentDesc'.")
-                        }
-                        true
-                    },
-                    name = "ContentDescriptionContains isNullOrEmpty in $selectorDesc",
-                    type = UiAutomatorAssertionType.CONTENT_DESCRIPTION_IS_NULL_OR_EMPTY,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.CONTENT_DESCRIPTION_IS_NULL_OR_EMPTY}' in $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
-        )
+        hasContentDescription(isEmptyOrNullString(), timeoutMs, resultHandler)
     }
 
     fun contentDescriptionIsNotNullOrEmpty(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = {
-                        val actualContentDesc = uiObject2ProviderBlock()!!.contentDescription
-                        if (actualContentDesc.isNullOrEmpty()) {
-                            throw UltronException("Expected: contentDescription isNotNullOrEmpty, got '$actualContentDesc'.")
-                        }
-                        true
-                    },
-                    name = "ContentDescriptionContains isNotNullOrEmpty in $selectorDesc",
-                    type = UiAutomatorAssertionType.CONTENT_DESCRIPTION_IS_NOT_NULL_OR_EMPTY,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.CONTENT_DESCRIPTION_IS_NOT_NULL_OR_EMPTY}' in $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
-        )
+        hasContentDescription(not(isEmptyOrNullString()),timeoutMs, resultHandler)
     }
 
     fun isCheckable(
@@ -1264,15 +1191,20 @@ class UltronUiObject2 internal constructor(
     companion object {
         /** value from [UiObject2.DEFAULT_SWIPE_SPEED] */
         private const val DEFAULT_SWIPE_SPEED = 5000
+
         /** value from [UiObject2.DEFAULT_SCROLL_SPEED] */
         private const val DEFAULT_SCROLL_SPEED = 5000
+
         /** value from [UiObject2.DEFAULT_FLING_SPEED] */
         private const val DEFAULT_FLING_SPEED = 7500
+
         /** value from [UiObject2.DEFAULT_DRAG_SPEED] */
         private const val DEFAULT_DRAG_SPEED = 2500
+
         /** value from [UiObject2.DEFAULT_PINCH_SPEED] */
         private const val DEFAULT_PINCH_SPEED = 2500
 
+        @JvmStatic
         fun resId(@IntegerRes resourceId: Int): UltronUiObject2 {
             val bySelector = byResId(resourceId)
             return UltronUiObject2(
@@ -1281,6 +1213,7 @@ class UltronUiObject2 internal constructor(
             )
         }
 
+        @JvmStatic
         fun by(bySelector: BySelector): UltronUiObject2 {
             return UltronUiObject2(
                 { UltronConfig.UiAutomator.uiDevice.findObject(bySelector) },
@@ -1288,6 +1221,7 @@ class UltronUiObject2 internal constructor(
             )
         }
 
+        @JvmStatic
         fun byResId(@IntegerRes resourceId: Int): BySelector {
             return By.res(getTargetResourceName(resourceId))
         }

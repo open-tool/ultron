@@ -28,6 +28,7 @@
     <string name="checkbox_selected">Selected button</string>
     <string name="checkbox_focusable">Focusable button</string>
     <string name="checkbox_js_enabled">WebView Javascript enabled</string>
+    <string name="checkbox_unavailable">Unavailable</string>
 
     <string name="button_event_click">Click</string>
     <string name="button_event_long_click">Long Click</string>

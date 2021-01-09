@@ -104,6 +104,34 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
         Assert.assertTrue(children.isEmpty())
     }
 
+    //getText
+    @Test
+    fun getText_objectHasText(){
+        Assert.assertEquals(getTargetString(R.string.button_text), page.button.getText())
+    }
+
+    @Test
+    fun getText_objectHasNoText(){
+        Assert.assertEquals(null, page.imageView.getText())
+    }
+
+    @Test
+    fun getText_notExistedObject(){
+        AssertUtils.assertException { page.notExistedObject.getText(100) }
+    }
+
+    //getClassName
+    @Test
+
+    fun getClassName_existObject(){
+        Assert.assertEquals("android.widget.Button", page.button.getClassName())
+    }
+
+    @Test
+    fun getClassName_notExistObject(){
+        AssertUtils.assertException { page.notExistedObject.getClassName(100) }
+    }
+
     //getApplicationPackage
     @Test
     fun getApplicationPackage_existedObject(){
