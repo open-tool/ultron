@@ -26,6 +26,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
         Assert.assertEquals(LinearLayout::class.qualifiedName, page.button.getParent()?.getClassName())
     }
 
+    //getChildren
     @Test
     fun getChildren_returnsAllChildren(){
         val children = page.radioGroup.getChildren()
@@ -47,7 +48,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
         Assert.assertEquals(3, foundElements)
     }
 
-    //getChildren
+
     @Test
     fun getChildren_noChildExist(){
         val children = page.button.getChildren()

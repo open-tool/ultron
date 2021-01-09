@@ -160,7 +160,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
     //contentDescriptionIsNotNullOrEmpty
     @Test
     fun contentDescriptionIsNotNullOrEmpty_notEmptyText(){
-        page.editTextContentDesc.contentDescriptionIsNotNullOrEmpty()
+        page.button.contentDescriptionIsNotNullOrEmpty()
     }
 
     @Test

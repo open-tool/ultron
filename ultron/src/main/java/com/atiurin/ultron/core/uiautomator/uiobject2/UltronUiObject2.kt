@@ -7,6 +7,7 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.UiObject2
+import com.atiurin.ultron.core.common.OperationType
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.uiautomator.UiAutomatorActionType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorAssertionType
@@ -36,16 +37,13 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): UltronUiObject2? {
         var uiobject2: UiObject2? = null
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiobject2 = uiObject2ProviderBlock()!!.parent },
-                    name = "GetParent of $selectorDesc",
-                    type = UiAutomatorActionType.GET_PARENT,
-                    description = "UiObject2 action '${UiAutomatorActionType.GET_PARENT}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiobject2 = uiObject2ProviderBlock()!!.parent },
+            name = "GetParent of $selectorDesc",
+            type = UiAutomatorActionType.GET_PARENT,
+            description = "UiObject2 action '${UiAutomatorActionType.GET_PARENT}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return if (uiobject2 != null) UltronUiObject2(
             { uiobject2 },
@@ -61,19 +59,17 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): List<UltronUiObject2> {
         val children = mutableListOf<UiObject2>()
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { children.addAll(uiObject2ProviderBlock()!!.children) },
-                    name = "GetChildren of $selectorDesc",
-                    type = UiAutomatorActionType.GET_CHILDREN,
-                    description = "UiObject2 action '${UiAutomatorActionType.GET_CHILDREN}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { children.addAll(uiObject2ProviderBlock()!!.children) },
+            name = "GetChildren of $selectorDesc",
+            type = UiAutomatorActionType.GET_CHILDREN,
+            description = "UiObject2 action '${UiAutomatorActionType.GET_CHILDREN}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return children.map { UltronUiObject2({ it }, "Child of $selectorDesc") }
     }
+
 
     /** Returns the number of child elements directly under this object, 0 if it has no child*/
     fun getChildCount(
@@ -81,16 +77,13 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): Int {
         var count = 0
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { count = uiObject2ProviderBlock()!!.childCount },
-                    name = "GetChildCount of $selectorDesc",
-                    type = UiAutomatorActionType.GET_CHILD_COUNT,
-                    description = "UiObject2 action '${UiAutomatorActionType.GET_CHILD_COUNT}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { count = uiObject2ProviderBlock()!!.childCount },
+            name = "GetChildCount of $selectorDesc",
+            type = UiAutomatorActionType.GET_CHILD_COUNT,
+            description = "UiObject2 action '${UiAutomatorActionType.GET_CHILD_COUNT}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return count
     }
@@ -105,16 +98,13 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): UltronUiObject2? {
         var uiobject2: UiObject2? = null
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiobject2 = uiObject2ProviderBlock()!!.findObject(bySelector) },
-                    name = "FindObject of $selectorDesc using $bySelector",
-                    type = UiAutomatorActionType.FIND_OBJECT,
-                    description = "UiObject2 action '${UiAutomatorActionType.FIND_OBJECT}' of $selectorDesc using $bySelector during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiobject2 = uiObject2ProviderBlock()!!.findObject(bySelector) },
+            name = "FindObject of $selectorDesc using $bySelector",
+            type = UiAutomatorActionType.FIND_OBJECT,
+            description = "UiObject2 action '${UiAutomatorActionType.FIND_OBJECT}' of $selectorDesc using $bySelector during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return if (uiobject2 != null) {
             UltronUiObject2(
@@ -131,16 +121,13 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): List<UltronUiObject2> {
         val objects = mutableListOf<UiObject2>()
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { objects.addAll(uiObject2ProviderBlock()!!.findObjects(bySelector)) },
-                    name = "FindObjects of $selectorDesc using $bySelector",
-                    type = UiAutomatorActionType.FIND_OBJECTS,
-                    description = "UiObject2 action '${UiAutomatorActionType.FIND_OBJECTS}' of $selectorDesc using $bySelector during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { objects.addAll(uiObject2ProviderBlock()!!.findObjects(bySelector)) },
+            name = "FindObjects of $selectorDesc using $bySelector",
+            type = UiAutomatorActionType.FIND_OBJECTS,
+            description = "UiObject2 action '${UiAutomatorActionType.FIND_OBJECTS}' of $selectorDesc using $bySelector during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return objects.map {
             UltronUiObject2({ it }, "Child of $selectorDesc with bySelector $bySelector")
@@ -157,16 +144,13 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): String? {
         var text: String? = null
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { text = uiObject2ProviderBlock()!!.text },
-                    name = "GetText of $selectorDesc",
-                    type = UiAutomatorActionType.GET_TEXT,
-                    description = "UiObject2 action '${UiAutomatorActionType.GET_TEXT}' of $selectorDesc  during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { text = uiObject2ProviderBlock()!!.text },
+            name = "GetText of $selectorDesc",
+            type = UiAutomatorActionType.GET_TEXT,
+            description = "UiObject2 action '${UiAutomatorActionType.GET_TEXT}' of $selectorDesc  during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return text
     }
@@ -178,16 +162,13 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): String? {
         var className: String? = null
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { className = uiObject2ProviderBlock()!!.className },
-                    name = "GetClassName of $selectorDesc",
-                    type = UiAutomatorActionType.GET_CLASS_NAME,
-                    description = "UiObject2 action '${UiAutomatorActionType.GET_CLASS_NAME}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { className = uiObject2ProviderBlock()!!.className },
+            name = "GetClassName of $selectorDesc",
+            type = UiAutomatorActionType.GET_CLASS_NAME,
+            description = "UiObject2 action '${UiAutomatorActionType.GET_CLASS_NAME}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return className
     }
@@ -200,16 +181,13 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): String? {
         var packageName: String? = null
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { packageName = uiObject2ProviderBlock()!!.applicationPackage },
-                    name = "GetApplicationPackage of $selectorDesc",
-                    type = UiAutomatorActionType.GET_APPLICATION_PACKAGE,
-                    description = "UiObject2 action '${UiAutomatorActionType.GET_APPLICATION_PACKAGE}' of $selectorDesc  during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { packageName = uiObject2ProviderBlock()!!.applicationPackage },
+            name = "GetApplicationPackage of $selectorDesc",
+            type = UiAutomatorActionType.GET_APPLICATION_PACKAGE,
+            description = "UiObject2 action '${UiAutomatorActionType.GET_APPLICATION_PACKAGE}' of $selectorDesc  during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return packageName
     }
@@ -220,16 +198,13 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): Rect? {
         var visibleBounds: Rect? = null
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { visibleBounds = uiObject2ProviderBlock()!!.visibleBounds },
-                    name = "GetVisibleBounds of $selectorDesc",
-                    type = UiAutomatorActionType.GET_VISIBLE_BOUNDS,
-                    description = "UiObject2 action '${UiAutomatorActionType.GET_VISIBLE_BOUNDS}' of $selectorDesc  during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { visibleBounds = uiObject2ProviderBlock()!!.visibleBounds },
+            name = "GetVisibleBounds of $selectorDesc",
+            type = UiAutomatorActionType.GET_VISIBLE_BOUNDS,
+            description = "UiObject2 action '${UiAutomatorActionType.GET_VISIBLE_BOUNDS}' of $selectorDesc  during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return visibleBounds
     }
@@ -240,16 +215,13 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): Point? {
         var visibleCenter: Point? = null
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { visibleCenter = uiObject2ProviderBlock()!!.visibleCenter },
-                    name = "GetVisibleCenter of $selectorDesc",
-                    type = UiAutomatorActionType.GET_VISIBLE_CENTER,
-                    description = "UiObject2 action '${UiAutomatorActionType.GET_VISIBLE_CENTER}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { visibleCenter = uiObject2ProviderBlock()!!.visibleCenter },
+            name = "GetVisibleCenter of $selectorDesc",
+            type = UiAutomatorActionType.GET_VISIBLE_CENTER,
+            description = "UiObject2 action '${UiAutomatorActionType.GET_VISIBLE_CENTER}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return visibleCenter
     }
@@ -263,16 +235,13 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): String? {
         var resName: String? = null
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { resName = uiObject2ProviderBlock()!!.resourceName },
-                    name = "GetResourceName of $selectorDesc",
-                    type = UiAutomatorActionType.GET_RESOURCE_NAME,
-                    description = "UiObject2 action '${UiAutomatorActionType.GET_RESOURCE_NAME}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { resName = uiObject2ProviderBlock()!!.resourceName },
+            name = "GetResourceName of $selectorDesc",
+            type = UiAutomatorActionType.GET_RESOURCE_NAME,
+            description = "UiObject2 action '${UiAutomatorActionType.GET_RESOURCE_NAME}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return resName
     }
@@ -286,16 +255,13 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): String? {
         var contentDesc: String? = null
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { contentDesc = uiObject2ProviderBlock()!!.contentDescription },
-                    name = "GetContentDescription of $selectorDesc",
-                    type = UiAutomatorActionType.GET_CONTENT_DESCRIPTION,
-                    description = "UiObject2 action '${UiAutomatorActionType.GET_CONTENT_DESCRIPTION}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { contentDesc = uiObject2ProviderBlock()!!.contentDescription },
+            name = "GetContentDescription of $selectorDesc",
+            type = UiAutomatorActionType.GET_CONTENT_DESCRIPTION,
+            description = "UiObject2 action '${UiAutomatorActionType.GET_CONTENT_DESCRIPTION}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return contentDesc
     }
@@ -307,16 +273,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiObject2ProviderBlock()!!.click(duration) },
-                    name = "Click to $selectorDesc with duration = $duration",
-                    type = UiAutomatorActionType.CLICK,
-                    description = "UiObject2 action '${UiAutomatorActionType.CLICK}' to $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiObject2ProviderBlock()!!.click(duration) },
+            name = "Click to $selectorDesc with duration = $duration",
+            type = UiAutomatorActionType.CLICK,
+            description = "UiObject2 action '${UiAutomatorActionType.CLICK}' to $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -325,16 +288,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiObject2ProviderBlock()!!.longClick() },
-                    name = "LongClick to $selectorDesc",
-                    type = UiAutomatorActionType.LONG_CLICK,
-                    description = "UiObject2 action '${UiAutomatorActionType.LONG_CLICK}' to $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiObject2ProviderBlock()!!.longClick() },
+            name = "LongClick to $selectorDesc",
+            type = UiAutomatorActionType.LONG_CLICK,
+            description = "UiObject2 action '${UiAutomatorActionType.LONG_CLICK}' to $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -343,16 +303,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiObject2ProviderBlock()!!.clear() },
-                    name = "Clear of $selectorDesc",
-                    type = UiAutomatorActionType.CLEAR_TEXT,
-                    description = "UiObject2 action '${UiAutomatorActionType.CLEAR_TEXT}' in $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiObject2ProviderBlock()!!.clear() },
+            name = "Clear of $selectorDesc",
+            type = UiAutomatorActionType.CLEAR_TEXT,
+            description = "UiObject2 action '${UiAutomatorActionType.CLEAR_TEXT}' in $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -362,16 +319,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiObject2ProviderBlock()!!.text += text },
-                    name = "AddText of $selectorDesc to '$text'",
-                    type = UiAutomatorActionType.ADD_TEXT,
-                    description = "UiObject2 action '${UiAutomatorActionType.ADD_TEXT}' = '$text' to $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiObject2ProviderBlock()!!.text += text },
+            name = "AddText of $selectorDesc to '$text'",
+            type = UiAutomatorActionType.ADD_TEXT,
+            description = "UiObject2 action '${UiAutomatorActionType.ADD_TEXT}' = '$text' to $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -383,16 +337,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiObject2ProviderBlock()!!.legacySetText(text) },
-                    name = "LegacySetText of $selectorDesc to '$text'",
-                    type = UiAutomatorActionType.LEGACY_SET_TEXT,
-                    description = "UiObject2 action '${UiAutomatorActionType.LEGACY_SET_TEXT}' in $selectorDesc to '$text' during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiObject2ProviderBlock()!!.legacySetText(text) },
+            name = "LegacySetText of $selectorDesc to '$text'",
+            type = UiAutomatorActionType.LEGACY_SET_TEXT,
+            description = "UiObject2 action '${UiAutomatorActionType.LEGACY_SET_TEXT}' in $selectorDesc to '$text' during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -402,16 +353,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiObject2ProviderBlock()!!.text = text },
-                    name = "ReplaceText of $selectorDesc to '$text'",
-                    type = UiAutomatorActionType.REPLACE_TEXT,
-                    description = "UiObject2 action '${UiAutomatorActionType.REPLACE_TEXT}' in $selectorDesc to '$text' during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiObject2ProviderBlock()!!.text = text },
+            name = "ReplaceText of $selectorDesc to '$text'",
+            type = UiAutomatorActionType.REPLACE_TEXT,
+            description = "UiObject2 action '${UiAutomatorActionType.REPLACE_TEXT}' in $selectorDesc to '$text' during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -427,16 +375,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiObject2ProviderBlock()!!.drag(dest, speed) },
-                    name = "Drag of $selectorDesc to dest = '$dest' with speed = $speed",
-                    type = UiAutomatorActionType.DRAG,
-                    description = "UiObject2 action '${UiAutomatorActionType.DRAG}' of $selectorDesc to dest = '$dest' with speed = $speed during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiObject2ProviderBlock()!!.drag(dest, speed) },
+            name = "Drag of $selectorDesc to dest = '$dest' with speed = $speed",
+            type = UiAutomatorActionType.DRAG,
+            description = "UiObject2 action '${UiAutomatorActionType.DRAG}' of $selectorDesc to dest = '$dest' with speed = $speed during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -452,16 +397,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiObject2ProviderBlock()!!.pinchClose(percent, speed) },
-                    name = "PinchClose of $selectorDesc with $percent% and $speed speed",
-                    type = UiAutomatorActionType.PINCH_CLOSE,
-                    description = "UiObject2 action '${UiAutomatorActionType.PINCH_CLOSE}' of $selectorDesc with $percent% and $speed speed during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiObject2ProviderBlock()!!.pinchClose(percent, speed) },
+            name = "PinchClose of $selectorDesc with $percent% and $speed speed",
+            type = UiAutomatorActionType.PINCH_CLOSE,
+            description = "UiObject2 action '${UiAutomatorActionType.PINCH_CLOSE}' of $selectorDesc with $percent% and $speed speed during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -477,16 +419,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiObject2ProviderBlock()!!.pinchOpen(percent, speed) },
-                    name = "PinchOpen of $selectorDesc with $percent% and $speed speed",
-                    type = UiAutomatorActionType.PINCH_OPEN,
-                    description = "UiObject2 action '${UiAutomatorActionType.PINCH_OPEN}' of $selectorDesc with $percent% and $speed speed during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiObject2ProviderBlock()!!.pinchOpen(percent, speed) },
+            name = "PinchOpen of $selectorDesc with $percent% and $speed speed",
+            type = UiAutomatorActionType.PINCH_OPEN,
+            description = "UiObject2 action '${UiAutomatorActionType.PINCH_OPEN}' of $selectorDesc with $percent% and $speed speed during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -504,16 +443,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiObject2ProviderBlock()!!.swipe(direction, percent, speed) },
-                    name = "Swipe of $selectorDesc to direction = '${direction.name}' with $percent% and $speed speed",
-                    type = UiAutomatorActionType.SWIPE,
-                    description = "UiObject2 action '${UiAutomatorActionType.SWIPE}' of $selectorDesc with direction = '${direction.name}' with $percent% and $speed speed during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiObject2ProviderBlock()!!.swipe(direction, percent, speed) },
+            name = "Swipe of $selectorDesc to direction = '${direction.name}' with $percent% and $speed speed",
+            type = UiAutomatorActionType.SWIPE,
+            description = "UiObject2 action '${UiAutomatorActionType.SWIPE}' of $selectorDesc with direction = '${direction.name}' with $percent% and $speed speed during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -593,18 +529,15 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): Boolean {
         var result = false
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = {
-                        result = uiObject2ProviderBlock()!!.scroll(direction, percent, speed)
-                    },
-                    name = "Scroll of $selectorDesc to direction = '${direction.name}' with $percent% and $speed speed",
-                    type = UiAutomatorActionType.SCROLL,
-                    description = "UiObject2 action '${UiAutomatorActionType.SCROLL}' of $selectorDesc with direction = '${direction.name}' with $percent% and $speed speed during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = {
+                result = uiObject2ProviderBlock()!!.scroll(direction, percent, speed)
+            },
+            name = "Scroll of $selectorDesc to direction = '${direction.name}' with $percent% and $speed speed",
+            type = UiAutomatorActionType.SCROLL,
+            description = "UiObject2 action '${UiAutomatorActionType.SCROLL}' of $selectorDesc with direction = '${direction.name}' with $percent% and $speed speed during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return result
     }
@@ -687,36 +620,34 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ): Boolean {
         var result: Boolean = false
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { result = uiObject2ProviderBlock()!!.fling(direction, speed) },
-                    name = "FLing of $selectorDesc to direction = '${direction.name}' with speed = $speed",
-                    type = UiAutomatorActionType.FLING,
-                    description = "UiObject2 action '${UiAutomatorActionType.FLING}' of $selectorDesc to direction = '${direction.name}' with speed = $speed during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { result = uiObject2ProviderBlock()!!.fling(direction, speed) },
+            name = "FLing of $selectorDesc to direction = '${direction.name}' with speed = $speed",
+            type = UiAutomatorActionType.FLING,
+            description = "UiObject2 action '${UiAutomatorActionType.FLING}' of $selectorDesc to direction = '${direction.name}' with speed = $speed during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
         return result
     }
 
+    /**
+     * @param actionBlock provides an access to UiObject2.
+     * @param actionDescription used for logging and exception description
+     */
     fun perform(
         actionBlock: UiObject2.() -> Unit,
         actionDescription: String,
         timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorActionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorActionExecutor(
-                UiAutomatorBySelectorAction(
-                    actionBlock = { uiObject2ProviderBlock()!!.actionBlock() },
-                    name = "Perform custom action '$actionDescription' on $selectorDesc.",
-                    type = UiAutomatorActionType.PERFORM,
-                    description = "UiObject2 action '${UiAutomatorActionType.PERFORM}' custom action '$actionDescription' on $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAction(
+            actionBlock = { uiObject2ProviderBlock()!!.actionBlock() },
+            name = "Perform custom action '$actionDescription' on $selectorDesc.",
+            type = UiAutomatorActionType.PERFORM,
+            description = "UiObject2 action '${UiAutomatorActionType.PERFORM}' custom action '$actionDescription' on $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -726,22 +657,19 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = {
-                        val actualText = uiObject2ProviderBlock()!!.text
-                        if (!textMatcher.matches(actualText)) {
-                            throw UltronException("Expected: text matches '$textMatcher', got '$actualText'.")
-                        }
-                        true
-                    },
-                    name = "HasText '$textMatcher' in $selectorDesc",
-                    type = UiAutomatorAssertionType.HAS_TEXT,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_TEXT}' matches '$textMatcher' in $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = {
+                val actualText = uiObject2ProviderBlock()!!.text
+                if (!textMatcher.matches(actualText)) {
+                    throw UltronException("Expected: text matches '$textMatcher', got '$actualText'.")
+                }
+                true
+            },
+            name = "HasText '$textMatcher' in $selectorDesc",
+            type = UiAutomatorAssertionType.HAS_TEXT,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_TEXT}' matches '$textMatcher' in $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -774,27 +702,25 @@ class UltronUiObject2 internal constructor(
     ) = apply {
         hasText(not(isEmptyOrNullString()), timeoutMs, resultHandler)
     }
+
     fun hasContentDescription(
         contentDescMatcher: Matcher<String>,
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = {
-                        val actualContentDesc = uiObject2ProviderBlock()!!.contentDescription
-                        if (!contentDescMatcher.matches(actualContentDesc)) {
-                            throw UltronException("Expected: contentDescription matches '$contentDescMatcher', got '$actualContentDesc'.")
-                        }
-                        true
-                    },
-                    name = "HasContentDescription '$contentDescMatcher' in $selectorDesc",
-                    type = UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION}' matches '$contentDescMatcher' in $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = {
+                val actualContentDesc = uiObject2ProviderBlock()!!.contentDescription
+                if (!contentDescMatcher.matches(actualContentDesc)) {
+                    throw UltronException("Expected: contentDescription matches '$contentDescMatcher', got '$actualContentDesc'.")
+                }
+                true
+            },
+            name = "HasContentDescription '$contentDescMatcher' in $selectorDesc",
+            type = UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION}' matches '$contentDescMatcher' in $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -805,7 +731,6 @@ class UltronUiObject2 internal constructor(
     ) = apply {
         hasContentDescription(equalTo(contentDesc), timeoutMs, resultHandler)
     }
-
 
     fun contentDescriptionContains(
         contentDescSubstring: String,
@@ -826,23 +751,20 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        hasContentDescription(not(isEmptyOrNullString()),timeoutMs, resultHandler)
+        hasContentDescription(not(isEmptyOrNullString()), timeoutMs, resultHandler)
     }
 
     fun isCheckable(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { uiObject2ProviderBlock()!!.isCheckable },
-                    name = "IsCheckable of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_CHECKABLE,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_CHECKABLE}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { uiObject2ProviderBlock()!!.isCheckable },
+            name = "IsCheckable of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_CHECKABLE,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_CHECKABLE}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -850,16 +772,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { !uiObject2ProviderBlock()!!.isCheckable },
-                    name = "IsNotCheckable of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_NOT_CHECKABLE,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_CHECKABLE}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { !uiObject2ProviderBlock()!!.isCheckable },
+            name = "IsNotCheckable of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_NOT_CHECKABLE,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_CHECKABLE}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -867,16 +786,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { uiObject2ProviderBlock()!!.isChecked },
-                    name = "IsChecked of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_CHECKED,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_CHECKED}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { uiObject2ProviderBlock()!!.isChecked },
+            name = "IsChecked of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_CHECKED,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_CHECKED}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -884,16 +800,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { !uiObject2ProviderBlock()!!.isChecked },
-                    name = "IsNotChecked of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_NOT_CHECKED,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_CHECKED}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { !uiObject2ProviderBlock()!!.isChecked },
+            name = "IsNotChecked of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_NOT_CHECKED,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_CHECKED}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -901,16 +814,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { uiObject2ProviderBlock()!!.isClickable },
-                    name = "IsClickable of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_CLICKABLE,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_CLICKABLE}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { uiObject2ProviderBlock()!!.isClickable },
+            name = "IsClickable of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_CLICKABLE,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_CLICKABLE}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -918,16 +828,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { !uiObject2ProviderBlock()!!.isClickable },
-                    name = "IsNotClickable of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_NOT_CLICKABLE,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_CLICKABLE}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { !uiObject2ProviderBlock()!!.isClickable },
+            name = "IsNotClickable of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_NOT_CLICKABLE,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_CLICKABLE}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -935,16 +842,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { uiObject2ProviderBlock()!!.isEnabled },
-                    name = "IsEnabled of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_ENABLED,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_ENABLED}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { uiObject2ProviderBlock()!!.isEnabled },
+            name = "IsEnabled of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_ENABLED,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_ENABLED}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -952,16 +856,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { !uiObject2ProviderBlock()!!.isEnabled },
-                    name = "IsNotEnabled of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_NOT_ENABLED,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_ENABLED}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { !uiObject2ProviderBlock()!!.isEnabled },
+            name = "IsNotEnabled of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_NOT_ENABLED,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_ENABLED}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -969,16 +870,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { uiObject2ProviderBlock()!!.isFocusable },
-                    name = "IsFocusable of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_FOCUSABLE,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_FOCUSABLE}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { uiObject2ProviderBlock()!!.isFocusable },
+            name = "IsFocusable of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_FOCUSABLE,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_FOCUSABLE}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -986,16 +884,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { !uiObject2ProviderBlock()!!.isFocusable },
-                    name = "IsNotFocusable of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_NOT_FOCUSABLE,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_FOCUSABLE}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { !uiObject2ProviderBlock()!!.isFocusable },
+            name = "IsNotFocusable of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_NOT_FOCUSABLE,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_FOCUSABLE}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -1003,16 +898,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { uiObject2ProviderBlock()!!.isFocused },
-                    name = "IsFocused of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_FOCUSED,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_FOCUSED}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { uiObject2ProviderBlock()!!.isFocused },
+            name = "IsFocused of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_FOCUSED,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_FOCUSED}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -1020,16 +912,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { !uiObject2ProviderBlock()!!.isFocused },
-                    name = "IsNotFocused of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_NOT_FOCUSED,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_FOCUSED}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { !uiObject2ProviderBlock()!!.isFocused },
+            name = "IsNotFocused of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_NOT_FOCUSED,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_FOCUSED}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -1037,16 +926,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { uiObject2ProviderBlock()!!.isLongClickable },
-                    name = "IsLongClickable of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_LONG_CLICKABLE,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_LONG_CLICKABLE}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { uiObject2ProviderBlock()!!.isLongClickable },
+            name = "IsLongClickable of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_LONG_CLICKABLE,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_LONG_CLICKABLE}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -1054,16 +940,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { !uiObject2ProviderBlock()!!.isLongClickable },
-                    name = "IsNotLongClickable of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_NOT_LONG_CLICKABLE,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_LONG_CLICKABLE}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { !uiObject2ProviderBlock()!!.isLongClickable },
+            name = "IsNotLongClickable of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_NOT_LONG_CLICKABLE,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_LONG_CLICKABLE}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -1071,16 +954,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { uiObject2ProviderBlock()!!.isScrollable },
-                    name = "IsScrollable of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_SCROLLABLE,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_SCROLLABLE}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { uiObject2ProviderBlock()!!.isScrollable },
+            name = "IsScrollable of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_SCROLLABLE,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_SCROLLABLE}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -1088,16 +968,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { !uiObject2ProviderBlock()!!.isScrollable },
-                    name = "IsNotScrollable of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_NOT_SCROLLABLE,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_SCROLLABLE}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { !uiObject2ProviderBlock()!!.isScrollable },
+            name = "IsNotScrollable of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_NOT_SCROLLABLE,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_SCROLLABLE}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -1105,16 +982,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { uiObject2ProviderBlock()!!.isSelected },
-                    name = "IsSelected of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_SELECTED,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_SELECTED}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { uiObject2ProviderBlock()!!.isSelected },
+            name = "IsSelected of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_SELECTED,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_SELECTED}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -1122,16 +996,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { !uiObject2ProviderBlock()!!.isSelected },
-                    name = "IsNotSelected of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_NOT_SELECTED,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_SELECTED}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { !uiObject2ProviderBlock()!!.isSelected },
+            name = "IsNotSelected of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_NOT_SELECTED,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_SELECTED}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -1139,16 +1010,13 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { uiObject2ProviderBlock() != null },
-                    name = "IsDisplayed of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_DISPLAYED,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_DISPLAYED}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { uiObject2ProviderBlock() != null },
+            name = "IsDisplayed of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_DISPLAYED,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_DISPLAYED}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
@@ -1156,32 +1024,73 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
-        UiAutomatorLifecycle.execute(
-            UiAutomatorBySelectorAssertionExecutor(
-                UiAutomatorBySelectorAssertion(
-                    assertionBlock = { uiObject2ProviderBlock() == null },
-                    name = "IsNotDisplayed of $selectorDesc",
-                    type = UiAutomatorAssertionType.IS_NOT_DISPLAYED,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_DISPLAYED}' of $selectorDesc during $timeoutMs ms",
-                    timeoutMs = timeoutMs
-                )
-            ), resultHandler
+        executeAssertion(
+            assertionBlock = { uiObject2ProviderBlock() == null },
+            name = "IsNotDisplayed of $selectorDesc",
+            type = UiAutomatorAssertionType.IS_NOT_DISPLAYED,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.IS_NOT_DISPLAYED}' of $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
         )
     }
 
+    /**
+     * @param assertBlock provides an access to UiObject2.
+     * If [assertBlock] returns false it means the assertion failed and an exception will be thrown
+     * @param assertionDescription used for logging and exception description
+     */
     fun assertThat(
         assertBlock: UiObject2.() -> Boolean,
         assertionDescription: String,
         timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.bySelectorAssertionResultHandler
     ) = apply {
+        executeAssertion(
+            assertionBlock = { uiObject2ProviderBlock()!!.assertBlock() },
+            name = "AssertThat $assertionDescription in $selectorDesc",
+            type = UiAutomatorAssertionType.ASSERT_THAT,
+            description = "UiObject2 assertion '${UiAutomatorAssertionType.ASSERT_THAT}' $assertionDescription in $selectorDesc during $timeoutMs ms",
+            timeoutMs = timeoutMs,
+            resultHandler = resultHandler
+        )
+    }
+
+    private fun executeAction(
+        actionBlock: () -> Unit,
+        name: String,
+        description: String,
+        type: OperationType,
+        timeoutMs: Long,
+        resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit
+    ) {
+        UiAutomatorLifecycle.execute(
+            UiAutomatorBySelectorActionExecutor(
+                UiAutomatorBySelectorAction(
+                    actionBlock = actionBlock,
+                    name = name,
+                    type = type,
+                    description = description,
+                    timeoutMs = timeoutMs
+                )
+            ), resultHandler
+        )
+    }
+
+    private fun executeAssertion(
+        assertionBlock: () -> Boolean,
+        name: String,
+        description: String,
+        type: OperationType,
+        timeoutMs: Long,
+        resultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit
+    ) {
         UiAutomatorLifecycle.execute(
             UiAutomatorBySelectorAssertionExecutor(
                 UiAutomatorBySelectorAssertion(
-                    assertionBlock = { uiObject2ProviderBlock()!!.assertBlock() },
-                    name = "AssertThat $assertionDescription in $selectorDesc",
-                    type = UiAutomatorAssertionType.ASSERT_THAT,
-                    description = "UiObject2 assertion '${UiAutomatorAssertionType.ASSERT_THAT}' $assertionDescription in $selectorDesc during $timeoutMs ms",
+                    assertionBlock = assertionBlock,
+                    name = name,
+                    type = type,
+                    description = description,
                     timeoutMs = timeoutMs
                 )
             ), resultHandler
@@ -1201,7 +1110,7 @@ class UltronUiObject2 internal constructor(
         /** value from [UiObject2.DEFAULT_DRAG_SPEED] */
         private const val DEFAULT_DRAG_SPEED = 2500
 
-        /** value from [UiObject2.DEFAULT_PINCH_SPEED] */
+        /** value from [UiObject2.DEFAULT_P INCH_SPEED] */
         private const val DEFAULT_PINCH_SPEED = 2500
 
         @JvmStatic
