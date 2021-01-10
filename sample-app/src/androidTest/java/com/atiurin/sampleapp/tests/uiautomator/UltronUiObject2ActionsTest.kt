@@ -55,6 +55,11 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
         Assert.assertTrue(children.isEmpty())
     }
 
+    @Test
+    fun getChildrenWithResultHandler(){
+        page.button.getChildren()
+    }
+
     //getChildCount
     @Test
     fun getChildCount_childExist(){
@@ -83,7 +88,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun findObject_notExistedParentObject(){
-        AssertUtils.assertException { page.notExistedObject.findObject(byResId(R.id.button1), timeoutMs = 100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).findObject(byResId(R.id.button1)) }
     }
 
     //findObjects
@@ -115,7 +120,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun getText_notExistedObject(){
-        AssertUtils.assertException { page.notExistedObject.getText(100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).getText() }
     }
 
     //getClassName
@@ -127,7 +132,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun getClassName_notExistObject(){
-        AssertUtils.assertException { page.notExistedObject.getClassName(100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).getClassName() }
     }
 
     //getApplicationPackage
@@ -139,7 +144,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun getApplicationPackage_notExistedObject(){
-        AssertUtils.assertException {  page.notExistedObject.getApplicationPackage(100) }
+        AssertUtils.assertException {  page.notExistedObject.withTimeout(100).getApplicationPackage() }
     }
 
     //getVisibleBounds
@@ -150,7 +155,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun getVisibleBounds_notExistedObject(){
-        AssertUtils.assertException {  page.notExistedObject.getVisibleBounds() }
+        AssertUtils.assertException {  page.notExistedObject.withTimeout(100).getVisibleBounds() }
     }
 
     //getVisibleCenter
@@ -164,7 +169,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun getVisibleCenter_notExistedObject(){
-        AssertUtils.assertException {  page.notExistedObject.getVisibleCenter() }
+        AssertUtils.assertException {  page.notExistedObject.withTimeout(100).getVisibleCenter() }
     }
 
     //getResourceName
@@ -182,7 +187,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun getResourceName_notExistedObject(){
-        AssertUtils.assertException { page.notExistedObject.getResourceName(100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).getResourceName() }
     }
 
     //getContentDescription
@@ -199,7 +204,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun getContentDescription_notExistedObject(){
-        AssertUtils.assertException { page.notExistedObject.getContentDescription(100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).getContentDescription() }
     }
 
     //click
@@ -217,7 +222,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun click_onNotExistedObject() {
-        AssertUtils.assertException { page.notExistedObject.click(100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).click() }
     }
     //longClick
     @Test
@@ -228,7 +233,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun longClick_onNotExistedObject() {
-        AssertUtils.assertException { page.notExistedObject.longClick(100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).longClick() }
     }
 
     //clear
@@ -245,7 +250,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun clear_notExistedObject(){
-        AssertUtils.assertException { page.notExistedObject.clear() }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).clear() }
     }
 
     //addText
@@ -267,7 +272,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun addText_toNotExistedObject(){
-        AssertUtils.assertException { page.notExistedObject.addText("asdasd") }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).addText("asdasd") }
     }
 
     @Test
@@ -280,11 +285,11 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun legacySetText_toUneditableObject(){
-        AssertUtils.assertException { page.button.legacySetText("some new text", 100) }
+        AssertUtils.assertException { page.button.withTimeout(100).legacySetText("some new text") }
     }
     @Test
     fun legacySetText_toNotExistedObject(){
-        AssertUtils.assertException { page.notExistedObject.legacySetText("some new text", 100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).legacySetText("some new text") }
     }
     //replaceText
     @Test
@@ -297,12 +302,12 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
     @Test
     fun replaceText_toUneditableObject(){
         val btnText = getTargetString(R.string.button_text)
-        page.button.replaceText("some new text", 1000).hasText(btnText)
+        page.button.withTimeout(100).replaceText("some new text").hasText(btnText)
     }
 
     @Test
     fun replaceText_toNotExistedObject(){
-        AssertUtils.assertException { page.notExistedObject.replaceText("some new text", 100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).replaceText("some new text") }
     }
 
     //perform
@@ -314,7 +319,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun perform_notExistedObject(){
-        AssertUtils.assertException { page.notExistedObject.perform({this.click()}, "Click on button", timeoutMs = 100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).perform({this.click()}, "Click on button") }
     }
 
     //swipe

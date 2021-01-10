@@ -33,12 +33,12 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
                         result.exception ?: UnknownError("Create an issue to ULTRON project")
                     if (error::class.java.isAssignedFrom(getAllowedExceptions(operation))) {
                         if (exceptions.find { it.javaClass.simpleName == error.javaClass.simpleName } == null) {
-                            exceptions.add(getWrapperException(error))
+                            exceptions.add(error)
                         }
                     } else {
                         description =
                             "Not allowed exception occurs - ${error.javaClass.simpleName}, message - ${error.message}, cause - ${error.cause}"
-                        exceptions.add(getWrapperException(error))
+                        exceptions.add(error)
                         throw error
                     }
                 }
@@ -71,7 +71,7 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
         }
         return generateResult(
             success = success,
-            exceptions = exceptions,
+            exceptions = exceptions.map { getWrapperException(it) },
             description = description,
             operationIterationResult = lastIteration
         )

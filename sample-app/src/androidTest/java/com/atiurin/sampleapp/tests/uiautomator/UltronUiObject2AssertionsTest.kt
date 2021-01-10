@@ -1,6 +1,7 @@
 package com.atiurin.sampleapp.tests.uiautomator
 
 import com.atiurin.sampleapp.R
+import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.UiObject2ElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
@@ -21,12 +22,13 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun hasText_InvalidText_withResourceId() {
-        AssertUtils.assertException { page.editTextContentDesc.hasText("invalid text", 100) }
+
+        AssertUtils.assertException { page.editTextContentDesc.withTimeout(100).withTimeout(100).hasText("invalid text") }
     }
 
     @Test
     fun hasText_notExisted(){
-        AssertUtils.assertException { page.notExistedObject.hasText("asd", 100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).withTimeout(100).hasText("asd") }
     }
 
     //hasText matcher
@@ -37,12 +39,12 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun hasText_matcher_InvalidText() {
-        AssertUtils.assertException { page.editTextContentDesc.hasText(equalToIgnoringCase("invalid text"), 100) }
+        AssertUtils.assertException { page.editTextContentDesc.withTimeout(100).hasText(equalToIgnoringCase("invalid text") ) }
     }
 
     @Test
     fun hasText_matcher_notExisted(){
-        AssertUtils.assertException { page.notExistedObject.hasText(containsString("asd"), 100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).hasText(containsString("asd") ) }
     }
 
     //textContains
@@ -54,28 +56,28 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun textContains_invalidText(){
-        AssertUtils.assertException { page.button.textContains("invalid substring", 100) }
+        AssertUtils.assertException { page.button.withTimeout(100).textContains("invalid substring" ) }
     }
 
     @Test
     fun textContains_notExisted(){
-        AssertUtils.assertException { page.notExistedObject.textContains("invalid substring", 100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).textContains("invalid substring" ) }
     }
 
     //textIsNullOrEmpty
     @Test
     fun textIsNullOrEmpty_nullText(){
-        page.editTextContentDesc.clear().textIsNullOrEmpty()
+        page.editTextContentDesc.clear().withTimeout(100).textIsNullOrEmpty()
     }
 
     @Test
     fun textIsNullOrEmpty_notEmptyText(){
-        AssertUtils.assertException { page.editTextContentDesc.textIsNullOrEmpty(100) }
+        AssertUtils.assertException { page.editTextContentDesc.withTimeout(100).textIsNullOrEmpty() }
     }
 
     @Test
     fun textIsNullOrEmpty_notExisted(){
-        AssertUtils.assertException { page.notExistedObject.textIsNullOrEmpty(100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).textIsNullOrEmpty() }
     }
 
     //textIsNotNullOrEmpty
@@ -86,7 +88,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun textIsNotNullOrEmpty_nullText(){
-        AssertUtils.assertException { page.editTextContentDesc.clear().textIsNotNullOrEmpty(100) }
+        AssertUtils.assertException { page.editTextContentDesc.clear().withTimeout(100).textIsNotNullOrEmpty() }
     }
 
     //contentDescription
@@ -99,12 +101,12 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun hasContentDescription_InvalidText_withResourceId() {
-        AssertUtils.assertException { page.button.hasContentDescription("invalid text", 100) }
+        AssertUtils.assertException { page.button.withTimeout(100).hasContentDescription("invalid text" ) }
     }
 
     @Test
     fun hasContentDescription_notExisted(){
-        AssertUtils.assertException { page.notExistedObject.hasContentDescription("asd", 100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).hasContentDescription("asd" ) }
     }
 
     //contentDescription matcher
@@ -115,12 +117,12 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun hasContentDescription_matcher_InvalidText() {
-        AssertUtils.assertException { page.button.hasContentDescription(equalToIgnoringCase("invalid text"), 100) }
+        AssertUtils.assertException { page.button.withTimeout(100).hasContentDescription(equalToIgnoringCase("invalid text") ) }
     }
 
     @Test
     fun hasContentDescription_matcher_notExisted(){
-        AssertUtils.assertException { page.notExistedObject.hasContentDescription(containsString("asd"), 100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).hasContentDescription(containsString("asd") ) }
     }
 
     //contentDescriptionContains
@@ -132,12 +134,12 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun contentDescriptionContains_invalidText(){
-        AssertUtils.assertException { page.button.contentDescriptionContains("invalid substring", 100) }
+        AssertUtils.assertException { page.button.withTimeout(100).contentDescriptionContains("invalid substring" ) }
     }
 
     @Test
     fun contentDescriptionContains_notExisted(){
-        AssertUtils.assertException { page.notExistedObject.contentDescriptionContains("invalid substring", 100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).contentDescriptionContains("invalid substring" ) }
     }
 
     //contentDescriptionIsNullOrEmpty
@@ -149,12 +151,12 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun contentDescriptionIsNullOrEmpty_notEmptyText(){
-        AssertUtils.assertException { page.button.contentDescriptionIsNullOrEmpty(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).contentDescriptionIsNullOrEmpty() }
     }
 
     @Test
     fun contentDescriptionIsNullOrEmpty_notExisted(){
-        AssertUtils.assertException { page.notExistedObject.contentDescriptionIsNullOrEmpty(100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).contentDescriptionIsNullOrEmpty() }
     }
 
     //contentDescriptionIsNotNullOrEmpty
@@ -166,7 +168,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
     @Test
     fun contentDescriptionIsNotNullOrEmpty_nullText(){
         page.editTextContentDesc.clear()
-        AssertUtils.assertException { page.button.contentDescriptionIsNotNullOrEmpty(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).contentDescriptionIsNotNullOrEmpty() }
     }
     //isDisplayed
     @Test
@@ -177,25 +179,25 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
     @Test
     fun isDisplayed_ofInvisibleObject() {
         page.radioInvisibleButton.click()
-        AssertUtils.assertException { page.button.isDisplayed(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isDisplayed() }
     }
 
     @Test
     fun isDisplayed_BooleanTrue_ofInvisibleObject() {
-        val result = page.button.isSuccess { isDisplayed(100) }
+        val result = page.button.isSuccess { withTimeout(100).isDisplayed() }
         Assert.assertTrue(result)
     }
 
     @Test
     fun isDisplayed_BooleanFalse_ofInvisibleObject() {
         page.radioInvisibleButton.click()
-        val result = page.button.isSuccess { isDisplayed(100) }
+        val result = page.button.isSuccess { withTimeout(100).isDisplayed() }
         Assert.assertFalse(result)
     }
     //isNotDisplayed
     @Test
     fun isNotDisplayed_ofDisplayedObject() {
-        AssertUtils.assertException { page.button.isDisplayed().isNotDisplayed(100) }
+        AssertUtils.assertException { page.button.isDisplayed().withTimeout(100).isNotDisplayed() }
     }
 
     @Test
@@ -211,7 +213,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
     }
     @Test
     fun isCheckable_ofNotCheckable(){
-        AssertUtils.assertException { page.emptyImageView.isCheckable(100) }
+        AssertUtils.assertException { page.emptyImageView.withTimeout(100).isCheckable() }
     }
 
     //isNotCheckable
@@ -222,7 +224,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isNotCheckable_ofCheckable(){
-        AssertUtils.assertException { page.checkBoxClickable.isNotCheckable(100) }
+        AssertUtils.assertException { page.checkBoxClickable.withTimeout(100).isNotCheckable() }
     }
 
     //isChecked
@@ -233,7 +235,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isChecked_ofNotChecked(){
-        AssertUtils.assertException { page.checkBoxUnavailable.isChecked(100) }
+        AssertUtils.assertException { page.checkBoxUnavailable.withTimeout(100).isChecked() }
     }
     //isNotChecked
     @Test
@@ -243,7 +245,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isNotChecked_ofChecked(){
-        AssertUtils.assertException { page.checkBoxClickable.isNotChecked(100) }
+        AssertUtils.assertException { page.checkBoxClickable.withTimeout(100).isNotChecked() }
     }
 
     //isClickable
@@ -255,7 +257,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
     @Test
     fun isClickable_ofNotClickable(){
         page.checkBoxClickable.click()
-        AssertUtils.assertException { page.button.isClickable(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isClickable() }
     }
 
     //isNotClickable
@@ -267,7 +269,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isNotClickable_ofClickable(){
-        AssertUtils.assertException { page.button.isNotClickable(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isNotClickable() }
     }
 
     //isEnabled
@@ -279,7 +281,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
     @Test
     fun isEnabled_ofNotEnable(){
         page.checkBoxEnabled.click()
-        AssertUtils.assertException { page.button.isEnabled(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isEnabled() }
     }
 
     //isNotEnabled
@@ -291,7 +293,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isNotEnabled_ofEnable(){
-        AssertUtils.assertException { page.button.isNotEnabled(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isNotEnabled() }
     }
 
     //isFocusable
@@ -303,7 +305,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
     @Test
     fun isFocusable_ofNotFocusable(){
         page.checkBoxFocusable.click()
-        AssertUtils.assertException { page.button.isFocusable(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isFocusable() }
     }
 
     //isNotFocusable
@@ -315,7 +317,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isNotFocusable_ofFocusable(){
-        AssertUtils.assertException { page.button.isNotFocusable(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isNotFocusable() }
     }
 
     //isFocused
@@ -326,7 +328,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isFocused_ofNotFocused(){
-        AssertUtils.assertException { page.editTextContentDesc.isFocused(100) }
+        AssertUtils.assertException { page.editTextContentDesc.withTimeout(100).isFocused() }
     }
 
     //isNotFocused
@@ -337,7 +339,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isNotFocused_ofFocused(){
-        AssertUtils.assertException { page.editTextContentDesc.click().isNotFocused(100) }
+        AssertUtils.assertException { page.editTextContentDesc.click().withTimeout(100).isNotFocused() }
     }
 
     //isLongClickable
@@ -348,7 +350,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isLongClickable_ofNotLongClickable(){
-        AssertUtils.assertException { page.emptyImageView.isLongClickable(100) }
+        AssertUtils.assertException { page.emptyImageView.withTimeout(100).isLongClickable() }
     }
 
     //isNotLongClickable
@@ -359,7 +361,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isNotLongClickable_ofLongClickable(){
-        AssertUtils.assertException { page.button.isNotLongClickable(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isNotLongClickable() }
     }
 
     //isSelected
@@ -371,7 +373,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isSelected_ofNotSelected(){
-        AssertUtils.assertException { page.button.isSelected(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isSelected() }
     }
 
     //isNotSelected
@@ -383,7 +385,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
     @Test
     fun isNotSelected_ofSelected(){
         page.checkBoxSelected.click()
-        AssertUtils.assertException { page.button.isNotSelected(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isNotSelected() }
     }
 
     //isNotScrollable
@@ -394,7 +396,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isScrollable_ofNotScrollable(){
-        AssertUtils.assertException { page.button.isScrollable(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isScrollable() }
     }
 
     //assertThat
@@ -405,11 +407,20 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun assertThat_invalidAssertion_existedObject(){
-        AssertUtils.assertException { page.button.assertThat({ !this.isClickable }, "Object isn't clickable", 100) }
+        AssertUtils.assertException { page.button.withTimeout(100).assertThat({ !this.isClickable }, "Object isn't clickable") }
     }
 
     @Test
     fun assertThat_notExistedObject(){
-        AssertUtils.assertException { page.notExistedObject.assertThat({ !this.isClickable }, "Should fail", 100) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).assertThat({ !this.isClickable }, "Should fail") }
+    }
+
+    @Test
+    fun resultHandlerTest(){
+        page.editTextContentDesc.withResultHandler {
+            Assert.assertFalse(it.success)
+            Assert.assertTrue(it.description.isNotEmpty())
+        }.withTimeout(100).hasText("invalid text")
+        AssertUtils.assertException { page.editTextContentDesc.withTimeout(100).isNotDisplayed() }
     }
 }

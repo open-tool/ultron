@@ -7,6 +7,7 @@ import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.OperationType
 import com.atiurin.ultron.core.config.UltronConfig.UiAutomator.Companion.uiDevice
+import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 
 class UiAutomatorUiSelectorOperation(
     private val operationBlock: UiObject.() -> Boolean,
@@ -14,7 +15,7 @@ class UiAutomatorUiSelectorOperation(
     override val name: String,
     override val description: String,
     override val type: OperationType,
-    override val timeoutMs: Long) : Operation {
+    override val timeoutMs: Long) : UiAutomatorOperation {
     override fun execute(): OperationIterationResult {
         var success = true
         var exception: Throwable? = null

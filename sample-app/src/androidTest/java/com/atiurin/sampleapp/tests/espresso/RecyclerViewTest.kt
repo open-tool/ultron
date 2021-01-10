@@ -5,6 +5,7 @@ import androidx.test.rule.ActivityTestRule
 import com.atiurin.ultron.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.activity.MainActivity
 import com.atiurin.sampleapp.data.repositories.CONTACTS
+import com.atiurin.sampleapp.data.repositories.ContactRepositoty
 import com.atiurin.sampleapp.pages.FriendsListPage
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.extensions.assertMatches
@@ -32,6 +33,8 @@ class RecyclerViewTest : BaseTest() {
 
     @Test
     fun testListSize(){
+        withRecyclerView(page.friendsRecycler).atPosition(0)
+            .assertMatches(hasDescendant(withText(ContactRepositoty.getFirst().name)))
         val actualSize = withRecyclerView(page.friendsRecycler).getSize()
         Assert.assertEquals(CONTACTS.size, actualSize)
     }

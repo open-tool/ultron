@@ -21,6 +21,7 @@ import com.atiurin.ultron.core.espresso.assertion.DataInteractionEspressoAsserti
 import com.atiurin.ultron.core.espresso.assertion.ViewInteractionEspressoAssertion
 import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
+import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.uiobject2.UiAutomatorBySelectorAction
 import com.atiurin.ultron.core.uiautomator.uiobject2.UiAutomatorBySelectorAssertion
@@ -111,8 +112,7 @@ object UltronConfig {
     class UiAutomator {
         companion object {
             var UIAUTOMATOR_OPERATION_POLLING_TIMEOUT = 50L //ms
-            var ACTION_TIMEOUT = 5_000L
-            var ASSERTION_TIMEOUT = 5_000L
+            var OPERATION_TIMEOUT = 5_000L
 
             var resultAnalyzer: OperationResultAnalyzer = DefaultOperationResultAnalyzer()
 
@@ -163,12 +163,7 @@ object UltronConfig {
                     NullPointerException::class.java,
                     UltronException::class.java
                 )
-                val bySelectorActionResultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAction>) -> Unit =
-                    {
-
-                        resultAnalyzer.analyze(it)
-                    }
-                val bySelectorAssertionResultHandler: (UiAutomatorOperationResult<UiAutomatorBySelectorAssertion>) -> Unit =
+                val resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit =
                     {
                         resultAnalyzer.analyze(it)
                     }

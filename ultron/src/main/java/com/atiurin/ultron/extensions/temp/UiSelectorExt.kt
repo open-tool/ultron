@@ -19,7 +19,7 @@ import org.hamcrest.Matcher
  */
 fun UiSelector.getChild(
     uiSelector: UiSelector,
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ): UltronUiObject {
     val uiObject = UltronUiObject({uiDevice.findObject(this)}, this.toString()).getChild(uiSelector, timeoutMs, resultHandler)
@@ -36,7 +36,7 @@ fun UiSelector.getChild(
  */
 fun UiSelector.getFromParent(
     uiSelector: UiSelector,
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ): UltronUiObject {
     val uiObject = UltronUiObject({uiDevice.findObject(this)}, this.toString()).getFromParent(uiSelector,   timeoutMs, resultHandler)
@@ -50,7 +50,7 @@ fun UiSelector.getFromParent(
  * @since API Level 16
  */
 fun UiSelector.getFromParent(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ): Int {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getChildCount( timeoutMs, resultHandler)
@@ -63,7 +63,7 @@ fun UiSelector.getFromParent(
  * @since API Level 18
  */
 fun UiSelector.getClassName(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ): String? {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getClassName( timeoutMs, resultHandler)
@@ -76,14 +76,14 @@ fun UiSelector.getClassName(
  * @since API Level 16
  */
 fun UiSelector.getContentDescription(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ): String? {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getContentDescription( timeoutMs, resultHandler)
 }
 
 fun UiSelector.getPackageName(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ): String? {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getPackageName( timeoutMs, resultHandler)
@@ -94,7 +94,7 @@ fun UiSelector.getPackageName(
  * @return Rect containing visible bounds
  */
 fun UiSelector.getVisibleBounds(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ): Rect? {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getVisibleBounds( timeoutMs, resultHandler)
@@ -107,7 +107,7 @@ fun UiSelector.getVisibleBounds(
  * @since API Level 16
  */
 fun UiSelector.getBounds(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ): Rect? {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getBounds( timeoutMs, resultHandler)
@@ -120,7 +120,7 @@ fun UiSelector.getBounds(
  * @since API Level 16
  */
 fun UiSelector.getText(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ): String? {
     return UltronUiObject({uiDevice.findObject(this)}, this.toString()).getText( timeoutMs, resultHandler)
@@ -134,7 +134,7 @@ fun UiSelector.getText(
  * @since API Level 16
  */
 fun UiSelector.clearTextField(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).clearTextField( timeoutMs, resultHandler)
@@ -142,7 +142,7 @@ fun UiSelector.clearTextField(
 
 fun UiSelector.replaceText(
     text: String,
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).replaceText(text,   timeoutMs, resultHandler)
@@ -153,7 +153,7 @@ fun UiSelector.replaceText(
  */
 fun UiSelector.legacySetText(
     text: String,
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).legacySetText(text,   timeoutMs, resultHandler)
@@ -164,7 +164,7 @@ fun UiSelector.legacySetText(
  * @since API Level 16
  */
 fun UiSelector.click(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).click( timeoutMs, resultHandler)
@@ -186,7 +186,7 @@ fun UiSelector.click(
  */
 fun UiSelector.clickAndWaitForNewWindow(
     waitWindowTimeout: Long = 5500,//default uiautomator timeout value
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).clickAndWaitForNewWindow(waitWindowTimeout,   timeoutMs, resultHandler)
@@ -197,7 +197,7 @@ fun UiSelector.clickAndWaitForNewWindow(
  * @since API Level 16
  */
 fun UiSelector.clickTopLeft(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).clickTopLeft( timeoutMs, resultHandler)
@@ -208,7 +208,7 @@ fun UiSelector.clickTopLeft(
  * @since API Level 16
  */
 fun UiSelector.clickBottomRight(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).clickBottomRight( timeoutMs, resultHandler)
@@ -219,7 +219,7 @@ fun UiSelector.clickBottomRight(
  * @since API Level 16
  */
 fun UiSelector.longClick(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).longClick( timeoutMs, resultHandler)
@@ -230,7 +230,7 @@ fun UiSelector.longClick(
  * @since API Level 16
  */
 fun UiSelector.longClickTopLeft(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).longClickTopLeft( timeoutMs, resultHandler)
@@ -241,7 +241,7 @@ fun UiSelector.longClickTopLeft(
  * @since API Level 16
  */
 fun UiSelector.longClickBottomRight(
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).longClickBottomRight( timeoutMs, resultHandler)
@@ -260,7 +260,7 @@ fun UiSelector.longClickBottomRight(
 fun UiSelector.dragTo(
     destObj: UiObject,
     steps: Int,
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).dragTo(destObj, steps,  timeoutMs, resultHandler)
@@ -281,7 +281,7 @@ fun UiSelector.dragTo(
     destX: Int,
     destY: Int,
     steps: Int,
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).dragTo(destX, destY, steps,   timeoutMs, resultHandler)
@@ -296,7 +296,7 @@ fun UiSelector.dragTo(
  */
 fun UiSelector.swipeUp(
     steps: Int,
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).swipeUp(steps,  timeoutMs, resultHandler)
@@ -313,7 +313,7 @@ fun UiSelector.swipeUp(
  */
 fun UiSelector.swipeDown(
     steps: Int,
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).swipeDown(steps,  timeoutMs, resultHandler)
@@ -330,7 +330,7 @@ fun UiSelector.swipeDown(
  */
 fun UiSelector.swipeLeft(
     steps: Int,
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).swipeLeft(steps,  timeoutMs, resultHandler)
@@ -347,7 +347,7 @@ fun UiSelector.swipeLeft(
  */
 fun UiSelector.swipeRight(
     steps: Int,
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).swipeRight(steps,   timeoutMs, resultHandler)
@@ -365,7 +365,7 @@ fun UiSelector.swipeRight(
 fun UiSelector.pinchOut(
     percent: Int,
     steps: Int,
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).pinchOut(percent, steps,  timeoutMs, resultHandler)
@@ -382,7 +382,7 @@ fun UiSelector.pinchOut(
 fun UiSelector.pinchIn(
     percent: Int,
     steps: Int,
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).pinchIn(percent, steps,   timeoutMs, resultHandler)
@@ -393,7 +393,7 @@ fun UiSelector.pinchIn(
  * @since API Level 16
  */
 fun UiSelector.exists(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).exists( timeoutMs, resultHandler)
@@ -404,7 +404,7 @@ fun UiSelector.exists(
  * @since API Level 16
  */
 fun UiSelector.notExists(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).notExists( timeoutMs, resultHandler)
@@ -415,7 +415,7 @@ fun UiSelector.notExists(
  * @since API Level 16
  */
 fun UiSelector.isCheckable(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isCheckable( timeoutMs, resultHandler)
@@ -426,7 +426,7 @@ fun UiSelector.isCheckable(
  * @since API Level 16
  */
 fun UiSelector.isNotCheckable(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isNotCheckable( timeoutMs, resultHandler)
@@ -437,7 +437,7 @@ fun UiSelector.isNotCheckable(
  * @since API Level 16
  */
 fun UiSelector.isChecked(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isChecked( timeoutMs, resultHandler)
@@ -448,7 +448,7 @@ fun UiSelector.isChecked(
  * @since API Level 16
  */
 fun UiSelector.isNotChecked(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isNotChecked( timeoutMs, resultHandler)
@@ -459,7 +459,7 @@ fun UiSelector.isNotChecked(
  * @since API Level 16
  */
 fun UiSelector.isClickable(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isClickable( timeoutMs, resultHandler)
@@ -470,7 +470,7 @@ fun UiSelector.isClickable(
  * @since API Level 16
  */
 fun UiSelector.isNotClickable(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isNotClickable( timeoutMs, resultHandler)
@@ -481,7 +481,7 @@ fun UiSelector.isNotClickable(
  * @since API Level 16
  */
 fun UiSelector.isEnabled(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isEnabled( timeoutMs, resultHandler)
@@ -492,7 +492,7 @@ fun UiSelector.isEnabled(
  * @since API Level 16
  */
 fun UiSelector.isNotEnabled(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isNotEnabled( timeoutMs, resultHandler)
@@ -503,7 +503,7 @@ fun UiSelector.isNotEnabled(
  * @since API Level 16
  */
 fun UiSelector.isFocusable(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isFocusable( timeoutMs, resultHandler)
@@ -514,7 +514,7 @@ fun UiSelector.isFocusable(
  * @since API Level 16
  */
 fun UiSelector.isNotFocusable(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isNotFocusable( timeoutMs, resultHandler)
@@ -525,7 +525,7 @@ fun UiSelector.isNotFocusable(
  * @since API Level 16
  */
 fun UiSelector.isFocused(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isFocused( timeoutMs, resultHandler)
@@ -536,7 +536,7 @@ fun UiSelector.isFocused(
  * @since API Level 16
  */
 fun UiSelector.isNotFocused(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isNotFocused( timeoutMs, resultHandler)
@@ -547,7 +547,7 @@ fun UiSelector.isNotFocused(
  * @since API Level 16
  */
 fun UiSelector.isLongClickable(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isLongClickable( timeoutMs, resultHandler)
@@ -558,7 +558,7 @@ fun UiSelector.isLongClickable(
  * @since API Level 16
  */
 fun UiSelector.isNotLongClickable(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isNotLongClickable( timeoutMs, resultHandler)
@@ -569,7 +569,7 @@ fun UiSelector.isNotLongClickable(
  * @since API Level 16
  */
 fun UiSelector.isScrollable(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isScrollable( timeoutMs, resultHandler)
@@ -580,7 +580,7 @@ fun UiSelector.isScrollable(
  * @since API Level 16
  */
 fun UiSelector.isNotScrollable(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isNotScrollable( timeoutMs, resultHandler)
@@ -591,7 +591,7 @@ fun UiSelector.isNotScrollable(
  * @since API Level 16
  */
 fun UiSelector.isSelected(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isSelected( timeoutMs, resultHandler)
@@ -602,7 +602,7 @@ fun UiSelector.isSelected(
  * @since API Level 16
  */
 fun UiSelector.isNotSelected(
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).isNotSelected( timeoutMs, resultHandler)
@@ -611,7 +611,7 @@ fun UiSelector.isNotSelected(
 /** Assert view.text has value equals [text] */
 fun UiSelector.hasText(
     text: String,
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).hasText(text,  timeoutMs, resultHandler)
@@ -620,7 +620,7 @@ fun UiSelector.hasText(
 /** Assert view.text value matching [textMatcher] */
 fun UiSelector.hasText(
     textMatcher: Matcher<String>,
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).hasText(textMatcher,   timeoutMs, resultHandler)
@@ -629,7 +629,7 @@ fun UiSelector.hasText(
 /** Assert view.text value contains substring [textSubstring] */
 fun UiSelector.textContains(
     textSubstring: String,
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).textContains(textSubstring,  timeoutMs, resultHandler)
@@ -638,7 +638,7 @@ fun UiSelector.textContains(
 /** Assert view.contentDescription has value equals [contentDesc] */
 fun UiSelector.hasContentDescription(
     contentDesc: String,
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).hasContentDescription(contentDesc,   timeoutMs, resultHandler)
@@ -647,7 +647,7 @@ fun UiSelector.hasContentDescription(
 /** Assert view.contentDescription value matching [contentDescMatcher] */
 fun UiSelector.hasContentDescription(
     contentDescMatcher: Matcher<String>,
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).hasContentDescription(contentDescMatcher,   timeoutMs, resultHandler)
@@ -656,7 +656,7 @@ fun UiSelector.hasContentDescription(
 /** Assert view.contentDescription value contains substring [contentDescSubstring] */
 fun UiSelector.contentDescriptionContains(
     contentDescSubstring: String,
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).contentDescriptionContains(contentDescSubstring,  timeoutMs, resultHandler)
@@ -670,7 +670,7 @@ fun UiSelector.contentDescriptionContains(
 fun UiSelector.assertThat(
     assertBlock: UiObject.() -> Boolean,
     assertionDescription: String = "NO_DESCRIPTION_SPECIFIED",
-    timeoutMs: Long = UltronConfig.UiAutomator.ASSERTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).assertThat(assertBlock, assertionDescription,  timeoutMs, resultHandler)
@@ -683,7 +683,7 @@ fun UiSelector.assertThat(
 fun UiSelector.perform(
     actionBlock: UiObject.() -> Boolean,
     actionDescription: String = "NO_DESCRIPTION_SPECIFIED",
-    timeoutMs: Long = UltronConfig.UiAutomator.ACTION_TIMEOUT,
+    timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT,
     resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = UltronConfig.UiAutomator.UiObjectConfig.resultHandler
 ) {
     UltronUiObject({uiDevice.findObject(this)}, this.toString()).perform(actionBlock, actionDescription,  timeoutMs, resultHandler)

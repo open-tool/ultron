@@ -5,6 +5,7 @@ import com.atiurin.ultron.core.common.DefaultOperationIterationResult
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.OperationType
+import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.exceptions.UltronWrapperException
 
@@ -13,7 +14,7 @@ class UiAutomatorBySelectorAssertion (
     override val name: String,
     override val description: String,
     override val type: OperationType,
-    override val timeoutMs: Long) : Operation {
+    override val timeoutMs: Long) : UiAutomatorOperation {
     override fun execute(): OperationIterationResult {
         var success = true
         var exception: Throwable? = null

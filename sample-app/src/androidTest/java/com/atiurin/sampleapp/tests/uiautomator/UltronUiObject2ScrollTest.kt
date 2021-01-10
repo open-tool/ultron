@@ -26,7 +26,7 @@ class UltronUiObject2ScrollTest : BaseTest() {
     @Test
     fun scrollToBottom() {
         for (i in 0..10) {
-            if (page.bottomElement.isSuccess { isDisplayed(10) }) break
+            if (page.bottomElement.isSuccess { withTimeout(100).isDisplayed() }) break
             page.list.scrollDown()
         }
         page.bottomElement.isDisplayed()
@@ -36,12 +36,12 @@ class UltronUiObject2ScrollTest : BaseTest() {
     @Test
     fun scrollToTop() {
         for (i in 0..10) {
-            if (page.bottomElement.isSuccess { isDisplayed(10) }) break
+            if (page.bottomElement.isSuccess { withTimeout(100).isDisplayed() }) break
             page.list.scrollDown()
         }
         page.bottomElement.isDisplayed()
         for (i in 0..10) {
-            if (page.topElement.isSuccess { isDisplayed(10) }) break
+            if (page.topElement.isSuccess { withTimeout(100).isDisplayed() }) break
             page.list.scrollUp()
         }
     }

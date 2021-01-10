@@ -20,12 +20,6 @@ abstract class BaseTest {
             AccountManager(InstrumentationRegistry.getInstrumentation().targetContext).login(
                 CURRENT_USER.login, CURRENT_USER.password
             )
-        }.addSetUp {
-            Log.info("Register idling resource")
-            IdlingRegistry.getInstance().register(idlingRes)
-        }.addTearDown {
-            Log.info("Unregister idling resource")
-            IdlingRegistry.getInstance().unregister(idlingRes)
         }
 
     @get:Rule
