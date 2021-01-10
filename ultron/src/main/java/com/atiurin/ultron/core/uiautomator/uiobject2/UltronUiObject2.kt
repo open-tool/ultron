@@ -974,8 +974,8 @@ class UltronUiObject2 internal constructor(
         private const val DEFAULT_PINCH_SPEED = 2500
 
         @JvmStatic
-        fun resId(@IntegerRes resourceId: Int): UltronUiObject2 {
-            val bySelector = byResId(resourceId)
+        fun byResId(@IntegerRes resourceId: Int): UltronUiObject2 {
+            val bySelector = bySelector(resourceId)
             return UltronUiObject2(
                 { UltronConfig.UiAutomator.uiDevice.findObject(bySelector) },
                 bySelector.toString()
@@ -991,7 +991,7 @@ class UltronUiObject2 internal constructor(
         }
 
         @JvmStatic
-        fun byResId(@IntegerRes resourceId: Int): BySelector {
+        fun bySelector(@IntegerRes resourceId: Int): BySelector {
             return By.res(getTargetResourceName(resourceId))
         }
     }

@@ -9,12 +9,9 @@ import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils
 import com.atiurin.sampleapp.pages.UiObject2ElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
-import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2.Companion.byResId
+import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2.Companion.bySelector
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
-import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.Test
 
 class UltronUiObject2ActionsTest: UiElementsTest() {
@@ -74,7 +71,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
     //findObject
     @Test
     fun findObject_existedChildObject(){
-        val child = page.radioGroup.findObject(byResId(R.id.radio_invisible))
+        val child = page.radioGroup.findObject(bySelector(R.id.radio_invisible))
         Assert.assertNotNull(child)
         child!!.click()
         page.button.isNotDisplayed()
@@ -82,19 +79,19 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 
     @Test
     fun findObject_notExistedChildObject(){
-        val child = page.radioGroup.findObject(byResId(R.id.button1))
+        val child = page.radioGroup.findObject(bySelector(R.id.button1))
         Assert.assertNull(child)
     }
 
     @Test
     fun findObject_notExistedParentObject(){
-        AssertUtils.assertException { page.notExistedObject.withTimeout(100).findObject(byResId(R.id.button1)) }
+        AssertUtils.assertException { page.notExistedObject.withTimeout(100).findObject(bySelector(R.id.button1)) }
     }
 
     //findObjects
     @Test
     fun findObjects_existedChildObject(){
-        val children = page.radioGroup.findObjects(byResId(R.id.radio_invisible))
+        val children = page.radioGroup.findObjects(bySelector(R.id.radio_invisible))
         Assert.assertEquals(1, children.size)
         children.forEach {
             it.click()
@@ -103,7 +100,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
     }
     @Test
     fun findObjects_notExistedChildObject(){
-        val children = page.radioGroup.findObjects(byResId(R.id.button1))
+        val children = page.radioGroup.findObjects(bySelector(R.id.button1))
         Assert.assertTrue(children.isEmpty())
     }
 
