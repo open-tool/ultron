@@ -6,7 +6,6 @@ import androidx.test.espresso.Root
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.web.model.ElementReference
 import androidx.test.espresso.web.sugar.Web
-import com.atiurin.ultron.core.espressoweb.webelement.WebElement
 import org.hamcrest.Matcher
 import java.util.concurrent.atomic.AtomicReference
 

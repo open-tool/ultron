@@ -23,20 +23,30 @@ import org.hamcrest.Matchers.containsString
 import org.w3c.dom.Document
 
 /**
- * It is recommended to create WebElement object using method in Companion object
- * like [WebElement.Companion.id], [WebElement.Companion.xpath], [WebElement.Companion.element] and etc
+ * It is required to create WebElement object using method in Companion object
+ * like [UltronWebElement.Companion.id], [UltronWebElement.Companion.xpath], [UltronWebElement.Companion.element] and etc
  */
-open class WebElement(
+open class UltronWebElement internal constructor(
     open val locator: Locator,
     open val value: String,
     private val webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
     private val elementReference: ElementReference? = null,
-    private val windowReference: WindowReference? = null
+    private val windowReference: WindowReference? = null,
+    private val timeoutMs: Long? = null,
+    private val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler
 ) {
-    private val contextualElements = mutableListOf<WebElement>()
+    private val contextualElements = mutableListOf<UltronWebElement>()
 
-    fun withContextual(webElement: WebElement) = apply {
-        contextualElements.add(webElement)
+    fun withContextual(ultronWebElement: UltronWebElement) = apply {
+        contextualElements.add(ultronWebElement)
+    }
+
+    open fun withTimeout(timeoutMs: Long): UltronWebElement{
+        return UltronWebElement(this.locator, this.value, this.webViewMatcher, this.elementReference, this.windowReference, timeoutMs, this.resultHandler)
+    }
+
+    open fun withResultHandler(resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit): UltronWebElement{
+        return UltronWebElement(this.locator, this.value, this.webViewMatcher, this.elementReference, this.windowReference, this.timeoutMs, resultHandler)
     }
 
     internal val webViewInteraction: Web.WebInteraction<Void>
@@ -61,9 +71,6 @@ open class WebElement(
 
     /** Clears content from an editable element. */
     fun clearElement(
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit =
-            (UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit)
     ) = apply {
         val result = WebLifecycle.execute(
             WebInteractionOperationExecutor(
@@ -72,17 +79,14 @@ open class WebElement(
                     name = "ClearElement of WebElement(${locator.type} = '$value')",
                     type = EspressoWebOperationType.WEB_CLEAR_ELEMENT,
                     description = "ClearElement of WebElement(${locator.type} = '$value') during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler as (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit
         )
     }
 
     /** Returns the visible text beneath a given DOM element. */
     fun getText(
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<String>>) -> Unit =
-            (UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<String>>) -> Unit)
     ): String {
         val result = WebLifecycle.execute(
             WebInteractionOperationExecutor(
@@ -91,9 +95,9 @@ open class WebElement(
                     name = "GetText of WebElement(${locator.type} = '$value')",
                     type = EspressoWebOperationType.WEB_GET_TEXT,
                     description = "GetText of WebElement(${locator.type} = '$value') during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler as (WebOperationResult<WebInteractionOperation<String>>) -> Unit
         )
         return (result.operationIterationResult as WebInteractionOperationIterationResult<String>).webInteraction?.get()
             ?: throw UltronException("Couldn't getText of locator '${locator.type}' and value '$value'")
@@ -101,9 +105,6 @@ open class WebElement(
 
     /** Simulates the javascript events to click on a particular element. */
     fun webClick(
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit =
-            (UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit)
     ) = apply {
         WebLifecycle.execute(
             WebInteractionOperationExecutor(
@@ -114,18 +115,15 @@ open class WebElement(
                     name = "WebClick on WebElement(${locator.type} = '$value')",
                     type = EspressoWebOperationType.WEB_CLICK,
                     description = "WebClick on WebElement(${locator.type} = '$value') during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler as (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit
         )
     }
 
     /** Simulates javascript key events sent to a certain element. */
     fun webKeys(
-        text: String,
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit
+        text: String
     ) = apply {
         WebLifecycle.execute(
             WebInteractionOperationExecutor(
@@ -136,18 +134,15 @@ open class WebElement(
                     name = "WebKeys text '$text' on WebElement(${locator.type} = '$value')",
                     type = EspressoWebOperationType.WEB_KEYS,
                     description = "WebKeys text '$text' on  WebElement(${locator.type} = '$value') during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler as (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit
         )
     }
 
     /** Simulates javascript clear and key events sent to a certain element. */
     fun replaceText(
-        text: String,
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit
+        text: String
     ) = apply {
         WebLifecycle.execute(
             WebInteractionOperationExecutor(
@@ -160,17 +155,14 @@ open class WebElement(
                     name = " WebElement(${locator.type} = '$value') ReplaceText to '$text'",
                     type = EspressoWebOperationType.WEB_REPLACE_TEXT,
                     description = " WebElement(${locator.type} = '$value') ReplaceText to '$text' during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler as (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit
         )
     }
 
     /** Returns {@code true} if the desired element is in view after scrolling. */
     fun webScrollIntoViewBoolean(
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<Boolean>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Boolean>>) -> Unit
     ) : Boolean{
         val result = WebLifecycle.execute(
             WebInteractionOperationExecutor(
@@ -179,22 +171,16 @@ open class WebElement(
                     name = " WebElement(${locator.type} = '$value') WebScrollIntoView",
                     type = EspressoWebOperationType.WEB_SCROLL_INTO_VIEW,
                     description = " WebElement(${locator.type} = '$value') WebScrollIntoView during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler as (WebOperationResult<WebInteractionOperation<Boolean>>) -> Unit
         )
         return (result.operationIterationResult as WebInteractionOperationIterationResult<Boolean>).webInteraction?.get()
             ?: false
     }
 
-    /**
-     * Returns webElement after scroll
-     */
-    fun webScrollIntoView(
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<Boolean>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Boolean>>) -> Unit
-    ) = apply {
+    /** Returns {@code true} if the desired element is in view after scrolling. */
+    fun webScrollIntoView() = apply {
         val result = WebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
@@ -202,18 +188,15 @@ open class WebElement(
                     name = " WebElement(${locator.type} = '$value') WebScrollIntoView",
                     type = EspressoWebOperationType.WEB_SCROLL_INTO_VIEW,
                     description = " WebElement(${locator.type} = '$value') WebScrollIntoView during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler as (WebOperationResult<WebInteractionOperation<Boolean>>) -> Unit
         )
     }
 
     /** Asserts that DOM element contains visible text beneath it self. */
     fun containsText(
-        text: String,
-        timeoutMs: Long = UltronConfig.Espresso.ASSERTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<String>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<String>>) -> Unit
+        text: String
     ) = apply {
         WebLifecycle.execute(
             WebInteractionOperationExecutor(
@@ -226,18 +209,15 @@ open class WebElement(
                     name = "WebElement(${locator.type} = '$value') ContainsText '$text'",
                     type = EspressoWebOperationType.WEB_CONTAINS_TEXT,
                     description = "Assert WebElement(${locator.type} = '$value') ContainsText = '$text' during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler as (WebOperationResult<WebInteractionOperation<String>>) -> Unit
         )
     }
 
     /** Asserts that DOM element has visible text beneath it self. */
     fun hasText(
-        text: String,
-        timeoutMs: Long = UltronConfig.Espresso.ASSERTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<String>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<String>>) -> Unit
+        text: String
     ) = apply {
         WebLifecycle.execute(
             WebInteractionOperationExecutor(
@@ -250,17 +230,14 @@ open class WebElement(
                     name = "WebElement(${locator.type} = '$value') HasText '$text'",
                     type = EspressoWebOperationType.WEB_HAS_TEXT,
                     description = "Assert WebElement(${locator.type} = '$value') HasText = '$text' during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler as (WebOperationResult<WebInteractionOperation<String>>) -> Unit
         )
     }
 
     /** Asserts that element exists in webView */
     fun exists(
-        timeoutMs: Long = UltronConfig.Espresso.ASSERTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<Void>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Void>>) -> Unit
     ) = apply {
         WebLifecycle.execute(
             WebInteractionOperationExecutor(
@@ -271,18 +248,15 @@ open class WebElement(
                     name = "WebElement(${locator.type} = '$value') exists",
                     type = EspressoWebOperationType.WEB_EXISTS,
                     description = "Assert WebElement(${locator.type} = '$value') exists during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler as (WebOperationResult<WebInteractionOperation<Void>>) -> Unit
         )
     }
 
     protected fun hasElementAttribute(
         attributeName: String,
         attributeValueMatcher: Matcher<String>,
-        timeoutMs: Long = UltronConfig.Espresso.ASSERTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<Document>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Document>>) -> Unit,
         documentMatcher: Matcher<Document>
     ) = apply {
         WebLifecycle.execute(
@@ -298,19 +272,16 @@ open class WebElement(
                     name = " WebElement(${locator.type} = '$value') hasAttribute '$attributeName' matches $attributeValueMatcher",
                     type = EspressoWebOperationType.WEB_HAS_ATTRIBUTE,
                     description = "Assert WebElement(${locator.type} = '$value') hasAttribute '$attributeName' matches $attributeValueMatcher during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler  as (WebOperationResult<WebInteractionOperation<Document>>) -> Unit
         )
     }
 
 
     /** use any webAssertion to assert it safely */
     fun <T> assertThat(
-        webAssertion: WebAssertion<T>,
-        timeoutMs: Long = UltronConfig.Espresso.ASSERTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<T>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<T>>) -> Unit
+        webAssertion: WebAssertion<T>
     ) = apply {
         WebLifecycle.execute(
             WebInteractionOperationExecutor(
@@ -321,14 +292,14 @@ open class WebElement(
                     name = "WebElement(${locator.type} = '$value') custom webAssertion",
                     type = EspressoWebOperationType.WEB_ASSERT_THAT,
                     description = "WebElement(${locator.type} = '$value') custom webAssertion during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler  as (WebOperationResult<WebInteractionOperation<T>>) -> Unit
         )
     }
 
     /** Transforms any action or assertion to Boolean value */
-    fun isSuccess(block: WebElement.() -> Unit): Boolean = this.methodToBoolean(block)
+    fun isSuccess(block: UltronWebElement.() -> Unit): Boolean = this.methodToBoolean(block)
 
     /** Removes the Element and Window references from this interaction */
     fun reset() = apply { webViewInteraction.reset() }
@@ -339,8 +310,8 @@ open class WebElement(
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             elementReference: ElementReference? = null,
             windowReference: WindowReference? = null
-        ): WebElement {
-            return WebElement(
+        ): UltronWebElement {
+            return UltronWebElement(
                 Locator.CLASS_NAME,
                 value,
                 webViewMatcher,
@@ -354,8 +325,8 @@ open class WebElement(
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             elementReference: ElementReference? = null,
             windowReference: WindowReference? = null
-        ): WebElement {
-            return WebElement(
+        ): UltronWebElement {
+            return UltronWebElement(
                 Locator.CSS_SELECTOR,
                 value,
                 webViewMatcher,
@@ -369,8 +340,8 @@ open class WebElement(
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             elementReference: ElementReference? = null,
             windowReference: WindowReference? = null
-        ): WebElementWithId {
-            return WebElementWithId(value, webViewMatcher, elementReference, windowReference)
+        ): UltronWebElementId {
+            return UltronWebElementId(value, webViewMatcher, elementReference, windowReference)
         }
 
         fun linkText(
@@ -378,8 +349,8 @@ open class WebElement(
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             elementReference: ElementReference? = null,
             windowReference: WindowReference? = null
-        ): WebElement {
-            return WebElement(
+        ): UltronWebElement {
+            return UltronWebElement(
                 Locator.LINK_TEXT,
                 value,
                 webViewMatcher,
@@ -393,8 +364,8 @@ open class WebElement(
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             elementReference: ElementReference? = null,
             windowReference: WindowReference? = null
-        ): WebElement {
-            return WebElement(
+        ): UltronWebElement {
+            return UltronWebElement(
                 Locator.NAME,
                 value,
                 webViewMatcher,
@@ -408,8 +379,8 @@ open class WebElement(
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             elementReference: ElementReference? = null,
             windowReference: WindowReference? = null
-        ): WebElement {
-            return WebElement(
+        ): UltronWebElement {
+            return UltronWebElement(
                 Locator.PARTIAL_LINK_TEXT,
                 value,
                 webViewMatcher,
@@ -423,8 +394,8 @@ open class WebElement(
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             elementReference: ElementReference? = null,
             windowReference: WindowReference? = null
-        ): WebElement {
-            return WebElement(
+        ): UltronWebElement {
+            return UltronWebElement(
                 Locator.TAG_NAME,
                 value,
                 webViewMatcher,
@@ -438,8 +409,8 @@ open class WebElement(
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             elementReference: ElementReference? = null,
             windowReference: WindowReference? = null
-        ): WebElementWithXpath {
-            return WebElementWithXpath(
+        ): UltronWebElementXpath {
+            return UltronWebElementXpath(
                 value,
                 webViewMatcher,
                 elementReference,
@@ -453,8 +424,8 @@ open class WebElement(
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             elementReference: ElementReference? = null,
             windowReference: WindowReference? = null
-        ): WebElement {
-            return WebElement(
+        ): UltronWebElement {
+            return UltronWebElement(
                 locator,
                 value,
                 webViewMatcher,

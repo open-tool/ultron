@@ -18,7 +18,7 @@ import org.hamcrest.Matcher
  * Represents document of webView
  * Provides methods for interaction with document
  */
-class WebDocument {
+class UltronWebDocument {
     companion object {
         /**
          * Performs a force enable of Javascript on a WebView.

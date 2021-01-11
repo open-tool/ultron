@@ -1,7 +1,6 @@
 package com.atiurin.ultron.core.espressoweb.webelement
 
 import android.view.View
-import androidx.test.espresso.web.matcher.DomMatchers
 import androidx.test.espresso.web.matcher.DomMatchers.elementByXPath
 import androidx.test.espresso.web.model.ElementReference
 import androidx.test.espresso.web.model.WindowReference
@@ -9,28 +8,33 @@ import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
 import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
-import com.atiurin.ultron.custom.espresso.matcher.ElementWithAttributeMatcher
 import com.atiurin.ultron.custom.espresso.matcher.ElementWithAttributeMatcher.Companion.withAttribute
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers
 import org.w3c.dom.Document
 
-class WebElementWithXpath(
+class UltronWebElementXpath(
     override val value: String,
-    webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
-    elementReference: ElementReference? = null,
-    windowReference: WindowReference? = null
-) : WebElement(Locator.XPATH, value, webViewMatcher, elementReference, windowReference) {
+    private val webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+    private val elementReference: ElementReference? = null,
+    private val windowReference: WindowReference? = null,
+    private val timeoutMs: Long? = null,
+    private val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler
+) : UltronWebElement(Locator.XPATH, value, webViewMatcher, elementReference, windowReference, timeoutMs, resultHandler) {
+    override fun withTimeout(timeoutMs: Long): UltronWebElementXpath{
+        return UltronWebElementXpath(this.value, this.webViewMatcher, this.elementReference, this.windowReference, timeoutMs, this.resultHandler)
+    }
+
+    override fun withResultHandler(resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit): UltronWebElementXpath{
+        return UltronWebElementXpath(this.value, this.webViewMatcher, this.elementReference, this.windowReference, this.timeoutMs, resultHandler)
+    }
+
     fun hasAttribute(
         attributeName: String,
-        attributeValueMatcher: Matcher<String>,
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<Document>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Document>>) -> Unit
+        attributeValueMatcher: Matcher<String>
     ) = apply {
         this.hasElementAttribute(
-            attributeName, attributeValueMatcher, timeoutMs, resultHandler, elementByXPath(
+            attributeName, attributeValueMatcher, elementByXPath(
                 value, withAttribute(
                     attributeName,
                     attributeValueMatcher
@@ -42,13 +46,10 @@ class WebElementWithXpath(
     fun hasAttribute(
         attributeName: String,
         attributeValue: String,
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<Document>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Document>>) -> Unit
     ) = apply {
         val matcher = `is`(attributeValue)
         this.hasElementAttribute(
-            attributeName, matcher, timeoutMs, resultHandler, elementByXPath(
+            attributeName, matcher, elementByXPath(
                 value, withAttribute(
                     attributeName,
                     matcher

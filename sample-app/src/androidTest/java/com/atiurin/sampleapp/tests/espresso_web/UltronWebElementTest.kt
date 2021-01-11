@@ -1,21 +1,16 @@
 package com.atiurin.sampleapp.tests.espresso_web
 
-import androidx.test.espresso.web.assertion.WebViewAssertions
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
-import androidx.test.espresso.web.matcher.DomMatchers
 import androidx.test.espresso.web.webdriver.DriverAtoms.getText
-import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.WebViewPage
-import com.atiurin.ultron.core.espressoweb.webelement.WebDocument
-import com.atiurin.ultron.core.espressoweb.webelement.WebElement
-import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.className
-import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.id
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.className
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.id
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Test
 
-class WebElementTest : BaseWebViewTest() {
+class UltronWebElementTest : BaseWebViewTest() {
     @Test
     fun webClick_onExistElement() {
         page.buttonSetTitle2.webClick()
@@ -24,7 +19,7 @@ class WebElementTest : BaseWebViewTest() {
 
     @Test
     fun webClick_onNotExistedElement() {
-        AssertUtils.assertException { id("notExistId").webClick(timeoutMs = 100) }
+        AssertUtils.assertException { id("notExistId").withTimeout(100).webClick() }
     }
 
     @Test
@@ -35,7 +30,7 @@ class WebElementTest : BaseWebViewTest() {
 
     @Test
     fun webClick_isSuccessFalseValue() {
-        val success = id("notExistId").isSuccess { webClick(100) }
+        val success = id("notExistId").isSuccess { withTimeout(100).webClick() }
         Assert.assertFalse(success)
     }
 
@@ -46,7 +41,7 @@ class WebElementTest : BaseWebViewTest() {
 
     @Test
     fun exists_onNotExistedElement() {
-        AssertUtils.assertException { id("notExistId").exists(timeoutMs = 100) }
+        AssertUtils.assertException { id("notExistId").withTimeout(100).exists() }
     }
 
     @Test
@@ -57,7 +52,7 @@ class WebElementTest : BaseWebViewTest() {
 
     @Test
     fun exists_isSuccessFalseValue() {
-        val success = id("notExistId").isSuccess { exists(100) }
+        val success = id("notExistId").isSuccess { withTimeout(100).exists() }
         Assert.assertFalse(success)
     }
 
@@ -70,12 +65,12 @@ class WebElementTest : BaseWebViewTest() {
 
     @Test
     fun clearElement_onExistedNotEditableElement() {
-        AssertUtils.assertException { page.buttonUpdTitle.clearElement(100) }
+        AssertUtils.assertException { page.buttonUpdTitle.withTimeout(100).clearElement() }
     }
 
     @Test
     fun clearElement_onNotExistedElement() {
-        AssertUtils.assertException { id("notExistId").clearElement(100) }
+        AssertUtils.assertException { id("notExistId").withTimeout(100).clearElement() }
     }
 
     @Test
@@ -89,7 +84,7 @@ class WebElementTest : BaseWebViewTest() {
 
     @Test
     fun getText_onNotExistedElement() {
-        AssertUtils.assertException { id("notExistId").getText(100) }
+        AssertUtils.assertException { id("notExistId").withTimeout(100).getText() }
     }
 
     @Test
@@ -102,7 +97,7 @@ class WebElementTest : BaseWebViewTest() {
 
     @Test
     fun webKeys_onNotExistedElement() {
-        AssertUtils.assertException { id("notExistId").webKeys("asd", 100) }
+        AssertUtils.assertException { id("notExistId").withTimeout(100).webKeys("asd") }
     }
 
     @Test
@@ -115,12 +110,12 @@ class WebElementTest : BaseWebViewTest() {
 
     @Test
     fun replaceText_onNotExistedElement() {
-        AssertUtils.assertException { id("notExistId").replaceText("asd", 100) }
+        AssertUtils.assertException { id("notExistId").withTimeout(100).replaceText("asd") }
     }
 
     @Test
     fun hasText_onNotExistedElement() {
-        AssertUtils.assertException { id("notExistId").hasText("asd", 100) }
+        AssertUtils.assertException { id("notExistId").withTimeout(100).hasText("asd") }
     }
 
     @Test
@@ -133,7 +128,7 @@ class WebElementTest : BaseWebViewTest() {
 
     @Test
     fun containsText_onNotExistedElement() {
-        AssertUtils.assertException { id("notExistId").containsText("asd", 100) }
+        AssertUtils.assertException { id("notExistId").withTimeout(100).containsText("asd") }
     }
 
     @Test
@@ -149,13 +144,13 @@ class WebElementTest : BaseWebViewTest() {
     @Test
     fun hasAttribute_invalidMatcher_onExistedElement() {
         AssertUtils.assertException {
-            page.appleLink.hasAttribute("href", `is`("SomeInvalidValue"), timeoutMs = 100)
+            page.appleLink.withTimeout(100).hasAttribute("href", `is`("SomeInvalidValue"))
         }
     }
 
     @Test
     fun hasAttribute_onNotExistedElement() {
-        AssertUtils.assertException { id("notExistId").hasAttribute("asd", `is`("asdasd"), 100) }
+        AssertUtils.assertException { id("notExistId").withTimeout(100).hasAttribute("asd", `is`("asdasd")) }
     }
 
     @Test
@@ -166,11 +161,11 @@ class WebElementTest : BaseWebViewTest() {
     @Test
     fun assertThat_onNotExistedElement() {
         AssertUtils.assertException {
-            id("notExistId").assertThat(
+            id("notExistId").withTimeout(100).assertThat(
                 webMatches(
                     getText(),
                     `is`("Apple")
-                ), timeoutMs = 100
+                )
             )
         }
     }

@@ -11,15 +11,15 @@ import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espressoweb.webelement.WebDocument
-import com.atiurin.ultron.core.espressoweb.webelement.WebDocument.Companion.evalJS
-import com.atiurin.ultron.core.espressoweb.webelement.WebElement
-import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.className
-import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.id
-import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.linkText
-import com.atiurin.ultron.core.espressoweb.webelement.WebElement.Companion.xpath
-import com.atiurin.ultron.core.espressoweb.webelement.WebElementsList
-import com.atiurin.ultron.core.espressoweb.webelement.WebElementsList.Companion.classNames
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebDocument
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebDocument.Companion.evalJS
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.className
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.id
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.linkText
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.xpath
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElements
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElements.Companion.classNames
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
@@ -48,20 +48,20 @@ class EspressoWebUiElementsTest : BaseWebViewTest() {
 
     @Test
     fun multipleElementsWebViewTest() {
-        WebElementsList(Locator.CLASS_NAME, "button").getElements().forEach {
+        UltronWebElements(Locator.CLASS_NAME, "button").getElements().forEach {
             it.webClick()
         }
-        WebElementsList(Locator.CLASS_NAME, "link").getElements()
+        UltronWebElements(Locator.CLASS_NAME, "link").getElements()
             .filter {
                 it.isSuccess {
-                    hasText("Apple", 1000)
+                    withTimeout(100).hasText("Apple")
                 }
             }
             .forEach { it.webClick() }
         classNames("link").getElements()
             .filter {
                 it.isSuccess {
-                    hasText("Apple", 1000)
+                    withTimeout(100).hasText("Apple")
                 }
             }
             .forEach { it.webClick() }
@@ -73,15 +73,6 @@ class EspressoWebUiElementsTest : BaseWebViewTest() {
         page.buttons.getElements().forEach {
             it.webClick()
         }
-    }
-
-    //
-    @Test
-    fun extWebViewTest() {
-        val newTitle = "New title"
-        WebElement(Locator.ID, "text_input").webKeys(newTitle)
-        WebElement(Locator.ID, "button1").webClick()
-        id("title").webClick().containsText(newTitle)
     }
 
     @Test
@@ -119,7 +110,7 @@ class EspressoWebUiElementsTest : BaseWebViewTest() {
         page.buttonUpdTitle.webClick()
         page.title.containsText(newTitle)
         page.titleWithCss.containsText(newTitle)
-        AssertUtils.assertException { page.appleLink.containsText("Apple12312", 100) }
+        AssertUtils.assertException { page.appleLink.withTimeout(100).containsText("Apple12312") }
     }
 
     @Test
@@ -154,13 +145,13 @@ class EspressoWebUiElementsTest : BaseWebViewTest() {
 
     @Test
     fun elementNotPresentCustomTimeout() {
-        AssertUtils.assertExecTimeMoreThen(1_000) { id("asdasdasd").getText(2000) }
-        AssertUtils.assertExecTimeLessThen(3_000) { id("asdasdasd").getText(2000) }
+        AssertUtils.assertExecTimeMoreThen(1_000) { id("asdasdasd").withTimeout(2000).getText() }
+        AssertUtils.assertExecTimeLessThen(3_000) { id("asdasdasd").withTimeout(2000).getText() }
     }
 
     @Test
     fun customWebViewAssertionTest() {
-        WebDocument.assertThat(webContent(elementById("apple_link", withTextContent("Apple"))))
+        UltronWebDocument.assertThat(webContent(elementById("apple_link", withTextContent("Apple"))))
         id("apple_link").hasAttribute("href", `is`("fake_link.html"))
     }
 

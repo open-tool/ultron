@@ -13,21 +13,28 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers.`is`
 import org.w3c.dom.Document
 
-class WebElementWithId(
+class UltronWebElementId(
     override val value: String,
-    webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
-    elementReference: ElementReference? = null,
-    windowReference: WindowReference? = null
-) : WebElement(Locator.ID, value, webViewMatcher, elementReference, windowReference) {
+    private val webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+    private val elementReference: ElementReference? = null,
+    private val windowReference: WindowReference? = null,
+    private val timeoutMs: Long? = null,
+    private val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler
+) : UltronWebElement(Locator.ID, value, webViewMatcher, elementReference, windowReference, timeoutMs, resultHandler) {
+    override fun withTimeout(timeoutMs: Long): UltronWebElementId{
+        return UltronWebElementId(this.value, this.webViewMatcher, this.elementReference, this.windowReference, timeoutMs, this.resultHandler)
+    }
+
+    override fun withResultHandler(resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit): UltronWebElementId{
+        return UltronWebElementId(this.value, this.webViewMatcher, this.elementReference, this.windowReference, this.timeoutMs, resultHandler)
+    }
+
     fun hasAttribute(
         attributeName: String,
-        attributeValueMatcher: Matcher<String>,
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<Document>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Document>>) -> Unit
+        attributeValueMatcher: Matcher<String>
     ) = apply {
         this.hasElementAttribute(
-            attributeName, attributeValueMatcher, timeoutMs, resultHandler, elementById(
+            attributeName, attributeValueMatcher, elementById(
                 value, withAttribute(
                     attributeName,
                     attributeValueMatcher
@@ -38,14 +45,11 @@ class WebElementWithId(
 
     fun hasAttribute(
         attributeName: String,
-        attributeValue: String,
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<Document>>) -> Unit =
-            UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Document>>) -> Unit
+        attributeValue: String
     ) = apply {
         val matcher = `is`(attributeValue)
         this.hasElementAttribute(
-            attributeName, matcher, timeoutMs, resultHandler, elementById(
+            attributeName, matcher, elementById(
                 value, withAttribute(
                     attributeName,
                     matcher

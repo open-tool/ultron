@@ -1,12 +1,11 @@
 package com.atiurin.sampleapp.tests.espresso_web
 
 import com.atiurin.sampleapp.framework.Log
-import com.atiurin.sampleapp.framework.utils.AssertUtils
-import com.atiurin.ultron.core.espressoweb.webelement.WebElementsList.Companion.classNames
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElements.Companion.classNames
 import org.junit.Assert
 import org.junit.Test
 
-class WebElementsListTest : BaseWebViewTest() {
+class UltronUltronWebElementsTest : BaseWebViewTest() {
     @Test
     fun getSizeTest() {
         val buttonsAmount = classNames("button").getSize()
@@ -24,7 +23,7 @@ class WebElementsListTest : BaseWebViewTest() {
         classNames("link").getElements()
             .filter {
                 it.isSuccess {
-                    hasText("Apple", 1000)
+                    withTimeout(100).hasText("Apple")
                 }
             }
             .forEach { it.webClick() }

@@ -13,31 +13,37 @@ import com.atiurin.ultron.core.espressoweb.operation.*
 import org.hamcrest.Matcher
 
 /**
- * It is recommended to create WebElementsList object using method in Companion object
- * like [WebElementsList.Companion.ids], [WebElementsList.Companion.xpaths], [WebElementsList.Companion.elements] and etc
+ * Represents the list of web objects with [locator] and [value]
+ * It is required to create WebElementsList object using method in Companion object
+ * like [UltronWebElements.Companion.ids], [UltronWebElements.Companion.xpaths], [UltronWebElements.Companion.elements] and etc
  */
-class WebElementsList(
+class UltronWebElements(
     val locator: Locator,
     val value: String,
-    internal val webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
-    internal val windowReference: WindowReference? = null
+    private val webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+    private val windowReference: WindowReference? = null,
+    private val timeoutMs: Long? = null,
+    private val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler
 ) {
     private val webViewInteraction: Web.WebInteraction<Void>
         get() {
             return if (windowReference != null) onWebView(webViewMatcher).inWindow(windowReference)
             else onWebView(webViewMatcher)
         }
+    fun withTimeout(timeoutMs: Long): UltronWebElements {
+        return UltronWebElements(this.locator, this.value, this.webViewMatcher, this.windowReference, timeoutMs, this.resultHandler)
+    }
 
+    fun withResultHandler(resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit): UltronWebElements {
+        return UltronWebElements(this.locator, this.value, this.webViewMatcher, this.windowReference, this.timeoutMs, resultHandler)
+    }
     /**
-     * @return list of [WebElement], empty list if no elements found
+     * @return list of [UltronWebElement], empty list if no elements found
      */
     fun getElements(
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<List<ElementReference>>>) -> Unit =
-            (UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<List<ElementReference>>>) -> Unit)
-    ): List<WebElement> {
-        return findMultipleElements(locator, value, timeoutMs, resultHandler).map {
-            WebElement(
+    ): List<UltronWebElement> {
+        return findMultipleElements(locator, value).map {
+            UltronWebElement(
                 locator,
                 value,
                 webViewMatcher,
@@ -55,10 +61,7 @@ class WebElementsList(
 
     private fun findMultipleElements(
         locator: Locator,
-        matcher: String,
-        timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
-        resultHandler: (WebOperationResult<WebInteractionOperation<List<ElementReference>>>) -> Unit =
-            (UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<List<ElementReference>>>) -> Unit)
+        matcher: String
     ): List<ElementReference> {
         val result = WebLifecycle.execute(
             WebInteractionOperationExecutor(
@@ -70,9 +73,9 @@ class WebElementsList(
                     name = "WebElementsList(${locator.type} = '$matcher') findMultipleElements",
                     type = EspressoWebOperationType.WEB_FIND_MULTIPLE_ELEMENTS,
                     description = "WebElementsList(${locator.type} = '$matcher') findMultipleElements during $timeoutMs ms",
-                    timeoutMs = timeoutMs
+                    timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
                 )
-            ), resultHandler
+            ), resultHandler as (WebOperationResult<WebInteractionOperation<List<ElementReference>>>) -> Unit
         )
         return (result.operationIterationResult as WebInteractionOperationIterationResult<List<ElementReference>>).webInteraction?.get()
             ?: emptyList()
@@ -83,64 +86,64 @@ class WebElementsList(
             value: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             windowReference: WindowReference? = null
-        ): WebElementsList {
-            return WebElementsList(Locator.CLASS_NAME, value, webViewMatcher, windowReference)
+        ): UltronWebElements {
+            return UltronWebElements(Locator.CLASS_NAME, value, webViewMatcher, windowReference)
         }
 
         fun cssSelectors(
             value: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             windowReference: WindowReference? = null
-        ): WebElementsList {
-            return WebElementsList(Locator.CSS_SELECTOR, value, webViewMatcher, windowReference)
+        ): UltronWebElements {
+            return UltronWebElements(Locator.CSS_SELECTOR, value, webViewMatcher, windowReference)
         }
 
         fun ids(
             value: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             windowReference: WindowReference? = null
-        ): WebElementsList {
-            return WebElementsList(Locator.ID, value, webViewMatcher, windowReference)
+        ): UltronWebElements {
+            return UltronWebElements(Locator.ID, value, webViewMatcher, windowReference)
         }
 
         fun linkTexts(
             value: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             windowReference: WindowReference? = null
-        ): WebElementsList {
-            return WebElementsList(Locator.LINK_TEXT, value, webViewMatcher, windowReference)
+        ): UltronWebElements {
+            return UltronWebElements(Locator.LINK_TEXT, value, webViewMatcher, windowReference)
         }
 
         fun names(
             value: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             windowReference: WindowReference? = null
-        ): WebElementsList {
-            return WebElementsList(Locator.NAME, value, webViewMatcher, windowReference)
+        ): UltronWebElements {
+            return UltronWebElements(Locator.NAME, value, webViewMatcher, windowReference)
         }
 
         fun partialLinkTexts(
             value: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             windowReference: WindowReference? = null
-        ): WebElementsList {
-            return WebElementsList(Locator.PARTIAL_LINK_TEXT, value, webViewMatcher, windowReference)
+        ): UltronWebElements {
+            return UltronWebElements(Locator.PARTIAL_LINK_TEXT, value, webViewMatcher, windowReference)
         }
 
         fun tagNames(
             value: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             windowReference: WindowReference? = null
-        ): WebElementsList {
-            return WebElementsList(Locator.TAG_NAME, value, webViewMatcher, windowReference)
+        ): UltronWebElements {
+            return UltronWebElements(Locator.TAG_NAME, value, webViewMatcher, windowReference)
         }
 
         fun xpaths(
             value: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             windowReference: WindowReference? = null
-        ): WebElementsList {
-            return WebElementsList(Locator.XPATH, value, webViewMatcher, windowReference)
+        ): UltronWebElements {
+            return UltronWebElements(Locator.XPATH, value, webViewMatcher, windowReference)
         }
 
         fun elements(
@@ -148,8 +151,8 @@ class WebElementsList(
             matcher: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             windowReference: WindowReference? = null
-        ): WebElementsList {
-            return WebElementsList(locator, matcher, webViewMatcher, windowReference)
+        ): UltronWebElements {
+            return UltronWebElements(locator, matcher, webViewMatcher, windowReference)
         }
     }
 }
