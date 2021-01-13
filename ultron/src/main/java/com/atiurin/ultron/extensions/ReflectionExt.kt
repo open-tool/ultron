@@ -28,7 +28,7 @@ internal fun DataInteraction.getMatcher(propertyName: String): Matcher<View>? {
     return this.getProperty(propertyName)
 }
 
-internal fun DataInteraction.getRootMatcher(): Matcher<View>? {
+internal fun DataInteraction.getRootMatcher(): Matcher<Root>? {
     return this.getProperty("rootMatcher")
 }
 

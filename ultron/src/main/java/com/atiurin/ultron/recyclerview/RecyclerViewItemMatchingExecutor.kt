@@ -3,7 +3,7 @@ package com.atiurin.ultron.recyclerview
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.contrib.RecyclerViewActions
-import com.atiurin.ultron.extensions.execute
+import com.atiurin.ultron.extensions.perform
 import org.hamcrest.Matcher
 
 class RecyclerViewItemMatchingExecutor(
@@ -12,7 +12,7 @@ class RecyclerViewItemMatchingExecutor(
 ) : RecyclerViewItemExecutor {
     override fun scrollToItem() {
         //TODO work around this trade off
-        recyclerViewMatcher.execute(
+        recyclerViewMatcher.perform(
             RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(itemViewMatcher)
         )
     }

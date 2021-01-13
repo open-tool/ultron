@@ -16,6 +16,7 @@ import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.common.OperationResultAnalyzer
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.action.DataInteractionEspressoAction
+import com.atiurin.ultron.core.espresso.action.EspressoOperation
 import com.atiurin.ultron.core.espresso.action.ViewInteractionEspressoAction
 import com.atiurin.ultron.core.espresso.assertion.DataInteractionEspressoAssertion
 import com.atiurin.ultron.core.espresso.assertion.ViewInteractionEspressoAssertion
@@ -63,15 +64,9 @@ object UltronConfig {
                     PerformException::class.java,
                     NoMatchingViewException::class.java
                 )
-
-                val dataInteractionResultHandler: (EspressoOperationResult<DataInteractionEspressoAction>) -> Unit =
-                    {
-                        resultAnalyzer.analyze(it)
-                    }
-                val viewInteractionResultHandler: (EspressoOperationResult<ViewInteractionEspressoAction>) -> Unit =
-                    {
-                        resultAnalyzer.analyze(it)
-                    }
+                val resultHandler: (EspressoOperationResult<EspressoOperation>) -> Unit = {
+                    resultAnalyzer.analyze(it)
+                }
             }
         }
 
@@ -82,14 +77,9 @@ object UltronConfig {
                     NoMatchingViewException::class.java,
                     AssertionFailedError::class.java
                 )
-                val dataInteractionResultHandler: (EspressoOperationResult<DataInteractionEspressoAssertion>) -> Unit =
-                    {
-                        resultAnalyzer.analyze(it)
-                    }
-                val viewInteractionResultHandler: (EspressoOperationResult<ViewInteractionEspressoAssertion>) -> Unit =
-                    {
-                        resultAnalyzer.analyze(it)
-                    }
+                val resultHandler: (EspressoOperationResult<EspressoOperation>) -> Unit = {
+                    resultAnalyzer.analyze(it)
+                }
             }
         }
 
@@ -136,7 +126,7 @@ object UltronConfig {
                 }
             }
 
-            fun speedUp(){
+            fun speedUp() {
                 setTimeout(0)
             }
         }

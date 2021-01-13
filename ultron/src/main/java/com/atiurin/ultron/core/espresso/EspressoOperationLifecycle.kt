@@ -1,6 +1,6 @@
-package com.atiurin.ultron.core.espresso.action
+package com.atiurin.ultron.core.espresso
 
 import com.atiurin.ultron.core.common.*
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 
-object ViewActionLifecycle : AbstractOperationLifecycle()
+object EspressoOperationLifecycle : AbstractOperationLifecycle()

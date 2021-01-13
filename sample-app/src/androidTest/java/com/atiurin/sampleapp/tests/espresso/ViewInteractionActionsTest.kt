@@ -4,7 +4,6 @@ import android.os.SystemClock
 import android.view.KeyEvent
 import androidx.test.espresso.action.EspressoKey
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.ultron.extensions.*
 import com.atiurin.sampleapp.R
@@ -14,6 +13,7 @@ import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.utils.getTargetString
+import kotlinx.coroutines.withTimeout
 import org.junit.Assert
 import org.junit.Test
 
@@ -44,12 +44,12 @@ class ViewInteractionActionsTest : UiElementsTest() {
     fun doubleClick_onClickable() {
         page.button.doubleClick()
 
-        val suc = page.button.isDisplayed (1000)
+        val suc = page.button.withTimeout(100).isDisplayed()
 
         var success = false
         with(page.eventStatus){
             textContains(getResourceString(R.string.button_event_click))
-            success = isSuccess { textContains("1", 3000) } ||  isSuccess { textContains("2", 3000) }
+            success = isSuccess { withTimeout(3000).textContains("1") } ||  isSuccess { withTimeout(2000).textContains("2") }
         }
         Assert.assertTrue(success)
 
@@ -64,7 +64,7 @@ class ViewInteractionActionsTest : UiElementsTest() {
 
     @Test
     fun typeText_onNotEditable() {
-        AssertUtils.assertException { page.eventStatus.typeText("simple text", 1000) }
+        AssertUtils.assertException { page.eventStatus.withTimeout(100).typeText("simple text") }
     }
 
     @Test
@@ -109,7 +109,7 @@ class ViewInteractionActionsTest : UiElementsTest() {
 
     @Test
     fun executeCustomClick_onClickable(){
-        page.button.execute(click())
+        page.button.perform(click())
         page.eventStatus.textContains(getResourceString(R.string.button_event_click))
     }
 }

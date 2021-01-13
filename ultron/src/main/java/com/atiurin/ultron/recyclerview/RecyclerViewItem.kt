@@ -46,7 +46,7 @@ open class RecyclerViewItem {
     fun swipeLeft() = apply { this.get().swipeLeft() }
     fun swipeRight() = apply { this.get().swipeRight() }
     fun swipeUp() = apply { this.get().swipeUp() }
-    fun execute(action: ViewAction) = apply { this.get().execute(action) }
+    fun execute(action: ViewAction) = apply { this.get().perform(action) }
 
     //assertions
     fun isDisplayed() = apply { this.get().isDisplayed() }

@@ -28,13 +28,13 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun isDisplayed_ofNotDisplayedObject() {
         page.radioInvisibleButton.click()
-        AssertUtils.assertException { page.button.isDisplayed(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isDisplayed() }
     }
 
     @Test
     fun isNotDisplayed_ofDisplayedObject() {
         page.radioVisibleButton.click()
-        AssertUtils.assertException { page.button.isNotDisplayed(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isNotDisplayed() }
     }
 
     @Test
@@ -52,12 +52,12 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isChecked_ofNotChecked() {
-        AssertUtils.assertException { page.checkBoxSelected.isChecked(100) }
+        AssertUtils.assertException { page.checkBoxSelected.withTimeout(100).isChecked() }
     }
 
     @Test
     fun isNotChecked_ofChecked() {
-        AssertUtils.assertException { page.checkBoxClickable.isNotChecked(100) }
+        AssertUtils.assertException { page.checkBoxClickable.withTimeout(100).isNotChecked() }
     }
 
     @Test
@@ -74,13 +74,13 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isSelected_ofNotSelected() {
-        AssertUtils.assertException { page.button.isSelected(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isSelected() }
     }
 
     @Test
     fun isNotSelected_ofSelected() {
         page.checkBoxSelected.click()
-        AssertUtils.assertException { page.button.isNotSelected(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isNotSelected() }
     }
 
     @Test
@@ -97,12 +97,12 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun isEnabled_ofNotEnabled() {
         page.checkBoxEnabled.click()
-        AssertUtils.assertException { page.button.isEnabled(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isEnabled() }
     }
 
     @Test
     fun isNotEnabled_ofEnabled() {
-        AssertUtils.assertException { page.button.isNotEnabled(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isNotEnabled() }
     }
 
     @Test
@@ -120,12 +120,12 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun isClickable_ofNotClickable() {
         page.checkBoxClickable.click()
-        AssertUtils.assertException { page.button.isClickable(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isClickable() }
     }
 
     @Test
     fun isNotClickable_ofClickable() {
-        AssertUtils.assertException { page.button.isNotClickable(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isNotClickable() }
     }
 
     @Test
@@ -143,12 +143,12 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun isFocusable_ofNotFocusable() {
         page.checkBoxFocusable.click()
-        AssertUtils.assertException { page.button.isFocusable(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isFocusable() }
     }
 
     @Test
     fun isNotFocusable_ofFocusable() {
-        AssertUtils.assertException { page.button.isNotFocusable(100) }
+        AssertUtils.assertException { page.button.withTimeout(100).isNotFocusable() }
     }
 
     @Test
@@ -166,7 +166,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun hasFocus_ofNotFocused() {
-        AssertUtils.assertException { page.editTextContentDesc.hasFocus(100) }
+        AssertUtils.assertException { page.editTextContentDesc.withTimeout(100).hasFocus() }
     }
 
     //hasText
@@ -178,15 +178,14 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun hasText_InvalidSubstringText() {
         val text = getResourceString(R.string.button_default_content_desc)
-        AssertUtils.assertException { page.editTextContentDesc.hasText(text.substring(3), 100) }
+        AssertUtils.assertException { page.editTextContentDesc.withTimeout(100).hasText(text.substring(3)) }
     }
 
     @Test
     fun hasText_InvalidText_withResourceId() {
         AssertUtils.assertException {
-            page.editTextContentDesc.hasText(
-                R.string.action_clear_history,
-                1000
+            page.editTextContentDesc.withTimeout(100).hasText(
+                R.string.action_clear_history
             )
         }
     }
@@ -201,9 +200,8 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     fun hasText_InvalidText_withString() {
         val text = getResourceString(R.string.button_default_content_desc)
         AssertUtils.assertException {
-            page.editTextContentDesc.hasText(
-                "$text to be invalid",
-                1000
+            page.editTextContentDesc.withTimeout(100).hasText(
+                "$text to be invalid"
             )
         }
     }
@@ -218,9 +216,8 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     fun hasText_InvalidText_withStringMatcher() {
         val text = getResourceString(R.string.button_default_content_desc)
         AssertUtils.assertException {
-            page.editTextContentDesc.hasText(
-                containsString("$text to be invalid"),
-                1000
+            page.editTextContentDesc.withTimeout(100).hasText(
+                containsString("$text to be invalid")
             )
         }
     }
@@ -236,9 +233,8 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     fun containsText_InvalidSubstringText() {
         val text = getResourceString(R.string.button_default_content_desc)
         AssertUtils.assertException {
-            page.editTextContentDesc.textContains(
-                "${text.substring(3)} to be invalid",
-                1000
+            page.editTextContentDesc.withTimeout(100).textContains(
+                "${text.substring(3)} to be invalid"
             )
         }
     }
@@ -252,15 +248,14 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun hasContentDescription_InvalidSubstringText() {
         val text = getResourceString(R.string.button_default_content_desc)
-        AssertUtils.assertException { page.button.hasContentDescription(text.substring(3), 100) }
+        AssertUtils.assertException { page.button.withTimeout(100).hasContentDescription(text.substring(3)) }
     }
 
     @Test
     fun hasContentDescription_InvalidText_withResourceId() {
         AssertUtils.assertException {
-            page.button.hasContentDescription(
-                R.string.action_clear_history,
-                1000
+            page.button.withTimeout(100).hasContentDescription(
+                R.string.action_clear_history
             )
         }
     }
@@ -275,9 +270,8 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     fun hasContentDescription_InvalidText_withString() {
         val text = getResourceString(R.string.button_default_content_desc)
         AssertUtils.assertException {
-            page.button.hasContentDescription(
-                "$text to be invalid",
-                1000
+            page.button.withTimeout(100).hasContentDescription(
+                "$text to be invalid"
             )
         }
     }
@@ -286,16 +280,15 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun contentDescriptionContains_CorrectText_withString() {
         val text = getResourceString(R.string.button_default_content_desc)
-        page.button.contentDescriptionContains(text.substring(2), 100)
+        page.button.withTimeout(100).contentDescriptionContains(text.substring(2))
     }
 
     @Test
     fun contentDescriptionContains_InvalidText_withString() {
         val text = getResourceString(R.string.button_default_content_desc)
         AssertUtils.assertException {
-            page.button.contentDescriptionContains(
-                "${text.substring(2)} to be invalid",
-                1000
+            page.button.withTimeout(100).contentDescriptionContains(
+                "${text.substring(2)} to be invalid"
             )
         }
     }
@@ -310,12 +303,12 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     fun assertMatches_ofNotMatched() {
         page.checkBoxEnabled.click()
         AssertUtils.assertException {
-            page.button.assertMatches(
+            page.button.withTimeout(100).assertMatches(
                 allOf(
                     isDisplayed(),
                     isEnabled(),
                     withText(R.string.button_text)
-                ), 1000
+                ),
             )
         }
     }
@@ -329,19 +322,19 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun jsEnabled_ofNotEnabled() {
         page.checkBoxJsEnabled.click()
-        AssertUtils.assertException { page.webView.isJavascriptEnabled(100) }
+        AssertUtils.assertException { page.webView.withTimeout(100).isJavascriptEnabled() }
     }
     //isSuccess
 
     @Test
     fun isSuccess_FalseTest() {
-        val success = page.button.isSuccess { isNotDisplayed(100) }
+        val success = page.button.isSuccess { withTimeout(100).isNotDisplayed() }
         Assert.assertFalse(success)
     }
 
     @Test
     fun isSuccess_TrueTest() {
-        val success = page.button.isSuccess { isDisplayed(100) }
+        val success = page.button.isSuccess { withTimeout(100).isDisplayed() }
         Assert.assertTrue(success)
     }
 
@@ -361,7 +354,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun hasDrawable_viewHasNoDrawable() {
-        AssertUtils.assertException { page.emptyImageView.assertMatches(hasAnyDrawable(), 100) }
+        AssertUtils.assertException { page.emptyImageView.withTimeout(100).assertMatches(hasAnyDrawable()) }
     }
 
     @Test
@@ -372,9 +365,8 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun withDrawable_invalidDrawable() {
         AssertUtils.assertException {
-            page.imageView.assertMatches(
-                withDrawable(R.drawable.ic_attach_file),
-                100
+            page.imageView.withTimeout(100).assertMatches(
+                withDrawable(R.drawable.ic_attach_file)
             )
         }
     }
