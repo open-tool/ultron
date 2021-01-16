@@ -1,23 +1,16 @@
 package com.atiurin.ultron.core.espresso
 
-import android.content.Context
 import android.view.View
 import androidx.test.espresso.*
-import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.EspressoKey
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.isRoot
-import androidx.test.platform.app.InstrumentationRegistry
-import com.atiurin.ultron.core.common.OperationType
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.UltronEspresso.executeAction
 import com.atiurin.ultron.core.espresso.UltronEspresso.executeAssertion
 import com.atiurin.ultron.core.espresso.action.*
-import com.atiurin.ultron.core.espresso.action.EspressoActionExecutor
-import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionExecutor
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.getDataMatcher
@@ -29,7 +22,7 @@ import org.hamcrest.Matchers
 class UltronInteraction<T>(
     private val interaction: T,
     private val timeoutMs: Long? = null,
-    private val resultHandler: ((EspressoOperationResult<EspressoOperation>) -> Unit)? = null
+    private val resultHandler: ((EspressoOperationResult<UltronEspressoOperation>) -> Unit)? = null
 ) {
     init {
         if (interaction !is ViewInteraction && interaction !is DataInteraction) throw UltronException(
@@ -37,7 +30,7 @@ class UltronInteraction<T>(
         )
     }
 
-    fun withResultHandler(resultHandler: (EspressoOperationResult<EspressoOperation>) -> Unit): UltronInteraction<T> {
+    fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit): UltronInteraction<T> {
         return UltronInteraction(this.interaction, this.timeoutMs, resultHandler)
     }
 
@@ -47,7 +40,7 @@ class UltronInteraction<T>(
 
     fun click() = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.click()),
                 name = "Click to '${getInteractionMatcher()}'",
                 type = EspressoActionType.CLICK,
@@ -60,7 +53,7 @@ class UltronInteraction<T>(
 
     fun doubleClick() = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.doubleClick()),
                 name = "DoubleClick to '${getInteractionMatcher()}'",
                 type = EspressoActionType.CLICK,
@@ -73,7 +66,7 @@ class UltronInteraction<T>(
 
     fun longClick() = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.longClick()),
                 name = "LongClick to '${getInteractionMatcher()}'",
                 type = EspressoActionType.LONG_CLICK,
@@ -86,7 +79,7 @@ class UltronInteraction<T>(
 
     fun typeText(text: String) = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.typeText(text)),
                 name = "Type text '$text' to '${getInteractionMatcher()}'",
                 type = EspressoActionType.TYPE_TEXT,
@@ -99,7 +92,7 @@ class UltronInteraction<T>(
 
     fun replaceText(text: String) = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.replaceText(text)),
                 name = "Replace text '$text' to '${getInteractionMatcher()}'",
                 type = EspressoActionType.REPLACE_TEXT,
@@ -112,7 +105,7 @@ class UltronInteraction<T>(
 
     fun clearText() = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.clearText()),
                 name = "Clear text in '${getInteractionMatcher()}'",
                 type = EspressoActionType.CLEAR_TEXT,
@@ -125,7 +118,7 @@ class UltronInteraction<T>(
 
     fun pressKey(keyCode: Int) = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.pressKey(keyCode)),
                 name = "PressKey code '$keyCode' on '${getInteractionMatcher()}'",
                 type = EspressoActionType.PRESS_KEY,
@@ -138,7 +131,7 @@ class UltronInteraction<T>(
 
     fun pressKey(key: EspressoKey) = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.pressKey(key)),
                 name = "Press EspressoKey '$key' on '${getInteractionMatcher()}'",
                 type = EspressoActionType.PRESS_KEY,
@@ -151,7 +144,7 @@ class UltronInteraction<T>(
 
     fun closeSoftKeyboard() = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.closeSoftKeyboard()),
                 name = "CloseSoftKeyboard with '${getInteractionMatcher()}'",
                 type = EspressoActionType.CLOSE_SOFT_KEYBOARD,
@@ -164,7 +157,7 @@ class UltronInteraction<T>(
 
     fun swipeLeft() = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.swipeLeft()),
                 name = "SwipeLeft with '${getInteractionMatcher()}'",
                 type = EspressoActionType.SWIPE_LEFT,
@@ -177,7 +170,7 @@ class UltronInteraction<T>(
 
     fun swipeRight() = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.swipeRight()),
                 name = "SwipeRight with '${getInteractionMatcher()}'",
                 type = EspressoActionType.SWIPE_RIGHT,
@@ -190,7 +183,7 @@ class UltronInteraction<T>(
 
     fun swipeUp() = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.swipeUp()),
                 name = "SwipeUp with '${getInteractionMatcher()}'",
                 type = EspressoActionType.SWIPE_UP,
@@ -203,7 +196,7 @@ class UltronInteraction<T>(
 
     fun swipeDown() = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.swipeDown()),
                 name = "SwipeDown with '${getInteractionMatcher()}'",
                 type = EspressoActionType.SWIPE_DOWN,
@@ -216,7 +209,7 @@ class UltronInteraction<T>(
 
     fun scrollTo() = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(ViewActions.scrollTo()),
                 name = "ScrollTo with '${getInteractionMatcher()}'",
                 type = EspressoActionType.SCROLL,
@@ -229,7 +222,7 @@ class UltronInteraction<T>(
 
     fun perform(viewAction: ViewAction, description: String = "") = apply {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionActionBlock(viewAction),
                 name = "Custom action '$description' to ${getInteractionMatcher()}",
                 type = EspressoActionType.CUSTOM,
@@ -243,7 +236,7 @@ class UltronInteraction<T>(
     //assertion
     fun isDisplayed() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.isDisplayed()),
                 name = "IsDisplayed of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_DISPLAYED,
@@ -260,7 +253,7 @@ class UltronInteraction<T>(
      */
     fun isNotDisplayed() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isDisplayed())),
                 name = "IsNotDisplayed of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_NOT_DISPLAYED,
@@ -276,7 +269,7 @@ class UltronInteraction<T>(
      */
     fun doesNotExist() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewAssertions.doesNotExist()),
                 name = "DoesNotExist of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.DOES_NOT_EXIST,
@@ -289,7 +282,7 @@ class UltronInteraction<T>(
 
     fun isCompletelyDisplayed() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.isCompletelyDisplayed()),
                 name = "IsCompletelyDisplayed of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_COMPLETELY_DISPLAYED,
@@ -302,7 +295,7 @@ class UltronInteraction<T>(
 
     fun isDisplayingAtLeast(percentage: Int) = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(
                     ViewMatchers.isDisplayingAtLeast(
                         percentage
@@ -319,7 +312,7 @@ class UltronInteraction<T>(
 
     fun isEnabled() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.isEnabled()),
                 name = "IsEnabled of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_ENABLED,
@@ -332,7 +325,7 @@ class UltronInteraction<T>(
 
     fun isNotEnabled() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isEnabled())),
                 name = "IsNotEnabled of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_NOT_ENABLED,
@@ -345,7 +338,7 @@ class UltronInteraction<T>(
 
     fun isSelected() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.isSelected()),
                 name = "IsSelected of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_SELECTED,
@@ -358,7 +351,7 @@ class UltronInteraction<T>(
 
     fun isNotSelected() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isSelected())),
                 name = "IsNotSelected of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_NOT_SELECTED,
@@ -371,7 +364,7 @@ class UltronInteraction<T>(
 
     fun isClickable() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.isClickable()),
                 name = "IsClickable of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_CLICKABLE,
@@ -384,7 +377,7 @@ class UltronInteraction<T>(
 
     fun isNotClickable() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isClickable())),
                 name = "IsNotClickable of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_NOT_CLICKABLE,
@@ -397,7 +390,7 @@ class UltronInteraction<T>(
 
     fun isChecked() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.isChecked()),
                 name = "IsChecked of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_CHECKED,
@@ -410,7 +403,7 @@ class UltronInteraction<T>(
 
     fun isNotChecked() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.isNotChecked()),
                 name = "IsNotChecked of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_NOT_CHECKED,
@@ -423,7 +416,7 @@ class UltronInteraction<T>(
 
     fun isFocusable() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.isFocusable()),
                 name = "IsFocusable of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_FOCUSABLE,
@@ -436,7 +429,7 @@ class UltronInteraction<T>(
 
     fun isNotFocusable() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isFocusable())),
                 name = "IsNotFocusable of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_NOT_FOCUSABLE,
@@ -449,7 +442,7 @@ class UltronInteraction<T>(
 
     fun hasFocus() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.hasFocus()),
                 name = "HasFocus of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.HAS_FOCUS,
@@ -462,7 +455,7 @@ class UltronInteraction<T>(
 
     fun isJavascriptEnabled() = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.isJavascriptEnabled()),
                 name = "IsJavascriptEnabled of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_JS_ENABLED,
@@ -475,7 +468,7 @@ class UltronInteraction<T>(
 
     fun hasText(text: String) = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.withText(text)),
                 name = "HasText '$text' in '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.HAS_TEXT,
@@ -488,7 +481,7 @@ class UltronInteraction<T>(
 
     fun hasText(resourceId: Int) = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.withText(resourceId)),
                 name = "HasText with resourceId '$resourceId' in '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.HAS_TEXT,
@@ -501,7 +494,7 @@ class UltronInteraction<T>(
 
     fun hasText(stringMatcher: Matcher<String>) = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(ViewMatchers.withText(stringMatcher)),
                 name = "HasText with matcher '$stringMatcher' in '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.HAS_TEXT,
@@ -514,7 +507,7 @@ class UltronInteraction<T>(
 
     fun textContains(text: String) = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(
                     ViewMatchers.withText(
                         Matchers.containsString(
@@ -533,7 +526,7 @@ class UltronInteraction<T>(
 
     fun hasContentDescription(text: String) = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(
                     ViewMatchers.withContentDescription(
                         text
@@ -550,7 +543,7 @@ class UltronInteraction<T>(
 
     fun hasContentDescription(resourceId: Int) = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(
                     ViewMatchers.withContentDescription(
                         resourceId
@@ -567,7 +560,7 @@ class UltronInteraction<T>(
 
     fun hasContentDescription(charSequenceMatcher: Matcher<CharSequence>) = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(
                     ViewMatchers.withContentDescription(
                         charSequenceMatcher
@@ -584,7 +577,7 @@ class UltronInteraction<T>(
 
     fun contentDescriptionContains(text: String) = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(
                     ViewMatchers.withContentDescription(
                         Matchers.containsString(text)
@@ -601,7 +594,7 @@ class UltronInteraction<T>(
 
     fun assertMatches(condition: Matcher<View>) = apply {
         executeAssertion(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = getInteractionAssertionBlock(condition),
                 name = "Custom assertion with '$condition' of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.ASSERT_MATCHES,

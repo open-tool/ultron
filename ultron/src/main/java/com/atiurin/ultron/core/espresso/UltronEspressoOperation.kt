@@ -13,7 +13,7 @@ import com.atiurin.ultron.core.common.OperationType
  * @param type specifies the type of operation to be executed.
  * Use one of [com.atiurin.ultron.core.espresso.action.EspressoActionType], [com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType]
  */
-class EspressoOperation(
+class UltronEspressoOperation(
     val operationBlock: () -> Unit,
     override val name: String,
     override val type: OperationType,

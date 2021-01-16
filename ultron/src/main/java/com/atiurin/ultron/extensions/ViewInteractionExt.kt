@@ -5,7 +5,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.EspressoKey
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
-import com.atiurin.ultron.core.espresso.EspressoOperation
+import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.UltronInteraction
 import org.hamcrest.Matcher
 
@@ -21,7 +21,7 @@ fun ViewInteraction.isSuccess(
     return success
 }
 fun ViewInteraction.withTimeout(timeoutMs: Long) = UltronInteraction(this).withTimeout(timeoutMs)
-fun ViewInteraction.withResultHandler(resultHandler: (EspressoOperationResult<EspressoOperation>) -> Unit) = UltronInteraction(this).withResultHandler(resultHandler)
+fun ViewInteraction.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) = UltronInteraction(this).withResultHandler(resultHandler)
 
 //actions
 fun ViewInteraction.click() = UltronInteraction(this).click()

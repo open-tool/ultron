@@ -13,7 +13,7 @@ object UltronEspresso {
     /** Closes soft keyboard if open. */
     fun closeSoftKeyboard() {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = { Espresso.closeSoftKeyboard() },
                 name = "Espresso.closeSoftKeyboard()",
                 type = EspressoActionType.CLOSE_SOFT_KEYBOARD,
@@ -32,7 +32,7 @@ object UltronEspresso {
      */
     fun pressBack() {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = { Espresso.pressBack() },
                 name = "Espresso.pressBack()",
                 type = EspressoActionType.PRESS_BACK,
@@ -54,7 +54,7 @@ object UltronEspresso {
      */
     fun openActionBarOverflowOrOptionsMenu(context: Context = InstrumentationRegistry.getInstrumentation().targetContext) {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = { Espresso.openActionBarOverflowOrOptionsMenu(context) },
                 name = "Espresso.openActionBarOverflowOrOptionsMenu(context)",
                 type = EspressoActionType.OPEN_ACTION_BAR_OVERFLOW_OR_OPTION_MENU,
@@ -76,7 +76,7 @@ object UltronEspresso {
      */
     fun openContextualActionModeOverflowMenu() {
         executeAction(
-            EspressoOperation(
+            UltronEspressoOperation(
                 operationBlock = { Espresso.openContextualActionModeOverflowMenu() },
                 name = "Espresso.openContextualActionModeOverflowMenu()",
                 type = EspressoActionType.OPEN_CONTEXTUAL_ACTION_MODE_OVERFLOW_MENU,
@@ -91,8 +91,8 @@ object UltronEspresso {
      * Executes any espresso action inside Ultron lifecycle
      */
     fun executeAction(
-        operation: EspressoOperation,
-        resultHandler: (EspressoOperationResult<EspressoOperation>) -> Unit = UltronConfig.Espresso.ViewActionConfig.resultHandler
+        operation: UltronEspressoOperation,
+        resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = UltronConfig.Espresso.ViewActionConfig.resultHandler
     ) {
         EspressoOperationLifecycle.execute(EspressoActionExecutor(operation), resultHandler)
     }
@@ -101,8 +101,8 @@ object UltronEspresso {
      * Executes any espresso assertion inside Ultron lifecycle
      */
     fun executeAssertion(
-        operation: EspressoOperation,
-        resultHandler: (EspressoOperationResult<EspressoOperation>) -> Unit = UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+        operation: UltronEspressoOperation,
+        resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = UltronConfig.Espresso.ViewAssertionConfig.resultHandler
     ) {
         EspressoOperationLifecycle.execute(EspressoAssertionExecutor(operation), resultHandler)
     }
