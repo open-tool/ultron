@@ -5,16 +5,8 @@ import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.EspressoKey
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.ACTION_TIMEOUT
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.ASSERTION_TIMEOUT
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
-import com.atiurin.ultron.core.espresso.action.*
-import com.atiurin.ultron.core.espresso.assertion.*
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.ViewActionConfig
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.ViewAssertionConfig
-import com.atiurin.ultron.core.espresso.EspressoOperationLifecycle
+import com.atiurin.ultron.core.espresso.EspressoOperation
 import com.atiurin.ultron.core.espresso.UltronInteraction
 import org.hamcrest.Matcher
 
@@ -51,6 +43,7 @@ fun DataInteraction.perform(viewAction: ViewAction) = UltronInteraction(this).pe
 //assertions
 fun DataInteraction.isDisplayed() = UltronInteraction(this).isDisplayed()
 fun DataInteraction.isNotDisplayed() = UltronInteraction(this).isNotDisplayed()
+fun DataInteraction.doesNotExist() = UltronInteraction(this).doesNotExist()
 fun DataInteraction.isCompletelyDisplayed() = UltronInteraction(this).isCompletelyDisplayed()
 fun DataInteraction.isDisplayingAtLeast(percentage: Int) =
     UltronInteraction(this).isDisplayingAtLeast(percentage)

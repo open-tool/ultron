@@ -3,17 +3,10 @@ package com.atiurin.ultron.extensions
 import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.EspressoKey
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.ViewActionConfig
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.ViewAssertionConfig
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.ACTION_TIMEOUT
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.ASSERTION_TIMEOUT
 import com.atiurin.ultron.core.espresso.UltronInteraction
-import com.atiurin.ultron.core.espresso.action.EspressoOperation
-import com.atiurin.ultron.core.espresso.action.ViewInteractionEspressoAction
-import com.atiurin.ultron.core.espresso.assertion.ViewInteractionEspressoAssertion
+import com.atiurin.ultron.core.espresso.EspressoOperation
 import org.hamcrest.Matcher
 
 fun Matcher<View>.isSuccess(
@@ -44,6 +37,7 @@ fun Matcher<View>.perform(viewAction: ViewAction) = UltronInteraction(onView(thi
 //assertions
 fun Matcher<View>.isDisplayed() = UltronInteraction(onView(this)).isDisplayed()
 fun Matcher<View>.isNotDisplayed() = UltronInteraction(onView(this)).isNotDisplayed()
+fun Matcher<View>.doesNotExist() = UltronInteraction(onView(this)).doesNotExist()
 fun Matcher<View>.isCompletelyDisplayed() = UltronInteraction(onView(this)).isCompletelyDisplayed()
 fun Matcher<View>.isDisplayingAtLeast(percentage: Int) =
     UltronInteraction(onView(this)).isDisplayingAtLeast(percentage)

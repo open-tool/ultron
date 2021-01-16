@@ -4,7 +4,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry
 
 object EspressoUtil {
-    fun openOptionsMenu() = apply {
-        Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
-    }
+//    fun openOptionsMenu() = apply {
+//        Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().context)
+//    }
 }

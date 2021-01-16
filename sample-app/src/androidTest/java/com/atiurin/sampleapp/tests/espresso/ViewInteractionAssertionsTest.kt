@@ -9,11 +9,9 @@ import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
-import com.atiurin.ultron.core.config.UltronConfig
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
 
 class ViewInteractionAssertionsTest : UiElementsTest() {
@@ -43,6 +41,16 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
         page.button.isNotDisplayed()
     }
 
+    //doesNotExist
+    @Test
+    fun doesNotExist_notExisted(){
+        page.notExistElement.doesNotExist()
+    }
+
+    @Test
+    fun doesNotExist_existed(){
+        AssertUtils.assertException { page.button.withTimeout(100).doesNotExist() }
+    }
 
     //checked
     @Test
@@ -354,7 +362,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun hasDrawable_viewHasNoDrawable() {
-        AssertUtils.assertException { page.emptyImageView.withTimeout(100).assertMatches(hasAnyDrawable()) }
+        AssertUtils.assertException { page.emptyNotClickableImageView.withTimeout(100).assertMatches(hasAnyDrawable()) }
     }
 
     @Test

@@ -1,10 +1,12 @@
 package com.atiurin.sampleapp.pages
 
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.ultron.page.Page
 import com.atiurin.sampleapp.R
 
 object UiElementsPage : Page<UiElementsPage>() {
+    val notExistElement = withText("Some not existed text element")
     val button = withId(R.id.button1)
     val eventStatus = withId(R.id.last_event_status)
     val radioVisibleButton = withId(R.id.radio_visible)
@@ -19,5 +21,5 @@ object UiElementsPage : Page<UiElementsPage>() {
     val webView = withId(R.id.webview)
     val appCompatTextView = withId(R.id.app_compat_text)
     val imageView = withId(R.id.image_view)
-    val emptyImageView = withId(R.id.empty_image_view)
+    val emptyNotClickableImageView = withId(R.id.empty_image_view)
 }

@@ -1,26 +1,22 @@
-package com.atiurin.ultron.core.espresso.assertion
+package com.atiurin.ultron.core.espresso
 
-import android.view.View
-import androidx.test.espresso.ViewInteraction
-import androidx.test.espresso.assertion.ViewAssertions
 import com.atiurin.ultron.core.common.DefaultOperationIterationResult
+import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.OperationType
-import org.hamcrest.Matcher
 
-class ViewInteractionEspressoAssertion(
-    val viewInteraction: ViewInteraction,
-    override val matcher: Matcher<View>,
+class EspressoOperation(
+    val operationBlock: () -> Unit,
     override val name: String,
     override val type: OperationType,
     override val description: String,
     override val timeoutMs: Long
-): EspressoAssertion{
-    override fun execute() : OperationIterationResult {
+) : Operation {
+    override fun execute(): OperationIterationResult {
         var success = true
         var exception: Throwable? = null
         try {
-            viewInteraction.check(ViewAssertions.matches(matcher))
+            operationBlock()
         }catch (error: Throwable){
             success = false
             exception = error

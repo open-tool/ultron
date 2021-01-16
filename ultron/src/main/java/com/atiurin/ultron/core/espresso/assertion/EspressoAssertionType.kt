@@ -5,6 +5,7 @@ import com.atiurin.ultron.core.common.OperationType
 enum class EspressoAssertionType :
     OperationType {
     IS_DISPLAYED, IS_NOT_DISPLAYED, IS_COMPLETELY_DISPLAYED, IS_DISPLAYING_AT_LEAST,
+    DOES_NOT_EXIST,
     IS_ENABLED, IS_NOT_ENABLED,
     IS_SELECTED, IS_NOT_SELECTED,
     IS_CLICKABLE, IS_NOT_CLICKABLE,

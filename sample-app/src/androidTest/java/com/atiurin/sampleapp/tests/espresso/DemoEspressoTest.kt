@@ -8,6 +8,11 @@ import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.pages.ChatPage
 import com.atiurin.sampleapp.pages.FriendsListPage
 import com.atiurin.sampleapp.tests.BaseTest
+import com.atiurin.ultron.core.espresso.UltronInteraction
+import com.atiurin.ultron.core.espresso.UltronInteraction.Companion.pressBack
+import com.atiurin.ultron.extensions.doesNotExist
+import com.atiurin.ultron.extensions.isDisplayed
+import com.atiurin.ultron.extensions.isNotDisplayed
 import org.junit.Test
 
 class DemoEspressoTest : BaseTest() {
@@ -62,5 +67,29 @@ class DemoEspressoTest : BaseTest() {
             sendMessage(secondMessage)
             assertMessageTextAtPosition(0, firstMessage)
         }
+    }
+
+    @Test
+    fun pressBackTest(){
+        FriendsListPage.openChat("Chandler Bing")
+        ChatPage.assertPageDisplayed()
+        pressBack()
+        FriendsListPage.assertPageDisplayed()
+    }
+
+    @Test
+    fun openContextualActionModeOverflowMenuTest(){
+        FriendsListPage.openChat("Chandler Bing")
+        ChatPage.clearHistoryBtn.doesNotExist()
+        UltronInteraction.openContextualActionModeOverflowMenu()
+        ChatPage.clearHistoryBtn.isDisplayed()
+    }
+
+    @Test
+    fun openActionBarOverflowOrOptionsMenuTest(){
+        FriendsListPage.openChat("Chandler Bing")
+        ChatPage.clearHistoryBtn.doesNotExist()
+        UltronInteraction.openActionBarOverflowOrOptionsMenu()
+        ChatPage.clearHistoryBtn.isDisplayed()
     }
 }
