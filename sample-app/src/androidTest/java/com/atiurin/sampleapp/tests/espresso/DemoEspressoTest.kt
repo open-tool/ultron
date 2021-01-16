@@ -8,8 +8,8 @@ import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.pages.ChatPage
 import com.atiurin.sampleapp.pages.FriendsListPage
 import com.atiurin.sampleapp.tests.BaseTest
+import com.atiurin.ultron.core.espresso.UltronEspresso
 import com.atiurin.ultron.core.espresso.UltronInteraction
-import com.atiurin.ultron.core.espresso.UltronInteraction.Companion.pressBack
 import com.atiurin.ultron.extensions.doesNotExist
 import com.atiurin.ultron.extensions.isDisplayed
 import com.atiurin.ultron.extensions.isNotDisplayed
@@ -73,7 +73,7 @@ class DemoEspressoTest : BaseTest() {
     fun pressBackTest(){
         FriendsListPage.openChat("Chandler Bing")
         ChatPage.assertPageDisplayed()
-        pressBack()
+        UltronEspresso.pressBack()
         FriendsListPage.assertPageDisplayed()
     }
 
@@ -81,7 +81,7 @@ class DemoEspressoTest : BaseTest() {
     fun openContextualActionModeOverflowMenuTest(){
         FriendsListPage.openChat("Chandler Bing")
         ChatPage.clearHistoryBtn.doesNotExist()
-        UltronInteraction.openContextualActionModeOverflowMenu()
+        UltronEspresso.openContextualActionModeOverflowMenu()
         ChatPage.clearHistoryBtn.isDisplayed()
     }
 
@@ -89,7 +89,7 @@ class DemoEspressoTest : BaseTest() {
     fun openActionBarOverflowOrOptionsMenuTest(){
         FriendsListPage.openChat("Chandler Bing")
         ChatPage.clearHistoryBtn.doesNotExist()
-        UltronInteraction.openActionBarOverflowOrOptionsMenu()
+        UltronEspresso.openActionBarOverflowOrOptionsMenu()
         ChatPage.clearHistoryBtn.isDisplayed()
     }
 }

@@ -2,20 +2,17 @@ package com.atiurin.sampleapp.tests.espresso
 
 import android.os.SystemClock
 import android.view.KeyEvent
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.EspressoKey
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withText
-import com.atiurin.ultron.extensions.*
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espresso.UltronInteraction.Companion.closeSoftKeyboard
+import com.atiurin.ultron.core.espresso.UltronEspresso
+import com.atiurin.ultron.extensions.*
 import com.atiurin.ultron.utils.getTargetString
-import kotlinx.coroutines.withTimeout
 import org.junit.Assert
 import org.junit.Test
 
@@ -156,7 +153,7 @@ class ViewInteractionActionsTest : UiElementsTest() {
     @Test
     fun closeSoftKeyboardTest(){
         page.editTextContentDesc.click()
-        closeSoftKeyboard()
+        UltronEspresso.closeSoftKeyboard()
         page.emptyNotClickableImageView.isDisplayed()
     }
 }

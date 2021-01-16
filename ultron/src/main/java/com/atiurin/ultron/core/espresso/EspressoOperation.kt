@@ -5,6 +5,14 @@ import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.OperationType
 
+/**
+ * @param operationBlock represent an action or assertion block, for example
+ * operationBlock = { onView(matcher).perform(viewAction) }
+ *
+ * if [operationBlock] doesn't throw any exception the operation executes successful
+ * @param type specifies the type of operation to be executed.
+ * Use one of [com.atiurin.ultron.core.espresso.action.EspressoActionType], [com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType]
+ */
 class EspressoOperation(
     val operationBlock: () -> Unit,
     override val name: String,

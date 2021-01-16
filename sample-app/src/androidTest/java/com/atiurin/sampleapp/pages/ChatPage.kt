@@ -12,6 +12,7 @@ import com.atiurin.ultron.page.Page
 import com.atiurin.ultron.recyclerview.RecyclerViewItem
 import com.atiurin.ultron.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.framework.utils.EspressoUtil
+import com.atiurin.ultron.core.espresso.UltronEspresso
 import com.atiurin.ultron.core.espresso.UltronInteraction
 import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
@@ -75,7 +76,7 @@ object ChatPage : Page<ChatPage>() {
     fun clearHistory() = apply {
         step("Clear chat history") {
 //            UltronInteraction.openActionBarOverflowOrOptionsMenu()
-            UltronInteraction.openContextualActionModeOverflowMenu()
+            UltronEspresso.openContextualActionModeOverflowMenu()
             clearHistoryBtn.click()
             Assert.assertEquals(0, withRecyclerView(messagesList).getSize())
         }
