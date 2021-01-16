@@ -14,7 +14,7 @@ import org.hamcrest.Matcher
 
 /**
  * Represents the list of web objects with [locator] and [value]
- * It is required to create WebElementsList object using method in Companion object
+ * It is required to create [UltronWebElements] object using method in Companion object
  * like [UltronWebElements.Companion.ids], [UltronWebElements.Companion.xpaths], [UltronWebElements.Companion.elements] and etc
  */
 class UltronWebElements(

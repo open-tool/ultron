@@ -6,7 +6,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.EspressoKey
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronInteraction
-import com.atiurin.ultron.core.espresso.EspressoOperation
+import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import org.hamcrest.Matcher
 
 fun Matcher<View>.isSuccess(
@@ -16,7 +16,7 @@ fun Matcher<View>.isSuccess(
 }
 
 fun Matcher<View>.withTimeout(timeoutMs: Long) = UltronInteraction(onView(this)).withTimeout(timeoutMs)
-fun Matcher<View>.withResultHandler(resultHandler: (EspressoOperationResult<EspressoOperation>) -> Unit) = UltronInteraction(onView(this)).withResultHandler(resultHandler)
+fun Matcher<View>.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) = UltronInteraction(onView(this)).withResultHandler(resultHandler)
 //actions
 fun Matcher<View>.click() = UltronInteraction(onView(this)).click()
 fun Matcher<View>.doubleClick() = UltronInteraction(onView(this)).doubleClick()

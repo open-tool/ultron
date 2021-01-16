@@ -15,7 +15,7 @@ import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.common.OperationResultAnalyzer
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
-import com.atiurin.ultron.core.espresso.EspressoOperation
+import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
@@ -58,7 +58,7 @@ object UltronConfig {
                     PerformException::class.java,
                     NoMatchingViewException::class.java
                 )
-                val resultHandler: (EspressoOperationResult<EspressoOperation>) -> Unit = {
+                val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
                     resultAnalyzer.analyze(it)
                 }
             }
@@ -71,7 +71,7 @@ object UltronConfig {
                     NoMatchingViewException::class.java,
                     AssertionFailedError::class.java
                 )
-                val resultHandler: (EspressoOperationResult<EspressoOperation>) -> Unit = {
+                val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
                     resultAnalyzer.analyze(it)
                 }
             }
