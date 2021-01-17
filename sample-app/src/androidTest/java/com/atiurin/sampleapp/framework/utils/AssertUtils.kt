@@ -16,7 +16,7 @@ object AssertUtils {
     }
 
     fun assertExecTimeMoreThen(time: Long, block: () -> Unit) {
-        var startTime = System.currentTimeMillis()
+        val startTime = System.currentTimeMillis()
         try {
             block()
         } catch (ex: Throwable) {
@@ -25,11 +25,21 @@ object AssertUtils {
     }
 
     fun assertExecTimeLessThen(time: Long, block: () -> Unit) {
-        var startTime = System.currentTimeMillis()
+        val startTime = System.currentTimeMillis()
         try {
             block()
         } catch (ex: Throwable) {
         }
         Assert.assertTrue(System.currentTimeMillis() - startTime <= time)
+    }
+
+    fun assertExecTimeBetween(minTime: Long, maxTime: Long,block: () -> Unit){
+        val startTime = System.currentTimeMillis()
+        try {
+            block()
+        } catch (ex: Throwable) {
+        }
+        val execTime = System.currentTimeMillis() - startTime
+        Assert.assertTrue("ExecTime in $minTime .. $maxTime, but actual $execTime", execTime in minTime..maxTime)
     }
 }

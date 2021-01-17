@@ -42,12 +42,14 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
                         throw error
                     }
                 }
-                if (!success) SystemClock.sleep(pollingTimeout)
-                else lastIteration = result
+                    if (!success) {
+                        if (pollingTimeout > 0) SystemClock.sleep(pollingTimeout)
+                    } else lastIteration = result
             } while (SystemClock.elapsedRealtime() < endTime && !success)
         } catch (th: Throwable) {
             success = false // just make sure we will have correct action status
         }
+
         if (!success && exceptions.isNotEmpty()) {
             description +=
                 """

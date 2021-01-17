@@ -139,14 +139,12 @@ class EspressoWebUiElementsTest : BaseWebViewTest() {
 
     @Test
     fun elementNotPresentDefaultTimeout() {
-        AssertUtils.assertExecTimeMoreThen(5_000) { id("asdasdasd").getText() }
-        AssertUtils.assertExecTimeLessThen(7_000) { id("asdasdasd").getText() }
+        AssertUtils.assertExecTimeBetween(5_000, 7_000) { id("asdasdasd").getText() }
     }
 
     @Test
     fun elementNotPresentCustomTimeout() {
-        AssertUtils.assertExecTimeMoreThen(1_000) { id("asdasdasd").withTimeout(2000).getText() }
-        AssertUtils.assertExecTimeLessThen(3_000) { id("asdasdasd").withTimeout(2000).getText() }
+        AssertUtils.assertExecTimeBetween(1_000, 3_000) { id("asdasdasd").withTimeout(2000).getText() }
     }
 
     @Test

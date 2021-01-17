@@ -10,8 +10,13 @@ import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspresso
+import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.extensions.*
+import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
+import com.atiurin.ultron.testlifecycle.setupteardown.SetUpTearDownRule
+import com.atiurin.ultron.testlifecycle.setupteardown.TearDown
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
 import org.junit.Test
@@ -156,4 +161,6 @@ class ViewInteractionActionsTest : UiElementsTest() {
         UltronEspresso.closeSoftKeyboard()
         page.emptyNotClickableImageView.isDisplayed()
     }
+
+
 }

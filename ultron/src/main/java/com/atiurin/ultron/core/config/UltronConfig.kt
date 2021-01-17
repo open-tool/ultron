@@ -10,7 +10,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.Configurator
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
-import com.atiurin.ultron.core.common.DefaultOperationResultAnalyzer
+import com.atiurin.ultron.core.common.UltronDefaultOperationResultAnalyzer
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.common.OperationResultAnalyzer
@@ -32,11 +32,14 @@ object UltronConfig {
 
     class Espresso {
         companion object {
-            var ESPRESSO_OPERATION_POLLING_TIMEOUT = 50L //ms
-            var ACTION_TIMEOUT = 5_000L
-            var ASSERTION_TIMEOUT = 5_000L
+            const val DEFAULT_ACTION_TIMEOUT = 5_000L
+            const val DEFAULT_ASSERTION_TIMEOUT = 5_000L
 
-            var resultAnalyzer: OperationResultAnalyzer = DefaultOperationResultAnalyzer()
+            var ESPRESSO_OPERATION_POLLING_TIMEOUT = 0L //ms
+            var ACTION_TIMEOUT = DEFAULT_ACTION_TIMEOUT
+            var ASSERTION_TIMEOUT = DEFAULT_ASSERTION_TIMEOUT
+
+            var resultAnalyzer: OperationResultAnalyzer = UltronDefaultOperationResultAnalyzer()
 
             inline fun setResultAnalyzer(crossinline block: (OperationResult<Operation>) -> Boolean) {
                 resultAnalyzer = object : OperationResultAnalyzer {
@@ -98,7 +101,7 @@ object UltronConfig {
             var UIAUTOMATOR_OPERATION_POLLING_TIMEOUT = 50L //ms
             var OPERATION_TIMEOUT = 5_000L
 
-            var resultAnalyzer: OperationResultAnalyzer = DefaultOperationResultAnalyzer()
+            var resultAnalyzer: OperationResultAnalyzer = UltronDefaultOperationResultAnalyzer()
 
             inline fun setResultAnalyzer(crossinline block: (OperationResult<Operation>) -> Boolean) {
                 resultAnalyzer = object : OperationResultAnalyzer {
