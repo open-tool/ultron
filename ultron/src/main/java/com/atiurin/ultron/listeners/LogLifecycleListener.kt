@@ -22,8 +22,7 @@ class LogLifecycleListener : AbstractLifecycleListener() {
 
     override fun afterFailure(operationResult: OperationResult<Operation>) {
         Log.d(
-            UltronConfig.LOGCAT_TAG, "Failed execution of ${operationResult.operation.name}, " +
-                    "description: ${operationResult.description}"
+            UltronConfig.LOGCAT_TAG, "Failed description: ${operationResult.description}"
         )
     }
 }

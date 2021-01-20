@@ -2,19 +2,15 @@ package com.atiurin.sampleapp.pages
 
 import android.view.View
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.*
 import com.atiurin.ultron.extensions.click
 import com.atiurin.ultron.extensions.typeText
 import com.atiurin.ultron.page.Page
-import com.atiurin.ultron.recyclerview.RecyclerViewItem
+import com.atiurin.ultron.recyclerview.UltronRecyclerViewItem
 import com.atiurin.ultron.recyclerview.withRecyclerView
-import com.atiurin.sampleapp.framework.utils.EspressoUtil
 import com.atiurin.ultron.core.espresso.UltronEspresso
-import com.atiurin.ultron.core.espresso.UltronInteraction
-import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
@@ -27,15 +23,13 @@ object ChatPage : Page<ChatPage>() {
         }
     }
 
-    val messagesList = withId(R.id.messages_list)
+    val messagesList = withRecyclerView(R.id.messages_list)
     val clearHistoryBtn = withText("Clear history")
     val inputMessageText = withId(R.id.message_input_text)
     val sendMessageBtn = withId(R.id.send_button)
 
     fun getMessageListItem(text: String): ChatRecyclerItem {
-        return ChatRecyclerItem(
-            messagesList,
-            ViewMatchers.hasDescendant(
+        return messagesList.getItem(hasDescendant(
                 allOf(
                     withId(R.id.message_text),
                     withText(text)
@@ -45,18 +39,15 @@ object ChatPage : Page<ChatPage>() {
     }
 
     private fun getListItemAtPosition(position: Int): ChatRecyclerItem {
-        return ChatRecyclerItem(messagesList, position)
+        return messagesList.getItem(position)
     }
 
     fun getTitle(title: String): Matcher<View> {
         return allOf(withId(R.id.toolbar_title), withText(title))
     }
 
-    class ChatRecyclerItem : RecyclerViewItem {
-        constructor(list: Matcher<View>, item: Matcher<View>) : super(list, item)
-        constructor(list: Matcher<View>, position: Int) : super(list, position)
-
-        val text = getChildMatcher(withId(R.id.message_text))
+    class ChatRecyclerItem : UltronRecyclerViewItem(){
+        val text = getChild(withId(R.id.message_text))
     }
 
     fun sendMessage(text: String) = apply {
@@ -78,7 +69,7 @@ object ChatPage : Page<ChatPage>() {
 //            UltronInteraction.openActionBarOverflowOrOptionsMenu()
             UltronEspresso.openContextualActionModeOverflowMenu()
             clearHistoryBtn.click()
-            Assert.assertEquals(0, withRecyclerView(messagesList).getSize())
+            Assert.assertEquals(0, messagesList.getSize())
         }
     }
 

@@ -1,60 +1,54 @@
 package com.atiurin.sampleapp.pages
 
-import android.view.View
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.atiurin.ultron.page.Page
-import com.atiurin.ultron.recyclerview.RecyclerViewItem
+import com.atiurin.ultron.recyclerview.UltronRecyclerViewItem
 import com.atiurin.ultron.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.step
 import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
-import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert
 
 object FriendsListPage : Page<FriendsListPage>() {
-    val friendsRecycler = withId(R.id.recycler_friends)
+    val friendsRecycler = withRecyclerView(R.id.recycler_friends)
 
     fun assertPageDisplayed() = apply {
         step("Assert friends list page displayed") {
-            friendsRecycler.isDisplayed()
+            friendsRecycler.recyclerViewMatcher.isDisplayed()
         }
     }
 
-    class FriendRecyclerItem(list: Matcher<View>, item: Matcher<View>, autoScroll: Boolean = true) :
-        RecyclerViewItem(list, item, autoScroll) {
-        val name = getChildMatcher(withId(R.id.tv_name))
-        val status = getChildMatcher(withId(R.id.tv_status))
+    class FriendRecyclerItem : UltronRecyclerViewItem() {
+        val name by lazy { getChild(withId(R.id.tv_name)) }
+        val status by lazy { getChild(withId(R.id.tv_status)) }
     }
 
-    fun getFriendsListItem(title: String): FriendRecyclerItem {
-        return FriendRecyclerItem(
-            withId(R.id.recycler_friends),
-            hasDescendant(allOf(withId(R.id.tv_name), withText(title)))
-        )
+    fun getListItem(contactName: String): FriendRecyclerItem {
+        return friendsRecycler.getItem(hasDescendant(allOf(withId(R.id.tv_name), withText(contactName))))
     }
 
     fun openChat(name: String) = apply {
         step("Open chat with friend '$name'") {
-            this.getFriendsListItem(name).click()
+            this.getListItem(name).click()
             ChatPage { assertPageDisplayed() }
         }
     }
 
     fun assertStatus(name: String, status: String) = apply {
         step("Assert friend with name '$name' has status '$status'") {
-            this.getFriendsListItem(name).status.hasText(status)
+            getListItem(name).status.hasText(status).isDisplayed()
         }
     }
 
     fun assertName(nameText: String) = apply {
         step("Assert friend name '$nameText' in the right place") {
-            this.getFriendsListItem(nameText).name.hasText(nameText)
+            getListItem(nameText).name.hasText(nameText).isDisplayed()
         }
     }
 
     fun assertFriendsListSize(size: Int) {
-        Assert.assertEquals(size, withRecyclerView(friendsRecycler).getSize())
+        Assert.assertEquals(size, friendsRecycler.getSize())
     }
 }

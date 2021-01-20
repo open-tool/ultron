@@ -9,10 +9,8 @@ import com.atiurin.sampleapp.pages.ChatPage
 import com.atiurin.sampleapp.pages.FriendsListPage
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.core.espresso.UltronEspresso
-import com.atiurin.ultron.core.espresso.UltronInteraction
 import com.atiurin.ultron.extensions.doesNotExist
 import com.atiurin.ultron.extensions.isDisplayed
-import com.atiurin.ultron.extensions.isNotDisplayed
 import org.junit.Test
 
 class DemoEspressoTest : BaseTest() {

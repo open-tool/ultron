@@ -6,6 +6,7 @@ buildscript {
         classpath "com.github.dcendents:android-maven-gradle-plugin:$android_maven_gradle_plugin"
         classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintray_plugin"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     }
 }
 
@@ -82,6 +83,7 @@ dependencies {
     implementation "androidx.test.uiautomator:uiautomator:${versions.uiautomator}"
     implementation "androidx.test.espresso:espresso-web:${versions.espresso}"
     testImplementation "junit:junit:${versions.junit}"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
 
 group = publishedGroupId
