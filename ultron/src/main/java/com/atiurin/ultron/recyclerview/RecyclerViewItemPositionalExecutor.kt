@@ -3,31 +3,33 @@ package com.atiurin.ultron.recyclerview
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.contrib.RecyclerViewActions
-import com.atiurin.ultron.extensions.perform
+import com.atiurin.ultron.exceptions.UltronException
+import com.atiurin.ultron.extensions.withTimeout
 import org.hamcrest.Matcher
 
 class RecyclerViewItemPositionalExecutor(
-    private val recyclerViewMatcher: Matcher<View>,
-    private val position: Int
+    private val ultronRecyclerView: UltronRecyclerView,
+    private val position: Int,
+    private val scrollTimeoutMs: Long
 ) : RecyclerViewItemExecutor {
 
     init {
         if (position < 0){
-            throw Exception("Position value can't be negative: '$position'")
+            throw UltronException("Position value can't be negative: '$position'")
         }
     }
     override fun scrollToItem() {
-        //TODO work around this trade off
-        recyclerViewMatcher.perform(
+        ultronRecyclerView.assertHasItemAtPosition(position, scrollTimeoutMs)
+        ultronRecyclerView.recyclerViewMatcher.withTimeout(scrollTimeoutMs).perform(
             RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(position)
         )
     }
 
     override fun getItemMatcher(): Matcher<View> {
-        return withRecyclerView(recyclerViewMatcher).atPosition(position)
+        return ultronRecyclerView.atPosition(position)
     }
 
     override fun getItemChildMatcher(childMatcher: Matcher<View>): Matcher<View> {
-        return withRecyclerView(recyclerViewMatcher).atPositionItemChild(position, childMatcher)
+        return ultronRecyclerView.atPositionItemChild(position, childMatcher)
     }
 }

@@ -2,7 +2,6 @@ package com.atiurin.sampleapp.tests.espresso
 
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
-import com.atiurin.ultron.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.activity.MainActivity
 import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.data.repositories.ContactRepositoty
@@ -12,7 +11,7 @@ import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.extensions.assertMatches
 import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
-import com.atiurin.ultron.recyclerview.UltronRecyclerViewItem
+import com.atiurin.ultron.recyclerview.withRecyclerView
 import org.junit.Assert
 import org.junit.Test
 
@@ -20,6 +19,7 @@ class RecyclerViewTest : BaseTest() {
     init {
         ruleSequence.addLast(ActivityTestRule(MainActivity::class.java))
     }
+
     val page = FriendsListPage
 
     @Test
@@ -33,7 +33,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun testListSize(){
+    fun testListSize() {
         page.friendsRecycler.atPosition(0)
             .assertMatches(hasDescendant(withText(ContactRepositoty.getFirst().name)))
         val actualSize = page.friendsRecycler.getSize()
@@ -41,14 +41,14 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getRecyclerViewTest(){
+    fun getRecyclerViewTest() {
         val view = page.friendsRecycler.getRecyclerViewList()
         Assert.assertNotNull(view)
         Assert.assertEquals(Visibility.VISIBLE.value, view?.visibility)
     }
 
     @Test
-    fun scrollToItemTest(){
+    fun scrollToItemTest() {
         val contact = CONTACTS[CONTACTS.size - 1]
         val item = page.getListItem(contact.name)
         item.isDisplayed()
@@ -57,9 +57,9 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun recyclerViewItemClassTest(){
+    fun recyclerViewItemClassTest() {
         val contact = CONTACTS[1]
-        with(page.getListItem(contact.name)){
+        with(page.getListItem(contact.name)) {
             this.isDisplayed().isClickable()
             this.name.isDisplayed().isEnabled().hasText(contact.name)
             this.status.isDisplayed().isEnabled().hasText(contact.status)
@@ -67,12 +67,38 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getNotExistedRecyclerItem(){
-        AssertUtils.assertException { page.friendsRecycler.getSimpleItem(100).withTimeout(100).isDisplayed() }
+    fun scrollToLastItem(){
+        page.friendsRecycler.item(CONTACTS.size - 1).isDisplayed()
     }
 
     @Test
-    fun assertListSize(){
+    fun scrollToLastWithMatcher(){
+        page.friendsRecycler.item(hasDescendant(withText("Friend14"))).isDisplayed()
+    }
+
+    @Test
+    fun getNotExistedRecyclerItemWithPosition() {
+        AssertUtils.assertException {
+            page.friendsRecycler.item(100).withTimeout(100).isDisplayed()
+        }
+    }
+
+    @Test
+    fun assertListSize() {
         page.friendsRecycler.assertSize(CONTACTS.size)
+    }
+
+    @Test
+    fun recyclerView_notExist() {
+        AssertUtils.assertException {
+            withRecyclerView(withText("Not existed recycler")).withTimeout(100).isDisplayed()
+        }
+    }
+
+    @Test
+    fun item_notExist() {
+        AssertUtils.assertException {
+            page.friendsRecycler.item(withText("Not existed item"),false).withTimeout(100).isDisplayed()
+        }
     }
 }

@@ -93,7 +93,7 @@ class UltronEspressoConfigTest : UiElementsTest() {
     @Test
     fun withTimeout_action_default() {
         val default = UltronConfig.Espresso.DEFAULT_ACTION_TIMEOUT
-        AssertUtils.assertExecTimeBetween(default, default + 2_000) { page.notExistElement.click() }
+        AssertUtils.assertExecTimeBetween(default, default + 5_000) { page.notExistElement.click() }
     }
 
     @Test

@@ -47,7 +47,7 @@ object ChatPage : Page<ChatPage>() {
     }
 
     class ChatRecyclerItem : UltronRecyclerViewItem(){
-        val text = getChild(withId(R.id.message_text))
+        val text by lazy { getChild(withId(R.id.message_text)) }
     }
 
     fun sendMessage(text: String) = apply {

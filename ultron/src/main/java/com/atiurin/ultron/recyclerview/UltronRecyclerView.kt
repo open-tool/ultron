@@ -15,25 +15,44 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
+/**
+ *  Provides a set of interaction with a RecyclerView list.
+ */
 open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>) {
     private var recyclerView: RecyclerView? = null
 
     inline fun <reified T : UltronRecyclerViewItem> getItem(
         itemMatcher: Matcher<View>,
-        autoScroll: Boolean = true
-    ) = UltronRecyclerViewItem.getInstance<T>(recyclerViewMatcher, itemMatcher, autoScroll)
+        autoScroll: Boolean = true,
+        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+    ) = UltronRecyclerViewItem.getInstance<T>(this, itemMatcher, autoScroll, scrollTimeoutMs)
 
+    /**
+     * @param timeoutMs of item waiting
+     */
     inline fun <reified T : UltronRecyclerViewItem> getItem(
         itemPosition: Int,
-        autoScroll: Boolean = true
-    ) =
-        UltronRecyclerViewItem.getInstance<T>(recyclerViewMatcher, itemPosition, autoScroll) as T
+        autoScroll: Boolean = true,
+        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+    ): T {
+        return UltronRecyclerViewItem.getInstance(this, itemPosition, autoScroll, scrollTimeoutMs)
+    }
 
-    fun getSimpleItem(itemMatcher: Matcher<View>, autoScroll: Boolean = true) =
-        UltronRecyclerViewItem(recyclerViewMatcher, itemMatcher, autoScroll)
+    /** @return simple RecyclerView item matching '[matcher]'
+     *  @param autoScroll evaluate scrollTo matched item in case of true value
+     *  @param scrollTimeoutMs of item waiting
+     * */
+    fun item(matcher: Matcher<View>, autoScroll: Boolean = true, scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT) =
+        UltronRecyclerViewItem(recyclerViewMatcher, matcher, autoScroll, scrollTimeoutMs)
 
-    fun getSimpleItem(itemPosition: Int, autoScroll: Boolean = true) =
-        UltronRecyclerViewItem(recyclerViewMatcher, itemPosition, autoScroll)
+    /** @return simple RecyclerView item at [position]
+     *  @param autoScroll evaluate scrollTo item at [position] in case of true value
+     *  @param scrollTimeoutMs of item waiting
+     * */
+    fun item(
+        position: Int, autoScroll: Boolean = true, scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+    ) = UltronRecyclerViewItem(recyclerViewMatcher, position, autoScroll, scrollTimeoutMs)
+
 
     open fun getRecyclerViewList(): RecyclerView? {
         recyclerViewMatcher.assertMatches(identifyRecyclerView())
@@ -58,6 +77,17 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>) {
             { getSize() == expected },
             timeoutMs,
             "Assert RecyclerView($recyclerViewMatcher) size is $expected, but actual ${getSize()}"
+        )
+    }
+
+    /**
+     * Asserts RecyclerView list has item at [position] during [timeoutMs]
+     */
+    open fun assertHasItemAtPosition(position: Int, timeoutMs: Long = UltronConfig.Espresso.ASSERTION_TIMEOUT) {
+        AssertUtils.assertTrue(
+            { getSize() >= position },
+            timeoutMs,
+            "Wait RecyclerView($recyclerViewMatcher) size is >= $position, but actual ${getSize()}"
         )
     }
 
@@ -130,7 +160,6 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>) {
 
             override fun describeTo(description: Description) {
                 description.appendText("RecyclerViewItem recyclerViewMatcher: '$recyclerViewMatcher', itemMatcher: '$itemMatcher', childMatcher: '$childMatcher'")
-                return
             }
 
             override fun matchesSafely(view: View?): Boolean {
@@ -195,7 +224,6 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>) {
         return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
             override fun describeTo(description: Description) {
                 description.appendText("RecyclerView matches ").appendValue(recyclerViewMatcher)
-                return
             }
 
             override fun matchesSafely(view: RecyclerView): Boolean {

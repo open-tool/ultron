@@ -4,24 +4,26 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.contrib.RecyclerViewActions
 import com.atiurin.ultron.extensions.perform
+import com.atiurin.ultron.extensions.withTimeout
 import org.hamcrest.Matcher
 
 class RecyclerViewItemMatchingExecutor(
-    private val recyclerViewMatcher: Matcher<View>,
-    private val itemViewMatcher: Matcher<View>
+    private val ultronRecyclerView: UltronRecyclerView,
+    private val itemViewMatcher: Matcher<View>,
+    private val scrollTimeoutMs: Long
 ) : RecyclerViewItemExecutor {
     override fun scrollToItem() {
         //TODO work around this trade off
-        recyclerViewMatcher.perform(
+        ultronRecyclerView.recyclerViewMatcher.withTimeout(scrollTimeoutMs).perform(
             RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(itemViewMatcher)
         )
     }
 
     override fun getItemMatcher(): Matcher<View> {
-        return withRecyclerView(recyclerViewMatcher).atItem(itemViewMatcher)
+        return ultronRecyclerView.atItem(itemViewMatcher)
     }
 
     override fun getItemChildMatcher(childMatcher: Matcher<View>): Matcher<View> {
-        return withRecyclerView(recyclerViewMatcher).atItemChild(itemViewMatcher, childMatcher)
+        return ultronRecyclerView.atItemChild(itemViewMatcher, childMatcher)
     }
 }

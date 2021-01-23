@@ -2,16 +2,23 @@ package com.atiurin.ultron.recyclerview
 
 import android.view.View
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.ViewInteraction
+import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
+import com.atiurin.ultron.core.espresso.UltronInteraction
+import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.*
 import org.hamcrest.Matcher
 import kotlin.reflect.KFunction
 import kotlin.reflect.KParameter
 
+/**
+ * Represents the item of RecyclerView list.
+ * Provides a set of interaction with item.
+ */
 open class UltronRecyclerViewItem {
-    private lateinit var executor: RecyclerViewItemExecutor
-
+    private var executor: RecyclerViewItemExecutor? = null
     /**
      * Use this constructor to inherit from [UltronRecyclerViewItem]
      * Don't create an instance of subclass. Use [UltronRecyclerView.getItem] instead
@@ -19,68 +26,63 @@ open class UltronRecyclerViewItem {
     protected constructor()
 
     constructor(
+        ultronRecyclerView: UltronRecyclerView,
+        itemViewMatcher: Matcher<View>,
+        autoScroll: Boolean = true,
+        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+    ) {
+        setExecutor(ultronRecyclerView, itemViewMatcher, scrollTimeoutMs)
+        if (autoScroll) scrollToItem()
+    }
+
+    constructor(
+        ultronRecyclerView: UltronRecyclerView,
+        position: Int,
+        autoScroll: Boolean = true,
+        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+    ) {
+        setExecutor(ultronRecyclerView, position, scrollTimeoutMs)
+        if (autoScroll) scrollToItem()
+    }
+
+    constructor(
         recyclerViewMatcher: Matcher<View>,
         itemViewMatcher: Matcher<View>,
-        autoScroll: Boolean = true
+        autoScroll: Boolean = true,
+        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
     ) {
-        this.executor = getExecutor(recyclerViewMatcher, itemViewMatcher)
-        if (autoScroll) {
-            scrollToItem()
-        }
+        setExecutor(UltronRecyclerView(recyclerViewMatcher), itemViewMatcher, scrollTimeoutMs)
+        if (autoScroll) scrollToItem()
     }
 
     constructor(
         recyclerViewMatcher: Matcher<View>,
         position: Int,
-        autoScroll: Boolean = true
+        autoScroll: Boolean = true,
+        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
     ) {
-        executor = getExecutor(recyclerViewMatcher, position)
-        if (autoScroll) {
-            scrollToItem()
-        }
-    }
-
-    private fun getExecutor(
-        recyclerViewMatcher: Matcher<View>,
-        itemViewMatcher: Matcher<View>
-    ): RecyclerViewItemExecutor {
-        return RecyclerViewItemMatchingExecutor(recyclerViewMatcher, itemViewMatcher)
-    }
-
-    private fun getExecutor(
-        recyclerViewMatcher: Matcher<View>,
-        position: Int
-    ): RecyclerViewItemExecutor {
-        return RecyclerViewItemPositionalExecutor(recyclerViewMatcher, position)
-    }
-
-    fun setExecutor(
-        recyclerViewMatcher: Matcher<View>,
-        itemViewMatcher: Matcher<View>
-    ) {
-        this.executor = getExecutor(recyclerViewMatcher, itemViewMatcher)
-    }
-
-    fun setExecutor(
-        recyclerViewMatcher: Matcher<View>,
-        position: Int
-    ) {
-        this.executor = getExecutor(recyclerViewMatcher, position)
+        setExecutor(UltronRecyclerView(recyclerViewMatcher), position, scrollTimeoutMs)
+        if (autoScroll) scrollToItem()
     }
 
     fun scrollToItem(): UltronRecyclerViewItem = apply {
-        executor.scrollToItem()
-    }
-
-    private fun get(): Matcher<View> {
-        return executor.getItemMatcher()
+        executor?.scrollToItem()
     }
 
     /**
      * @return matcher to a child element
      */
-    fun getChild(childMatcher: Matcher<View>) : Matcher<View> {
-        return executor.getItemChildMatcher(childMatcher)
+    fun getChild(childMatcher: Matcher<View>): Matcher<View> {
+        if (executor == null) throw UltronException(
+            """
+            |UltronRecyclerViewItem child element should have lazy initialisation in subclasses. 
+            |For example, do not use: 
+            |val name = getChild(matcher)
+            |Refactor it to:
+            |val name by lazy { getChild(matcher) }
+        """.trimMargin()
+        )
+        return executor!!.getItemChildMatcher(childMatcher)
     }
 
     fun withTimeout(timeoutMs: Long) = get().withTimeout(timeoutMs)
@@ -119,25 +121,47 @@ open class UltronRecyclerViewItem {
     fun contentDescriptionContains(text: String) =
         apply { this.get().contentDescriptionContains(text) }
 
+    fun setExecutor(
+        ultronRecyclerView: UltronRecyclerView,
+        itemViewMatcher: Matcher<View>,
+        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+    ) {
+        this.executor = RecyclerViewItemMatchingExecutor(ultronRecyclerView, itemViewMatcher, scrollTimeoutMs)
+    }
+
+    fun setExecutor(
+        ultronRecyclerView: UltronRecyclerView,
+        position: Int,
+        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+    ) {
+        this.executor = RecyclerViewItemPositionalExecutor(ultronRecyclerView, position, scrollTimeoutMs)
+    }
+
+    private fun get(): Matcher<View> {
+        return executor!!.getItemMatcher()
+    }
+
     companion object {
         inline fun <reified T : UltronRecyclerViewItem> getInstance(
-            recyclerViewMatcher: Matcher<View>,
+            ultronRecyclerView: UltronRecyclerView,
             itemViewMatcher: Matcher<View>,
-            autoScroll: Boolean = true
+            autoScroll: Boolean = true,
+            scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
         ): T {
             val item = T::class.constructors.find { it.parameters.isEmpty() }?.call()!!
-            item.setExecutor(recyclerViewMatcher, itemViewMatcher)
+            item.setExecutor(ultronRecyclerView, itemViewMatcher, scrollTimeoutMs)
             if (autoScroll) item.scrollToItem()
             return item
         }
 
         inline fun <reified T : UltronRecyclerViewItem> getInstance(
-            recyclerViewMatcher: Matcher<View>,
+            ultronRecyclerView: UltronRecyclerView,
             position: Int,
-            autoScroll: Boolean = true
+            autoScroll: Boolean = true,
+            scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
         ): T {
             val item = T::class.constructors.find { it.parameters.isEmpty() }?.call()!!
-            item.setExecutor(recyclerViewMatcher, position)
+            item.setExecutor(ultronRecyclerView, position, scrollTimeoutMs)
             if (autoScroll) item.scrollToItem()
             return item
         }
