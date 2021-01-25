@@ -8,6 +8,8 @@ import com.atiurin.sampleapp.data.repositories.CURRENT_USER
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.idlingresources.resources.ContactsIdlingResource
 import com.atiurin.sampleapp.managers.AccountManager
+import com.atiurin.ultron.core.config.UltronConfig
+import org.junit.BeforeClass
 import org.junit.Rule
 
 abstract class BaseTest {
@@ -24,4 +26,12 @@ abstract class BaseTest {
 
     @get:Rule
     open val ruleSequence = RuleSequence(setupRule)
+
+    companion object {
+        @BeforeClass
+        @JvmStatic
+        fun speedUpAutomator() {
+            UltronConfig.UiAutomator.speedUp()
+        }
+    }
 }

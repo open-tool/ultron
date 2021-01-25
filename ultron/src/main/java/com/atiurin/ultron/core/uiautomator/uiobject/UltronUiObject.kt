@@ -251,7 +251,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun click() {
+    fun click() = apply {
         executeOperation(
             operationBlock = { uiObjectProviderBlock().click() },
             name = "Click to $selectorDesc",
@@ -673,6 +673,14 @@ class UltronUiObject internal constructor(
         hasText(Matchers.containsString(textSubstring))
     }
 
+    fun textIsNullOrEmpty() = apply {
+        hasText(Matchers.isEmptyOrNullString())
+    }
+
+    fun textIsNotNullOrEmpty() = apply {
+        hasText(Matchers.not(Matchers.isEmptyOrNullString()))
+    }
+
     fun hasContentDescription(
         contentDesc: String
     ) = apply {
@@ -700,6 +708,14 @@ class UltronUiObject internal constructor(
         contentDescSubstring: String
     ) = apply {
         hasContentDescription(Matchers.containsString(contentDescSubstring))
+    }
+
+    fun contentDescriptionIsNullOrEmpty() = apply {
+        hasContentDescription(Matchers.isEmptyOrNullString())
+    }
+
+    fun contentDescriptionIsNotNullOrEmpty() = apply {
+        hasContentDescription(Matchers.not(Matchers.isEmptyOrNullString()))
     }
 
     fun assertThat(
