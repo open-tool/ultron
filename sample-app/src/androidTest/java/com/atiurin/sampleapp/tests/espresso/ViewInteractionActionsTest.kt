@@ -25,12 +25,17 @@ class ViewInteractionActionsTest : UiElementsTest() {
     val page = UiElementsPage
 
     @Test
-    fun testNotExistedElement(){
+    fun isSuccess_notExistedElement_return_false(){
         val startTime = SystemClock.elapsedRealtime()
         val result = page.notExistElement.isSuccess { isDisplayed() }
         val endTime = SystemClock.elapsedRealtime()
         Assert.assertTrue(endTime - startTime >= UltronConfig.Espresso.ASSERTION_TIMEOUT)
         Assert.assertFalse(result)
+    }
+
+    @Test
+    fun isSuccess_existedElement_return_true(){
+        Assert.assertTrue(page.button.isSuccess { isDisplayed() })
     }
 
     @Test

@@ -9,4 +9,6 @@ object MyApplication : Application() {
         super.onCreate()
         context = applicationContext
     }
+
+    var CONTACTS_LOADING_TIMEOUT_MS = 500L
 }

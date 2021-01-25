@@ -87,7 +87,7 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>) {
         AssertUtils.assertTrue(
             { getSize() >= position },
             timeoutMs,
-            "Wait RecyclerView($recyclerViewMatcher) size is >= $position, but actual ${getSize()}"
+            "Wait RecyclerView($recyclerViewMatcher) size >= $position (actual size = ${getSize()})"
         )
     }
 
