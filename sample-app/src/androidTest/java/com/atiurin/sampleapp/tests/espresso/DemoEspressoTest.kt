@@ -22,14 +22,6 @@ class DemoEspressoTest : BaseTest() {
     private val activityTestRule = ActivityTestRule(MainActivity::class.java)
 
     init {
-        setupRule
-            .addSetUp { Log.info("Common setup for all @Tests") }
-            .addSetUp(FIRST_CONDITION) { Log.info("$FIRST_CONDITION setup, executed after common setup") }
-            .addSetUp(SECOND_CONDITION) { Log.info("$SECOND_CONDITION setup") }
-            .addSetUp { Log.info("Last common setup for all @Tests") }
-            .addTearDown(FIRST_CONDITION) { Log.info("$FIRST_CONDITION teardowm executed before common teardowm") }
-            .addTearDown { Log.info("Common tearDown for all @Tests") }
-            .addTearDown(SECOND_CONDITION) { Log.info("$SECOND_CONDITION teardowm executed last") }
         ruleSequence.addLast(activityTestRule)
     }
 

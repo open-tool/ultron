@@ -14,8 +14,9 @@ import com.atiurin.ultron.extensions.isDisplayed
 import com.atiurin.ultron.extensions.withResultHandler
 import com.atiurin.ultron.extensions.withTimeout
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
-import com.atiurin.ultron.testlifecycle.setupteardown.SetUpTearDownRule
+import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
 import com.atiurin.ultron.testlifecycle.setupteardown.TearDown
+import com.atiurin.ultron.testlifecycle.setupteardown.TearDownRule
 import org.junit.Assert
 import org.junit.Test
 
@@ -32,33 +33,33 @@ class UltronEspressoConfigTest : UiElementsTest() {
         const val MODIFIED_OPERATIONS_TIMEOUT = 7_000L
     }
 
-    val setUpTearDownRule = SetUpTearDownRule()
-        .addSetUp(SET_CUSTOM_RESULT_ANALYZER) {
+    val setUpRule = SetUpRule()
+        .add(SET_CUSTOM_RESULT_ANALYZER) {
             UltronConfig.Espresso.setResultAnalyzer {
                 Log.debug("SET_CUSTOM_RESULT_ANALYZER ${it.success}")
                 if (it.success) throw UltronException("Special reversed analyzer exception on ${it.description}")
                 it.success
             }
-        }
-        .addTearDown(SET_DEFAULT_CONFIG) {
-            UltronConfig.Espresso.resultAnalyzer = UltronDefaultOperationResultAnalyzer()
-        }
-        .addSetUp(SET_CUSTOM_ASSERTIONS_TIMEOUT) {
+        }.add(SET_CUSTOM_ASSERTIONS_TIMEOUT) {
             UltronConfig.Espresso.ASSERTION_TIMEOUT =
                 MODIFIED_OPERATIONS_TIMEOUT
         }
-        .addSetUp(SET_CUSTOM_ACTIONS_TIMEOUT) {
+        .add(SET_CUSTOM_ACTIONS_TIMEOUT) {
             UltronConfig.Espresso.ACTION_TIMEOUT =
                 MODIFIED_OPERATIONS_TIMEOUT
         }
-        .addTearDown(SET_DEFAULT_TIMEOUT) {
+    private val tearDownRule = TearDownRule()
+        .add(SET_DEFAULT_CONFIG) {
+            UltronConfig.Espresso.resultAnalyzer = UltronDefaultOperationResultAnalyzer()
+        }
+        .add(SET_DEFAULT_TIMEOUT) {
             UltronConfig.Espresso.ACTION_TIMEOUT = UltronConfig.Espresso.DEFAULT_ACTION_TIMEOUT
             UltronConfig.Espresso.ASSERTION_TIMEOUT =
                 UltronConfig.Espresso.DEFAULT_ASSERTION_TIMEOUT
         }
 
     init {
-        ruleSequence.add(setUpTearDownRule)
+        ruleSequence.add(setUpRule, tearDownRule)
     }
 
     @Test
@@ -117,7 +118,10 @@ class UltronEspressoConfigTest : UiElementsTest() {
     @Test
     fun withTimeout_assertion_default() {
         val default = UltronConfig.Espresso.DEFAULT_ASSERTION_TIMEOUT
-        AssertUtils.assertExecTimeBetween(default, default + 2_000) { page.notExistElement.isDisplayed() }
+        AssertUtils.assertExecTimeBetween(
+            default,
+            default + 2_000
+        ) { page.notExistElement.isDisplayed() }
     }
 
     @Test

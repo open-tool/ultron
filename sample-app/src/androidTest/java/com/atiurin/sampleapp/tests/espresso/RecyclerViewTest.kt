@@ -15,8 +15,9 @@ import com.atiurin.ultron.extensions.isDisplayed
 import com.atiurin.ultron.extensions.withTimeout
 import com.atiurin.ultron.recyclerview.withRecyclerView
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
-import com.atiurin.ultron.testlifecycle.setupteardown.SetUpTearDownRule
+import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
 import com.atiurin.ultron.testlifecycle.setupteardown.TearDown
+import com.atiurin.ultron.testlifecycle.setupteardown.TearDownRule
 import org.junit.Assert
 import org.junit.Test
 
@@ -25,15 +26,16 @@ class RecyclerViewTest : BaseTest() {
         const val CUSTOM_TIMEOUT = "CUSTOM_TIMEOUT"
     }
 
-    private val setUpTearDownRule = SetUpTearDownRule()
-        .addSetUp(CUSTOM_TIMEOUT) {
+    private val setUpRule = SetUpRule()
+        .add(CUSTOM_TIMEOUT) {
             MyApplication.CONTACTS_LOADING_TIMEOUT_MS = 6_000L
-        }.addTearDown(CUSTOM_TIMEOUT) {
-            MyApplication.CONTACTS_LOADING_TIMEOUT_MS = 500L
         }
+    private val tearDownRule = TearDownRule().add(CUSTOM_TIMEOUT) {
+        MyApplication.CONTACTS_LOADING_TIMEOUT_MS = 500L
+    }
 
     init {
-        ruleSequence.add(setUpTearDownRule).addLast(ActivityTestRule(MainActivity::class.java))
+        ruleSequence.add(setUpRule,tearDownRule).addLast(ActivityTestRule(MainActivity::class.java))
     }
 
     val page = FriendsListPage
