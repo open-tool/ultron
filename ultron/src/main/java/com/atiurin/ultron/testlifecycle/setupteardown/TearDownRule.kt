@@ -2,7 +2,7 @@ package com.atiurin.ultron.testlifecycle.setupteardown
 
 import org.junit.runner.Description
 
-class TearDownRule : ConditionRule() {
+class TearDownRule : ConditionRule(), RuleSequenceTearDown {
     override fun finished(description: Description) {
         val keys = mutableListOf<String>().apply { this.addAll(commonConditionKeys) }
         val method = description.testClass.getMethod(description.methodName)

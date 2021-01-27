@@ -127,13 +127,13 @@ class UltronUiObjectActionsTest: UiElementsTest() {
     //click
     @Test
     fun click_onClickable() {
-        page.button.click()
+        page.button.exists().click()
         page.eventStatus.textContains(TestDataUtils.getResourceString(R.string.button_event_click))
     }
 
     @Test
     fun click_withDuration_onClickable() {
-        page.button.click()
+        page.button.exists().click()
         page.eventStatus.textContains(TestDataUtils.getResourceString(R.string.button_event_click))
     }
 
@@ -144,7 +144,7 @@ class UltronUiObjectActionsTest: UiElementsTest() {
     //longClick
     @Test
     fun longClick_onLongClickable() {
-        page.button.longClick()
+        page.button.exists().longClick()
         page.eventStatus.textContains(getTargetString(R.string.button_event_long_click))
     }
 
@@ -199,25 +199,25 @@ class UltronUiObjectActionsTest: UiElementsTest() {
     //swipe
     @Test
     fun swipeUpTest(){
-        page.swipableImageView.swipeUp()
+        page.swipableImageView.exists().swipeUp()
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_UP.name)
     }
 
     @Test
     fun swipeDownTest(){
-        page.swipableImageView.swipeDown()
+        page.swipableImageView.exists().swipeDown()
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_DOWN.name)
     }
 
     @Test
     fun swipeRightTest(){
-        page.swipableImageView.swipeRight()
+        page.swipableImageView.exists().swipeRight()
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
     }
 
     @Test
     fun swipeLeftTest(){
-        page.swipableImageView.swipeLeft()
+        page.swipableImageView.exists().swipeLeft()
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_LEFT.name)
     }
 }

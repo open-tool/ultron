@@ -1,5 +1,6 @@
 package com.atiurin.ultron.testlifecycle.rulesequence
 
+import com.atiurin.ultron.testlifecycle.setupteardown.RuleSequenceTearDown
 import com.atiurin.ultron.testlifecycle.setupteardown.TearDownRule
 import org.junit.rules.TestRule
 import org.junit.runner.Description
@@ -37,21 +38,21 @@ class RuleSequence : TestRule {
 
     fun addFirst(vararg rules: TestRule) = apply {
         rules.forEach { rule ->
-            if (rule is TearDownRule) this.lastRules.add(RuleContainer(-firstRulesCounter.getAndIncrement(), rule))
+            if (rule is RuleSequenceTearDown) this.lastRules.add(RuleContainer(-firstRulesCounter.getAndIncrement(), rule))
             else this.firstRules.add(RuleContainer(firstRulesCounter.getAndIncrement(), rule))
         }
     }
 
     fun add(vararg rules: TestRule) = apply {
         rules.forEach { rule ->
-            if (rule is TearDownRule) this.rules.add(RuleContainer(-rulesCounter.getAndIncrement(), rule))
+            if (rule is RuleSequenceTearDown) this.rules.add(RuleContainer(-rulesCounter.getAndIncrement(), rule))
             else this.rules.add(RuleContainer(rulesCounter.getAndIncrement(), rule))
         }
     }
 
     fun addLast(vararg rules: TestRule) = apply {
         rules.forEach { rule ->
-            if (rule is TearDownRule) this.firstRules.add(RuleContainer(-lastRulesCounter.getAndIncrement(), rule))
+            if (rule is RuleSequenceTearDown) this.firstRules.add(RuleContainer(-lastRulesCounter.getAndIncrement(), rule))
             else this.lastRules.add(RuleContainer(lastRulesCounter.getAndIncrement(), rule))
         }
     }

@@ -322,25 +322,25 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
     //swipe
     @Test
     fun swipeUpTest(){
-        page.swipableImageView.swipeUp()
+        page.swipableImageView.isDisplayed().swipeUp()
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_UP.name)
     }
 
     @Test
     fun swipeDownTest(){
-        page.swipableImageView.swipeDown()
+        page.swipableImageView.isDisplayed().swipeDown()
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_DOWN.name)
     }
 
     @Test
     fun swipeRightTest(){
-        page.swipableImageView.swipeRight()
+        page.swipableImageView.isDisplayed().swipeRight()
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
     }
 
     @Test
     fun swipeLeftTest(){
-        page.swipableImageView.swipeLeft()
+        page.swipableImageView.isDisplayed().swipeLeft()
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_LEFT.name)
     }
 }
