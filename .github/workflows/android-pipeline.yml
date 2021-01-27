@@ -18,7 +18,7 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: 27
-        script: ./gradlew :app:connectedCheck --stacktrace
+        script: ./gradlew :sample-app:connectedCheck --stacktrace
         profile: Nexus 6
         
   run_tests_on_api_28:
@@ -31,7 +31,7 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: 28
-        script: ./gradlew :app:connectedCheck --stacktrace
+        script: ./gradlew :sample-app:connectedCheck --stacktrace
         profile: Nexus 6
         
   run_tests_on_api_29:
@@ -44,5 +44,5 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         api-level: 29
-        script: ./gradlew :app:connectedCheck --stacktrace
+        script: ./gradlew :sample-app:connectedCheck --stacktrace
         profile: Nexus 6
