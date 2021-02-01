@@ -18,7 +18,7 @@ Ultron can be easially customised and extended. Wish you only stable tests!
 - Stability of all actions and assertions
 - Full control under any action or assertion
 - An architectural approach to writing tests
-- Amazing mechanism of setups and teardowns (You even can setup preconditions for single test in test class. It won't affect the others))
+- Amazing mechanism of setups and teardowns (You even can setup preconditions for single test in test class. It won't affect the others)
 
 ## A few words about syntax
 
@@ -72,7 +72,7 @@ if (isButtonDisplayed) {
 withId(R.id.result).withTimeout(10_000).hasText("Passed")
 ```
 
-## 3 steps to write a test using Ultron
+## 3 steps to develop a test using Ultron
 
 I try to advocate the correct construction of the test framework architecture, the division of responsibilities between the layers and other correct things.
 

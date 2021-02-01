@@ -17,24 +17,26 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 ext {
-    bintrayRepo = 'android'
-    bintrayName = 'ultron'
+    Properties properties = new Properties()
+    File propertiesFile = project.rootProject.file('local.properties')
+    if (propertiesFile.exists()) {
+        properties.load(propertiesFile.newDataInputStream())
+    }
 
+    bintrayRepo = properties.getProperty("bintray.repo")
+    bintrayName = properties.getProperty("bintray.name")
+    bintrayUser = properties.getProperty("bintray.user")
+    bintrayKey = properties.getProperty("bintray.apikey")
     publishedGroupId = 'com.atiurin'
     libraryName = 'Ultron'
     artifact = 'ultron'
-
     libraryDescription = 'Ultron make it easy to write android UI tests.'
-
     siteUrl = 'https://github.com/alex-tiurin/ultron'
     gitUrl = 'https://github.com/alex-tiurin/ultron.git'
-
-    libraryVersion = '1.0.1'
-
-    developerId = 'alex-tiurin'
-    developerName = 'Aleksei Tiurin'
-    developerEmail = 'alexeytyurin74@gmail.com'
-
+    libraryVersion = '0.0.1'
+    developerId = properties.getProperty("maven.developerId")
+    developerName = properties.getProperty("maven.developerName")
+    developerEmail = properties.getProperty("maven.developerEmail")
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]
@@ -74,7 +76,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.recyclerview:recyclerview:${versions.recyclerview}"
     implementation "androidx.test:runner:${versions.test}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -138,20 +139,17 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+task testTask(){
+    println(bintrayRepo + "," + bintrayName + "," + developerId+ "," +developerName +"," +developerEmail)
+}
 artifacts {
     archives javadocJar
     archives sourcesJar
 }
 
 bintray {
-    Properties properties = new Properties()
-    File propertiesFile = project.rootProject.file('local.properties')
-    if (propertiesFile.exists()) {
-        properties.load(propertiesFile.newDataInputStream())
-    }
-
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+    user = bintrayUser
+    key = bintrayKey
 
     configurations = ['archives']
     pkg {
