@@ -98,7 +98,7 @@ object UltronConfig {
 
     class UiAutomator {
         companion object {
-            var UIAUTOMATOR_OPERATION_POLLING_TIMEOUT = 50L //ms
+            var UIAUTOMATOR_OPERATION_POLLING_TIMEOUT = 0L //ms
             var OPERATION_TIMEOUT = 5_000L
 
             var resultAnalyzer: OperationResultAnalyzer = UltronDefaultOperationResultAnalyzer()

@@ -1,20 +1,24 @@
-# Espresso page object
+# Ultron
 
 [![Download](https://api.bintray.com/packages/alex-tiurin/espresso-page-object/espressopageobject/images/download.svg)](https://bintray.com/alex-tiurin/espresso-page-object/espressopageobject/_latestVersion)
-![Android CI](https://github.com/alex-tiurin/espresso-page-object/workflows/AndroidCI/badge.svg)
+![Android CI](https://github.com/alex-tiurin/ultron/workflows/AndroidCI/badge.svg)
 
-This library provides access to nice and simple DSL for **Espresso** framework. It allows you to write simple and stable UI tests for Android application.
+Ultron is an easiest framework to develop Android UI tests. It makes your tests stable, short and understandable.
+It's based on Espresso and UI Automator and it provides a lot of new great features.
+Ultron also gives you a full control under your tests!
+
 Moreover, you don't need to learn any new classes or special syntax. All magic actions and assertions are provided from crunch.
-Library can be easy customised and extended by advanced user. Wish you only stable tests!
+Ultron can be easially customised and extended. Wish you only stable tests!
 
-## Russian README is [here](https://github.com/alex-tiurin/espresso-page-object/blob/master/README_RU.md)
+![logo](https://user-images.githubusercontent.com/12834123/106507974-d8558c80-64dc-11eb-975b-ea76ddb27a37.png)
 
-## What are the benefits of using the library?
+## What are the benefits of using the framework?
 
 - Simple and presentative syntax
 - Stability of all actions and assertions
-- Full control under any action and assertion
+- Full control under any action or assertion
 - An architectural approach to writing tests
+- Amazing mechanism of setups and teardowns (You even can setup preconditions for single test in test class. It won't affect the others))
 
 ## A few words about syntax
 
@@ -29,7 +33,7 @@ _1. Click on simple button._
 ```kotlin
 onView(withId(R.id.send_button)).perform(click())
 ```
-**Espresso page object**
+**Ultron**
 ```kotlin
 withId(R.id.send_button).click()
 ```
@@ -48,9 +52,9 @@ onView(withId(R.id.recycler_friends))
             )
         )
 ```
-**Espresso page object**
+**Ultron**
 ```kotlin
-withRecyclerView(withId(R.id.recycler_friends))
+withRecyclerView(R.id.recycler_friends)
     .atItem(hasDescendant(withText("Janice")))
     .click()
 ```
@@ -62,29 +66,17 @@ if (isButtonDisplayed) {
     //do some reasonable actions
 }
 ```
-### You can get the result of any operation and process it by yourself
+### You can customise a timeout of any operation
 
 ```kotlin
-val isButtonDisplayed = withId(R.id.button).click { result ->
-    success = result.success
-    exception = result.exception
-    description = result.resultDescription
-}
+withId(R.id.result).withTimeout(10_000).hasText("Passed")
 ```
 
-## Cool features
-
--  [How to interact with RecyclerView](https://github.com/alex-tiurin/espresso-page-object/blob/master/wiki/en/recyclerview.md)
--  [AdapterView and onData](https://github.com/alex-tiurin/espresso-page-object/blob/master/wiki/en/adapterview.md)
--  [How we reduce flakiness of all actions and assertions](https://github.com/alex-tiurin/espresso-page-object/blob/master/wiki/en/operations_stability.md)
--  [Lifecycle listener. Listen all operations and their results.](https://github.com/alex-tiurin/espresso-page-object/blob/master/wiki/en/lifecycle_listener.md)
--  [RuleSequence + SetUpTearDownRule. Full control under your tests](https://github.com/alex-tiurin/espresso-page-object/blob/master/wiki/en/rulesequence_setupterdownrule.md)
-
-## 3 steps to write a test using espresso-page-object
+## 3 steps to write a test using Ultron
 
 I try to advocate the correct construction of the test framework architecture, the division of responsibilities between the layers and other correct things.
 
-Therefore, I would like to recommend the following approach when your are using the library.
+Therefore, I would like to recommend the following approach when your are using Ultron.
 
 1. Create a PageObject class and specify screen UI elements `Matcher<View>`.
 
@@ -94,16 +86,6 @@ object ChatPage : Page<ChatPage>() {
     private val clearHistoryBtn = withText("Clear history")
     private val inputMessageText = withId(R.id.message_input_text)
     private val sendMessageBtn = withId(R.id.send_button)
-}
-```
-Some elements like chat title could be determined dynamically with application data.
-In this case you need to add a method in PageObject class which will return `Matcher<View>` object.
-
-```kotlin
-object ChatPage : Page<ChatPage>() {
-    private fun getTitle(title: String): Matcher<View> {
-        return allOf(withId(R.id.toolbar_title), withText(title))
-    }
 }
 ```
 
@@ -117,18 +99,18 @@ object ChatPage : Page<ChatPage>() {
     fun sendMessage(text: String) = apply {
         inputMessageText.typeText(text)
         sendMessageBtn.click()
-        this.getListItem(text).text
-            .isDisplayed()
-            .hasText(text)
+        this.getMessageListItem(text).text
+             .isDisplayed()
+             .hasText(text)
     }
 
     fun clearHistory() = apply {
-        openOptionsMenu()
+        openContextualActionModeOverflowMenu()
         clearHistoryBtn.click()
     }
 }
 ```
-Full code sample [ChatPage.class](https://github.com/alex-tiurin/espresso-page-object/blob/master/app/src/androidTest/java/com/atiurin/espressopageobjectexample/pages/ChatPage.kt)
+Full code sample [ChatPage.class](https://github.com/alex-tiurin/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/pages/ChatPage.kt)
 
 3. Call user steps in test
 
@@ -149,10 +131,6 @@ Full code sample [ChatPage.class](https://github.com/alex-tiurin/espresso-page-o
         }
     }
 ```
-
-Full code sample [DemoEspressoTest](https://github.com/alex-tiurin/espresso-page-object/blob/master/app/src/androidTest/java/com/atiurin/espressopageobjectexample/tests/DemoEspressoTest.kt)
-
-Use RuleSequence + SetUpTearDownRule to prepare test data.
 
 In general, it all comes down to the fact that the architecture of your project will look like this.
 
@@ -178,9 +156,6 @@ Maven
   <type>pom</type>
 </dependency>
 ```
-
-Version 0.1.17 has a new internal structure and you need to make minor changes in your project to migrate on it.
-Read more info [Migration to 0.1.17](https://github.com/alex-tiurin/espresso-page-object/wiki/Migration-to-0.1.17)
 
 ## AndroidX
 

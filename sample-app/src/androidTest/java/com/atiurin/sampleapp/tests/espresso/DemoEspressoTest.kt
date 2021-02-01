@@ -36,7 +36,6 @@ class DemoEspressoTest : BaseTest() {
     @SetUp(SECOND_CONDITION)
     @Test
     fun sendMessage() {
-        Log.info("Start test sendMessage")
         FriendsListPage.openChat("Chandler Bing")
         ChatPage
             .clearHistory()

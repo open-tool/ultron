@@ -16,7 +16,7 @@ abstract class UiElementsTest : BaseTest() {
         @BeforeClass
         @JvmStatic
         fun speedUpAutomator() {
-            UltronConfig.UiAutomator.speedUp()
+//            UltronConfig.UiAutomator.speedUp()
         }
     }
 }
