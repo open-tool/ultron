@@ -14,8 +14,4 @@ jobs:
       uses: actions/checkout@v2
 
     - name: run ui tests
-      uses: reactivecircus/android-emulator-runner@v2
-      with:
-        api-level: 29
-        script: ./gradlew :sample-app:connectedCheck --stacktrace
-        profile: Nexus 6
+      run: ./gradlew :ultron:compileDebugKotlin

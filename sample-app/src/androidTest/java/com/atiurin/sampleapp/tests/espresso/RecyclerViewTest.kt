@@ -177,7 +177,7 @@ class RecyclerViewTest : BaseTest() {
     @Test
     @SetUp(CUSTOM_TIMEOUT)
     @TearDown(CUSTOM_TIMEOUT)
-    fun itemMatcher_autoScroll_false_custom_timeout() {
+    fun itemMatcher_autoScroll_false() {
         AssertUtils.assertException {
             page.friendsRecycler.item(
                 hasDescendant(withText("Friend14")),

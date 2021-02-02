@@ -1,6 +1,6 @@
 # Ultron
 
-[![Download](https://api.bintray.com/packages/alex-tiurin/espresso-page-object/espressopageobject/images/download.svg)](https://bintray.com/alex-tiurin/espresso-page-object/espressopageobject/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/alex-tiurin/android/ultron/images/download.svg) ](https://bintray.com/alex-tiurin/android/ultron/_latestVersion)
 ![Android CI](https://github.com/alex-tiurin/ultron/workflows/AndroidCI/badge.svg)
 
 Ultron is an easiest framework to develop Android UI tests. It makes your tests stable, short and understandable.
@@ -131,6 +131,7 @@ Full code sample [ChatPage.class](https://github.com/alex-tiurin/ultron/blob/mas
         }
     }
 ```
+Full code sample [DemoEspressoTest.class](https://github.com/alex-tiurin/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/espresso/DemoEspressoTest.kt)
 
 In general, it all comes down to the fact that the architecture of your project will look like this.
 
@@ -144,17 +145,8 @@ repositories {
 }
 
 dependencies {
-    androidTestImplementation 'com.atiurin.espresso:espressopageobject:0.1.19'
+    androidTestImplementation 'com.atiurin:ultron:0.0.2'
 }
-```
-Maven
-```
-<dependency>
-  <groupId>com.atiurin.espresso</groupId>
-  <artifactId>espressopageobject</artifactId>
-  <version>0.1.19</version>
-  <type>pom</type>
-</dependency>
 ```
 
 ## AndroidX

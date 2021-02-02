@@ -32,8 +32,8 @@ ext {
     artifact = 'ultron'
     libraryDescription = 'Ultron make it easy to write android UI tests.'
     siteUrl = 'https://github.com/alex-tiurin/ultron'
-    gitUrl = 'https://github.com/alex-tiurin/ultron.git'
-    libraryVersion = '0.0.1'
+    gitUrl  = 'https://github.com/alex-tiurin/ultron.git'
+    libraryVersion = '0.0.2'
     developerId = properties.getProperty("maven.developerId")
     developerName = properties.getProperty("maven.developerName")
     developerEmail = properties.getProperty("maven.developerEmail")
@@ -139,9 +139,6 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
-task testTask(){
-    println(bintrayRepo + "," + bintrayName + "," + developerId+ "," +developerName +"," +developerEmail)
-}
 artifacts {
     archives javadocJar
     archives sourcesJar
