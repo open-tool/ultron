@@ -6,7 +6,7 @@ import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.exceptions.UltronWrapperException
 
-abstract class WebOperationExecutor<T : Operation>(
+internal abstract class WebOperationExecutor<T : Operation>(
     override val operation: T
 ) : OperationExecutor<T, WebOperationResult<T>> {
     override val pollingTimeout: Long

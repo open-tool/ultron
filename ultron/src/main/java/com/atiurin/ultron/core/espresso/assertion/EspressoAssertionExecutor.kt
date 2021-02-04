@@ -5,7 +5,7 @@ import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.EspressoOperationExecutor
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 
-open class EspressoAssertionExecutor(
+internal class EspressoAssertionExecutor(
     operation: UltronEspressoOperation
 ) : EspressoOperationExecutor<UltronEspressoOperation>(operation){
     override fun getAllowedExceptions(operation: Operation): List<Class<out Throwable>> {
