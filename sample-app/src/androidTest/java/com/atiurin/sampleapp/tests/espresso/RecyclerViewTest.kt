@@ -30,12 +30,14 @@ class RecyclerViewTest : BaseTest() {
         .add(CUSTOM_TIMEOUT) {
             MyApplication.CONTACTS_LOADING_TIMEOUT_MS = 6_000L
         }
-    private val tearDownRule = TearDownRule().add(CUSTOM_TIMEOUT) {
-        MyApplication.CONTACTS_LOADING_TIMEOUT_MS = 500L
-    }
+    private val tearDownRule = TearDownRule()
+        .add(CUSTOM_TIMEOUT) {
+            MyApplication.CONTACTS_LOADING_TIMEOUT_MS = 500L
+        }
 
     init {
-        ruleSequence.add(setUpRule,tearDownRule).addLast(ActivityTestRule(MainActivity::class.java))
+        ruleSequence.add(setUpRule, tearDownRule)
+            .addLast(ActivityTestRule(MainActivity::class.java))
     }
 
     val page = FriendsListPage

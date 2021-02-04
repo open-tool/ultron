@@ -9,7 +9,7 @@ import androidx.test.espresso.web.model.WindowReference
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espressoweb.WebLifecycle
+import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
 import com.atiurin.ultron.core.espressoweb.operation.*
 import com.atiurin.ultron.exceptions.UltronException
 import org.hamcrest.Matcher
@@ -37,7 +37,7 @@ class UltronWebDocument {
                 UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Void>>) -> Unit
         ) {
             val webViewInteraction = Web.onWebView(webViewMatcher)
-            WebLifecycle.execute(
+            UltronWebLifecycle.execute(
                 WebInteractionOperationExecutor(
                     WebInteractionOperation(
                         webInteractionBlock = { webViewInteraction.forceJavascriptEnabled() },
@@ -64,7 +64,7 @@ class UltronWebDocument {
             val webViewInteraction =
                 if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
                 else Web.onWebView(webViewMatcher)
-            WebLifecycle.execute(
+            UltronWebLifecycle.execute(
                 WebInteractionOperationExecutor(
                     WebInteractionOperation(
                         webInteractionBlock = { webViewInteraction.perform(Atoms.script(script)) },
@@ -90,7 +90,7 @@ class UltronWebDocument {
             val webViewInteraction =
                 if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
                 else Web.onWebView(webViewMatcher)
-            WebLifecycle.execute(
+            UltronWebLifecycle.execute(
                 WebInteractionOperationExecutor(
                     WebInteractionOperation(
                         webInteractionBlock = {
@@ -117,7 +117,7 @@ class UltronWebDocument {
             val webViewInteraction =
                 if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
                 else Web.onWebView(webViewMatcher)
-            val result = WebLifecycle.execute(
+            val result = UltronWebLifecycle.execute(
                 WebInteractionOperationExecutor(
                     WebInteractionOperation(
                         webInteractionBlock = { webViewInteraction.perform(DriverAtoms.selectActiveElement()) },
@@ -145,7 +145,7 @@ class UltronWebDocument {
             val webViewInteraction =
                 if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
                 else Web.onWebView(webViewMatcher)
-            val result = WebLifecycle.execute(
+            val result = UltronWebLifecycle.execute(
                 WebInteractionOperationExecutor(
                     WebInteractionOperation(
                         webInteractionBlock = {
@@ -180,7 +180,7 @@ class UltronWebDocument {
             val webViewInteraction =
                 if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
                 else Web.onWebView(webViewMatcher)
-            val result = WebLifecycle.execute(
+            val result = UltronWebLifecycle.execute(
                 WebInteractionOperationExecutor(
                     WebInteractionOperation(
                         webInteractionBlock = {
@@ -215,7 +215,7 @@ class UltronWebDocument {
             val webViewInteraction =
                 if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
                 else Web.onWebView(webViewMatcher)
-            val result = WebLifecycle.execute(
+            val result = UltronWebLifecycle.execute(
                 WebInteractionOperationExecutor(
                     WebInteractionOperation(
                         webInteractionBlock = {
@@ -250,7 +250,7 @@ class UltronWebDocument {
             val webViewInteraction =
                 if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
                 else Web.onWebView(webViewMatcher)
-            val result = WebLifecycle.execute(
+            val result = UltronWebLifecycle.execute(
                 WebInteractionOperationExecutor(
                     WebInteractionOperation(
                         webInteractionBlock = {

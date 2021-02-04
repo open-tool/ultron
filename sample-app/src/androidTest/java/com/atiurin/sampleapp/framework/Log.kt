@@ -1,5 +1,6 @@
 package com.atiurin.sampleapp.framework
 
+import android.os.SystemClock
 import android.util.Log
 
 object Log {
@@ -8,4 +9,10 @@ object Log {
     fun debug(message: String) = Log.d(LOG_TAG, message)
     fun error(message: String) = Log.e(LOG_TAG, message)
     fun warn(message: String) = Log.w(LOG_TAG, message)
+    fun <R> time(desc: String, block: () -> R) : R{
+        val startTime = SystemClock.elapsedRealtime()
+        val result = block()
+        debug("$desc duration ${SystemClock.elapsedRealtime() - startTime} ms")
+        return result
+    }
 }

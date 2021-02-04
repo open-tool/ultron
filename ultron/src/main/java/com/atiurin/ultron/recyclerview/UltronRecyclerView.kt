@@ -28,7 +28,7 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>) {
     ) = UltronRecyclerViewItem.getInstance<T>(this, itemMatcher, autoScroll, scrollTimeoutMs)
 
     /**
-     * @param timeoutMs of item waiting
+     * @param scrollTimeoutMs of item waiting
      */
     inline fun <reified T : UltronRecyclerViewItem> getItem(
         itemPosition: Int,

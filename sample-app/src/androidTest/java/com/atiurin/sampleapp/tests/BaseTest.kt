@@ -12,9 +12,6 @@ import org.junit.BeforeClass
 import org.junit.Rule
 
 abstract class BaseTest {
-
-    private val idlingRes = ContactsIdlingResource.getInstanceFromTest()
-
     val setupRule = SetUpRule()
         .add {
             Log.info("Login valid user")

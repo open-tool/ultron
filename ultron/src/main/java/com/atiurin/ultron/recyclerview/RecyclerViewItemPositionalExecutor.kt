@@ -14,14 +14,16 @@ class RecyclerViewItemPositionalExecutor(
 ) : RecyclerViewItemExecutor {
 
     init {
-        if (position < 0){
+        if (position < 0) {
             throw UltronException("Position value can't be negative: '$position'")
         }
     }
+
     override fun scrollToItem() {
         ultronRecyclerView.assertHasItemAtPosition(position, scrollTimeoutMs)
         ultronRecyclerView.recyclerViewMatcher.withTimeout(scrollTimeoutMs).perform(
-            RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(position)
+            viewAction = RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(position),
+            description = "RecyclerViewActions scrollToPosition $position"
         )
     }
 

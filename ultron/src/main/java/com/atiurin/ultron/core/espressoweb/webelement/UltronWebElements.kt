@@ -8,7 +8,7 @@ import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espressoweb.WebLifecycle
+import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
 import com.atiurin.ultron.core.espressoweb.operation.*
 import org.hamcrest.Matcher
 
@@ -63,7 +63,7 @@ class UltronWebElements(
         locator: Locator,
         matcher: String
     ): List<ElementReference> {
-        val result = WebLifecycle.execute(
+        val result = UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = {

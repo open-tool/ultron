@@ -13,7 +13,7 @@ import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espressoweb.WebLifecycle
+import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
 import com.atiurin.ultron.core.espressoweb.operation.*
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.methodToBoolean
@@ -72,7 +72,7 @@ open class UltronWebElement internal constructor(
     /** Clears content from an editable element. */
     fun clearElement(
     ) = apply {
-        val result = WebLifecycle.execute(
+        val result = UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = { webInteractionBlock().perform(DriverAtoms.clearElement()) },
@@ -88,7 +88,7 @@ open class UltronWebElement internal constructor(
     /** Returns the visible text beneath a given DOM element. */
     fun getText(
     ): String {
-        val result = WebLifecycle.execute(
+        val result = UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = { webInteractionBlock().perform(DriverAtoms.getText()) },
@@ -106,7 +106,7 @@ open class UltronWebElement internal constructor(
     /** Simulates the javascript events to click on a particular element. */
     fun webClick(
     ) = apply {
-        WebLifecycle.execute(
+        UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = {
@@ -125,7 +125,7 @@ open class UltronWebElement internal constructor(
     fun webKeys(
         text: String
     ) = apply {
-        WebLifecycle.execute(
+        UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = {
@@ -144,7 +144,7 @@ open class UltronWebElement internal constructor(
     fun replaceText(
         text: String
     ) = apply {
-        WebLifecycle.execute(
+        UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = {
@@ -164,7 +164,7 @@ open class UltronWebElement internal constructor(
     /** Returns {@code true} if the desired element is in view after scrolling. */
     fun webScrollIntoViewBoolean(
     ) : Boolean{
-        val result = WebLifecycle.execute(
+        val result = UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = { webInteractionBlock().perform(DriverAtoms.webScrollIntoView()) },
@@ -181,7 +181,7 @@ open class UltronWebElement internal constructor(
 
     /** Returns {@code true} if the desired element is in view after scrolling. */
     fun webScrollIntoView() = apply {
-        val result = WebLifecycle.execute(
+        val result = UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = { webInteractionBlock().perform(DriverAtoms.webScrollIntoView()) },
@@ -198,7 +198,7 @@ open class UltronWebElement internal constructor(
     fun containsText(
         text: String
     ) = apply {
-        WebLifecycle.execute(
+        UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = {
@@ -219,7 +219,7 @@ open class UltronWebElement internal constructor(
     fun hasText(
         text: String
     ) = apply {
-        WebLifecycle.execute(
+        UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = {
@@ -239,7 +239,7 @@ open class UltronWebElement internal constructor(
     /** Asserts that element exists in webView */
     fun exists(
     ) = apply {
-        WebLifecycle.execute(
+        UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = {
@@ -259,7 +259,7 @@ open class UltronWebElement internal constructor(
         attributeValueMatcher: Matcher<String>,
         documentMatcher: Matcher<Document>
     ) = apply {
-        WebLifecycle.execute(
+        UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = {
@@ -283,7 +283,7 @@ open class UltronWebElement internal constructor(
     fun <T> assertThat(
         webAssertion: WebAssertion<T>
     ) = apply {
-        WebLifecycle.execute(
+        UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = {

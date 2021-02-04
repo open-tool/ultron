@@ -15,7 +15,8 @@ class RecyclerViewItemMatchingExecutor(
     override fun scrollToItem() {
         //TODO work around this trade off
         ultronRecyclerView.recyclerViewMatcher.withTimeout(scrollTimeoutMs).perform(
-            RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(itemViewMatcher)
+            viewAction = RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(itemViewMatcher),
+            description = "RecyclerViewActions scrollTo $itemViewMatcher"
         )
     }
 

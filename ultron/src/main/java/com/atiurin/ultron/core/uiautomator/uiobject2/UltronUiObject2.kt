@@ -921,7 +921,7 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit
     ) {
-        UiAutomatorLifecycle.execute(
+        UltronUiAutomatorLifecycle.execute(
             UiAutomatorBySelectorActionExecutor(
                 UiAutomatorBySelectorAction(
                     actionBlock = actionBlock,
@@ -943,7 +943,7 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit
     ) {
-        UiAutomatorLifecycle.execute(
+        UltronUiAutomatorLifecycle.execute(
             UiAutomatorBySelectorAssertionExecutor(
                 UiAutomatorBySelectorAssertion(
                     assertionBlock = assertionBlock,

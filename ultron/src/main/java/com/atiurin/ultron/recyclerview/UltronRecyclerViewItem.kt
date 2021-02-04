@@ -1,5 +1,7 @@
 package com.atiurin.ultron.recyclerview
 
+import android.os.SystemClock
+import android.util.Log
 import android.view.View
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
@@ -31,7 +33,7 @@ open class UltronRecyclerViewItem {
         autoScroll: Boolean = true,
         scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
     ) {
-        setExecutor(ultronRecyclerView, itemViewMatcher, scrollTimeoutMs)
+        setExecutor(ultronRecyclerView, itemViewMatcher , scrollTimeoutMs)
         if (autoScroll) scrollToItem()
     }
 
@@ -148,7 +150,7 @@ open class UltronRecyclerViewItem {
             autoScroll: Boolean = true,
             scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
         ): T {
-            val item = T::class.constructors.find { it.parameters.isEmpty() }?.call()!!
+            val item = T::class.java.newInstance()
             item.setExecutor(ultronRecyclerView, itemViewMatcher, scrollTimeoutMs)
             if (autoScroll) item.scrollToItem()
             return item
@@ -160,7 +162,7 @@ open class UltronRecyclerViewItem {
             autoScroll: Boolean = true,
             scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
         ): T {
-            val item = T::class.constructors.find { it.parameters.isEmpty() }?.call()!!
+            val item = T::class.java.newInstance()
             item.setExecutor(ultronRecyclerView, position, scrollTimeoutMs)
             if (autoScroll) item.scrollToItem()
             return item

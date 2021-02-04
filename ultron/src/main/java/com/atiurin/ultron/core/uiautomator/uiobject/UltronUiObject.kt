@@ -739,7 +739,7 @@ class UltronUiObject internal constructor(
         timeoutMs: Long,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
     ) {
-        UiAutomatorLifecycle.execute(
+        UltronUiAutomatorLifecycle.execute(
             UiAutomatorUiSelectorOperationExecutor(
                 UiAutomatorUiSelectorOperation(
                     operationBlock = operationBlock,

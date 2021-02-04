@@ -94,7 +94,7 @@ object UltronEspresso {
         operation: UltronEspressoOperation,
         resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = UltronConfig.Espresso.ViewActionConfig.resultHandler
     ) {
-        EspressoOperationLifecycle.execute(EspressoActionExecutor(operation), resultHandler)
+        UltronEspressoOperationLifecycle.execute(EspressoActionExecutor(operation), resultHandler)
     }
 
     /**
@@ -104,6 +104,6 @@ object UltronEspresso {
         operation: UltronEspressoOperation,
         resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = UltronConfig.Espresso.ViewAssertionConfig.resultHandler
     ) {
-        EspressoOperationLifecycle.execute(EspressoAssertionExecutor(operation), resultHandler)
+        UltronEspressoOperationLifecycle.execute(EspressoAssertionExecutor(operation), resultHandler)
     }
 }
