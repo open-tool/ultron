@@ -6,7 +6,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.EspressoKey
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
-import com.atiurin.ultron.core.espresso.UltronInteraction
+import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import org.hamcrest.Matcher
 
 fun DataInteraction.isSuccess(
@@ -20,56 +20,56 @@ fun DataInteraction.isSuccess(
     }
     return success
 }
-fun DataInteraction.withTimeout(timeoutMs: Long) = UltronInteraction(this).withTimeout(timeoutMs)
-fun DataInteraction.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) = UltronInteraction(this).withResultHandler(resultHandler)
+fun DataInteraction.withTimeout(timeoutMs: Long) = UltronEspressoInteraction(this).withTimeout(timeoutMs)
+fun DataInteraction.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) = UltronEspressoInteraction(this).withResultHandler(resultHandler)
 //actions
-fun DataInteraction.click() = UltronInteraction(this).click()
-fun DataInteraction.doubleClick() = UltronInteraction(this).doubleClick()
-fun DataInteraction.longClick() = UltronInteraction(this).longClick()
-fun DataInteraction.typeText(text: String) = UltronInteraction(this).typeText(text)
-fun DataInteraction.replaceText(text: String) = UltronInteraction(this).replaceText(text)
-fun DataInteraction.clearText() = UltronInteraction(this).clearText()
-fun DataInteraction.pressKey(keyCode: Int) = UltronInteraction(this).pressKey(keyCode)
-fun DataInteraction.pressKey(key: EspressoKey) = UltronInteraction(this).pressKey(key)
-fun DataInteraction.closeSoftKeyboard() = UltronInteraction(this).closeSoftKeyboard()
-fun DataInteraction.swipeLeft() = UltronInteraction(this).swipeLeft()
-fun DataInteraction.swipeRight() = UltronInteraction(this).swipeRight()
-fun DataInteraction.swipeUp() = UltronInteraction(this).swipeUp()
-fun DataInteraction.swipeDown() = UltronInteraction(this).swipeDown()
-fun DataInteraction.scrollTo() = UltronInteraction(this).scrollTo()
-fun DataInteraction.perform(viewAction: ViewAction) = UltronInteraction(this).perform(viewAction)
+fun DataInteraction.click() = UltronEspressoInteraction(this).click()
+fun DataInteraction.doubleClick() = UltronEspressoInteraction(this).doubleClick()
+fun DataInteraction.longClick() = UltronEspressoInteraction(this).longClick()
+fun DataInteraction.typeText(text: String) = UltronEspressoInteraction(this).typeText(text)
+fun DataInteraction.replaceText(text: String) = UltronEspressoInteraction(this).replaceText(text)
+fun DataInteraction.clearText() = UltronEspressoInteraction(this).clearText()
+fun DataInteraction.pressKey(keyCode: Int) = UltronEspressoInteraction(this).pressKey(keyCode)
+fun DataInteraction.pressKey(key: EspressoKey) = UltronEspressoInteraction(this).pressKey(key)
+fun DataInteraction.closeSoftKeyboard() = UltronEspressoInteraction(this).closeSoftKeyboard()
+fun DataInteraction.swipeLeft() = UltronEspressoInteraction(this).swipeLeft()
+fun DataInteraction.swipeRight() = UltronEspressoInteraction(this).swipeRight()
+fun DataInteraction.swipeUp() = UltronEspressoInteraction(this).swipeUp()
+fun DataInteraction.swipeDown() = UltronEspressoInteraction(this).swipeDown()
+fun DataInteraction.scrollTo() = UltronEspressoInteraction(this).scrollTo()
+fun DataInteraction.perform(viewAction: ViewAction) = UltronEspressoInteraction(this).perform(viewAction)
 
 //assertions
-fun DataInteraction.isDisplayed() = UltronInteraction(this).isDisplayed()
-fun DataInteraction.isNotDisplayed() = UltronInteraction(this).isNotDisplayed()
-fun DataInteraction.doesNotExist() = UltronInteraction(this).doesNotExist()
-fun DataInteraction.isCompletelyDisplayed() = UltronInteraction(this).isCompletelyDisplayed()
+fun DataInteraction.isDisplayed() = UltronEspressoInteraction(this).isDisplayed()
+fun DataInteraction.isNotDisplayed() = UltronEspressoInteraction(this).isNotDisplayed()
+fun DataInteraction.doesNotExist() = UltronEspressoInteraction(this).doesNotExist()
+fun DataInteraction.isCompletelyDisplayed() = UltronEspressoInteraction(this).isCompletelyDisplayed()
 fun DataInteraction.isDisplayingAtLeast(percentage: Int) =
-    UltronInteraction(this).isDisplayingAtLeast(percentage)
-fun DataInteraction.isEnabled() = UltronInteraction(this).isEnabled()
-fun DataInteraction.isNotEnabled() = UltronInteraction(this).isNotEnabled()
-fun DataInteraction.isSelected() = UltronInteraction(this).isSelected()
-fun DataInteraction.isNotSelected() = UltronInteraction(this).isNotSelected()
-fun DataInteraction.isClickable() = UltronInteraction(this).isClickable()
-fun DataInteraction.isNotClickable() = UltronInteraction(this).isNotClickable()
-fun DataInteraction.isChecked() = UltronInteraction(this).isChecked()
-fun DataInteraction.isNotChecked() = UltronInteraction(this).isNotChecked()
-fun DataInteraction.isFocusable() = UltronInteraction(this).isFocusable()
-fun DataInteraction.isNotFocusable() = UltronInteraction(this).isNotFocusable()
-fun DataInteraction.hasFocus() = UltronInteraction(this).hasFocus()
-fun DataInteraction.isJavascriptEnabled() = UltronInteraction(this).isJavascriptEnabled()
-fun DataInteraction.hasText(text: String) = UltronInteraction(this).hasText(text)
-fun DataInteraction.hasText(resourceId: Int) = UltronInteraction(this).hasText(resourceId)
+    UltronEspressoInteraction(this).isDisplayingAtLeast(percentage)
+fun DataInteraction.isEnabled() = UltronEspressoInteraction(this).isEnabled()
+fun DataInteraction.isNotEnabled() = UltronEspressoInteraction(this).isNotEnabled()
+fun DataInteraction.isSelected() = UltronEspressoInteraction(this).isSelected()
+fun DataInteraction.isNotSelected() = UltronEspressoInteraction(this).isNotSelected()
+fun DataInteraction.isClickable() = UltronEspressoInteraction(this).isClickable()
+fun DataInteraction.isNotClickable() = UltronEspressoInteraction(this).isNotClickable()
+fun DataInteraction.isChecked() = UltronEspressoInteraction(this).isChecked()
+fun DataInteraction.isNotChecked() = UltronEspressoInteraction(this).isNotChecked()
+fun DataInteraction.isFocusable() = UltronEspressoInteraction(this).isFocusable()
+fun DataInteraction.isNotFocusable() = UltronEspressoInteraction(this).isNotFocusable()
+fun DataInteraction.hasFocus() = UltronEspressoInteraction(this).hasFocus()
+fun DataInteraction.isJavascriptEnabled() = UltronEspressoInteraction(this).isJavascriptEnabled()
+fun DataInteraction.hasText(text: String) = UltronEspressoInteraction(this).hasText(text)
+fun DataInteraction.hasText(resourceId: Int) = UltronEspressoInteraction(this).hasText(resourceId)
 fun DataInteraction.hasText(stringMatcher: Matcher<String>) =
-    UltronInteraction(this).hasText(stringMatcher)
-fun DataInteraction.textContains(text: String) = UltronInteraction(this).textContains(text)
+    UltronEspressoInteraction(this).hasText(stringMatcher)
+fun DataInteraction.textContains(text: String) = UltronEspressoInteraction(this).textContains(text)
 fun DataInteraction.hasContentDescription(text: String) =
-    UltronInteraction(this).hasContentDescription(text)
+    UltronEspressoInteraction(this).hasContentDescription(text)
 fun DataInteraction.hasContentDescription(resourceId: Int) =
-    UltronInteraction(this).hasContentDescription(resourceId)
+    UltronEspressoInteraction(this).hasContentDescription(resourceId)
 fun DataInteraction.hasContentDescription(charSequenceMatcher: Matcher<CharSequence>) =
-    UltronInteraction(this).hasContentDescription(charSequenceMatcher)
+    UltronEspressoInteraction(this).hasContentDescription(charSequenceMatcher)
 fun DataInteraction.contentDescriptionContains(text: String) =
-    UltronInteraction(this).contentDescriptionContains(text)
+    UltronEspressoInteraction(this).contentDescriptionContains(text)
 fun DataInteraction.assertMatches(condition: Matcher<View>) =
-    UltronInteraction(this).assertMatches(condition)
+    UltronEspressoInteraction(this).assertMatches(condition)

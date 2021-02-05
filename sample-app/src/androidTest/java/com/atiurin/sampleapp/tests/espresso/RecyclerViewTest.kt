@@ -196,7 +196,7 @@ class RecyclerViewTest : BaseTest() {
     @SetUp(CUSTOM_TIMEOUT)
     @TearDown(CUSTOM_TIMEOUT)
     fun itemMatcher_autoScroll_true_custom_timeout() {
-        page.friendsRecycler.item(hasDescendant(withText("Friend14")), scrollTimeoutMs = 8000)
+        page.friendsRecycler.item(hasDescendant(withText("Friend14")), scrollTimeoutMs = 10_000)
             .isDisplayed()
     }
 }

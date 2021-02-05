@@ -19,7 +19,7 @@ import com.atiurin.ultron.extensions.getViewMatcher
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 
-class UltronInteraction<T>(
+class UltronEspressoInteraction<T>(
     private val interaction: T,
     private val timeoutMs: Long? = null,
     private val resultHandler: ((EspressoOperationResult<UltronEspressoOperation>) -> Unit)? = null
@@ -30,12 +30,12 @@ class UltronInteraction<T>(
         )
     }
 
-    fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit): UltronInteraction<T> {
-        return UltronInteraction(this.interaction, this.timeoutMs, resultHandler)
+    fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit): UltronEspressoInteraction<T> {
+        return UltronEspressoInteraction(this.interaction, this.timeoutMs, resultHandler)
     }
 
-    fun withTimeout(timeoutMs: Long): UltronInteraction<T> {
-        return UltronInteraction(this.interaction, timeoutMs, this.resultHandler)
+    fun withTimeout(timeoutMs: Long): UltronEspressoInteraction<T> {
+        return UltronEspressoInteraction(this.interaction, timeoutMs, this.resultHandler)
     }
 
     fun click() = apply {
@@ -605,7 +605,7 @@ class UltronInteraction<T>(
         )
     }
 
-    private fun getInteractionActionBlock(viewAction: ViewAction): () -> Unit {
+    fun getInteractionActionBlock(viewAction: ViewAction): () -> Unit {
         return when (interaction) {
             is ViewInteraction -> {
                 { interaction.perform(viewAction) }
@@ -617,7 +617,7 @@ class UltronInteraction<T>(
         }
     }
 
-    private fun getInteractionAssertionBlock(matcher: Matcher<View>): () -> Unit {
+    fun getInteractionAssertionBlock(matcher: Matcher<View>): () -> Unit {
         return when (interaction) {
             is ViewInteraction -> {
                 { interaction.check(matches(matcher)) }
@@ -629,7 +629,7 @@ class UltronInteraction<T>(
         }
     }
 
-    private fun getInteractionAssertionBlock(assertion: ViewAssertion): () -> Unit {
+    fun getInteractionAssertionBlock(assertion: ViewAssertion): () -> Unit {
         return when (interaction) {
             is ViewInteraction -> {
                 { interaction.check(assertion) }
@@ -641,7 +641,7 @@ class UltronInteraction<T>(
         }
     }
 
-    private fun getInteractionMatcher(): Matcher<View>? {
+    fun getInteractionMatcher(): Matcher<View>? {
         return when (interaction) {
             is ViewInteraction -> {
                 interaction.getViewMatcher()
@@ -653,7 +653,7 @@ class UltronInteraction<T>(
         }
     }
 
-    private fun getInteractionRootMatcher(): Matcher<Root>? {
+    fun getInteractionRootMatcher(): Matcher<Root>? {
         return when (interaction) {
             is ViewInteraction -> {
                 interaction.getRootMatcher()
