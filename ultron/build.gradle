@@ -33,7 +33,7 @@ ext {
     libraryDescription = 'Ultron make it easy to write android UI tests.'
     siteUrl = 'https://github.com/alex-tiurin/ultron'
     gitUrl  = 'https://github.com/alex-tiurin/ultron.git'
-    libraryVersion = '0.0.6'
+    libraryVersion = '0.0.7'
     developerId = properties.getProperty("maven.developerId")
     developerName = properties.getProperty("maven.developerName")
     developerEmail = properties.getProperty("maven.developerEmail")

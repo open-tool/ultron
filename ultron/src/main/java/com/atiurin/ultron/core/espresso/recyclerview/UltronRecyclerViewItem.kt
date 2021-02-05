@@ -81,41 +81,41 @@ open class UltronRecyclerViewItem {
         return executor!!.getItemChildMatcher(childMatcher)
     }
 
-    fun withTimeout(timeoutMs: Long) = get().withTimeout(timeoutMs)
+    fun withTimeout(timeoutMs: Long) = getMatcher().withTimeout(timeoutMs)
     fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
-        get().withResultHandler(resultHandler)
+        getMatcher().withResultHandler(resultHandler)
 
     //actions
-    fun click() = apply { this.get().click() }
-    fun longClick() = apply { this.get().longClick() }
-    fun doubleClick() = apply { this.get().doubleClick() }
-    fun swipeDown() = apply { this.get().swipeDown() }
-    fun swipeLeft() = apply { this.get().swipeLeft() }
-    fun swipeRight() = apply { this.get().swipeRight() }
-    fun swipeUp() = apply { this.get().swipeUp() }
-    fun perform(action: ViewAction) = apply { this.get().perform(action) }
+    fun click() = apply { this.getMatcher().click() }
+    fun longClick() = apply { this.getMatcher().longClick() }
+    fun doubleClick() = apply { this.getMatcher().doubleClick() }
+    fun swipeDown() = apply { this.getMatcher().swipeDown() }
+    fun swipeLeft() = apply { this.getMatcher().swipeLeft() }
+    fun swipeRight() = apply { this.getMatcher().swipeRight() }
+    fun swipeUp() = apply { this.getMatcher().swipeUp() }
+    fun perform(action: ViewAction) = apply { this.getMatcher().perform(action) }
 
     //assertions
-    fun isDisplayed() = apply { this.get().isDisplayed() }
-    fun isNotDisplayed() = apply { this.get().isNotDisplayed() }
-    fun isCompletelyDisplayed() = apply { this.get().isCompletelyDisplayed() }
-    fun isDisplayingAtLeast(percentage: Int) = apply { this.get().isDisplayingAtLeast(percentage) }
-    fun isClickable() = apply { this.get().isClickable() }
-    fun isNotClickable() = apply { this.get().isNotClickable() }
-    fun isEnabled() = apply { this.get().isEnabled() }
-    fun isNotEnabled() = apply { this.get().isNotEnabled() }
-    fun assertMatches(condition: Matcher<View>) = apply { this.get().assertMatches(condition) }
+    fun isDisplayed() = apply { this.getMatcher().isDisplayed() }
+    fun isNotDisplayed() = apply { this.getMatcher().isNotDisplayed() }
+    fun isCompletelyDisplayed() = apply { this.getMatcher().isCompletelyDisplayed() }
+    fun isDisplayingAtLeast(percentage: Int) = apply { this.getMatcher().isDisplayingAtLeast(percentage) }
+    fun isClickable() = apply { this.getMatcher().isClickable() }
+    fun isNotClickable() = apply { this.getMatcher().isNotClickable() }
+    fun isEnabled() = apply { this.getMatcher().isEnabled() }
+    fun isNotEnabled() = apply { this.getMatcher().isNotEnabled() }
+    fun assertMatches(condition: Matcher<View>) = apply { this.getMatcher().assertMatches(condition) }
     fun hasContentDescription(contentDescription: String) =
-        apply { this.get().hasContentDescription(contentDescription) }
+        apply { this.getMatcher().hasContentDescription(contentDescription) }
 
     fun hasContentDescription(resourceId: Int) =
-        apply { this.get().hasContentDescription(resourceId) }
+        apply { this.getMatcher().hasContentDescription(resourceId) }
 
     fun hasContentDescription(charSequenceMatcher: Matcher<CharSequence>) =
-        apply { this.get().hasContentDescription(charSequenceMatcher) }
+        apply { this.getMatcher().hasContentDescription(charSequenceMatcher) }
 
     fun contentDescriptionContains(text: String) =
-        apply { this.get().contentDescriptionContains(text) }
+        apply { this.getMatcher().contentDescriptionContains(text) }
 
     fun setExecutor(
         ultronRecyclerView: UltronRecyclerView,
@@ -133,7 +133,7 @@ open class UltronRecyclerViewItem {
         this.executor = RecyclerViewItemPositionalExecutor(ultronRecyclerView, position, scrollTimeoutMs)
     }
 
-    private fun get(): Matcher<View> {
+    fun getMatcher(): Matcher<View> {
         return executor!!.getItemMatcher()
     }
 
