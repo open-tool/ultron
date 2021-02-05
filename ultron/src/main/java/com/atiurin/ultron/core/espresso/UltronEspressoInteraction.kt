@@ -20,9 +20,9 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 
 class UltronEspressoInteraction<T>(
-    private val interaction: T,
-    private val timeoutMs: Long? = null,
-    private val resultHandler: ((EspressoOperationResult<UltronEspressoOperation>) -> Unit)? = null
+    val interaction: T,
+    val timeoutMs: Long? = null,
+    val resultHandler: ((EspressoOperationResult<UltronEspressoOperation>) -> Unit)? = null
 ) {
     init {
         if (interaction !is ViewInteraction && interaction !is DataInteraction) throw UltronException(
