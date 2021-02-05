@@ -1,4 +1,4 @@
-package com.atiurin.ultron.recyclerview
+package com.atiurin.ultron.core.espresso.recyclerview
 
 import android.util.SparseArray
 import android.view.View

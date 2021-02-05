@@ -1,19 +1,13 @@
-package com.atiurin.ultron.recyclerview
+package com.atiurin.ultron.core.espresso.recyclerview
 
-import android.os.SystemClock
-import android.util.Log
 import android.view.View
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.ViewInteraction
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
-import com.atiurin.ultron.core.espresso.UltronInteraction
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.*
 import org.hamcrest.Matcher
-import kotlin.reflect.KFunction
-import kotlin.reflect.KParameter
 
 /**
  * Represents the item of RecyclerView list.

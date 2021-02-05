@@ -3,6 +3,7 @@ package com.atiurin.sampleapp.tests.espresso
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
 import com.atiurin.sampleapp.MyApplication
+import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.MainActivity
 import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.data.repositories.ContactRepositoty
@@ -13,7 +14,7 @@ import com.atiurin.ultron.extensions.assertMatches
 import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
 import com.atiurin.ultron.extensions.withTimeout
-import com.atiurin.ultron.recyclerview.withRecyclerView
+import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
 import com.atiurin.ultron.testlifecycle.setupteardown.TearDown
@@ -43,21 +44,20 @@ class RecyclerViewTest : BaseTest() {
     val page = FriendsListPage
 
     @Test
+    fun childTest(){
+        withRecyclerView(R.id.recycler_friends)
+            .item(0)
+            .getChild(withId(R.id.tv_status))
+            .hasText(ContactRepositoty.getFirst().status)
+    }
+    @Test
     fun testDisplayedItemPositions() {
         for (index in 0..3) {
-            page.friendsRecycler.atPosition(index)
+            page.friendsRecycler.item(index)
                 .assertMatches(hasDescendant(withText(CONTACTS[index].name)))
                 .assertMatches(hasDescendant(withText(CONTACTS[index].status)))
                 .isDisplayed()
         }
-    }
-
-    @Test
-    fun testListSize() {
-        page.friendsRecycler.atPosition(0)
-            .assertMatches(hasDescendant(withText(ContactRepositoty.getFirst().name)))
-        val actualSize = page.friendsRecycler.getSize()
-        Assert.assertEquals(CONTACTS.size, actualSize)
     }
 
     @Test
@@ -97,12 +97,16 @@ class RecyclerViewTest : BaseTest() {
 
     @Test
     fun scrollToLastItem() {
-        page.friendsRecycler.item(CONTACTS.size - 1).isDisplayed()
+        withRecyclerView(R.id.recycler_friends)
+            .item(CONTACTS.size - 1)
+            .isDisplayed()
     }
 
     @Test
     fun scrollToLastWithMatcher() {
-        page.friendsRecycler.item(hasDescendant(withText("Friend14"))).isDisplayed()
+        withRecyclerView(R.id.recycler_friends)
+            .item(hasDescendant(withText("Friend14")))
+            .isDisplayed()
     }
 
     @Test

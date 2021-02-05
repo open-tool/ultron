@@ -12,9 +12,7 @@ import com.atiurin.sampleapp.data.repositories.ContactRepositoty
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.pages.FriendsListPage
 import com.atiurin.sampleapp.tests.BaseTest
-import com.atiurin.ultron.extensions.click
 import com.atiurin.ultron.extensions.isDisplayed
-import com.atiurin.ultron.recyclerview.withRecyclerView
 import org.junit.Test
 
 class RecyclerPerfTest : BaseTest() {
@@ -24,29 +22,33 @@ class RecyclerPerfTest : BaseTest() {
     init {
         ruleSequence.addLast(activityTestRule)
     }
+
     @Test
-    fun test1() {}
+    fun test1() {
+    }
+
     @Test
     fun test2() {
-        Log.time("Scroll+Click"){
+        Log.time("Scroll+Click") {
             withText(ContactRepositoty.getFirst().name).isDisplayed()
-            onView(withId(R.id.recycler_friends)).perform(
-                RecyclerViewActions
-                    .scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(ContactRepositoty.getLast().name)))
-            )
-            onView(withId(R.id.recycler_friends)).perform(
-                RecyclerViewActions
-                    .actionOnItem<RecyclerView.ViewHolder>(
-                        hasDescendant(withText(ContactRepositoty.getLast().name)),
-                        click()
-                    )
-            )
+            onView(withId(R.id.recycler_friends))
+                .perform(
+                    RecyclerViewActions
+                        .scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(ContactRepositoty.getLast().name)))
+                )
+                .perform(
+                    RecyclerViewActions
+                        .actionOnItem<RecyclerView.ViewHolder>(
+                            hasDescendant(withText(ContactRepositoty.getLast().name)),
+                            click()
+                        )
+                )
         }
     }
 
     @Test
     fun test3() {
-        Log.time("FriendsPageClick"){
+        Log.time("FriendsPageClick") {
             FriendsListPage.getListItem(ContactRepositoty.getLast().name).click()
         }
     }

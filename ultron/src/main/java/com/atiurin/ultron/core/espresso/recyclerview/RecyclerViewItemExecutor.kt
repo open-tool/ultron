@@ -1,7 +1,6 @@
-package com.atiurin.ultron.recyclerview
+package com.atiurin.ultron.core.espresso.recyclerview
 
 import android.view.View
-import com.atiurin.ultron.core.config.UltronConfig
 import org.hamcrest.Matcher
 
 interface RecyclerViewItemExecutor {

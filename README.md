@@ -46,6 +46,10 @@ _2. Click on RecyclerView list item_
 onView(withId(R.id.recycler_friends))
     .perform(
         RecyclerViewActions
+            .scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText("Janice")))
+    )
+    .perform(
+        RecyclerViewActions
             .actionOnItem<RecyclerView.ViewHolder>(
                 hasDescendant(withText("Janice")),
                 click()
@@ -55,7 +59,7 @@ onView(withId(R.id.recycler_friends))
 **Ultron**
 ```kotlin
 withRecyclerView(R.id.recycler_friends)
-    .atItem(hasDescendant(withText("Janice")))
+    .item(hasDescendant(withText("Janice")))
     .click()
 ```
 ### You can get the result of any operation as boolean value
@@ -145,7 +149,7 @@ repositories {
 }
 
 dependencies {
-    androidTestImplementation 'com.atiurin:ultron:0.0.2'
+    androidTestImplementation 'com.atiurin:ultron:<latest_version>'
 }
 ```
 

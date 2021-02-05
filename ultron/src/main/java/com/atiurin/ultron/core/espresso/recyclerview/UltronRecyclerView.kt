@@ -1,4 +1,4 @@
-package com.atiurin.ultron.recyclerview
+package com.atiurin.ultron.core.espresso.recyclerview
 
 import android.view.View
 import androidx.annotation.IntegerRes
@@ -114,10 +114,11 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>) {
         recyclerViewMatcher.withResultHandler(resultHandler)
 
     /**
-     * @param itemMatcher describes how to identify item in the list. It shouldn't be unique in  view hierarchy
+     * @param itemMatcher describes how to identify item in the list.
+     * It shouldn't be unique in  view hierarchy
      * @return the matcher to the exact recyclerView item which it's possible to interact
      */
-    open fun atItem(itemMatcher: Matcher<View>): Matcher<View> {
+    internal fun atItem(itemMatcher: Matcher<View>): Matcher<View> {
         return object : TypeSafeMatcher<View>() {
             var itemView: View? = null
 
@@ -135,7 +136,7 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>) {
     /**
      * @return matcher to RecyclerView item at position [position]
      */
-    open fun atPosition(position: Int): Matcher<View> {
+    internal fun atPosition(position: Int): Matcher<View> {
         return object : TypeSafeMatcher<View>() {
             var itemView: View? = null
             override fun describeTo(description: Description) {
@@ -154,7 +155,7 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>) {
      * @param childMatcher describes how to identify child inside item. It shouldn't be unique in scope of RecyclerView list
      * @return matcher to a RecyclerView item child which it's possible to interact
      */
-    open fun atItemChild(itemMatcher: Matcher<View>, childMatcher: Matcher<View>): Matcher<View> {
+    internal fun atItemChild(itemMatcher: Matcher<View>, childMatcher: Matcher<View>): Matcher<View> {
         return object : TypeSafeMatcher<View>() {
             var childView: View? = null
 
@@ -176,7 +177,7 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>) {
      * @param childMatcher describes how to identify child inside item. It shouldn't be unique in scope of RecyclerView list
      * @return matcher to a RecyclerView item child which it's possible to interact
      */
-    open fun atPositionItemChild(position: Int, childMatcher: Matcher<View>): Matcher<View> {
+    internal fun atPositionItemChild(position: Int, childMatcher: Matcher<View>): Matcher<View> {
         return object : TypeSafeMatcher<View>() {
             var childView: View? = null
             override fun describeTo(description: Description) {

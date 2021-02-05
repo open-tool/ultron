@@ -1,15 +1,14 @@
 package com.atiurin.sampleapp.pages
 
 import android.view.View
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.*
 import com.atiurin.ultron.extensions.click
 import com.atiurin.ultron.extensions.typeText
 import com.atiurin.ultron.page.Page
-import com.atiurin.ultron.recyclerview.UltronRecyclerViewItem
-import com.atiurin.ultron.recyclerview.withRecyclerView
+import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
+import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.ultron.core.espresso.UltronEspresso
 import com.atiurin.ultron.extensions.isDisplayed
 import org.hamcrest.Matcher
