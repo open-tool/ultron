@@ -45,7 +45,7 @@ class UltronEspressoInteraction<T>(
                 name = "Click to '${getInteractionMatcher()}'",
                 type = EspressoActionType.CLICK,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.CLICK}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -58,7 +58,7 @@ class UltronEspressoInteraction<T>(
                 name = "DoubleClick to '${getInteractionMatcher()}'",
                 type = EspressoActionType.CLICK,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.DOUBLE_CLICK}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -71,7 +71,7 @@ class UltronEspressoInteraction<T>(
                 name = "LongClick to '${getInteractionMatcher()}'",
                 type = EspressoActionType.LONG_CLICK,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.LONG_CLICK}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -84,7 +84,7 @@ class UltronEspressoInteraction<T>(
                 name = "Type text '$text' to '${getInteractionMatcher()}'",
                 type = EspressoActionType.TYPE_TEXT,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.TYPE_TEXT}' '$text' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -97,7 +97,7 @@ class UltronEspressoInteraction<T>(
                 name = "Replace text '$text' to '${getInteractionMatcher()}'",
                 type = EspressoActionType.REPLACE_TEXT,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.REPLACE_TEXT}' '$text' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -110,7 +110,7 @@ class UltronEspressoInteraction<T>(
                 name = "Clear text in '${getInteractionMatcher()}'",
                 type = EspressoActionType.CLEAR_TEXT,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.CLEAR_TEXT}' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -123,7 +123,7 @@ class UltronEspressoInteraction<T>(
                 name = "PressKey code '$keyCode' on '${getInteractionMatcher()}'",
                 type = EspressoActionType.PRESS_KEY,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.PRESS_KEY}' '$keyCode' on '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -136,7 +136,7 @@ class UltronEspressoInteraction<T>(
                 name = "Press EspressoKey '$key' on '${getInteractionMatcher()}'",
                 type = EspressoActionType.PRESS_KEY,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.PRESS_KEY}' EspressoKey '$key' on '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -149,7 +149,7 @@ class UltronEspressoInteraction<T>(
                 name = "CloseSoftKeyboard with '${getInteractionMatcher()}'",
                 type = EspressoActionType.CLOSE_SOFT_KEYBOARD,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.CLOSE_SOFT_KEYBOARD}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -162,7 +162,7 @@ class UltronEspressoInteraction<T>(
                 name = "SwipeLeft with '${getInteractionMatcher()}'",
                 type = EspressoActionType.SWIPE_LEFT,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.SWIPE_LEFT}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -175,7 +175,7 @@ class UltronEspressoInteraction<T>(
                 name = "SwipeRight with '${getInteractionMatcher()}'",
                 type = EspressoActionType.SWIPE_RIGHT,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.SWIPE_RIGHT}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -188,7 +188,7 @@ class UltronEspressoInteraction<T>(
                 name = "SwipeUp with '${getInteractionMatcher()}'",
                 type = EspressoActionType.SWIPE_UP,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.SWIPE_UP}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -201,7 +201,7 @@ class UltronEspressoInteraction<T>(
                 name = "SwipeDown with '${getInteractionMatcher()}'",
                 type = EspressoActionType.SWIPE_DOWN,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.SWIPE_DOWN}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -214,7 +214,7 @@ class UltronEspressoInteraction<T>(
                 name = "ScrollTo with '${getInteractionMatcher()}'",
                 type = EspressoActionType.SCROLL,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.SCROLL}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )
@@ -227,7 +227,7 @@ class UltronEspressoInteraction<T>(
                 name = "Custom action '$description' to ${getInteractionMatcher()}",
                 type = EspressoActionType.CUSTOM,
                 description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.CUSTOM}' of '${viewAction.description}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeoutMs ms",
-                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT,
+                timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
         )

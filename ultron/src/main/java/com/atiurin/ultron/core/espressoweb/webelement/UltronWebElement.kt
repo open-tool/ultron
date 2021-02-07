@@ -72,7 +72,7 @@ open class UltronWebElement internal constructor(
     /** Clears content from an editable element. */
     fun clearElement(
     ) = apply {
-        val result = UltronWebLifecycle.execute(
+        UltronWebLifecycle.execute(
             WebInteractionOperationExecutor(
                 WebInteractionOperation(
                     webInteractionBlock = { webInteractionBlock().perform(DriverAtoms.clearElement()) },

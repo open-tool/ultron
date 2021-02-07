@@ -8,6 +8,7 @@ import androidx.test.espresso.web.model.Evaluation
 import androidx.test.espresso.web.model.WindowReference
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.webdriver.DriverAtoms
+import com.atiurin.ultron.core.common.OperationType
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
 import com.atiurin.ultron.core.espressoweb.operation.*
@@ -29,7 +30,8 @@ class UltronWebDocument {
          * <p>Enabling Javascript may cause the WebView under test to be reloaded. This is necessary to
          * ensure the test infrastructure javascript bridges are loaded by the WebView.
          */
-        @JvmStatic @JvmOverloads
+        @JvmStatic
+        @JvmOverloads
         fun forceJavascriptEnabled(
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
@@ -49,10 +51,12 @@ class UltronWebDocument {
                 ), resultHandler
             )
         }
+
         /**
          * Evaluate JS on webView
          */
-        @JvmStatic @JvmOverloads
+        @JvmStatic
+        @JvmOverloads
         fun evalJS(
             script: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
@@ -78,7 +82,8 @@ class UltronWebDocument {
         }
 
         /** use any webAssertion to assert it safely */
-        @JvmStatic @JvmOverloads
+        @JvmStatic
+        @JvmOverloads
         fun <T> assertThat(
             webAssertion: WebAssertion<T>,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
@@ -106,7 +111,8 @@ class UltronWebDocument {
         }
 
         /** Finds the currently active element in the document. */
-        @JvmStatic @JvmOverloads
+        @JvmStatic
+        @JvmOverloads
         fun selectActiveElement(
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
             windowReference: WindowReference? = null,
@@ -133,7 +139,8 @@ class UltronWebDocument {
         }
 
         /** Selects a subframe of the currently selected window by it's index. */
-        @JvmStatic @JvmOverloads
+        @JvmStatic
+        @JvmOverloads
         fun selectFrameByIndex(
             index: Int,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
@@ -167,7 +174,8 @@ class UltronWebDocument {
         }
 
         /** Selects a subframe of the given window by it's index. */
-        @JvmStatic @JvmOverloads
+        @JvmStatic
+        @JvmOverloads
         fun selectFrameByIndex(
             index: Int,
             root: WindowReference,
@@ -203,7 +211,8 @@ class UltronWebDocument {
         }
 
         /** Selects a subframe of the current window by it's name or id. */
-        @JvmStatic @JvmOverloads
+        @JvmStatic
+        @JvmOverloads
         fun selectFrameByIdOrName(
             idOrName: String,
             webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
@@ -237,7 +246,8 @@ class UltronWebDocument {
         }
 
         /** Selects a subframe of the given window by it's name or id. */
-        @JvmStatic @JvmOverloads
+        @JvmStatic
+        @JvmOverloads
         fun selectFrameByIdOrName(
             idOrName: String,
             root: WindowReference,
@@ -270,6 +280,29 @@ class UltronWebDocument {
             )
             return (result.operationIterationResult as WebInteractionOperationIterationResult<WindowReference>).webInteraction?.get()
                 ?: throw UltronException("Couldn't select WindowReference by idOrName '$idOrName' with root with webViewInteraction = $webViewInteraction")
+        }
+
+        fun <R> executeOperation(
+            webInteractionBlock: () -> Web.WebInteraction<R>,
+            name: String,
+            type: OperationType,
+            description: String,
+            timeoutMs: Long,
+            resultHandler: (WebOperationResult<WebInteractionOperation<R>>) -> Unit
+        ): R {
+            val result = UltronWebLifecycle.execute(
+                WebInteractionOperationExecutor(
+                    WebInteractionOperation(
+                        webInteractionBlock = webInteractionBlock,
+                        name = name,
+                        type = type,
+                        description = description,
+                        timeoutMs = timeoutMs
+                    )
+                ), resultHandler
+            )
+            return (result.operationIterationResult as WebInteractionOperationIterationResult<R>).webInteraction?.get()
+                ?: throw UltronException("Couldn't get result of $name")
         }
     }
 }

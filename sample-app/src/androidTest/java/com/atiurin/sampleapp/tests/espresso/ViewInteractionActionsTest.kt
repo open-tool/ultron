@@ -2,9 +2,11 @@ package com.atiurin.sampleapp.tests.espresso
 
 import android.os.SystemClock
 import android.view.KeyEvent
+import android.view.View
 import androidx.test.espresso.action.EspressoKey
 import androidx.test.espresso.action.ViewActions.click
 import com.atiurin.sampleapp.R
+import com.atiurin.sampleapp.framework.ultronext.appendText
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
@@ -163,4 +165,11 @@ class ViewInteractionActionsTest : UiElementsTest() {
     }
 
 
+    @Test
+    fun customVisibilityAction(){
+        val text = "appended"
+        page.editTextContentDesc.appendText(text)
+            .hasText(getTargetString(R.string.button_default_content_desc)+text)
+        page.button.appendText(text)
+    }
 }
