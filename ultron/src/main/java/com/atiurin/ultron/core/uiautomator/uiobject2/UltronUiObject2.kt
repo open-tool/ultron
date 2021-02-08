@@ -18,10 +18,10 @@ import org.hamcrest.Matchers.*
 
 
 class UltronUiObject2 internal constructor(
-    private val uiObject2ProviderBlock: () -> UiObject2?,
-    private val selectorDesc: String,
-    private val resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.resultHandler,
-    private val timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT
+    val uiObject2ProviderBlock: () -> UiObject2?,
+    val selectorDesc: String,
+    val resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.resultHandler,
+    val timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT
 ) {
     fun isSuccess(
         action: UltronUiObject2.() -> Unit
@@ -33,10 +33,7 @@ class UltronUiObject2 internal constructor(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit
     ): UltronUiObject2 {
         return UltronUiObject2(
-            this.uiObject2ProviderBlock,
-            this.selectorDesc,
-            resultHandler,
-            this.timeoutMs
+            this.uiObject2ProviderBlock, this.selectorDesc, resultHandler, this.timeoutMs
         )
     }
 
@@ -44,10 +41,7 @@ class UltronUiObject2 internal constructor(
         timeoutMs: Long
     ): UltronUiObject2 {
         return UltronUiObject2(
-            this.uiObject2ProviderBlock,
-            this.selectorDesc,
-            this.resultHandler,
-            timeoutMs
+            this.uiObject2ProviderBlock, this.selectorDesc, this.resultHandler, timeoutMs
         )
     }
 
@@ -64,8 +58,7 @@ class UltronUiObject2 internal constructor(
             resultHandler = resultHandler
         )
         return if (uiobject2 != null) UltronUiObject2(
-            { uiobject2 },
-            "Parent of $selectorDesc."
+            { uiobject2 }, "Parent of $selectorDesc."
         ) else null
     }
 
@@ -118,8 +111,7 @@ class UltronUiObject2 internal constructor(
         )
         return if (uiobject2 != null) {
             UltronUiObject2(
-                { uiobject2 },
-                "First child of $selectorDesc with bySelector $bySelector."
+                { uiobject2 }, "First child of $selectorDesc with bySelector $bySelector."
             )
         } else null
     }
@@ -913,7 +905,7 @@ class UltronUiObject2 internal constructor(
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun executeAction(
+    fun executeAction(
         actionBlock: () -> Unit,
         name: String,
         description: String,
@@ -924,18 +916,14 @@ class UltronUiObject2 internal constructor(
         UltronUiAutomatorLifecycle.execute(
             UiAutomatorBySelectorActionExecutor(
                 UiAutomatorBySelectorAction(
-                    actionBlock = actionBlock,
-                    name = name,
-                    type = type,
-                    description = description,
-                    timeoutMs = timeoutMs
+                    actionBlock = actionBlock, name = name, type = type, description = description, timeoutMs = timeoutMs
                 )
             ), resultHandler
         )
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun executeAssertion(
+    fun executeAssertion(
         assertionBlock: () -> Boolean,
         name: String,
         description: String,
@@ -946,14 +934,9 @@ class UltronUiObject2 internal constructor(
         UltronUiAutomatorLifecycle.execute(
             UiAutomatorBySelectorAssertionExecutor(
                 UiAutomatorBySelectorAssertion(
-                    assertionBlock = assertionBlock,
-                    name = name,
-                    type = type,
-                    description = description,
-                    timeoutMs = timeoutMs
+                    assertionBlock = assertionBlock, name = name, type = type, description = description, timeoutMs = timeoutMs
                 )
-            ),
-            resultHandler
+            ), resultHandler
         )
     }
 
@@ -977,16 +960,14 @@ class UltronUiObject2 internal constructor(
         fun byResId(@IntegerRes resourceId: Int): UltronUiObject2 {
             val bySelector = bySelector(resourceId)
             return UltronUiObject2(
-                { UltronConfig.UiAutomator.uiDevice.findObject(bySelector) },
-                bySelector.toString()
+                { UltronConfig.UiAutomator.uiDevice.findObject(bySelector) }, bySelector.toString()
             )
         }
 
         @JvmStatic
         fun by(bySelector: BySelector): UltronUiObject2 {
             return UltronUiObject2(
-                { UltronConfig.UiAutomator.uiDevice.findObject(bySelector) },
-                bySelector.toString()
+                { UltronConfig.UiAutomator.uiDevice.findObject(bySelector) }, bySelector.toString()
             )
         }
 

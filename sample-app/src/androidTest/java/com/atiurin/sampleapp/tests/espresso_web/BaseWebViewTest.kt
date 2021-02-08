@@ -12,7 +12,7 @@ abstract class BaseWebViewTest : BaseTest() {
 
     private val startActivity = SetUpRule().add {
         ActivityScenario.launch(WebViewActivity::class.java)
-        UltronWebDocument.forceJavascriptEnabled()
+//        UltronWebDocument.forceJavascriptEnabled()
     }
 
     init {

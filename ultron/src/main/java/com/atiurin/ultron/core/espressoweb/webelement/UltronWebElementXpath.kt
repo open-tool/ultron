@@ -18,8 +18,8 @@ class UltronWebElementXpath(
     private val webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
     private val elementReference: ElementReference? = null,
     private val windowReference: WindowReference? = null,
-    private val timeoutMs: Long? = null,
-    private val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler
+    override val timeoutMs: Long? = null,
+    override val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler
 ) : UltronWebElement(Locator.XPATH, value, webViewMatcher, elementReference, windowReference, timeoutMs, resultHandler) {
     override fun withTimeout(timeoutMs: Long): UltronWebElementXpath{
         return UltronWebElementXpath(this.value, this.webViewMatcher, this.elementReference, this.windowReference, timeoutMs, this.resultHandler)

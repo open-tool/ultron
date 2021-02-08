@@ -5,6 +5,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.UiElementsActivity
 import com.atiurin.sampleapp.framework.Log
+import com.atiurin.sampleapp.framework.ultronext.appendText
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils
 import com.atiurin.sampleapp.pages.UiObject2ElementsPage
@@ -44,7 +45,6 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
         }
         Assert.assertEquals(3, foundElements)
     }
-
 
     @Test
     fun getChildren_noChildExist(){
@@ -322,25 +322,39 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
     //swipe
     @Test
     fun swipeUpTest(){
+        page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.swipableImageView.isDisplayed().swipeUp()
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_UP.name)
     }
 
     @Test
     fun swipeDownTest(){
+        page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.swipableImageView.isDisplayed().swipeDown()
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_DOWN.name)
     }
 
     @Test
     fun swipeRightTest(){
+        page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.swipableImageView.isDisplayed().swipeRight()
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
     }
 
     @Test
     fun swipeLeftTest(){
+        page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.swipableImageView.isDisplayed().swipeLeft()
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_LEFT.name)
+    }
+
+    @Test
+    fun customAppendText_toEditableObject(){
+        val startText = "start "
+        val textToAdd = "added new Text"
+        page.editTextContentDesc
+            .replaceText(startText)
+            .appendText(textToAdd)
+            .hasText(startText + textToAdd)
     }
 }

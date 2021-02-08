@@ -2,6 +2,7 @@ package com.atiurin.sampleapp.tests.espresso_web
 
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.webdriver.DriverAtoms.getText
+import com.atiurin.sampleapp.framework.ultronext.appendText
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.WebViewPage
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.className
@@ -58,9 +59,7 @@ class UltronWebElementTest : BaseWebViewTest() {
 
     @Test
     fun clearElement_onExistedEditableElement() {
-        page.textInput.webKeys("initial text")
-            .clearElement()
-            .hasText("")
+        page.textInput.webKeys("initial text").clearElement().hasText("")
     }
 
     @Test
@@ -163,8 +162,7 @@ class UltronWebElementTest : BaseWebViewTest() {
         AssertUtils.assertException {
             id("notExistId").withTimeout(100).assertThat(
                 webMatches(
-                    getText(),
-                    `is`("Apple")
+                    getText(), `is`("Apple")
                 )
             )
         }
@@ -172,32 +170,34 @@ class UltronWebElementTest : BaseWebViewTest() {
 
     @Test
     fun withContextual_hasText() {
-        id("teacher")
-            .containsText("Teachers")
-            .withContextual(className("person_name"))
-            .hasText("Socrates")
+        id("teacher").containsText("Teachers").withContextual(className("person_name")).hasText("Socrates")
     }
 
     @Test
     fun withContextual_containsText() {
-        id("student")
-            .withContextual(className("person_name"))
-            .hasText("Plato")
+        id("student").withContextual(className("person_name")).hasText("Plato")
     }
 
     @Test
     fun scrollToWebElement() {
-        id("list_element_12")
-            .webScrollIntoView()
-            .hasText("list_element_12")
-            .webClick()
+        id("list_element_12").webScrollIntoView().hasText("list_element_12").webClick()
         Thread.sleep(3000)
     }
 
     @Test
     fun webScrollIntoViewBoolean() {
-        val result = id("list_element_12")
-            .webScrollIntoViewBoolean ()
+        val result = id("list_element_12").webScrollIntoViewBoolean()
         Assert.assertTrue(result)
+    }
+
+    @Test
+    fun customActionTest() {
+        val initText = "start"
+        val finishText = "finish"
+        page.textInput
+            .replaceText(initText)
+            .appendText(finishText)
+        page.buttonUpdTitle.webClick()
+        page.title.hasText(initText+finishText)
     }
 }
