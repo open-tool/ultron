@@ -20,27 +20,29 @@ Ultron can be easially customised and extended. Wish you only stable tests!
 - An architectural approach to writing tests
 - Amazing mechanism of setups and teardowns (You even can setup preconditions for single test in test class. It won't affect the others)
 
-## A few words about syntax
+### A few words about syntax
 
 The standard Espresso syntax is complex and not intuitive to understand. This is especially evident when interacting with the RecyclerView
 
 Let's look at 2 examples:
 
-_1. Click on simple button._
+1. Simple assertion and action.
 
-**Clear Espresso**
+_Clear Espresso_
 
 ```kotlin
-onView(withId(R.id.send_button)).perform(click())
+onView(withId(R.id.send_button)).check(isDisplayed()).perform(click())
 ```
-**Ultron**
+_Ultron_
+
 ```kotlin
-withId(R.id.send_button).click()
+withId(R.id.send_button).isDisplayed().click()
 ```
+It looks better. Names of all Ultron operations are the same as Espresso one. It also provide a list of additional operations.
 
-_2. Click on RecyclerView list item_
+2. Action on RecyclerView list item
 
-**Clear Espresso**
+_Clear Espresso_
 
 ```kotlin
 onView(withId(R.id.recycler_friends))
@@ -56,7 +58,8 @@ onView(withId(R.id.recycler_friends))
             )
         )
 ```
-**Ultron**
+_Ultron_
+
 ```kotlin
 withRecyclerView(R.id.recycler_friends)
     .item(hasDescendant(withText("Janice")))
@@ -70,7 +73,9 @@ if (isButtonDisplayed) {
     //do some reasonable actions
 }
 ```
-### You can customise a timeout of any operation
+### Why all Ultron actions and assertions are much more stable?
+
+The framework catches a list of specified exceptions and tries to repeat operation during timeout (5 sec by default). Ofcourse, you are able to customise the list of processed exceptions. It is also available to specify custom timeout for any operation. 
 
 ```kotlin
 withId(R.id.result).withTimeout(10_000).hasText("Passed")
@@ -78,11 +83,11 @@ withId(R.id.result).withTimeout(10_000).hasText("Passed")
 
 ## 3 steps to develop a test using Ultron
 
-I try to advocate the correct construction of the test framework architecture, the division of responsibilities between the layers and other correct things.
+I try to advocate the correct construction of the test framework architecture, the division of responsibilities between the layers and other proper things.
 
 Therefore, I would like to recommend the following approach when your are using Ultron.
 
-1. Create a PageObject class and specify screen UI elements `Matcher<View>`.
+1. Create a PageObject class and specify screen UI elements as `Matcher<View>` objects.
 
 ```kotlin
 object ChatPage : Page<ChatPage>() {
