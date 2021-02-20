@@ -49,9 +49,7 @@ fun UltronRecyclerView.appendText(text: String) = apply { recyclerViewMatcher.ap
 fun UltronRecyclerViewItem.appendText(text: String) = apply { getMatcher().appendText(text) }
 
 class AppendTextAction(private val value: String) : ViewAction {
-    override fun getConstraints(): Matcher<View> {
-        return allOf(isDisplayed(), isAssignableFrom(TextView::class.java))
-    }
+    override fun getConstraints() = allOf(isDisplayed(), isAssignableFrom(TextView::class.java))!!
 
     override fun perform(uiController: UiController, view: View) {
         (view as TextView).apply {

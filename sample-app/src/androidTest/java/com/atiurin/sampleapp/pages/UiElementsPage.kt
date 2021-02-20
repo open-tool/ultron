@@ -1,5 +1,8 @@
 package com.atiurin.sampleapp.pages
 
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.ultron.page.Page
@@ -22,4 +25,6 @@ object UiElementsPage : Page<UiElementsPage>() {
     val appCompatTextView = withId(R.id.app_compat_text)
     val imageView = withId(R.id.image_view)
     val emptyNotClickableImageView = withId(R.id.empty_image_view)
+    val dialogButtonOk = onView(withText("OK")).inRoot(isDialog())
+    val popupButtonCancel = onView(withText("Cancel")).inRoot(isPlatformPopup())
 }

@@ -10,7 +10,7 @@ import org.hamcrest.TypeSafeMatcher
 import java.util.ArrayList
 
 internal fun <T : VH, VH : RecyclerView.ViewHolder> itemsMatching(
-    recyclerView: RecyclerView, viewHolderMatcher: Matcher<VH>, max: Int
+    recyclerView: RecyclerView, viewHolderMatcher: Matcher<VH>, maxItemsCount: Int = -1
 ): List<MatchedItem> {
     val adapter = recyclerView.adapter
     val viewHolderCache = SparseArray<VH>()
@@ -36,7 +36,7 @@ internal fun <T : VH, VH : RecyclerView.ViewHolder> itemsMatching(
                     )
                 )
             )
-            if (matchedItems.size == max) {
+            if (matchedItems.size == maxItemsCount) {
                 break
             }
         }

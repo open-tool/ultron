@@ -65,10 +65,9 @@ object ChatPage : Page<ChatPage>() {
 
     fun clearHistory() = apply {
         step("Clear chat history") {
-//            UltronInteraction.openActionBarOverflowOrOptionsMenu()
             UltronEspresso.openContextualActionModeOverflowMenu()
             clearHistoryBtn.click()
-            Assert.assertEquals(0, messagesList.getSize())
+            messagesList.assertEmpty()
         }
     }
 

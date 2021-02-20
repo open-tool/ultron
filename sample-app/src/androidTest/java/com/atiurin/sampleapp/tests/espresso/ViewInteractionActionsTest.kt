@@ -171,5 +171,6 @@ class ViewInteractionActionsTest : UiElementsTest() {
         page.editTextContentDesc.appendText(text)
             .hasText(getTargetString(R.string.button_default_content_desc)+text)
         page.button.appendText(text)
+
     }
 }

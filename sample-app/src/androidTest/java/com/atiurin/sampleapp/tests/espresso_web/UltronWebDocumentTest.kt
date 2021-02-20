@@ -5,6 +5,7 @@ import androidx.test.espresso.web.matcher.DomMatchers.elementById
 import androidx.test.espresso.web.matcher.DomMatchers.withTextContent
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebDocument
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebDocument.Companion.evalJS
 import org.junit.Assert
 import org.junit.Test
 
@@ -17,7 +18,7 @@ class UltronWebDocumentTest : BaseWebViewTest() {
     @Test
     fun evalJS_Test() {
         val title = "SOME NEW TITLE"
-        UltronWebDocument.evalJS("document.getElementById(\"title\").innerHTML = '$title';")
+        evalJS("document.getElementById(\"title\").innerHTML = '$title';")
         page.title.hasText(title)
     }
 

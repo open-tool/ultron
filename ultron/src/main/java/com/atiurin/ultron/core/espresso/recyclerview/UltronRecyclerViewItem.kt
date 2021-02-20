@@ -1,6 +1,7 @@
 package com.atiurin.ultron.core.espresso.recyclerview
 
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.ViewAction
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
@@ -24,45 +25,45 @@ open class UltronRecyclerViewItem {
     constructor(
         ultronRecyclerView: UltronRecyclerView,
         itemViewMatcher: Matcher<View>,
-        autoScroll: Boolean = true,
-        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+        autoScroll: Boolean = true
     ) {
-        setExecutor(ultronRecyclerView, itemViewMatcher , scrollTimeoutMs)
+        setExecutor(ultronRecyclerView, itemViewMatcher)
         if (autoScroll) scrollToItem()
     }
 
     constructor(
         ultronRecyclerView: UltronRecyclerView,
         position: Int,
-        autoScroll: Boolean = true,
-        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+        autoScroll: Boolean = true
     ) {
-        setExecutor(ultronRecyclerView, position, scrollTimeoutMs)
+        setExecutor(ultronRecyclerView, position)
         if (autoScroll) scrollToItem()
     }
 
     constructor(
         recyclerViewMatcher: Matcher<View>,
         itemViewMatcher: Matcher<View>,
-        autoScroll: Boolean = true,
-        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+        autoScroll: Boolean = true
     ) {
-        setExecutor(UltronRecyclerView(recyclerViewMatcher), itemViewMatcher, scrollTimeoutMs)
+        setExecutor(UltronRecyclerView(recyclerViewMatcher), itemViewMatcher)
         if (autoScroll) scrollToItem()
     }
 
     constructor(
         recyclerViewMatcher: Matcher<View>,
         position: Int,
-        autoScroll: Boolean = true,
-        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+        autoScroll: Boolean = true
     ) {
-        setExecutor(UltronRecyclerView(recyclerViewMatcher), position, scrollTimeoutMs)
+        setExecutor(UltronRecyclerView(recyclerViewMatcher), position)
         if (autoScroll) scrollToItem()
     }
 
     fun scrollToItem(): UltronRecyclerViewItem = apply {
         executor?.scrollToItem()
+    }
+
+    fun getViewHolder(): RecyclerView.ViewHolder? {
+        return executor?.getItemViewHolder()
     }
 
     /**
@@ -119,18 +120,16 @@ open class UltronRecyclerViewItem {
 
     fun setExecutor(
         ultronRecyclerView: UltronRecyclerView,
-        itemViewMatcher: Matcher<View>,
-        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+        itemViewMatcher: Matcher<View>
     ) {
-        this.executor = RecyclerViewItemMatchingExecutor(ultronRecyclerView, itemViewMatcher, scrollTimeoutMs)
+        this.executor = RecyclerViewItemMatchingExecutor(ultronRecyclerView, itemViewMatcher)
     }
 
     fun setExecutor(
         ultronRecyclerView: UltronRecyclerView,
-        position: Int,
-        scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+        position: Int
     ) {
-        this.executor = RecyclerViewItemPositionalExecutor(ultronRecyclerView, position, scrollTimeoutMs)
+        this.executor = RecyclerViewItemPositionalExecutor(ultronRecyclerView, position)
     }
 
     fun getMatcher(): Matcher<View> {
@@ -145,7 +144,7 @@ open class UltronRecyclerViewItem {
             scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
         ): T {
             val item = T::class.java.newInstance()
-            item.setExecutor(ultronRecyclerView, itemViewMatcher, scrollTimeoutMs)
+            item.setExecutor(ultronRecyclerView, itemViewMatcher)
             if (autoScroll) item.scrollToItem()
             return item
         }
@@ -157,7 +156,7 @@ open class UltronRecyclerViewItem {
             scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
         ): T {
             val item = T::class.java.newInstance()
-            item.setExecutor(ultronRecyclerView, position, scrollTimeoutMs)
+            item.setExecutor(ultronRecyclerView, position)
             if (autoScroll) item.scrollToItem()
             return item
         }

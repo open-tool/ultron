@@ -13,11 +13,11 @@ import org.hamcrest.Matchers.allOf
 import org.junit.Assert
 
 object FriendsListPage : Page<FriendsListPage>() {
-    val friendsRecycler = withRecyclerView(R.id.recycler_friends)
+    val recycler = withRecyclerView(R.id.recycler_friends)
 
     fun assertPageDisplayed() = apply {
         step("Assert friends list page displayed") {
-            friendsRecycler.recyclerViewMatcher.isDisplayed()
+            recycler.recyclerViewMatcher.isDisplayed()
         }
     }
 
@@ -27,9 +27,11 @@ object FriendsListPage : Page<FriendsListPage>() {
     }
 
     fun getListItem(contactName: String): FriendRecyclerItem {
-        return Log.time("getItem"){
-            friendsRecycler.getItem(hasDescendant(allOf(withId(R.id.tv_name), withText(contactName))))
-        }
+        return recycler.getItem(hasDescendant(allOf(withId(R.id.tv_name), withText(contactName))))
+    }
+
+    fun getListItem(positions: Int): FriendRecyclerItem {
+        return recycler.getItem(positions)
     }
 
     fun openChat(name: String) = apply {
@@ -52,6 +54,6 @@ object FriendsListPage : Page<FriendsListPage>() {
     }
 
     fun assertFriendsListSize(size: Int) {
-        Assert.assertEquals(size, friendsRecycler.getSize())
+        Assert.assertEquals(size, recycler.getSize())
     }
 }

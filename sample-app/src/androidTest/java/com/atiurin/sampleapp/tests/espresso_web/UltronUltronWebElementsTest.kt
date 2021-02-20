@@ -21,12 +21,11 @@ class UltronUltronWebElementsTest : BaseWebViewTest() {
     @Test
     fun getListElementTest(){
         classNames("link").getElements()
-            .filter {
-                it.isSuccess {
+            .find { ultronWebElement ->
+                ultronWebElement.isSuccess {
                     withTimeout(100).hasText("Apple")
                 }
-            }
-            .forEach { it.webClick() }
+            }?.webClick()
         page.title.containsText("apple")
     }
 }

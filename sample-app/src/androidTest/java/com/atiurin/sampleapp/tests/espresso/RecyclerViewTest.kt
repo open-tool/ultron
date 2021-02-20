@@ -7,14 +7,14 @@ import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.MainActivity
 import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.data.repositories.ContactRepositoty
+import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.FriendsListPage
 import com.atiurin.sampleapp.tests.BaseTest
-import com.atiurin.ultron.extensions.assertMatches
+import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
 import com.atiurin.ultron.extensions.withTimeout
-import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
 import com.atiurin.ultron.testlifecycle.setupteardown.TearDown
@@ -27,44 +27,37 @@ class RecyclerViewTest : BaseTest() {
         const val CUSTOM_TIMEOUT = "CUSTOM_TIMEOUT"
     }
 
-    private val setUpRule = SetUpRule()
-        .add(CUSTOM_TIMEOUT) {
-            MyApplication.CONTACTS_LOADING_TIMEOUT_MS = 6_000L
-        }
-    private val tearDownRule = TearDownRule()
-        .add(CUSTOM_TIMEOUT) {
-            MyApplication.CONTACTS_LOADING_TIMEOUT_MS = 500L
-        }
+    private val setUpRule = SetUpRule().add(CUSTOM_TIMEOUT) {
+        MyApplication.CONTACTS_LOADING_TIMEOUT_MS = 6_000L
+    }
+    private val tearDownRule = TearDownRule().add(CUSTOM_TIMEOUT) {
+        MyApplication.CONTACTS_LOADING_TIMEOUT_MS = 500L
+    }
 
     init {
-        ruleSequence.add(setUpRule, tearDownRule)
-            .addLast(ActivityTestRule(MainActivity::class.java))
+        ruleSequence.add(setUpRule, tearDownRule).addLast(ActivityTestRule(MainActivity::class.java))
     }
 
     val page = FriendsListPage
 
     @Test
-    fun childTest(){
-        withRecyclerView(R.id.recycler_friends)
-            .item(0)
-            .getChild(withId(R.id.tv_status))
-            .hasText(ContactRepositoty.getFirst().status)
+    fun childTest() {
+        withRecyclerView(R.id.recycler_friends).item(0).getChild(withId(R.id.tv_status)).hasText(ContactRepositoty.getFirst().status)
     }
+
     @Test
     fun testDisplayedItemPositions() {
         for (index in 0..3) {
-            page.friendsRecycler.item(index)
-                .assertMatches(hasDescendant(withText(CONTACTS[index].name)))
-                .assertMatches(hasDescendant(withText(CONTACTS[index].status)))
-                .isDisplayed()
+            page.recycler.item(index).assertMatches(hasDescendant(withText(CONTACTS[index].name)))
+                .assertMatches(hasDescendant(withText(CONTACTS[index].status))).isDisplayed()
         }
     }
 
     @Test
     fun getRecyclerViewTest() {
-        val view = page.friendsRecycler.getRecyclerViewList()
+        val view = page.recycler.getRecyclerViewList()
         Assert.assertNotNull(view)
-        Assert.assertEquals(Visibility.VISIBLE.value, view?.visibility)
+        Assert.assertEquals(Visibility.VISIBLE.value, view.visibility)
     }
 
     @Test
@@ -97,28 +90,24 @@ class RecyclerViewTest : BaseTest() {
 
     @Test
     fun scrollToLastItem() {
-        withRecyclerView(R.id.recycler_friends)
-            .item(CONTACTS.size - 1)
-            .isDisplayed()
+        withRecyclerView(R.id.recycler_friends).item(CONTACTS.size - 1).isDisplayed()
     }
 
     @Test
     fun scrollToLastWithMatcher() {
-        withRecyclerView(R.id.recycler_friends)
-            .item(hasDescendant(withText("Friend14")))
-            .isDisplayed()
+        withRecyclerView(R.id.recycler_friends).item(hasDescendant(withText("Friend14"))).isDisplayed()
     }
 
     @Test
     fun getNotExistedRecyclerItemWithPosition() {
         AssertUtils.assertException {
-            page.friendsRecycler.item(100).withTimeout(100).isDisplayed()
+            page.recycler.item(100).withTimeout(100).isDisplayed()
         }
     }
 
     @Test
     fun assertListSize() {
-        page.friendsRecycler.assertSize(CONTACTS.size)
+        page.recycler.assertSize(CONTACTS.size)
     }
 
     @Test
@@ -131,8 +120,7 @@ class RecyclerViewTest : BaseTest() {
     @Test
     fun item_notExist() {
         AssertUtils.assertException {
-            page.friendsRecycler.item(withText("Not existed item"), false).withTimeout(100)
-                .isDisplayed()
+            page.recycler.item(withText("Not existed item"), false).withTimeout(100).isDisplayed()
         }
     }
 
@@ -140,44 +128,42 @@ class RecyclerViewTest : BaseTest() {
     @SetUp(CUSTOM_TIMEOUT)
     @TearDown(CUSTOM_TIMEOUT)
     fun defaultTimeoutOnItemWaiting() {
-        AssertUtils.assertException { page.friendsRecycler.item(10).isDisplayed() }
+        AssertUtils.assertException { page.recycler.item(10).isDisplayed() }
     }
 
     @Test
     @SetUp(CUSTOM_TIMEOUT)
     @TearDown(CUSTOM_TIMEOUT)
     fun customTimeoutOnItemWaiting() {
-        page.friendsRecycler.item(10, scrollTimeoutMs = 8000).isDisplayed()
+        withRecyclerView(R.id.recycler_friends, 8000).item(10).isDisplayed()
     }
 
     @Test
     @SetUp(CUSTOM_TIMEOUT)
     @TearDown(CUSTOM_TIMEOUT)
     fun item_autoScroll_False_item_NotLoaded() {
-        AssertUtils.assertException { page.friendsRecycler.item(10, false).isDisplayed() }
+        AssertUtils.assertException { page.recycler.item(10, false).isDisplayed() }
     }
 
     @Test
     @SetUp(CUSTOM_TIMEOUT)
     @TearDown(CUSTOM_TIMEOUT)
     fun item_autoScroll_False_scroll_Force() {
-        page.friendsRecycler.item(10, false, 8000).scrollToItem().isDisplayed()
+        withRecyclerView(R.id.recycler_friends, 8_000).item(10, false).scrollToItem().isDisplayed()
     }
 
     @Test
-    fun itemMatcher_autoScroll_false_() {
+    fun itemMatcher_autoScroll_false_itemNotDisplayed() {
         AssertUtils.assertException {
-            page.friendsRecycler.item(
-                hasDescendant(withText("Friend14")),
-                false
+            page.recycler.item(
+                hasDescendant(withText("Friend14")), false
             ).isDisplayed()
         }
     }
 
     @Test
     fun itemMatcher_autoScroll_false_scroll_force() {
-        page.friendsRecycler.item(hasDescendant(withText("Friend14")), false).scrollToItem()
-            .isDisplayed()
+        page.recycler.item(hasDescendant(withText("Friend14")), false).scrollToItem().isDisplayed()
     }
 
     @Test
@@ -185,9 +171,8 @@ class RecyclerViewTest : BaseTest() {
     @TearDown(CUSTOM_TIMEOUT)
     fun itemMatcher_autoScroll_false() {
         AssertUtils.assertException {
-            page.friendsRecycler.item(
-                hasDescendant(withText("Friend14")),
-                false
+            page.recycler.item(
+                hasDescendant(withText("Friend14")), false
             ).scrollToItem().isDisplayed()
         }
     }
@@ -196,7 +181,72 @@ class RecyclerViewTest : BaseTest() {
     @SetUp(CUSTOM_TIMEOUT)
     @TearDown(CUSTOM_TIMEOUT)
     fun itemMatcher_autoScroll_true_custom_timeout() {
-        page.friendsRecycler.item(hasDescendant(withText("Friend14")), scrollTimeoutMs = 10_000)
-            .isDisplayed()
+        withRecyclerView(R.id.recycler_friends, 10_000).item(hasDescendant(withText("Friend14"))).isDisplayed()
+    }
+
+    @Test
+    fun getViewHolder() {
+        val position = CONTACTS.size - 1
+        Assert.assertEquals(
+            position,
+            page.recycler.item(hasDescendant(withText(CONTACTS[position].name)))
+                .getViewHolder()
+                ?.layoutPosition
+        )
+    }
+
+    @Test
+    fun transferFromGenericToSubclass(){
+        val position = 5
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(position)
+            .status.hasText(CONTACTS[position].status).isDisplayed()
+    }
+
+    @Test
+    fun getViewHolderList(){
+        page.recycler.waitItemsLoaded()
+        Assert.assertTrue(page.recycler.getViewHolderList(hasDescendant(withId(R.id.tv_name))).isNotEmpty())
+    }
+
+    @Test
+    fun waitLoaded_ofAlreadyLoadedList(){
+        page.recycler.waitItemsLoaded()
+        page.recycler.waitItemsLoaded()
+    }
+
+    @Test
+    fun waitLoaded_allItemsLoaded(){
+        val count = page.recycler.waitItemsLoaded().getSize()
+        Assert.assertEquals(CONTACTS.size, count)
+    }
+
+    @Test
+    fun getLastItem(){
+        page.recycler.lastItem().isDisplayed().click()
+    }
+
+    @Test
+    fun getLastItemWithCustomType(){
+        page.recycler.getLastItem<FriendsListPage.FriendRecyclerItem>().name.hasText(ContactRepositoty.getLast().name)
+    }
+
+    @Test
+    fun perfScroll(){
+        page.recycler.apply {
+            for (i in 0 ..10){
+                lastItem().isDisplayed()
+                firstItem().isDisplayed()
+            }
+        }
+    }
+
+    @Test
+    fun getViewHolderAtPosition_outOfVisibleList(){
+        Assert.assertNull(page.recycler.waitItemsLoaded().getViewHolderAtPosition(15))
+    }
+
+    @Test
+    fun getViewHolderAtPosition_inVisibleList(){
+        Assert.assertNotNull(page.recycler.waitItemsLoaded().getViewHolderAtPosition(2))
     }
 }

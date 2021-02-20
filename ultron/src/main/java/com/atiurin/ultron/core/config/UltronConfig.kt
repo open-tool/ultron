@@ -10,18 +10,17 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.Configurator
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
-import com.atiurin.ultron.core.common.UltronDefaultOperationResultAnalyzer
-import com.atiurin.ultron.core.common.Operation
-import com.atiurin.ultron.core.common.OperationResult
-import com.atiurin.ultron.core.common.OperationResultAnalyzer
+import com.atiurin.ultron.core.common.*
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
+import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
 import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
 import com.atiurin.ultron.exceptions.UltronException
+import com.atiurin.ultron.exceptions.UltronWrapperException
 import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
@@ -29,15 +28,18 @@ import java.lang.RuntimeException
 
 object UltronConfig {
     var LOGCAT_TAG = "Ultron"
+    val operationsExcludeFromLog = mutableListOf<OperationType>(EspressoAssertionType.IDENTIFY_RECYCLER_VIEW)
 
     class Espresso {
         companion object {
             const val DEFAULT_ACTION_TIMEOUT = 5_000L
             const val DEFAULT_ASSERTION_TIMEOUT = 5_000L
+            const val DEFAULT_RECYCLER_VIEW_LOAD_TIMEOUT = 5_000L
 
             var ESPRESSO_OPERATION_POLLING_TIMEOUT = 0L //ms
             var ACTION_TIMEOUT = DEFAULT_ACTION_TIMEOUT
             var ASSERTION_TIMEOUT = DEFAULT_ASSERTION_TIMEOUT
+            var RECYCLER_VIEW_LOAD_TIMEOUT = DEFAULT_RECYCLER_VIEW_LOAD_TIMEOUT
 
             var resultAnalyzer: OperationResultAnalyzer = UltronDefaultOperationResultAnalyzer()
 
@@ -58,6 +60,8 @@ object UltronConfig {
         class ViewActionConfig {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
+                    UltronWrapperException::class.java,
+                    UltronException::class.java,
                     PerformException::class.java,
                     NoMatchingViewException::class.java
                 )
@@ -70,6 +74,8 @@ object UltronConfig {
         class ViewAssertionConfig {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
+                    UltronWrapperException::class.java,
+                    UltronException::class.java,
                     PerformException::class.java,
                     NoMatchingViewException::class.java,
                     AssertionFailedError::class.java
@@ -83,6 +89,8 @@ object UltronConfig {
         class WebInteractionOperationConfig {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
+                    UltronWrapperException::class.java,
+                    UltronException::class.java,
                     PerformException::class.java,
                     NoMatchingViewException::class.java,
                     AssertionFailedError::class.java,
@@ -132,6 +140,8 @@ object UltronConfig {
         class UiObjectConfig {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
+                    UltronWrapperException::class.java,
+                    UltronException::class.java,
                     UiObjectNotFoundException::class.java,
                     NullPointerException::class.java
                 )
@@ -146,9 +156,10 @@ object UltronConfig {
         class UiObject2Config {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
+                    UltronWrapperException::class.java,
+                    UltronException::class.java,
                     UiObjectNotFoundException::class.java,
-                    NullPointerException::class.java,
-                    UltronException::class.java
+                    NullPointerException::class.java
                 )
                 val resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit =
                     {
