@@ -2,7 +2,7 @@ package com.atiurin.ultron.testlifecycle.setupteardown
 
 import org.junit.runner.Description
 
-class SetUpRule : ConditionRule() {
+open class SetUpRule(override val name: String = "") : ConditionRule(name) {
     override fun starting(description: Description) {
         val keys = mutableListOf<String>().apply { this.addAll(commonConditionKeys) }
         val method = description.testClass.getMethod(description.methodName)
@@ -11,18 +11,11 @@ class SetUpRule : ConditionRule() {
             if (setUpAnnotation != null) {
                 keys.addAll(setUpAnnotation.value.toList()) //get the list of keys in annotation SetUp
             }
-            conditions
-                .sortedBy { it.counter }
-                .filter {
-                    it.key in keys
-                }
-                .forEach { condition ->
-                    condition.actions()
-                }
+            conditionsExecutor.before(name, this::class)
+            conditionsExecutor.execute(conditions, keys)
         } else {
-            conditions.filter { it.key in commonConditionKeys }.forEach { condition ->
-                condition.actions()
-            }
+            conditionsExecutor.before(name, this::class)
+            conditionsExecutor.execute(conditions, commonConditionKeys)
         }
         super.starting(description)
     }

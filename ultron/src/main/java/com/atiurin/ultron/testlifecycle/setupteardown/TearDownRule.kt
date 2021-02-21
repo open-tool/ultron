@@ -2,7 +2,7 @@ package com.atiurin.ultron.testlifecycle.setupteardown
 
 import org.junit.runner.Description
 
-class TearDownRule : ConditionRule(), RuleSequenceTearDown {
+open class TearDownRule(override val name: String = "") : ConditionRule(name), RuleSequenceTearDown {
     override fun finished(description: Description) {
         val keys = mutableListOf<String>().apply { this.addAll(commonConditionKeys) }
         val method = description.testClass.getMethod(description.methodName)
@@ -11,16 +11,11 @@ class TearDownRule : ConditionRule(), RuleSequenceTearDown {
             if (tearDownAnnotation != null) {
                 keys.addAll(tearDownAnnotation.value.toList()) //get the list of keys in annotation TearDown
             }
-            conditions
-                .sortedBy { it.counter }
-                .filter { it.key in keys }
-                .forEach { condition ->
-                    condition.actions()
-                }
+            conditionsExecutor.before(name, this::class)
+            conditionsExecutor.execute(conditions, keys)
         } else {
-            conditions.filter { it.key in commonConditionKeys }.forEach { condition ->
-                condition.actions()
-            }
+            conditionsExecutor.before(name, this::class)
+            conditionsExecutor.execute(conditions, commonConditionKeys)
         }
         super.finished(description)
     }

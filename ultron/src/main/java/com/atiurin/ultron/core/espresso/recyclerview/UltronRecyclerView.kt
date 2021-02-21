@@ -31,6 +31,7 @@ import org.hamcrest.TypeSafeMatcher
 open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTimeoutMs: Long = DEFAULT_RECYCLER_VIEW_LOAD_TIMEOUT) {
     private var recyclerView: RecyclerView? = null
     private var recyclerViewOperationsTimeoutMs = 5_000L
+    fun getTimeout() = recyclerViewOperationsTimeoutMs
 
     /** @return [UltronRecyclerViewItem] subclass instance matches [itemMatcher] */
     inline fun <reified T : UltronRecyclerViewItem> getItem(itemMatcher: Matcher<View>, autoScroll: Boolean = true): T {
@@ -126,24 +127,24 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
         )
     }
 
-    open fun isDisplayed() = apply { recyclerViewMatcher.withTimeout(recyclerViewOperationsTimeoutMs).isDisplayed() }
-    open fun isNotDisplayed() = apply { recyclerViewMatcher.withTimeout(recyclerViewOperationsTimeoutMs).isNotDisplayed() }
-    open fun doesNotExist() = apply { recyclerViewMatcher.withTimeout(recyclerViewOperationsTimeoutMs).doesNotExist() }
-    open fun isEnabled() = apply { recyclerViewMatcher.withTimeout(recyclerViewOperationsTimeoutMs).isEnabled() }
-    open fun isNotEnabled() = apply { recyclerViewMatcher.withTimeout(recyclerViewOperationsTimeoutMs).isNotEnabled() }
+    open fun isDisplayed() = apply { recyclerViewMatcher.withTimeout(getTimeout()).isDisplayed() }
+    open fun isNotDisplayed() = apply { recyclerViewMatcher.withTimeout(getTimeout()).isNotDisplayed() }
+    open fun doesNotExist() = apply { recyclerViewMatcher.withTimeout(getTimeout()).doesNotExist() }
+    open fun isEnabled() = apply { recyclerViewMatcher.withTimeout(getTimeout()).isEnabled() }
+    open fun isNotEnabled() = apply { recyclerViewMatcher.withTimeout(getTimeout()).isNotEnabled() }
     open fun hasContentDescription(contentDescription: String) =
-        apply { recyclerViewMatcher.withTimeout(recyclerViewOperationsTimeoutMs).hasContentDescription(contentDescription) }
+        apply { recyclerViewMatcher.withTimeout(getTimeout()).hasContentDescription(contentDescription) }
 
     open fun hasContentDescription(resourceId: Int) =
-        apply { recyclerViewMatcher.withTimeout(recyclerViewOperationsTimeoutMs).hasContentDescription(resourceId) }
+        apply { recyclerViewMatcher.withTimeout(getTimeout()).hasContentDescription(resourceId) }
 
     open fun hasContentDescription(charSequenceMatcher: Matcher<CharSequence>) =
-        apply { recyclerViewMatcher.withTimeout(recyclerViewOperationsTimeoutMs).hasContentDescription(charSequenceMatcher) }
+        apply { recyclerViewMatcher.withTimeout(getTimeout()).hasContentDescription(charSequenceMatcher) }
 
     open fun contentDescriptionContains(text: String) =
-        apply { recyclerViewMatcher.withTimeout(recyclerViewOperationsTimeoutMs).contentDescriptionContains(text) }
+        apply { recyclerViewMatcher.withTimeout(getTimeout()).contentDescriptionContains(text) }
 
-    open fun assertMatches(matcher: Matcher<View>) = apply { recyclerViewMatcher.withTimeout(recyclerViewOperationsTimeoutMs).assertMatches(matcher) }
+    open fun assertMatches(matcher: Matcher<View>) = apply { recyclerViewMatcher.withTimeout(getTimeout()).assertMatches(matcher) }
 
     /** set timeout for operations with RecyclerView.
      * Note: it doesn't modify [loadTimeoutMs] (waiting a RecyclerView to be loaded)

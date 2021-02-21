@@ -1,4 +1,4 @@
-package com.atiurin.sampleapp.tests
+package com.atiurin.sampleapp.tests.testlifecycle
 
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.ultron.testlifecycle.rulesequence.RuleSequence
@@ -24,32 +24,35 @@ class SetUpTearDownRuleTest {
         const val lastTearDownKey = "lastTearDown"
     }
 
-    val firstSetUp = SetUpRule().add {
+    val firstSetUp = SetUpRule("firstSetUp").add {
         conditionsOrderMap.put(counter.incrementAndGet(), firstSetUpKey)
     }
-    val firstTearDown = TearDownRule().add {
+    val firstTearDown = TearDownRule("firstTearDown").add {
         conditionsOrderMap.put(counter.incrementAndGet(), firstTearDownKey)
     }
 
-    val setUp1 = SetUpRule()
-        .add {
+    val setUp1 = SetUpRule("setUpRule1")
+        .add(name = "setUp1") {
             conditionsOrderMap.put(counter.incrementAndGet(), setUp1Key)
         }
-    val tearDown1 = TearDownRule().add {
+        .add(name = "setUp1_2") {
+        }
+    val tearDown1 = TearDownRule("tearDown1").add {
         conditionsOrderMap.put(counter.incrementAndGet(), tearDown1Key)
     }
 
-    val setUp2 = SetUpRule()
+    val setUp2 = SetUpRule("setUp2")
         .add {
             conditionsOrderMap.put(counter.incrementAndGet(), setUp2Key)
         }
-    val tearDown2 = TearDownRule().add {
+    val tearDown2 = TearDownRule("tearDown2").add {
         conditionsOrderMap.put(counter.incrementAndGet(), tearDown2Key)
     }
 
     val lastSetUp = SetUpRule()
         .add {
             conditionsOrderMap.put(counter.incrementAndGet(), lastSetUpKey)
+//            throw Exception("asd")
         }
     val lastTearDown = TearDownRule()
         .add {
@@ -70,10 +73,15 @@ class SetUpTearDownRuleTest {
         }
 
     @get:Rule
-    val ruleSequence = RuleSequence(setUp1, tearDown1).add(tearDown2, setUp2)
+    val ruleSequence =
+        RuleSequence(setUp1, tearDown1)
+        .add(tearDown2, setUp2)
         .addFirst(firstSetUp, firstTearDown)
         .addLast(lastTearDown, lastSetUp, controlTearDown)
 
     @Test
-    fun mockTestConditions() {}
+    fun mockTestConditions() {
+        Log.info(">>>> test")
+//        throw Exception("asd")
+    }
 }

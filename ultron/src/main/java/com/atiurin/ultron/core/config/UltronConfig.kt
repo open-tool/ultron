@@ -1,5 +1,6 @@
 package com.atiurin.ultron.core.config
 
+import android.util.Log
 import android.view.View
 import android.webkit.WebView
 import androidx.test.espresso.NoMatchingViewException
@@ -21,6 +22,10 @@ import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.exceptions.UltronWrapperException
+import com.atiurin.ultron.testlifecycle.setupteardown.Condition
+import com.atiurin.ultron.testlifecycle.setupteardown.ConditionExecutorWrapper
+import com.atiurin.ultron.testlifecycle.setupteardown.ConditionsExecutor
+import com.atiurin.ultron.testlifecycle.setupteardown.DefaultConditionsExecutor
 import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
@@ -167,5 +172,19 @@ object UltronConfig {
                     }
             }
         }
+    }
+
+    class Conditions{
+        companion object{
+            var conditionExecutorWrapper: ConditionExecutorWrapper = DefaultConditionExecutorWrapper()
+            var conditionsExecutor: ConditionsExecutor = DefaultConditionsExecutor()
+        }
+    }
+}
+
+class DefaultConditionExecutorWrapper : ConditionExecutorWrapper{
+    override fun execute(condition: Condition) {
+        Log.d(UltronConfig.LOGCAT_TAG, "Execute condition '${condition.name}' with key '${condition.key}'")
+        condition.actions()
     }
 }
