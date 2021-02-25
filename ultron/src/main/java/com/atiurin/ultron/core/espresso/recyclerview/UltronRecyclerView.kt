@@ -27,35 +27,70 @@ import org.hamcrest.TypeSafeMatcher
 
 /**
  *  Provides a set of interactions with RecyclerView list.
+ *  @param recyclerViewMatcher help ot identify RecyclerView inside view hierarchy
+ *  @param loadTimeoutMs specifies a time of waiting while RecyclerView items will be loaded
  */
 open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTimeoutMs: Long = DEFAULT_RECYCLER_VIEW_LOAD_TIMEOUT) {
     private var recyclerView: RecyclerView? = null
     private var recyclerViewOperationsTimeoutMs = 5_000L
+
+    /**
+     * @return current [UltronRecyclerView] operations timeout
+     */
     fun getTimeout() = recyclerViewOperationsTimeoutMs
 
-    /** @return [UltronRecyclerViewItem] subclass instance matches [itemMatcher] */
+    /** @return [UltronRecyclerViewItem] subclass instance matches [itemMatcher]
+     *
+     * Note: never add inner modifier to [T] class
+     *
+     * Note: [T] class should have a constructor without parameters, eg
+     *
+     *    class SomeRecyclerViewItem : UltronRecyclerViewItem(){...}
+     * */
     inline fun <reified T : UltronRecyclerViewItem> getItem(itemMatcher: Matcher<View>, autoScroll: Boolean = true): T {
         waitItemsLoaded()
         return UltronRecyclerViewItem.getInstance(this, itemMatcher, autoScroll)
     }
 
-    /** @return [UltronRecyclerViewItem] subclass instance at position [itemPosition] */
+    /** @return [UltronRecyclerViewItem] subclass instance at position [itemPosition]
+     *
+     * Note: never add inner modifier to [T] class
+     *
+     * Note: [T] class should have a constructor without parameters, eg
+     *
+     *    class SomeRecyclerViewItem : UltronRecyclerViewItem(){...}
+     * */
     inline fun <reified T : UltronRecyclerViewItem> getItem(itemPosition: Int, autoScroll: Boolean = true): T {
         waitItemsLoaded()
         return UltronRecyclerViewItem.getInstance(this, itemPosition, autoScroll)
     }
 
-    /** @return [UltronRecyclerViewItem] subclass instance at first position */
+    /** @return [UltronRecyclerViewItem] subclass instance at first position
+     *
+     * Note: never add inner modifier to [T] class
+     *
+     * Note: [T] class should have a constructor without parameters, eg
+     *
+     *    class SomeRecyclerViewItem : UltronRecyclerViewItem(){...}
+     * */
     inline fun <reified T : UltronRecyclerViewItem> getFirstItem(autoScroll: Boolean = true) = getItem<T>(0, autoScroll)
 
-    /** @return [UltronRecyclerViewItem] subclass instance at last position */
+    /** @return [UltronRecyclerViewItem] subclass instance at last position
+     *
+     * Note: never add inner modifier to [T] class
+     *
+     * Note: [T] class should have a constructor without parameters, eg
+     *
+     *    class SomeRecyclerViewItem : UltronRecyclerViewItem(){...}
+     * */
     inline fun <reified T : UltronRecyclerViewItem> getLastItem(autoScroll: Boolean = true) : T {
         waitItemsLoaded()
         return UltronRecyclerViewItem.getInstance(this, getSize() - 1, autoScroll)
     }
 
     /** @return simple [UltronRecyclerViewItem] matches '[matcher]'
-     *  @param autoScroll evaluate scrollTo matched item in case of true value
+     * @param matcher helps to identify unique item in RecyclerView list
+     * @param autoScroll evaluate scrollTo matched item in case of true value
      * */
     fun item(matcher: Matcher<View>, autoScroll: Boolean = true): UltronRecyclerViewItem {
         waitItemsLoaded()
@@ -63,7 +98,8 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
     }
 
     /** @return simple [UltronRecyclerViewItem] at [position]
-     *  @param autoScroll evaluate scrollTo item at [position] in case of true value
+     * @param position of item in RecyclerView list
+     * @param autoScroll evaluate scrollTo item at [position] in case of true value
      * */
     fun item(position: Int, autoScroll: Boolean = true): UltronRecyclerViewItem {
         waitItemsLoaded()
@@ -90,13 +126,16 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
 
     /**
      * identify recyclerView items count immediately at the moment of method calling
+     *
      * use [assertSize] to make sure the list has correct items count
+     *
      * in case the list could be not fully loaded use [waitItemsLoaded] method before calling [getSize]
      */
     open fun getSize() = getRecyclerViewList().adapter?.itemCount ?: 0
 
     /**
      * specifies a list is empty at the moment of method calling
+     *
      * use [assertEmpty] to assert that list has no items
      */
     fun isEmpty() = getSize() == 0
