@@ -1,8 +1,8 @@
 package com.atiurin.ultron.core.common
 
+import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.listeners.AbstractLifecycleListener
 import com.atiurin.ultron.listeners.LogLifecycleListener
-import com.atiurin.ultron.listeners.TimeListener
 
 abstract class AbstractOperationLifecycle {
     private var listeners: MutableList<AbstractLifecycleListener> =
@@ -27,12 +27,14 @@ abstract class AbstractOperationLifecycle {
         val listeners = getListeners()
         listeners.forEach { it.before(executor.operation) }
         val operationResult = operationProcessor.process(executor)
-        if (operationResult.success) {
-            listeners.forEach { it.afterSuccess(operationResult as OperationResult<Operation>) }
-        } else {
-            listeners.forEach { it.afterFailure(operationResult as OperationResult<Operation>) }
+        if (operationResult.operation.type !in UltronConfig.operationsExcludedFromListeners){
+            if (operationResult.success) {
+                listeners.forEach { it.afterSuccess(operationResult as OperationResult<Operation>) }
+            } else {
+                listeners.forEach { it.afterFailure(operationResult as OperationResult<Operation>) }
+            }
+            listeners.forEach { it.after(operationResult as OperationResult<Operation>) }
         }
-        listeners.forEach { it.after(operationResult as OperationResult<Operation>) }
         resultHandler(operationResult)
         return operationResult
     }

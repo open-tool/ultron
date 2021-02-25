@@ -3,7 +3,6 @@ package com.atiurin.ultron.core.espresso.recyclerview
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.ViewAction
-import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.exceptions.UltronException
@@ -140,10 +139,9 @@ open class UltronRecyclerViewItem {
         inline fun <reified T : UltronRecyclerViewItem> getInstance(
             ultronRecyclerView: UltronRecyclerView,
             itemViewMatcher: Matcher<View>,
-            autoScroll: Boolean = true,
-            scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+            autoScroll: Boolean = true
         ): T {
-            val item = T::class.java.newInstance()
+            val item = this.createUltronRecyclerViewItemInstance<T>()
             item.setExecutor(ultronRecyclerView, itemViewMatcher)
             if (autoScroll) item.scrollToItem()
             return item
@@ -152,13 +150,33 @@ open class UltronRecyclerViewItem {
         inline fun <reified T : UltronRecyclerViewItem> getInstance(
             ultronRecyclerView: UltronRecyclerView,
             position: Int,
-            autoScroll: Boolean = true,
-            scrollTimeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT
+            autoScroll: Boolean = true
         ): T {
-            val item = T::class.java.newInstance()
+            val item = this.createUltronRecyclerViewItemInstance<T>()
             item.setExecutor(ultronRecyclerView, position)
             if (autoScroll) item.scrollToItem()
             return item
+        }
+
+        inline fun <reified T : UltronRecyclerViewItem> createUltronRecyclerViewItemInstance() : T{
+            return try {
+                T::class.java.newInstance()
+            }catch (ex: Exception){
+                val desc = when {
+                    T::class.isInner -> {
+                        "${T::class.simpleName} is an inner class so you have to delete inner modifier (It is often when kotlin throws 'has no zero argument constructor' but real reason is an inner modifier)"
+                    }
+                    T::class.constructors.find { it.parameters.isEmpty() } == null -> {
+                        "${T::class.simpleName} doesn't have a constructor without params (create an empty constructor)"
+                    }
+                    else -> ex.message
+                }
+                throw UltronException("""
+                    |Couldn't create an instance of ${T::class.simpleName}. 
+                    |Possible reason: $desc 
+                    |Original exception: ${ex.message}, cause ${ex.cause}
+                """.trimMargin())
+            }
         }
     }
 }

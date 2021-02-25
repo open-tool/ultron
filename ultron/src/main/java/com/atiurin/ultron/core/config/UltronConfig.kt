@@ -22,10 +22,7 @@ import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.exceptions.UltronWrapperException
-import com.atiurin.ultron.testlifecycle.setupteardown.Condition
-import com.atiurin.ultron.testlifecycle.setupteardown.ConditionExecutorWrapper
-import com.atiurin.ultron.testlifecycle.setupteardown.ConditionsExecutor
-import com.atiurin.ultron.testlifecycle.setupteardown.DefaultConditionsExecutor
+import com.atiurin.ultron.testlifecycle.setupteardown.*
 import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
@@ -33,7 +30,7 @@ import java.lang.RuntimeException
 
 object UltronConfig {
     var LOGCAT_TAG = "Ultron"
-    val operationsExcludeFromLog = mutableListOf<OperationType>(EspressoAssertionType.IDENTIFY_RECYCLER_VIEW)
+    val operationsExcludedFromListeners = mutableListOf<OperationType>(EspressoAssertionType.IDENTIFY_RECYCLER_VIEW)
 
     class Espresso {
         companion object {
@@ -179,12 +176,5 @@ object UltronConfig {
             var conditionExecutorWrapper: ConditionExecutorWrapper = DefaultConditionExecutorWrapper()
             var conditionsExecutor: ConditionsExecutor = DefaultConditionsExecutor()
         }
-    }
-}
-
-class DefaultConditionExecutorWrapper : ConditionExecutorWrapper{
-    override fun execute(condition: Condition) {
-        Log.d(UltronConfig.LOGCAT_TAG, "Execute condition '${condition.name}' with key '${condition.key}'")
-        condition.actions()
     }
 }
