@@ -3,7 +3,7 @@ package com.atiurin.ultron.core.espresso
 import com.atiurin.ultron.core.common.DefaultOperationIterationResult
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationIterationResult
-import com.atiurin.ultron.core.common.OperationType
+import com.atiurin.ultron.core.common.UltronOperationType
 
 /**
  * @param operationBlock represent an action or assertion block, for example
@@ -16,7 +16,7 @@ import com.atiurin.ultron.core.common.OperationType
 class UltronEspressoOperation(
     val operationBlock: () -> Unit,
     override val name: String,
-    override val type: OperationType,
+    override val type: UltronOperationType,
     override val description: String,
     override val timeoutMs: Long
 ) : Operation {

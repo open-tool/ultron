@@ -10,6 +10,7 @@ import com.atiurin.ultron.page.Page
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
 import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.ultron.core.espresso.UltronEspresso
+import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
@@ -26,6 +27,7 @@ object ChatPage : Page<ChatPage>() {
     val clearHistoryBtn = withText("Clear history")
     val inputMessageText = withId(R.id.message_input_text)
     val sendMessageBtn = withId(R.id.send_button)
+    val toolbarTitle = withId(R.id.toolbar_title)
 
     fun getMessageListItem(text: String): ChatRecyclerItem {
         return messagesList.getItem(hasDescendant(
@@ -63,6 +65,9 @@ object ChatPage : Page<ChatPage>() {
         this.getListItemAtPosition(position).text.isDisplayed().hasText(text)
     }
 
+    fun assertToolbarTitle(text: String){
+        toolbarTitle.hasText(text)
+    }
     fun clearHistory() = apply {
         step("Clear chat history") {
             UltronEspresso.openContextualActionModeOverflowMenu()

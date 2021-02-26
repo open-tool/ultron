@@ -10,6 +10,6 @@ object AssertUtils {
         while (!result && (SystemClock.elapsedRealtime() < startTime + timeoutMs)){
             result = block()
         }
-        if (!result) throw UltronException("'$desc' returns false during $timeoutMs ms")
+        if (!result) throw UltronException("Assertion '$desc' failed during $timeoutMs ms")
     }
 }

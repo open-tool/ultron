@@ -1,9 +1,9 @@
 package com.atiurin.ultron.core.uiautomator
 
-import com.atiurin.ultron.core.common.OperationType
+import com.atiurin.ultron.core.common.UltronOperationType
 
 enum class UiAutomatorActionType :
-        OperationType {
+        UltronOperationType {
     CLICK, CLICK_AND_WAIT_FOR_NEW_WINDOW, CLICK_TOP_LEFT, CLICK_BOTTOM_RIGHT,
     LONG_CLICK, LONG_CLICK_BOTTOM_RIGHT,  LONG_CLICK_TOP_LEFT,
     DRAG, FLING, PINCH_CLOSE, PINCH_OPEN, PINCH_OUT, PINCH_IN,

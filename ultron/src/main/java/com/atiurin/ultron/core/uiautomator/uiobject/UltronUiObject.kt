@@ -5,7 +5,7 @@ import androidx.annotation.IntegerRes
 import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiObjectNotFoundException
 import androidx.test.uiautomator.UiSelector
-import com.atiurin.ultron.core.common.OperationType
+import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.uiautomator.*
 import com.atiurin.ultron.exceptions.UltronException
@@ -735,7 +735,7 @@ class UltronUiObject internal constructor(
         operationBlock: () -> Boolean,
         name: String,
         description: String,
-        type: OperationType,
+        type: UltronOperationType,
         timeoutMs: Long,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit
     ) {

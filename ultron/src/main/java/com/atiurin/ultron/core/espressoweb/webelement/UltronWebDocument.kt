@@ -8,7 +8,7 @@ import androidx.test.espresso.web.model.Evaluation
 import androidx.test.espresso.web.model.WindowReference
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.webdriver.DriverAtoms
-import com.atiurin.ultron.core.common.OperationType
+import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
 import com.atiurin.ultron.core.espressoweb.operation.*
@@ -208,7 +208,7 @@ class UltronWebDocument {
         fun <R> executeOperation(
             webInteractionBlock: () -> Web.WebInteraction<R>,
             name: String,
-            type: OperationType,
+            type: UltronOperationType,
             description: String,
             timeoutMs: Long,
             resultHandler: (WebOperationResult<WebInteractionOperation<R>>) -> Unit
@@ -227,7 +227,7 @@ class UltronWebDocument {
         fun executeOperationVoid(
             webInteractionBlock: () -> Web.WebInteraction<Void>,
             name: String,
-            type: OperationType,
+            type: UltronOperationType,
             description: String,
             timeoutMs: Long,
             resultHandler: (WebOperationResult<WebInteractionOperation<Void>>) -> Unit

@@ -7,7 +7,7 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.UiObject2
-import com.atiurin.ultron.core.common.OperationType
+import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.uiautomator.*
 import com.atiurin.ultron.exceptions.UltronException
@@ -909,7 +909,7 @@ class UltronUiObject2 internal constructor(
         actionBlock: () -> Unit,
         name: String,
         description: String,
-        type: OperationType,
+        type: UltronOperationType,
         timeoutMs: Long,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit
     ) {
@@ -927,7 +927,7 @@ class UltronUiObject2 internal constructor(
         assertionBlock: () -> Boolean,
         name: String,
         description: String,
-        type: OperationType,
+        type: UltronOperationType,
         timeoutMs: Long,
         resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit
     ) {

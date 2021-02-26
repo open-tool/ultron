@@ -1,9 +1,9 @@
 package com.atiurin.ultron.core.espresso.action
 
-import com.atiurin.ultron.core.common.OperationType
+import com.atiurin.ultron.core.common.UltronOperationType
 
 enum class EspressoActionType :
-    OperationType {
+    UltronOperationType {
     CLICK, LONG_CLICK, DOUBLE_CLICK,
     TYPE_TEXT, REPLACE_TEXT, CLEAR_TEXT, PRESS_KEY,
     SWIPE_LEFT, SWIPE_RIGHT, SWIPE_UP, SWIPE_DOWN, SCROLL, CUSTOM,

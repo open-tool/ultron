@@ -88,6 +88,53 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
         return UltronRecyclerViewItem.getInstance(this, getSize() - 1, autoScroll)
     }
 
+    /**
+     * @return first [T] matched [matcher]
+     *
+     * it could be used if you can't determine unique matcher for item
+     *
+     * @param matcher determines how to find item
+     * @param autoScroll evaluate scrollTo this item in case of true value
+     */
+    inline fun <reified T : UltronRecyclerViewItem> getFirstItemMatched(matcher: Matcher<View>, autoScroll: Boolean = true) = getItemMatched<T>(matcher, 0, autoScroll)
+
+    /**
+     * @return [T] matched [matcher]
+     *
+     * it could be used if you can't determine unique matcher for item, eg
+     *
+     * RecyclerView has several matched items. You can get any of them by specifying desired [index] value
+     *
+     * @param matcher determines how to find items
+     * @param index value from 0 to lastIndex of matched items
+     * @param autoScroll evaluate scrollTo this item in case of true value
+     */
+    inline fun <reified T : UltronRecyclerViewItem> getItemMatched(matcher: Matcher<View>, index: Int, autoScroll: Boolean = true): T {
+        waitItemsLoaded()
+        AssertUtils.assertTrue(
+            { getItemsAdapterPositionList(matcher).getOrNull(index) != null }, getTimeout(), "RecyclerView($recyclerViewMatcher) has item matched '$matcher' with index $index"
+        )
+        val position = getItemsAdapterPositionList(matcher).getOrNull(index) ?: throw UltronException("RecyclerViewItem matched $matcher with index $index disappeared")
+        return UltronRecyclerViewItem.getInstance(this, position, autoScroll)
+    }
+
+    /**
+     * @return last [T] matched [matcher]
+     *
+     * it could be used if you can't determine unique matcher for item
+     *
+     * @param matcher determines how to find item
+     * @param autoScroll evaluate scrollTo this item in case of true value
+     */
+    inline fun <reified T : UltronRecyclerViewItem> getLastItemMatched(matcher: Matcher<View>, autoScroll: Boolean = true): T {
+        waitItemsLoaded()
+        AssertUtils.assertTrue(
+            { getItemsAdapterPositionList(matcher).lastOrNull() != null }, getTimeout(), "RecyclerView($recyclerViewMatcher) has last item matched '$matcher'"
+        )
+        val position = getItemsAdapterPositionList(matcher).lastOrNull() ?: throw UltronException("Last RecyclerViewItem matched $matcher disappeared")
+        return UltronRecyclerViewItem.getInstance(this, position, autoScroll)
+    }
+
     /** @return simple [UltronRecyclerViewItem] matches '[matcher]'
      * @param matcher helps to identify unique item in RecyclerView list
      * @param autoScroll evaluate scrollTo matched item in case of true value
@@ -112,11 +159,59 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
     /** @return [UltronRecyclerViewItem] at last position */
     fun lastItem(autoScroll: Boolean = true) : UltronRecyclerViewItem {
         waitItemsLoaded()
-        return UltronRecyclerViewItem(recyclerViewMatcher, getSize() - 1, autoScroll)
+        return UltronRecyclerViewItem(recyclerViewMatcher, getLastPosition(), autoScroll)
+    }
+
+    /**
+     * @return first [UltronRecyclerViewItem] matched [matcher]
+     *
+     * it could be used if you can't determine unique matcher for item
+     *
+     * @param matcher determines how to find item
+     * @param autoScroll evaluate scrollTo this item in case of true value
+     */
+    fun firstItemMatched(matcher: Matcher<View>, autoScroll: Boolean = true) = itemMatched(matcher, 0, autoScroll)
+
+    /**
+     * @return [UltronRecyclerViewItem] matched [matcher]
+     *
+     * it could be used if you can't determine unique matcher for item, eg
+     *
+     * RecyclerView has several matched items. You can get any of them by specifying desired [index] value
+     *
+     * @param matcher determines how to find items
+     * @param index value from 0 to lastIndex of matched items
+     * @param autoScroll evaluate scrollTo this item in case of true value
+     */
+    fun itemMatched(matcher: Matcher<View>, index: Int, autoScroll: Boolean = true): UltronRecyclerViewItem {
+        waitItemsLoaded()
+        AssertUtils.assertTrue(
+            { getItemsAdapterPositionList(matcher).getOrNull(index) != null }, getTimeout(), "RecyclerView($recyclerViewMatcher) has item matched '$matcher' with index $index"
+        )
+        val position = getItemsAdapterPositionList(matcher).getOrNull(index) ?: throw UltronException("RecyclerViewItem matched $matcher with index $index disappeared")
+        return UltronRecyclerViewItem(recyclerViewMatcher, position, autoScroll)
+    }
+
+    /**
+     * @return last [UltronRecyclerViewItem] matched [matcher]
+     *
+     * it could be used if you can't determine unique matcher for item
+     *
+     * @param matcher determines how to find item
+     * @param autoScroll evaluate scrollTo this item in case of true value
+     */
+    fun lastItemMatched(matcher: Matcher<View>, autoScroll: Boolean = true): UltronRecyclerViewItem {
+        waitItemsLoaded()
+        AssertUtils.assertTrue(
+            { getItemsAdapterPositionList(matcher).lastOrNull() != null }, getTimeout(), "RecyclerView($recyclerViewMatcher) has last item matched '$matcher'"
+        )
+        val position = getItemsAdapterPositionList(matcher).lastOrNull() ?: throw UltronException("Last RecyclerViewItem matched $matcher disappeared")
+        return UltronRecyclerViewItem(recyclerViewMatcher, position, autoScroll)
     }
 
     /**
      * @return RecyclerView representation at the moment of identifying
+     *
      * in case of original RecyclerView in app under test is changed you have to call this method again to get an actual info
      * */
     open fun getRecyclerViewList(): RecyclerView {
@@ -140,12 +235,16 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      */
     fun isEmpty() = getSize() == 0
 
+    fun getLastPosition(): Int {
+        val position = getSize() - 1
+        return if (position >= 0) position else 0
+    }
     /**
      * Asserts RecyclerView has no item
      */
     fun assertEmpty(){
         AssertUtils.assertTrue(
-            { getSize() == 0 }, recyclerViewOperationsTimeoutMs, "Assert RecyclerView($recyclerViewMatcher) has no items, but actual size = ${getSize()}"
+            { getSize() == 0 }, recyclerViewOperationsTimeoutMs, "RecyclerView($recyclerViewMatcher) has no items (actual size = ${getSize()})"
         )
     }
     /**
@@ -153,7 +252,7 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      */
     open fun assertSize(expected: Int) {
         AssertUtils.assertTrue(
-            { getSize() == expected }, recyclerViewOperationsTimeoutMs, "Assert RecyclerView($recyclerViewMatcher) size is $expected, but actual ${getSize()}"
+            { getSize() == expected }, recyclerViewOperationsTimeoutMs, "RecyclerView($recyclerViewMatcher) size is $expected (actual size = ${getSize()})"
         )
     }
 
@@ -216,6 +315,8 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
 
     /**
      * @return a list of [RecyclerView.ViewHolder] objects those matched with [itemMatcher]
+     *
+     * Note: only items are displayed on the screen have ViewHolder
      */
     fun getViewHolderList(itemMatcher: Matcher<View>): List<RecyclerView.ViewHolder> {
         val recyclerView = getRecyclerViewList()
@@ -226,6 +327,13 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
             recyclerView.findViewHolderForAdapterPosition(it.position)?.let { vh -> viewHolders.add(vh) }
         }
         return viewHolders
+    }
+
+    /**
+     * @return positions of all matched items in the list
+     */
+    fun getItemsAdapterPositionList(itemMatcher: Matcher<View>): List<Int> {
+        return itemsMatching(getRecyclerViewList(), viewHolderMatcher(itemMatcher)).map { it.position }
     }
 
     /**

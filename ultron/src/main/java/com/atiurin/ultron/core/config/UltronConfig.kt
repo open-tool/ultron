@@ -1,6 +1,5 @@
 package com.atiurin.ultron.core.config
 
-import android.util.Log
 import android.view.View
 import android.webkit.WebView
 import androidx.test.espresso.NoMatchingViewException
@@ -30,7 +29,7 @@ import java.lang.RuntimeException
 
 object UltronConfig {
     var LOGCAT_TAG = "Ultron"
-    val operationsExcludedFromListeners = mutableListOf<OperationType>(EspressoAssertionType.IDENTIFY_RECYCLER_VIEW)
+    val operationsExcludedFromListeners = mutableListOf<UltronOperationType>(EspressoAssertionType.IDENTIFY_RECYCLER_VIEW)
 
     class Espresso {
         companion object {

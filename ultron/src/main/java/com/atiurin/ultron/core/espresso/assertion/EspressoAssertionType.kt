@@ -1,9 +1,9 @@
 package com.atiurin.ultron.core.espresso.assertion
 
-import com.atiurin.ultron.core.common.OperationType
+import com.atiurin.ultron.core.common.UltronOperationType
 
 enum class EspressoAssertionType :
-    OperationType {
+    UltronOperationType {
     IS_DISPLAYED, IS_NOT_DISPLAYED, IS_COMPLETELY_DISPLAYED, IS_DISPLAYING_AT_LEAST,
     DOES_NOT_EXIST,
     IS_ENABLED, IS_NOT_ENABLED,

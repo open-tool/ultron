@@ -1,12 +1,8 @@
 package com.atiurin.ultron.core.uiautomator.uiobject
 
-import androidx.test.uiautomator.UiObject
-import androidx.test.uiautomator.UiSelector
 import com.atiurin.ultron.core.common.DefaultOperationIterationResult
-import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationIterationResult
-import com.atiurin.ultron.core.common.OperationType
-import com.atiurin.ultron.core.config.UltronConfig.UiAutomator.Companion.uiDevice
+import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 import com.atiurin.ultron.exceptions.UltronException
 
@@ -14,7 +10,7 @@ class UiAutomatorUiSelectorOperation(
     private val operationBlock: () -> Boolean,
     override val name: String,
     override val description: String,
-    override val type: OperationType,
+    override val type: UltronOperationType,
     override val timeoutMs: Long) : UiAutomatorOperation {
     override fun execute(): OperationIterationResult {
         var success = true

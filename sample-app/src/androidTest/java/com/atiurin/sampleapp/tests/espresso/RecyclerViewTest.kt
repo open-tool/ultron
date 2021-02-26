@@ -9,6 +9,7 @@ import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.data.repositories.ContactRepositoty
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.utils.AssertUtils
+import com.atiurin.sampleapp.pages.ChatPage
 import com.atiurin.sampleapp.pages.FriendsListPage
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
@@ -19,6 +20,8 @@ import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
 import com.atiurin.ultron.testlifecycle.setupteardown.TearDown
 import com.atiurin.ultron.testlifecycle.setupteardown.TearDownRule
+import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.containsString
 import org.junit.Assert
 import org.junit.Test
 
@@ -248,5 +251,97 @@ class RecyclerViewTest : BaseTest() {
     @Test
     fun getViewHolderAtPosition_inVisibleList(){
         Assert.assertNotNull(page.recycler.waitItemsLoaded().getViewHolderAtPosition(2))
+    }
+
+    @Test
+    fun getItemsAdapterPositionList(){
+        page.recycler.waitItemsLoaded()
+        val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString("Friend"))))
+        Assert.assertEquals(0, page.recycler.getViewHolderList(matcher).size)
+        Assert.assertTrue(page.recycler.getItemsAdapterPositionList(matcher).isNotEmpty())
+    }
+
+    @Test
+    fun firstItemMatched_existItem(){
+        val pattern = "Friend"
+        val expectedContacts = CONTACTS.filter { it.name.contains(pattern) }
+        val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(pattern))))
+
+        page.recycler.firstItemMatched(matcher).isDisplayed().click()
+        ChatPage.assertToolbarTitle(expectedContacts.first().name)
+    }
+
+    @Test
+    fun itemMatched_existItem(){
+        val pattern = "Friend"
+        val expectedContacts = CONTACTS.filter { it.name.contains(pattern) }
+        val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(pattern))))
+
+        page.recycler.itemMatched(matcher, 1).isDisplayed().click()
+        ChatPage.assertToolbarTitle(expectedContacts[1].name)
+    }
+
+    @Test
+    fun itemMatched_notExistItem(){
+        val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString("Friend"))))
+        AssertUtils.assertException { page.recycler.withTimeout(1000).itemMatched(matcher, 99) }
+    }
+
+    @Test
+    fun lastItemMatched_existItem(){
+        val pattern = "Friend"
+        val expectedContacts = CONTACTS.filter { it.name.contains(pattern) }
+        val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(pattern))))
+
+        page.recycler.itemMatched(matcher, expectedContacts.lastIndex).isDisplayed().click()
+        ChatPage.assertToolbarTitle(expectedContacts.last().name)
+    }
+
+    @Test
+    fun getFirstItemMatched_existItem(){
+        val pattern = "Friend"
+        val expectedContact = CONTACTS.filter { it.name.contains(pattern) }.first()
+        val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(pattern))))
+
+        page.recycler.getFirstItemMatched<FriendsListPage.FriendRecyclerItem>(matcher).apply {
+            name.isDisplayed().hasText(expectedContact.name)
+            status.hasText(expectedContact.status)
+            click()
+        }
+        ChatPage.assertToolbarTitle(expectedContact.name)
+    }
+
+    @Test
+    fun getItemMatched_existItem(){
+        val pattern = "Friend"
+        val expectedContact = CONTACTS.filter { it.name.contains(pattern) }[1]
+        val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(pattern))))
+
+        page.recycler.getItemMatched<FriendsListPage.FriendRecyclerItem>(matcher, 1).apply {
+            name.isDisplayed().hasText(expectedContact.name)
+            status.hasText(expectedContact.status)
+            click()
+        }
+        ChatPage.assertToolbarTitle(expectedContact.name)
+    }
+
+    @Test
+    fun getItemMatched_notExistItem(){
+        val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString("Friend"))))
+        AssertUtils.assertException { page.recycler.withTimeout(1000).getItemMatched<FriendsListPage.FriendRecyclerItem>(matcher, 99) }
+    }
+
+    @Test
+    fun getLastItemMatched_existItem(){
+        val pattern = "Friend"
+        val expectedContacts = CONTACTS.filter { it.name.contains(pattern) }
+        val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(pattern))))
+
+        page.recycler.getItemMatched<FriendsListPage.FriendRecyclerItem>(matcher, expectedContacts.lastIndex).apply {
+            name.isDisplayed().hasText(expectedContacts.last().name)
+            status.hasText(expectedContacts.last().status)
+            click()
+        }
+        ChatPage.assertToolbarTitle(expectedContacts.last().name)
     }
 }

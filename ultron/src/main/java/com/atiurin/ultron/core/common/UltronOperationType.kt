@@ -1,3 +1,3 @@
 package com.atiurin.ultron.core.common
 
-interface OperationType
+interface UltronOperationType

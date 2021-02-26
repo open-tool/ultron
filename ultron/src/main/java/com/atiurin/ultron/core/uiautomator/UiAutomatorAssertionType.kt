@@ -1,9 +1,9 @@
 package com.atiurin.ultron.core.uiautomator
 
-import com.atiurin.ultron.core.common.OperationType
+import com.atiurin.ultron.core.common.UltronOperationType
 
 enum class UiAutomatorAssertionType :
-    OperationType {
+    UltronOperationType {
     IS_DISPLAYED, IS_NOT_DISPLAYED, IS_COMPLETELY_DISPLAYED, IS_DISPLAYING_AT_LEAST,
     IS_ENABLED, IS_NOT_ENABLED,
     IS_CLICKABLE, IS_NOT_CLICKABLE,

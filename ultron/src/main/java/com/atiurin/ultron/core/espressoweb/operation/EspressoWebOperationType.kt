@@ -1,9 +1,9 @@
 package com.atiurin.ultron.core.espressoweb.operation
 
-import com.atiurin.ultron.core.common.OperationType
+import com.atiurin.ultron.core.common.UltronOperationType
 
 enum class EspressoWebOperationType :
-    OperationType {
+    UltronOperationType {
     //element
     WEB_CLICK, WEB_GET_TEXT, WEB_REPLACE_TEXT,
     WEB_CLEAR_ELEMENT, WEB_KEYS,
