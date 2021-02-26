@@ -14,10 +14,6 @@ import com.atiurin.ultron.extensions.isDisplayed
 import org.junit.Test
 
 class DemoEspressoTest : BaseTest() {
-    companion object {
-        const val FIRST_CONDITION = "FIRST_CONDITION"
-        const val SECOND_CONDITION = "SECOND_CONDITION"
-    }
 
     private val activityTestRule = ActivityTestRule(MainActivity::class.java)
 
@@ -33,7 +29,6 @@ class DemoEspressoTest : BaseTest() {
         }
     }
 
-    @SetUp(SECOND_CONDITION)
     @Test
     fun sendMessage() {
         FriendsListPage.openChat("Chandler Bing")
@@ -42,8 +37,6 @@ class DemoEspressoTest : BaseTest() {
             .sendMessage("test message")
     }
 
-    @SetUp(FIRST_CONDITION, SECOND_CONDITION)
-    @TearDown(FIRST_CONDITION, SECOND_CONDITION)
     @Test
     fun checkMessagesPositionsInChat() {
         Log.info("Start test checkMessagesPositionsInChat")
