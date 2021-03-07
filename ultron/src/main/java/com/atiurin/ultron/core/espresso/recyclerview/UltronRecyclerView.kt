@@ -1,7 +1,6 @@
 package com.atiurin.ultron.core.espresso.recyclerview
 
 import android.os.SystemClock
-import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.annotation.IntegerRes
@@ -24,6 +23,7 @@ import com.atiurin.ultron.utils.AssertUtils
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  *  Provides a set of interactions with RecyclerView list.
@@ -111,11 +111,13 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      */
     inline fun <reified T : UltronRecyclerViewItem> getItemMatched(matcher: Matcher<View>, index: Int, autoScroll: Boolean = true): T {
         waitItemsLoaded()
-        AssertUtils.assertTrue(
-            { getItemsAdapterPositionList(matcher).getOrNull(index) != null }, getTimeout(), "RecyclerView($recyclerViewMatcher) has item matched '$matcher' with index $index"
+        val position = AssertUtils.assertTrueAndReturn(AtomicInteger(),
+            { container ->
+                container.set(getItemAdapterPositionAtIndex(matcher, index))
+                container.get() >= 0
+            }, getTimeout(), "RecyclerView($recyclerViewMatcher) has item matched '$matcher' with index $index"
         )
-        val position = getItemsAdapterPositionList(matcher).getOrNull(index) ?: throw UltronException("RecyclerViewItem matched $matcher with index $index disappeared")
-        return UltronRecyclerViewItem.getInstance(this, position, autoScroll)
+        return UltronRecyclerViewItem.getInstance(this, position.get(), autoScroll)
     }
 
     /**
@@ -128,11 +130,13 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      */
     inline fun <reified T : UltronRecyclerViewItem> getLastItemMatched(matcher: Matcher<View>, autoScroll: Boolean = true): T {
         waitItemsLoaded()
-        AssertUtils.assertTrue(
-            { getItemsAdapterPositionList(matcher).lastOrNull() != null }, getTimeout(), "RecyclerView($recyclerViewMatcher) has last item matched '$matcher'"
+        val position = AssertUtils.assertTrueAndReturn(AtomicInteger(),
+            { container ->
+                container.set(getItemsAdapterPositionList(matcher).lastOrNull() ?: -1)
+                container.get() >= 0
+            }, getTimeout(), "RecyclerView($recyclerViewMatcher) has last item matched '$matcher'"
         )
-        val position = getItemsAdapterPositionList(matcher).lastOrNull() ?: throw UltronException("Last RecyclerViewItem matched $matcher disappeared")
-        return UltronRecyclerViewItem.getInstance(this, position, autoScroll)
+        return UltronRecyclerViewItem.getInstance(this, position.get(), autoScroll)
     }
 
     /** @return simple [UltronRecyclerViewItem] matches '[matcher]'
@@ -185,11 +189,13 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      */
     fun itemMatched(matcher: Matcher<View>, index: Int, autoScroll: Boolean = true): UltronRecyclerViewItem {
         waitItemsLoaded()
-        AssertUtils.assertTrue(
-            { getItemsAdapterPositionList(matcher).getOrNull(index) != null }, getTimeout(), "RecyclerView($recyclerViewMatcher) has item matched '$matcher' with index $index"
+        val position = AssertUtils.assertTrueAndReturn(AtomicInteger(),
+            { container ->
+                container.set(getItemAdapterPositionAtIndex(matcher, index))
+                container.get() >= 0
+            }, getTimeout(), "RecyclerView($recyclerViewMatcher) has item matched '$matcher' with index $index"
         )
-        val position = getItemsAdapterPositionList(matcher).getOrNull(index) ?: throw UltronException("RecyclerViewItem matched $matcher with index $index disappeared")
-        return UltronRecyclerViewItem(recyclerViewMatcher, position, autoScroll)
+        return UltronRecyclerViewItem(recyclerViewMatcher, position.get(), autoScroll)
     }
 
     /**
@@ -202,11 +208,13 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      */
     fun lastItemMatched(matcher: Matcher<View>, autoScroll: Boolean = true): UltronRecyclerViewItem {
         waitItemsLoaded()
-        AssertUtils.assertTrue(
-            { getItemsAdapterPositionList(matcher).lastOrNull() != null }, getTimeout(), "RecyclerView($recyclerViewMatcher) has last item matched '$matcher'"
+        val position = AssertUtils.assertTrueAndReturn(AtomicInteger(),
+            { container ->
+                container.set(getItemsAdapterPositionList(matcher).lastOrNull() ?: -1)
+                container.get() >= 0
+            }, getTimeout(), "RecyclerView($recyclerViewMatcher) has last item matched '$matcher'"
         )
-        val position = getItemsAdapterPositionList(matcher).lastOrNull() ?: throw UltronException("Last RecyclerViewItem matched $matcher disappeared")
-        return UltronRecyclerViewItem(recyclerViewMatcher, position, autoScroll)
+        return UltronRecyclerViewItem(recyclerViewMatcher, position.get(), autoScroll)
     }
 
     /**
@@ -297,19 +305,15 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      */
     fun waitItemsLoaded(recyclerView: RecyclerView = getRecyclerViewList()) = apply {
         var isLoaded = false
-        if (recyclerView.adapter?.itemCount ?: 0 > 0) {
-            Log.d("Ultron", "recyclerView.adapter?.itemCount > 0  = " + recyclerView.adapter?.itemCount)
-            return@apply
-        }
+        if (recyclerView.adapter?.itemCount ?: 0 > 0) return@apply
         recyclerView.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                Log.d("Ultron", "recyclerView is loaded")
                 recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 isLoaded = true
             }
         })
-        val startTime = SystemClock.elapsedRealtime()
-        while (!isLoaded && (startTime + loadTimeoutMs > SystemClock.elapsedRealtime())) {}
+        val finishTime = SystemClock.elapsedRealtime() + loadTimeoutMs
+        while (!isLoaded && (finishTime > SystemClock.elapsedRealtime())) {}
         if (!isLoaded) throw UltronException("RecyclerView matches '$recyclerViewMatcher' doesn't load any item during $loadTimeoutMs ms")
     }
 
@@ -331,9 +335,22 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
 
     /**
      * @return positions of all matched items in the list
+     * @param limitAmountOfMatchedItems restricts the size of list to be returned
+     *
+     * eg RecyclerView contains 100 matched items, [limitAmountOfMatchedItems] = 10 => this method will return positions of first 10 matched RecyclerView items
      */
-    fun getItemsAdapterPositionList(itemMatcher: Matcher<View>): List<Int> {
-        return itemsMatching(getRecyclerViewList(), viewHolderMatcher(itemMatcher)).map { it.position }
+    fun getItemsAdapterPositionList(itemMatcher: Matcher<View>, limitAmountOfMatchedItems: Int = -1): List<Int> {
+        return itemsMatching(getRecyclerViewList(), viewHolderMatcher(itemMatcher), limitAmountOfMatchedItems).map { it.position }
+    }
+
+    /**
+     * @return position of matched item with [index]
+     * @return -1 if there is no matched item with [index]
+     */
+    fun getItemAdapterPositionAtIndex(itemMatcher: Matcher<View>, index: Int): Int {
+        val items = getItemsAdapterPositionList(itemMatcher,index + 1)
+        return if (items.size -1 < index) -1
+        else items[index]
     }
 
     /**

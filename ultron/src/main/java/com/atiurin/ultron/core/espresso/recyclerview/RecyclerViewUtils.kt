@@ -27,12 +27,9 @@ internal fun <T : VH, VH : RecyclerView.ViewHolder> itemsMatching(
         // Bind data to ViewHolder and apply matcher to view descendants.
         adapter.bindViewHolder((cachedViewHolder as T?)!!, position)
         if (viewHolderMatcher.matches(cachedViewHolder)) {
-            matchedItems.add(
-                MatchedItem(
-                    position,
-                    HumanReadables.getViewHierarchyErrorMessage(
-                        cachedViewHolder!!.itemView, null,
-                        "\n\n*** Matched ViewHolder item at position: $position ***", null
+            matchedItems.add(MatchedItem(position,
+                HumanReadables.getViewHierarchyErrorMessage(
+                        cachedViewHolder!!.itemView, null, "\n\n*** Matched ViewHolder item at position: $position ***", null
                     )
                 )
             )
