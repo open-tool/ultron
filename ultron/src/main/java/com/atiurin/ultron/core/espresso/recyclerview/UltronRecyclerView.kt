@@ -39,7 +39,7 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      */
     fun getTimeout() = recyclerViewOperationsTimeoutMs
 
-    /** @return [UltronRecyclerViewItem] subclass instance matches [itemMatcher]
+    /** @return [UltronRecyclerViewItem] subclass instance matches [matcher]
      *
      * Note: never add inner modifier to [T] class
      *
@@ -47,12 +47,12 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      *
      *    class SomeRecyclerViewItem : UltronRecyclerViewItem(){...}
      * */
-    inline fun <reified T : UltronRecyclerViewItem> getItem(itemMatcher: Matcher<View>, autoScroll: Boolean = true): T {
+    inline fun <reified T : UltronRecyclerViewItem> getItem(matcher: Matcher<View>, autoScroll: Boolean = true): T {
         waitItemsLoaded()
-        return UltronRecyclerViewItem.getInstance(this, itemMatcher, autoScroll)
+        return UltronRecyclerViewItem.getInstance(this, matcher, autoScroll)
     }
 
-    /** @return [UltronRecyclerViewItem] subclass instance at position [itemPosition]
+    /** @return [UltronRecyclerViewItem] subclass instance at position [position]
      *
      * Note: never add inner modifier to [T] class
      *
@@ -60,9 +60,9 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      *
      *    class SomeRecyclerViewItem : UltronRecyclerViewItem(){...}
      * */
-    inline fun <reified T : UltronRecyclerViewItem> getItem(itemPosition: Int, autoScroll: Boolean = true): T {
+    inline fun <reified T : UltronRecyclerViewItem> getItem(position: Int, autoScroll: Boolean = true): T {
         waitItemsLoaded()
-        return UltronRecyclerViewItem.getInstance(this, itemPosition, autoScroll)
+        return UltronRecyclerViewItem.getInstance(this, position, autoScroll)
     }
 
     /** @return [UltronRecyclerViewItem] subclass instance at first position

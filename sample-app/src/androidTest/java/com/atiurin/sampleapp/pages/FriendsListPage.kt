@@ -7,9 +7,12 @@ import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.step
+import com.atiurin.ultron.extensions.click
 import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
+import com.atiurin.ultron.extensions.textContains
 import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.containsString
 import org.junit.Assert
 
 object FriendsListPage : Page<FriendsListPage>() {
@@ -24,6 +27,7 @@ object FriendsListPage : Page<FriendsListPage>() {
     class FriendRecyclerItem : UltronRecyclerViewItem() {
         val name by lazy { getChild(withId(R.id.tv_name)) }
         val status by lazy { getChild(withId(R.id.tv_status)) }
+        val avatar by lazy { getChild(withId(R.id.avatar)) }
     }
 
     fun getListItem(contactName: String): FriendRecyclerItem {
