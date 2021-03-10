@@ -1,11 +1,12 @@
 package com.atiurin.ultron.core.common
 
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.listeners.AbstractLifecycleListener
+import com.atiurin.ultron.listeners.UltronLifecycleListener
 import com.atiurin.ultron.listeners.LogLifecycleListener
+import kotlin.reflect.KClass
 
 abstract class AbstractOperationLifecycle {
-    private var listeners: MutableList<AbstractLifecycleListener> =
+    private var listeners: MutableList<UltronLifecycleListener> =
         mutableListOf(LogLifecycleListener())
 
     //set your own implementation in case you would like to customise the behaviour
@@ -39,11 +40,11 @@ abstract class AbstractOperationLifecycle {
         return operationResult
     }
 
-    fun getListeners(): List<AbstractLifecycleListener> {
+    fun getListeners(): List<UltronLifecycleListener> {
         return listeners
     }
 
-    fun addListener(listener: AbstractLifecycleListener) {
+    fun addListener(listener: UltronLifecycleListener) {
         val exist = listeners.find { it.id == listener.id }
         exist?.let { listeners.remove(it) }
         listeners.add(listener)
@@ -53,8 +54,15 @@ abstract class AbstractOperationLifecycle {
         listeners.clear()
     }
 
-    fun removeListener(listener: AbstractLifecycleListener) {
-        val exist = listeners.find { it.id == listener.id }
+    fun removeListener(listenerId: String) {
+        val exist = listeners.find { it.id == listenerId }
+        if (exist != null) {
+            listeners.remove(exist)
+        }
+    }
+
+    fun <T: UltronLifecycleListener> removeListener(listenerClass: Class<T>) {
+        val exist = listeners.find { it.id == listenerClass.name }
         if (exist != null) {
             listeners.remove(exist)
         }

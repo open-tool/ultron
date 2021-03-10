@@ -4,7 +4,7 @@ import android.util.Log
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationResult
 
-class TimeListener : AbstractLifecycleListener() {
+class TimeListener : UltronLifecycleListener() {
     var time = 0L
 
     override fun before(operation: Operation) {

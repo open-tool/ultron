@@ -5,7 +5,7 @@ import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.config.UltronConfig
 
-class LogLifecycleListener : AbstractLifecycleListener() {
+class LogLifecycleListener : UltronLifecycleListener() {
     override fun before(operation: Operation) {
         Log.d(UltronConfig.LOGCAT_TAG, "Before execution of ${operation.name}.")
     }

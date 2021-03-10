@@ -13,23 +13,48 @@ import androidx.test.uiautomator.UiObjectNotFoundException
 import com.atiurin.ultron.core.common.*
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
+import com.atiurin.ultron.core.espresso.UltronEspressoOperationLifecycle
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
-import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
+import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
+import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
+import com.atiurin.ultron.core.uiautomator.UltronUiAutomatorLifecycle
 import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.exceptions.UltronWrapperException
-import com.atiurin.ultron.testlifecycle.setupteardown.*
+import com.atiurin.ultron.listeners.UltronLifecycleListener
+import com.atiurin.ultron.testlifecycle.setupteardown.ConditionExecutorWrapper
+import com.atiurin.ultron.testlifecycle.setupteardown.ConditionsExecutor
+import com.atiurin.ultron.testlifecycle.setupteardown.DefaultConditionExecutorWrapper
+import com.atiurin.ultron.testlifecycle.setupteardown.DefaultConditionsExecutor
 import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
-import java.lang.RuntimeException
 
 object UltronConfig {
     var LOGCAT_TAG = "Ultron"
     val operationsExcludedFromListeners = mutableListOf<UltronOperationType>(EspressoAssertionType.IDENTIFY_RECYCLER_VIEW)
+
+    fun addGlobalListener(lifecycleListener: UltronLifecycleListener){
+        UltronEspressoOperationLifecycle.addListener(lifecycleListener)
+        UltronWebLifecycle.addListener(lifecycleListener)
+        UltronUiAutomatorLifecycle.addListener(lifecycleListener)
+    }
+
+    fun removeGlobalListener(listenerId: String){
+        UltronEspressoOperationLifecycle.removeListener(listenerId)
+        UltronWebLifecycle.removeListener(listenerId)
+        UltronUiAutomatorLifecycle.removeListener(listenerId)
+    }
+
+    fun <T: UltronLifecycleListener> removeGlobalListener(clazz: Class<T>){
+        UltronEspressoOperationLifecycle.removeListener(clazz)
+        UltronWebLifecycle.removeListener(clazz)
+        UltronUiAutomatorLifecycle.removeListener(clazz)
+    }
+
 
     class Espresso {
         companion object {
