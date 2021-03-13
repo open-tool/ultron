@@ -29,7 +29,7 @@ Let's look at 2 examples:
 
 1. Simple assertion and action.
 
-_Clear Espresso_
+_Espresso_
 
 ```kotlin
 onView(withId(R.id.send_button)).check(isDisplayed()).perform(click())
@@ -39,11 +39,13 @@ _Ultron_
 ```kotlin
 withId(R.id.send_button).isDisplayed().click()
 ```
-It looks better. Names of all Ultron operations are the same as Espresso one. It also provide a list of additional operations.
+It looks better. Names of all Ultron operations are the same as Espresso. It also provide a list of additional operations.
+
+See [wiki](https://github.com/alex-tiurin/ultron/wiki/Espresso-operations) for more info.
 
 2. Action on RecyclerView list item
 
-_Clear Espresso_
+_Espresso_
 
 ```kotlin
 onView(withId(R.id.recycler_friends))
@@ -66,6 +68,50 @@ withRecyclerView(R.id.recycler_friends)
     .item(hasDescendant(withText("Janice")))
     .click()
 ```
+
+Read [wiki](https://github.com/alex-tiurin/ultron/wiki/RecyclerView) and realise the magic of how *Ultron* interacts with RecyclerView.
+
+3. Espresso WebView operations 
+
+_Espresso_
+
+```kotlin
+onWebView()
+    .withElement(findElement(Locator.ID, "text_input"))
+    .perform(webKeys(newTitle))
+    .withElement(findElement(Locator.ID, "button1"))
+    .perform(webClick())
+    .withElement(findElement(Locator.ID, "title"))
+    .check(webMatches(getText(), containsString(newTitle)))
+```
+
+_Ultron_
+
+```kotlin
+id("text_input").webKeys(newTitle)
+id("button1").webClick()
+id("title").hasText(newTitle)
+```
+
+Read [wiki](https://github.com/alex-tiurin/ultron/wiki/WebView) 
+
+4. UI Automator operations
+
+_UI Automator_
+
+```kotlin
+val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+device
+    .findObject(By.res("com.atiurin.sampleapp:id", "button1"))
+    .click()
+```
+
+_Ultron_
+
+```kotlin
+byResId(R.id.button1).click() 
+```
+
 ### You can get the result of any operation as boolean value
 
 ```kotlin
@@ -84,7 +130,7 @@ withId(R.id.result).withTimeout(10_000).hasText("Passed")
 
 ## 3 steps to develop a test using Ultron
 
-I try to advocate the correct construction of the test framework architecture, the division of responsibilities between the layers and other proper things.
+We try to advocate the correct construction of the test framework architecture, the division of responsibilities between the layers and other proper things.
 
 Therefore, I would like to recommend the following approach when your are using Ultron.
 
@@ -109,7 +155,7 @@ object ChatPage : Page<ChatPage>() {
     fun sendMessage(text: String) = apply {
         inputMessageText.typeText(text)
         sendMessageBtn.click()
-        this.getMessageListItem(text).text
+        getMessageListItem(text).text
              .isDisplayed()
              .hasText(text)
     }
