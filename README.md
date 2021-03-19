@@ -1,6 +1,6 @@
 # Ultron
 
-[ ![Download](https://api.bintray.com/packages/alex-tiurin/android/ultron/images/download.svg) ](https://bintray.com/alex-tiurin/android/ultron/_latestVersion)
+[ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.atiurin/ultron/badge.svg) ](https://maven-badges.herokuapp.com/maven-central/com.atiurin/ultron)
 ![Android CI](https://github.com/alex-tiurin/ultron/workflows/AndroidCI/badge.svg)
 
 Ultron is an easiest framework to develop Android UI tests. It makes your tests stable, short and understandable.
