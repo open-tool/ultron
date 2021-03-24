@@ -10,7 +10,7 @@ Ultron also gives you a full control under your tests!
 Moreover, you don't need to learn any new classes or special syntax. All magic actions and assertions are provided from crunch.
 Ultron can be easially customised and extended. Wish you only stable tests!
 
-![logo](https://user-images.githubusercontent.com/12834123/108596249-d02e9580-7394-11eb-991b-781178d51a72.png)
+![logo](https://user-images.githubusercontent.com/12834123/112367915-96321580-8ceb-11eb-90f6-ed44b5b53ab0.png)
 
 
 ## What are the benefits of using the framework?
@@ -18,7 +18,7 @@ Ultron can be easially customised and extended. Wish you only stable tests!
 - Simple and presentative syntax
 - Stability of all actions and assertions
 - Full control under any action or assertion
-- An architectural approach to writing tests
+- An architectural approach to UI tests development
 - Amazing mechanism of setups and teardowns (You even can setup preconditions for single test in test class. It won't affect the others)
 
 ### A few words about syntax
@@ -111,6 +111,7 @@ _Ultron_
 ```kotlin
 byResId(R.id.button1).click() 
 ```
+Read [wiki](https://github.com/alex-tiurin/ultron/wiki/UI-Automator-operation) 
 
 ### You can get the result of any operation as boolean value
 
@@ -197,7 +198,7 @@ In general, it all comes down to the fact that the architecture of your project 
 Gradle
 ```groovy
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
