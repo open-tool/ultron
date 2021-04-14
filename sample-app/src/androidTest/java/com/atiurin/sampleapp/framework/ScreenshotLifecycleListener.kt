@@ -8,7 +8,7 @@ class ScreenshotLifecycleListener : UltronLifecycleListener(){
     override fun before(operation: Operation) {
     }
 
-    override fun after(operationResult: OperationResult<Operation>) {
-        operationResult.operation
+    override fun afterFailure(operationResult: OperationResult<Operation>) {
+        super.afterFailure(operationResult)
     }
 }
