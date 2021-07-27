@@ -3,7 +3,6 @@
 buildscript {
     ext.kotlin_version = '1.5.21'
     ext.android_maven_gradle_plugin = '2.1'
-    ext.bintray_plugin = '1.8.4'
     repositories {
         google()
         mavenCentral()
