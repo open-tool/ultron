@@ -1,10 +1,9 @@
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "com.github.dcendents:android-maven-gradle-plugin:$android_maven_gradle_plugin"
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintray_plugin"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     }
@@ -18,10 +17,9 @@ ext {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android-extensions'
+//apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.vanniktech.maven.publish'
 
 ext.versions = [
@@ -31,10 +29,10 @@ ext.versions = [
         'buildTools'        : '29.0.3',
         'release'           : publishedVersion,
         'code'              : 2,
-        'recyclerview'      : '1.1.0',
+        'recyclerview'      : '1.2.1',
         'test'              : '1.3.0',
-        'junit'             : '4.13',
-        'espresso'          : '3.3.0',
+        'junit'             : '4.13.2',
+        'espresso'          : '3.4.0',
         'uiautomator'       : '2.2.0'
 ]
 
