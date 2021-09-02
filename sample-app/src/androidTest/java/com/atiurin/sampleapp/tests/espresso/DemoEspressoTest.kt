@@ -1,8 +1,6 @@
 package com.atiurin.sampleapp.tests.espresso
 
-import androidx.test.rule.ActivityTestRule
-import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
-import com.atiurin.ultron.testlifecycle.setupteardown.TearDown
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.atiurin.sampleapp.activity.MainActivity
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.pages.ChatPage
@@ -15,10 +13,10 @@ import org.junit.Test
 
 class DemoEspressoTest : BaseTest() {
 
-    private val activityTestRule = ActivityTestRule(MainActivity::class.java)
+    private val activityRule = ActivityScenarioRule(MainActivity::class.java)
 
     init {
-        ruleSequence.addLast(activityTestRule)
+        ruleSequence.addLast(activityRule)
     }
 
     @Test

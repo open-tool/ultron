@@ -37,9 +37,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun withTimeout(
-        timeoutMs: Long
-    ): UltronUiObject {
+    fun withTimeout(timeoutMs: Long): UltronUiObject {
         return UltronUiObject(
             this.uiObjectProviderBlock,
             this.selectorDesc,
@@ -48,9 +46,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun getChild(
-        uiSelector: UiSelector
-    ): UltronUiObject {
+    fun getChild(uiSelector: UiSelector): UltronUiObject {
         var uiObject: UiObject? = null
         executeOperation(
             operationBlock = {
@@ -73,14 +69,12 @@ class UltronUiObject internal constructor(
      * Creates a new UiObject for a sibling view or a child of the sibling view,
      * relative to the present UiObject.
      *
-     * @param selector for a sibling view or children of the sibling view
+     * @param uiSelector for a sibling view or children of the sibling view
      * @return a new UiObject representing the matched view
      * @throws UiObjectNotFoundException
      * @since API Level 16
      */
-    fun getFromParent(
-        uiSelector: UiSelector
-    ): UltronUiObject {
+    fun getFromParent(uiSelector: UiSelector): UltronUiObject {
         var uiObject: UiObject? = null
         executeOperation(
             operationBlock = {
@@ -218,9 +212,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun replaceText(
-        text: String
-    ) = apply {
+    fun replaceText(text: String) = apply {
         executeOperation(
             operationBlock = {
                 uiObjectProviderBlock().setText(text)
@@ -236,9 +228,7 @@ class UltronUiObject internal constructor(
      * Why legacyAddText? Because it actually not replacing the text in textField it adds to the existing one
      * In case you would like to replace text use [replaceText]
      */
-    fun legacyAddText(
-        text: String
-    ) = apply {
+    fun legacyAddText(text: String) = apply {
         executeOperation(
             operationBlock = {
                 uiObjectProviderBlock().legacySetText(text)
@@ -261,9 +251,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun clickAndWaitForNewWindow(
-        waitWindowTimeout: Long
-    ) = apply {
+    fun clickAndWaitForNewWindow(waitWindowTimeout: Long) = apply {
         executeOperation(
             operationBlock = { uiObjectProviderBlock().clickAndWaitForNewWindow(waitWindowTimeout) },
             name = "ClickAndWaitForNewWindow to $selectorDesc with waitWindowTimeout = $waitWindowTimeout ms",
@@ -323,10 +311,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun dragTo(
-        destObj: UiObject,
-        steps: Int
-    ) = apply {
+    fun dragTo(destObj: UiObject, steps: Int) = apply {
         executeOperation(
             operationBlock = { uiObjectProviderBlock().dragTo(destObj, steps) },
             name = "DragTo of $selectorDesc destObj ${destObj.selector}  with $steps steps",
@@ -336,11 +321,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun dragTo(
-        destX: Int,
-        destY: Int,
-        steps: Int
-    ) = apply {
+    fun dragTo(destX: Int, destY: Int, steps: Int) = apply {
         executeOperation(
             operationBlock = { uiObjectProviderBlock().dragTo(destX, destY, steps) },
             name = "DragTo of $selectorDesc to destX = $destX, destY = $destY with $steps steps",
@@ -350,9 +331,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun swipeUp(
-        steps: Int = 100
-    ) = apply {
+    fun swipeUp(steps: Int = 100) = apply {
         executeOperation(
             operationBlock = { uiObjectProviderBlock().swipeUp(steps) },
             name = "SwipeUp of $selectorDesc with $steps steps",
@@ -362,9 +341,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun swipeDown(
-        steps: Int = 100
-    ) = apply {
+    fun swipeDown(steps: Int = 100) = apply {
         executeOperation(
             operationBlock = { uiObjectProviderBlock().swipeDown(steps) },
             name = "SwipeDown of $selectorDesc with $steps steps",
@@ -374,9 +351,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun swipeLeft(
-        steps: Int = 100
-    ) = apply {
+    fun swipeLeft(steps: Int = 100) = apply {
         executeOperation(
             operationBlock = { uiObjectProviderBlock().swipeLeft(steps) },
             name = "SwipeLeft of $selectorDesc with $steps steps",
@@ -386,9 +361,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun swipeRight(
-        steps: Int = 100
-    ) = apply {
+    fun swipeRight(steps: Int = 100) = apply {
         executeOperation(
             operationBlock = { uiObjectProviderBlock().swipeRight(steps) },
             name = "SwipeRight of $selectorDesc with $steps steps",
@@ -398,10 +371,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun pinchOut(
-        percent: Int,
-        steps: Int
-    ) = apply {
+    fun pinchOut(percent: Int, steps: Int) = apply {
         executeOperation(
             operationBlock = { uiObjectProviderBlock().pinchOut(percent, steps) },
             name = "PinchOut of $selectorDesc with $percent% and $steps steps",
@@ -411,10 +381,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun pinchIn(
-        percent: Int,
-        steps: Int
-    ) = apply {
+    fun pinchIn(percent: Int, steps: Int) = apply {
         executeOperation(
             operationBlock = { uiObjectProviderBlock().pinchIn(percent, steps) },
             name = "PinchIn of $selectorDesc with $percent% and $steps steps",
@@ -424,10 +391,7 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun perform(
-        actionBlock: UiObject.() -> Boolean,
-        actionDescription: String
-    ) = apply {
+    fun perform(actionBlock: UiObject.() -> Boolean, actionDescription: String) = apply {
         executeOperation(
             operationBlock = { uiObjectProviderBlock().actionBlock() },
             name = "Perform custom action '$actionDescription' on $selectorDesc.",
@@ -696,7 +660,8 @@ class UltronUiObject internal constructor(
                 if (!contentDescMatcher.matches(contentDesc)) {
                     throw UltronException("Expected: contentDescription matches '$contentDescMatcher', got '$contentDesc'.")
                 }
-                true },
+                true
+            },
             name = "HasContentDescription $contentDescMatcher in $selectorDesc",
             type = UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION,
             description = "UiObject assertion '${UiAutomatorAssertionType.HAS_CONTENT_DESCRIPTION}' matches '$contentDescMatcher' in $selectorDesc during $timeoutMs ms",

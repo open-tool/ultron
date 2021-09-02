@@ -5,6 +5,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.UiElementsActivity
 import com.atiurin.sampleapp.framework.Log
+import com.atiurin.sampleapp.framework.ultronext.addPrefixText
 import com.atiurin.sampleapp.framework.ultronext.appendText
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils
@@ -354,7 +355,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
         val textToAdd = "added new Text"
         page.editTextContentDesc
             .replaceText(startText)
-            .appendText(textToAdd)
+            .addPrefixText(textToAdd)
             .hasText(startText + textToAdd)
     }
 }

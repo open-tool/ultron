@@ -49,7 +49,7 @@ class SetUpTearDownRuleTest {
         conditionsOrderMap.put(counter.incrementAndGet(), tearDown2Key)
     }
 
-    val lastSetUp = SetUpRule()
+    val lastSetUp = SetUpRule("lastSetup")
         .add {
             conditionsOrderMap.put(counter.incrementAndGet(), lastSetUpKey)
 //            throw Exception("asd")
@@ -58,6 +58,8 @@ class SetUpTearDownRuleTest {
         .add {
             conditionsOrderMap.put(counter.incrementAndGet(), lastTearDownKey)
         }
+
+    val customTestWatcherRule = MyTestWatcherRule("")
     val controlTearDown = TearDownRule()
         .add {
             Log.info(conditionsOrderMap.toString())
@@ -76,12 +78,12 @@ class SetUpTearDownRuleTest {
     val ruleSequence =
         RuleSequence(setUp1, tearDown1)
         .add(tearDown2, setUp2)
-        .addFirst(firstSetUp, firstTearDown)
-        .addLast(lastTearDown, lastSetUp, controlTearDown)
+        .addFirst(firstSetUp, firstTearDown, customTestWatcherRule)
+        .addLast(lastTearDown, lastSetUp)//, controlTearDown)
 
     @Test
     fun mockTestConditions() {
-        Log.info(">>>> test")
+        Log.debug(">>>> test")
 //        throw Exception("asd")
     }
 }

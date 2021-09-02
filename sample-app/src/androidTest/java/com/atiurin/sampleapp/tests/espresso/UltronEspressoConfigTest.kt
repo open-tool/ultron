@@ -1,9 +1,12 @@
 package com.atiurin.sampleapp.tests.espresso
 
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
+import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.UltronDefaultOperationResultAnalyzer
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
@@ -17,6 +20,7 @@ import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
 import com.atiurin.ultron.testlifecycle.setupteardown.TearDown
 import com.atiurin.ultron.testlifecycle.setupteardown.TearDownRule
+import kotlinx.android.synthetic.main.activity_uielements.view.*
 import org.junit.Assert
 import org.junit.Test
 
