@@ -1,6 +1,7 @@
 package com.atiurin.sampleapp.tests.uiautomator
 
 import android.widget.LinearLayout
+import androidx.test.filters.FlakyTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.UiElementsActivity
@@ -341,7 +342,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
     }
 
-    @Test
+    @Test @FlakyTest
     fun swipeLeftTest(){
         page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.swipableImageView.isDisplayed().swipeLeft()

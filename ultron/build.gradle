@@ -12,8 +12,9 @@ buildscript {
 ext {
     RELEASE_REPOSITORY_URL = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
     SNAPSHOT_REPOSITORY_URL = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-    publishedVersion = '1.0.7'
-    publishedGroupId = 'com.atiurin'
+    publishedVersion = project.findProperty('VERSION_NAME')
+    publishedGroupId = project.findProperty('GROUP')
+
 }
 
 apply plugin: 'com.android.library'
