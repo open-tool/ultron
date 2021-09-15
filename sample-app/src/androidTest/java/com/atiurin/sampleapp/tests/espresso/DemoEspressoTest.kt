@@ -1,8 +1,6 @@
 package com.atiurin.sampleapp.tests.espresso
 
 import androidx.test.rule.ActivityTestRule
-import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
-import com.atiurin.ultron.testlifecycle.setupteardown.TearDown
 import com.atiurin.sampleapp.activity.MainActivity
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.pages.ChatPage
@@ -20,6 +18,7 @@ class DemoEspressoTest : BaseTest() {
     init {
         ruleSequence.addLast(activityTestRule)
     }
+
 
     @Test
     fun friendsItemCheck() {
