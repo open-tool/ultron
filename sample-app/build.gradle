@@ -9,20 +9,20 @@ ext.versions = [
         'compileSdk'        : 29,
         'targetSdk'         : 29,
         'buildTools'        : '29.0.3',
-        'coroutine'         : '1.3.3',
-        'appcompat'         : '1.2.0',
-        'ktx'               : '1.5.0',
+        'coroutine'         : '1.4.2',
+        'appcompat'         : '1.3.1',
+        'ktx'               : '1.6.0',
         'support_v4'        : '1.0.0',
-        'material'          : '1.2.1',
+        'material'          : '1.4.0',
         'constraintlayout'  : '2.0.4',
-        'recyclerview'      : '1.1.0',
+        'recyclerview'      : '1.2.1',
         'cardview'          : '1.0.0',
-        'espresso'          : '3.3.0',
-        'junit'             : '4.13',
+        'espresso'          : '3.4.0',
+        'junit'             : '4.13.2',
         'robolectric'       : '4.4',
-        'test'              : '1.3.0',
-        'mockito'           : '3.4.0',
-        'junit_ext'         : '1.1.2',
+        'test'              : '1.4.0',
+        'mockito'           : '3.9.0',
+        'junit_ext'         : '1.1.3',
         'truth'             : '4.13',
         'uiautomator'       : '2.2.0'
 ]
@@ -43,11 +43,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:${versions.coroutine}"
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
     implementation "androidx.core:core-ktx:${versions.ktx}"

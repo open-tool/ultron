@@ -1,5 +1,6 @@
 package com.atiurin.sampleapp.activity
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -36,7 +37,9 @@ class ChatActivity : AppCompatActivity(){
         toolbar.title = ""
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        window.statusBarColor = getColor(R.color.colorPrimaryDark)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.statusBarColor = getColor(R.color.colorPrimaryDark)
+        }
         val mIntent = intent
         val title = findViewById<TextView>(R.id.toolbar_title)
         val contactId = mIntent.getIntExtra(INTENT_CONTACT_ID_EXTRA_NAME, -1)
