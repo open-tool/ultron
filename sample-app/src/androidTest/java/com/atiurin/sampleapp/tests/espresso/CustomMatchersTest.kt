@@ -1,16 +1,15 @@
 package com.atiurin.sampleapp.tests.espresso
 
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.MainActivity
 import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.data.repositories.ContactRepositoty
-import com.atiurin.sampleapp.framework.first
-import com.atiurin.sampleapp.framework.hierarchyNumber
 import com.atiurin.sampleapp.pages.ChatPage
 import com.atiurin.sampleapp.tests.BaseTest
+import com.atiurin.ultron.custom.espresso.matcher.first
+import com.atiurin.ultron.custom.espresso.matcher.hierarchyNumber
 import com.atiurin.ultron.extensions.click
 import com.atiurin.ultron.extensions.hasText
 import org.junit.Test

@@ -17,7 +17,7 @@ ext.versions = [
         'constraintlayout'  : '2.0.4',
         'recyclerview'      : '1.2.1',
         'cardview'          : '1.0.0',
-        'espresso'          : '3.4.0',
+        'espresso'          : '3.3.0',
         'junit'             : '4.13.2',
         'robolectric'       : '4.4',
         'test'              : '1.4.0',

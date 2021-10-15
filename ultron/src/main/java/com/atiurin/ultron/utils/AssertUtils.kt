@@ -19,4 +19,14 @@ object AssertUtils {
         throw UltronException("Assertion '$desc' failed during $timeoutMs ms")
     }
 
+    /**
+     * Immediately throws an exception if block returns false
+     */
+    fun assertTrueWhileTime(block: () -> Boolean, timeoutMs: Long = 5_000, desc: String = ""){
+        val startTime = SystemClock.elapsedRealtime()
+        while (SystemClock.elapsedRealtime() < startTime + timeoutMs){
+            if (!block()) throw UltronException("Assertion '$desc' failed")
+        }
+    }
+
 }
