@@ -28,6 +28,7 @@ import org.junit.Test
 class RecyclerViewTest : BaseTest() {
     companion object {
         const val CUSTOM_TIMEOUT = "CUSTOM_TIMEOUT"
+        val notExistItemMatcher = hasDescendant(withText("zxcbmzxmbc"))
     }
 
     private val setUpRule = SetUpRule().add(CUSTOM_TIMEOUT) {
@@ -343,5 +344,28 @@ class RecyclerViewTest : BaseTest() {
             click()
         }
         ChatPage.assertToolbarTitle(expectedContacts.last().name)
+    }
+
+    @Test
+    fun assertItemNotExist_notExistItem(){
+        page.recycler.assertItemNotExist(notExistItemMatcher, 2000)
+    }
+
+    @Test
+    fun assertItemNotExist_existItem(){
+        val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(CONTACTS.first().name))))
+        AssertUtils.assertException { page.recycler.assertItemNotExist(matcher, 2000) }
+    }
+
+    @Test
+    fun assertItemNotExistImmediately_notExistItem(){
+        page.recycler.assertItemNotExistImmediately(notExistItemMatcher, 2000)
+    }
+
+    @Test
+    fun assertItemNotExistImmediately_existItem(){
+        page.recycler.waitItemsLoaded()
+        val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(CONTACTS.first().name))))
+        AssertUtils.assertException { page.recycler.assertItemNotExistImmediately(matcher, 2000) }
     }
 }

@@ -252,7 +252,8 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      */
     fun assertEmpty(){
         AssertUtils.assertTrue(
-            { getSize() == 0 }, recyclerViewOperationsTimeoutMs, "RecyclerView($recyclerViewMatcher) has no items (actual size = ${getSize()})"
+            { getSize() == 0 }, recyclerViewOperationsTimeoutMs,
+            "RecyclerView($recyclerViewMatcher) has no items (actual size = ${getSize()})"
         )
     }
     /**
@@ -260,7 +261,8 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      */
     open fun assertSize(expected: Int) {
         AssertUtils.assertTrue(
-            { getSize() == expected }, recyclerViewOperationsTimeoutMs, "RecyclerView($recyclerViewMatcher) size is $expected (actual size = ${getSize()})"
+            { getSize() == expected }, recyclerViewOperationsTimeoutMs,
+            "RecyclerView($recyclerViewMatcher) size is $expected (actual size = ${getSize()})"
         )
     }
 
@@ -269,7 +271,36 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      */
     open fun assertHasItemAtPosition(position: Int) {
         AssertUtils.assertTrue(
-            { getSize() >= position }, recyclerViewOperationsTimeoutMs, "Wait RecyclerView($recyclerViewMatcher) size >= $position (actual size = ${getSize()})"
+            { getSize() >= position }, recyclerViewOperationsTimeoutMs,
+            "Wait RecyclerView($recyclerViewMatcher) size >= $position (actual size = ${getSize()})"
+        )
+    }
+
+    /**
+     * Asserts RecyclerView list hasn't item matched with [matcher].
+     * In case of item not exist it returns immediately.
+     * If, for some reason, item appears later. These assertion can give you false positive result
+     */
+    open fun assertItemNotExistImmediately(matcher: Matcher<View>, timeoutMs: Long) {
+        waitItemsLoaded()
+        AssertUtils.assertTrue(
+            { !isItemExist(matcher) },
+            timeoutMs,
+            "RecyclerView($recyclerViewMatcher) has no item matched '$matcher'"
+        )
+    }
+
+    /**
+     * Asserts RecyclerView list hasn't item matched with [matcher] during specified [timeoutMs].
+     * In case item appears in list during [timeoutMs] an exception is going to be thrown.
+     * Note: In positive scenario this assert takes [timeoutMs]
+     */
+    open fun assertItemNotExist(matcher: Matcher<View>, timeoutMs: Long) {
+        waitItemsLoaded()
+        AssertUtils.assertTrueWhileTime(
+            { !isItemExist(matcher) },
+            timeoutMs,
+            "RecyclerView($recyclerViewMatcher) has no item matched '$matcher'"
         )
     }
 
@@ -299,6 +330,9 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
     open fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
         recyclerViewMatcher.withResultHandler(resultHandler)
 
+    fun isItemExist(matcher: Matcher<View>) : Boolean {
+        return getItemAdapterPositionAtIndex(matcher, 0) >= 0
+    }
     /**
      * It's waiting while RecyclerView items to be loaded
      * @throws [UltronException] if no item is loaded during [loadTimeoutMs]
