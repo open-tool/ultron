@@ -145,7 +145,7 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      * */
     fun item(matcher: Matcher<View>, autoScroll: Boolean = true): UltronRecyclerViewItem {
         waitItemsLoaded()
-        return UltronRecyclerViewItem(recyclerViewMatcher, matcher, autoScroll)
+        return UltronRecyclerViewItem(this, matcher, autoScroll)
     }
 
     /** @return simple [UltronRecyclerViewItem] at [position]
@@ -154,7 +154,7 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
      * */
     fun item(position: Int, autoScroll: Boolean = true): UltronRecyclerViewItem {
         waitItemsLoaded()
-        return UltronRecyclerViewItem(recyclerViewMatcher, position, autoScroll)
+        return UltronRecyclerViewItem(this, position, autoScroll)
     }
 
     /** @return [UltronRecyclerViewItem] at first position */
@@ -163,7 +163,7 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
     /** @return [UltronRecyclerViewItem] at last position */
     fun lastItem(autoScroll: Boolean = true) : UltronRecyclerViewItem {
         waitItemsLoaded()
-        return UltronRecyclerViewItem(recyclerViewMatcher, getLastPosition(), autoScroll)
+        return UltronRecyclerViewItem(this, getLastPosition(), autoScroll)
     }
 
     /**
@@ -195,7 +195,7 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
                 container.get() >= 0
             }, getTimeout(), "RecyclerView($recyclerViewMatcher) has item matched '$matcher' with index $index"
         )
-        return UltronRecyclerViewItem(recyclerViewMatcher, position.get(), autoScroll)
+        return UltronRecyclerViewItem(this, position.get(), autoScroll)
     }
 
     /**
@@ -214,7 +214,7 @@ open class UltronRecyclerView(val recyclerViewMatcher: Matcher<View>, val loadTi
                 container.get() >= 0
             }, getTimeout(), "RecyclerView($recyclerViewMatcher) has last item matched '$matcher'"
         )
-        return UltronRecyclerViewItem(recyclerViewMatcher, position.get(), autoScroll)
+        return UltronRecyclerViewItem(this, position.get(), autoScroll)
     }
 
     /**

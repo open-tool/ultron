@@ -39,24 +39,6 @@ open class UltronRecyclerViewItem {
         if (autoScroll) scrollToItem()
     }
 
-    constructor(
-        recyclerViewMatcher: Matcher<View>,
-        itemViewMatcher: Matcher<View>,
-        autoScroll: Boolean = true
-    ) {
-        setExecutor(UltronRecyclerView(recyclerViewMatcher), itemViewMatcher)
-        if (autoScroll) scrollToItem()
-    }
-
-    constructor(
-        recyclerViewMatcher: Matcher<View>,
-        position: Int,
-        autoScroll: Boolean = true
-    ) {
-        setExecutor(UltronRecyclerView(recyclerViewMatcher), position)
-        if (autoScroll) scrollToItem()
-    }
-
     fun scrollToItem(): UltronRecyclerViewItem = apply {
         executor?.scrollToItem()
     }
