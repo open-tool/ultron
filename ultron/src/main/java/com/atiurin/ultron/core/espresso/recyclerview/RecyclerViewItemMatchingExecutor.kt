@@ -12,11 +12,7 @@ class RecyclerViewItemMatchingExecutor(
     private val itemViewMatcher: Matcher<View>
 ) : RecyclerViewItemExecutor {
     override fun scrollToItem() {
-        //TODO work around this trade off
-        ultronRecyclerView.recyclerViewMatcher.perform(
-            viewAction = RecyclerViewActions.scrollTo<RecyclerView.ViewHolder>(itemViewMatcher),
-            description = "RecyclerViewActions scrollTo $itemViewMatcher"
-        )
+        ultronRecyclerView.scrollToIem(itemViewMatcher)
     }
 
     override fun getItemMatcher(): Matcher<View> {

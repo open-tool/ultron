@@ -24,10 +24,6 @@ class RecyclerPerfTest : BaseTest() {
     }
 
     @Test
-    fun test1() {
-    }
-
-    @Test
     fun test2() {
         Log.time("Scroll+Click") {
             withText(ContactRepositoty.getFirst().name).isDisplayed()
