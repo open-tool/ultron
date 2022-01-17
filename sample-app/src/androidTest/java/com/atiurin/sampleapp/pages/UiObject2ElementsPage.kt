@@ -18,7 +18,6 @@ class UiObject2ElementsPage {
     val checkBoxSelected = byResId(R.id.checkbox_selected)
     val checkBoxFocusable = byResId(R.id.checkbox_focusable)
     val checkBoxJsEnabled = byResId(R.id.checkbox_js_enabled)
-    val checkBoxUnavailable = byResId(R.id.checkbox_unavailable)
     val editTextContentDesc = byResId(R.id.et_contentDesc)
     val webView = byResId(R.id.webview)
     val appCompatTextView = byResId(R.id.app_compat_text)

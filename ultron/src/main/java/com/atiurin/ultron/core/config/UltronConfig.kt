@@ -66,6 +66,8 @@ object UltronConfig {
             var ACTION_TIMEOUT = DEFAULT_ACTION_TIMEOUT
             var ASSERTION_TIMEOUT = DEFAULT_ASSERTION_TIMEOUT
             var RECYCLER_VIEW_LOAD_TIMEOUT = DEFAULT_RECYCLER_VIEW_LOAD_TIMEOUT
+            var RECYCLER_VIEW_OPERARIONS_TIMEOUT = DEFAULT_ACTION_TIMEOUT
+            var RECYCLER_VIEW_ITEM_SEARCH_LIMIT = -1
 
             var resultAnalyzer: OperationResultAnalyzer = UltronDefaultOperationResultAnalyzer()
 

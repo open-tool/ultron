@@ -161,7 +161,7 @@ class ViewInteractionActionsTest : UiElementsTest() {
     fun closeSoftKeyboardTest(){
         page.editTextContentDesc.click()
         UltronEspresso.closeSoftKeyboard()
-        page.emptyNotClickableImageView.isDisplayed()
+        page.imageView.isDisplayed()
     }
 
 
@@ -171,6 +171,5 @@ class ViewInteractionActionsTest : UiElementsTest() {
         page.editTextContentDesc.appendText(text)
             .hasText(getTargetString(R.string.button_default_content_desc)+text)
         page.button.appendText(text)
-
     }
 }

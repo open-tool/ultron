@@ -235,12 +235,12 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isChecked_ofNotChecked(){
-        AssertUtils.assertException { page.checkBoxUnavailable.withTimeout(100).isChecked() }
+        AssertUtils.assertException { page.checkBoxSelected.withTimeout(100).isChecked() }
     }
     //isNotChecked
     @Test
     fun isNotChecked_ofNotChecked(){
-        page.checkBoxUnavailable.isNotChecked()
+        page.checkBoxSelected.isNotChecked()
     }
 
     @Test

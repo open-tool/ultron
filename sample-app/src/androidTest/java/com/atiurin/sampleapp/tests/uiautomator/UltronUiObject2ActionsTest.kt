@@ -1,5 +1,6 @@
 package com.atiurin.sampleapp.tests.uiautomator
 
+import android.view.ViewConfiguration
 import android.widget.LinearLayout
 import androidx.test.filters.FlakyTest
 import androidx.test.platform.app.InstrumentationRegistry
@@ -225,7 +226,8 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
     //longClick
     @Test
     fun longClick_onLongClickable() {
-        page.button.longClick()
+        val duration = ViewConfiguration.getLongPressTimeout().toLong()
+        page.button.click(duration*2)
         page.eventStatus.textContains(getTargetString(R.string.button_event_long_click))
     }
 

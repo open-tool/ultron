@@ -10,13 +10,14 @@ import org.hamcrest.TypeSafeMatcher
 import java.util.ArrayList
 
 internal fun <T : VH, VH : RecyclerView.ViewHolder> itemsMatching(
-    recyclerView: RecyclerView, viewHolderMatcher: Matcher<VH>, maxItemsCount: Int = -1
+    recyclerView: RecyclerView, viewHolderMatcher: Matcher<VH>, maxItemsCount: Int = -1, itemSearchLimit: Int = -1
 ): List<MatchedItem> {
     val adapter = recyclerView.adapter
     val viewHolderCache = SparseArray<VH>()
     val matchedItems = ArrayList<MatchedItem>()
     if (adapter == null) return matchedItems
-    for (position in 0 until adapter.itemCount) {
+    val itemsToBeResearched = if (adapter.itemCount > itemSearchLimit && itemSearchLimit > 0) itemSearchLimit else adapter.itemCount
+    for (position in 0 until itemsToBeResearched) {
         val itemType = adapter.getItemViewType(position)
         var cachedViewHolder: VH? = viewHolderCache.get(itemType)
         // Create a view holder per type if not exists

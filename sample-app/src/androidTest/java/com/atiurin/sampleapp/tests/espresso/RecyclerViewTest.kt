@@ -368,4 +368,22 @@ class RecyclerViewTest : BaseTest() {
         val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(CONTACTS.first().name))))
         AssertUtils.assertException { page.recycler.assertItemNotExistImmediately(matcher, 2000) }
     }
+
+    @Test
+    fun assertItemOutOfLimitNotFound(){
+        val rv = withRecyclerView(R.id.recycler_friends, itemSearchLimit = 2)
+        AssertUtils.assertException {
+            rv.withTimeout(2000L)
+                .item(hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(CONTACTS[10].name)))))
+                .click()
+        }
+    }
+
+    @Test
+    fun assertItemInLimitFound(){
+        val rv = withRecyclerView(R.id.recycler_friends, itemSearchLimit = 10)
+        rv.withTimeout(2000L)
+            .item(hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(CONTACTS[2].name)))))
+            .isDisplayed()
+    }
 }
