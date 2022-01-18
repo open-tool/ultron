@@ -13,7 +13,7 @@ import androidx.test.espresso.util.TreeIterables
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_ITEM_SEARCH_LIMIT
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_LOAD_TIMEOUT
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_OPERARIONS_TIMEOUT
+import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_OPERATIONS_TIMEOUT
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspresso.executeAssertion
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
@@ -39,7 +39,7 @@ open class UltronRecyclerView(
     val recyclerViewMatcher: Matcher<View>,
     val loadTimeoutMs: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     private val itemSearchLimit: Int = -1,
-    private var operationTimeoutMs: Long = RECYCLER_VIEW_OPERARIONS_TIMEOUT
+    private var operationTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
 ) {
     private var recyclerView: RecyclerView? = null
 
@@ -581,7 +581,7 @@ fun withRecyclerView(
     recyclerViewMatcher: Matcher<View>,
     loadTimeout: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
-    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERARIONS_TIMEOUT
+    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
 ): UltronRecyclerView {
     return UltronRecyclerView(recyclerViewMatcher, loadTimeout, itemSearchLimit, operationsTimeoutMs)
 }
@@ -590,7 +590,7 @@ fun withRecyclerView(
     @IntegerRes resourceId: Int,
     loadTimeout: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
-    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERARIONS_TIMEOUT
+    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
 ): UltronRecyclerView {
     return UltronRecyclerView(withId(resourceId), loadTimeout, itemSearchLimit, operationsTimeoutMs)
 }

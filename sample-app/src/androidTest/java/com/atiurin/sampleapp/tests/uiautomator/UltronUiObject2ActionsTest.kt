@@ -326,28 +326,28 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
     @Test
     fun swipeUpTest(){
         page.eventStatus.hasText(getTargetString(R.string.button_text))
-        page.swipableImageView.isDisplayed().swipeUp()
+        page.swipableImageView.isDisplayed().swipeUp(speed = 2000)
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_UP.name)
     }
 
     @Test
     fun swipeDownTest(){
         page.eventStatus.hasText(getTargetString(R.string.button_text))
-        page.swipableImageView.isDisplayed().swipeDown()
+        page.swipableImageView.isDisplayed().swipeDown(speed = 2000)
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_DOWN.name)
     }
 
     @Test
     fun swipeRightTest(){
         page.eventStatus.hasText(getTargetString(R.string.button_text))
-        page.swipableImageView.isDisplayed().swipeRight()
+        page.swipableImageView.isDisplayed().swipeRight(speed = 2000)
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
     }
 
     @Test @FlakyTest
     fun swipeLeftTest(){
         page.eventStatus.hasText(getTargetString(R.string.button_text))
-        page.swipableImageView.isDisplayed().swipeLeft()
+        page.swipableImageView.isDisplayed().swipeLeft(speed = 2000)
         page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_LEFT.name)
     }
 
