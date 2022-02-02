@@ -24,6 +24,7 @@ object UiElementsPage : Page<UiElementsPage>() {
     val webView = withId(R.id.webview)
     val appCompatTextView = withId(R.id.app_compat_text)
     val imageView = withId(R.id.image_view)
+    val imageView2 = withId(R.id.image_view2)
     val emptyNotClickableImageView = withId(R.id.empty_image_view)
     val dialogButtonOk = onView(withText("OK")).inRoot(isDialog())
     val popupButtonCancel = onView(withText("Cancel")).inRoot(isPlatformPopup())

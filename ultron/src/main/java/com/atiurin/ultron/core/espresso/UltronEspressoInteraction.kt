@@ -10,7 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.UltronEspresso.executeAction
 import com.atiurin.ultron.core.espresso.UltronEspresso.executeAssertion
-import com.atiurin.ultron.core.espresso.action.*
+import com.atiurin.ultron.core.espresso.action.EspressoActionType
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.getDataMatcher
