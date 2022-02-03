@@ -13,12 +13,12 @@ import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.UltronEspresso
+import com.atiurin.ultron.custom.espresso.action.getContentDescription
 import com.atiurin.ultron.custom.espresso.action.getDrawable
 import com.atiurin.ultron.custom.espresso.action.getText
 import com.atiurin.ultron.custom.espresso.assertion.hasAnyDrawable
 import com.atiurin.ultron.custom.espresso.assertion.hasDrawable
 import com.atiurin.ultron.extensions.*
-import com.atiurin.ultron.utils.getTargetDrawable
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
 import org.junit.Test
@@ -169,7 +169,6 @@ class ViewInteractionActionsTest : UiElementsTest() {
         page.imageView.isDisplayed()
     }
 
-
     @Test
     fun customVisibilityAction(){
         val text = "appended"
@@ -223,4 +222,13 @@ class ViewInteractionActionsTest : UiElementsTest() {
         page.imageView.hasAnyDrawable()
     }
 
+    @Test
+    fun getContentDesc_descIsNull(){
+        Assert.assertEquals(null, page.imageView.getContentDescription())
+    }
+
+    @Test
+    fun getContentDesc_descNotNull(){
+        Assert.assertEquals(getTargetString(R.string.button_default_content_desc), page.button.getContentDescription())
+    }
 }
