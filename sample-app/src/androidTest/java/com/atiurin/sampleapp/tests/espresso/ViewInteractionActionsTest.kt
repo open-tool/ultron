@@ -1,8 +1,8 @@
 package com.atiurin.sampleapp.tests.espresso
 
+
 import android.os.SystemClock
 import android.view.KeyEvent
-import android.view.View
 import androidx.test.espresso.action.EspressoKey
 import androidx.test.espresso.action.ViewActions.click
 import com.atiurin.sampleapp.R
@@ -13,6 +13,11 @@ import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.UltronEspresso
+import com.atiurin.ultron.custom.espresso.action.getContentDescription
+import com.atiurin.ultron.custom.espresso.action.getDrawable
+import com.atiurin.ultron.custom.espresso.action.getText
+import com.atiurin.ultron.custom.espresso.assertion.hasAnyDrawable
+import com.atiurin.ultron.custom.espresso.assertion.hasDrawable
 import com.atiurin.ultron.extensions.*
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
@@ -164,12 +169,66 @@ class ViewInteractionActionsTest : UiElementsTest() {
         page.imageView.isDisplayed()
     }
 
-
     @Test
     fun customVisibilityAction(){
         val text = "appended"
         page.editTextContentDesc.appendText(text)
             .hasText(getTargetString(R.string.button_default_content_desc)+text)
         page.button.appendText(text)
+    }
+
+    @Test
+    fun getTextActionTest_textExist(){
+        val text = page.appCompatTextView.getText()
+        Assert.assertEquals(getTargetString(R.string.app_compat_text), text)
+    }
+
+    @Test
+    fun getTextActionTest_noTextInView(){
+        AssertUtils.assertException { page.imageView.withTimeout(100).getText() }
+    }
+
+    @Test
+    fun getDrawable_drawableExist(){
+        Assert.assertNotNull(page.imageView.getDrawable())
+    }
+
+    @Test
+    fun hasDrawableTest(){
+        page.imageView.hasDrawable(R.drawable.ic_account)
+    }
+
+    @Test
+    fun hasDrawable_wrongResourceId(){
+        AssertUtils.assertException {
+            page.imageView.withTimeout(1000).hasDrawable(R.drawable.chandler)
+        }
+    }
+
+    @Test
+    fun  drawableCompare(){
+        val actDr = page.imageView.getDrawable()
+        val actDr2 = page.imageView2.getDrawable()
+        Assert.assertTrue(actDr!!.isSameAs(actDr2!!))
+    }
+
+    @Test
+    fun hasAnyDrawable_noDrawable(){
+        AssertUtils.assertException { page.emptyNotClickableImageView.withTimeout(1000).hasAnyDrawable() }
+    }
+
+    @Test
+    fun hasAnyDrawable_imageHasDrawable(){
+        page.imageView.hasAnyDrawable()
+    }
+
+    @Test
+    fun getContentDesc_descIsNull(){
+        Assert.assertEquals(null, page.imageView.getContentDescription())
+    }
+
+    @Test
+    fun getContentDesc_descNotNull(){
+        Assert.assertEquals(getTargetString(R.string.button_default_content_desc), page.button.getContentDescription())
     }
 }
