@@ -52,6 +52,17 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
         AssertUtils.assertException { page.button.withTimeout(100).doesNotExist() }
     }
 
+    //exists
+    @Test
+    fun exists_ExistedHiddenView(){
+        page.hiddenButton.exists()
+    }
+
+    @Test
+    fun exists_NotExisted(){
+        AssertUtils.assertException { page.notExistElement.withTimeout(100).exists() }
+    }
+
     //checked
     @Test
     fun isChecked_ofChecked() {

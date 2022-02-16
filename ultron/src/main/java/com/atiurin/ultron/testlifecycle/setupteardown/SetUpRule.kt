@@ -12,10 +12,10 @@ open class SetUpRule(override val name: String = "") : ConditionRule(name) {
                 keys.addAll(setUpAnnotation.value.toList()) //get the list of keys in annotation SetUp
             }
             conditionsExecutor.before(name, this::class)
-            conditionsExecutor.execute(conditions, keys)
+            conditionsExecutor.execute(conditions, keys, name)
         } else {
             conditionsExecutor.before(name, this::class)
-            conditionsExecutor.execute(conditions, commonConditionKeys)
+            conditionsExecutor.execute(conditions, commonConditionKeys, name)
         }
         super.starting(description)
     }

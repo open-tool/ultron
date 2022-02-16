@@ -28,4 +28,5 @@ object UiElementsPage : Page<UiElementsPage>() {
     val emptyNotClickableImageView = withId(R.id.empty_image_view)
     val dialogButtonOk = onView(withText("OK")).inRoot(isDialog())
     val popupButtonCancel = onView(withText("Cancel")).inRoot(isPlatformPopup())
+    val hiddenButton = withId(R.id.exist_hidden_button)
 }

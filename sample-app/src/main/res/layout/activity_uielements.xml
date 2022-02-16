@@ -125,4 +125,11 @@
             android:layout_margin="10dp"
             android:clickable="false"
             android:background="@color/colorAccent" />
+
+    <Button
+        android:id="@+id/exist_hidden_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:textAllCaps="false" />
     </LinearLayout>

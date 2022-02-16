@@ -9,7 +9,7 @@ open class DefaultConditionsExecutor : ConditionsExecutor{
     override fun before(name: String, ruleClass: KClass<*>) {
         Log.d(UltronConfig.LOGCAT_TAG, "Execute ${ruleClass.simpleName} '$name' conditions")
     }
-    override fun execute(conditions: List<Condition>, keys: List<String>) {
+    override fun execute(conditions: List<Condition>, keys: List<String>, description: String) {
         conditions
             .sortedBy { it.counter }
             .filter { it.key in keys }

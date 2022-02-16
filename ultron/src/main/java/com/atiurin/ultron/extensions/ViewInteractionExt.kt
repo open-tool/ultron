@@ -43,8 +43,9 @@ fun ViewInteraction.perform(viewAction: ViewAction) = UltronEspressoInteraction(
 
 //assertions
 fun ViewInteraction.isDisplayed() = UltronEspressoInteraction(this).isDisplayed()
-fun ViewInteraction.doesNotExist() = UltronEspressoInteraction(this).doesNotExist()
 fun ViewInteraction.isNotDisplayed() = UltronEspressoInteraction(this).isNotDisplayed()
+fun ViewInteraction.exists() = UltronEspressoInteraction(this).exists()
+fun ViewInteraction.doesNotExist() = UltronEspressoInteraction(this).doesNotExist()
 fun ViewInteraction.isCompletelyDisplayed() = UltronEspressoInteraction(this).isCompletelyDisplayed()
 fun ViewInteraction.isDisplayingAtLeast(percentage: Int) =
     UltronEspressoInteraction(this).isDisplayingAtLeast(percentage)
