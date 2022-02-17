@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         viewManager = LinearLayoutManager(this)
-        viewAdapter = ContactAdapter(ArrayList<Contact>(),
+        viewAdapter = ContactAdapter(this, ArrayList<Contact>(),
             object : ContactAdapter.OnItemClickListener {
                 override fun onItemClick(contact: Contact) {
                     val intent = Intent(applicationContext, ChatActivity::class.java)
