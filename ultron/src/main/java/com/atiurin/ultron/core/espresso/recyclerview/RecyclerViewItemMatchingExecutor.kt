@@ -11,8 +11,8 @@ class RecyclerViewItemMatchingExecutor(
     private val ultronRecyclerView: UltronRecyclerView,
     private val itemViewMatcher: Matcher<View>
 ) : RecyclerViewItemExecutor {
-    override fun scrollToItem() {
-        ultronRecyclerView.scrollToIem(itemViewMatcher)
+    override fun scrollToItem(offset: Int) {
+        ultronRecyclerView.scrollToIem(itemViewMatcher, offset = offset)
     }
 
     override fun getItemMatcher(): Matcher<View> {

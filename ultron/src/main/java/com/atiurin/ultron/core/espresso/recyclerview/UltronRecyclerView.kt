@@ -58,7 +58,8 @@ open class UltronRecyclerView(
      * */
     inline fun <reified T : UltronRecyclerViewItem> getItem(
         matcher: Matcher<View>,
-        autoScroll: Boolean = true
+        autoScroll: Boolean = true,
+        scrollOffset: Int = 0
     ): T {
         waitItemsLoaded()
         return UltronRecyclerViewItem.getInstance(this, matcher, autoScroll)
@@ -74,7 +75,8 @@ open class UltronRecyclerView(
      * */
     inline fun <reified T : UltronRecyclerViewItem> getItem(
         position: Int,
-        autoScroll: Boolean = true
+        autoScroll: Boolean = true,
+        scrollOffset: Int = 0
     ): T {
         waitItemsLoaded()
         return UltronRecyclerViewItem.getInstance(this, position, autoScroll)
@@ -375,8 +377,8 @@ open class UltronRecyclerView(
     open fun assertMatches(matcher: Matcher<View>) =
         apply { recyclerViewMatcher.withTimeout(getTimeout()).assertMatches(matcher) }
 
-    fun scrollToIem(itemMatcher: Matcher<View>, searchLimit: Int = this.itemSearchLimit) = apply {
-        recyclerViewMatcher.withTimeout(getTimeout()).perform(RecyclerViewScrollAction(itemMatcher, searchLimit))
+    fun scrollToIem(itemMatcher: Matcher<View>, searchLimit: Int = this.itemSearchLimit, offset: Int = 0) = apply {
+        recyclerViewMatcher.withTimeout(getTimeout()).perform(RecyclerViewScrollAction(itemMatcher, searchLimit, offset))
     }
 
     /** set timeout for operations with RecyclerView.

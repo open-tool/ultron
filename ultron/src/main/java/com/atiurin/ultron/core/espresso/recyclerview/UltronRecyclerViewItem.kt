@@ -15,6 +15,7 @@ import org.hamcrest.Matcher
  */
 open class UltronRecyclerViewItem {
     private var executor: RecyclerViewItemExecutor? = null
+
     /**
      * Use this constructor to inherit from [UltronRecyclerViewItem]
      * Don't create an instance of subclass. Use [UltronRecyclerView.getItem] instead
@@ -24,23 +25,25 @@ open class UltronRecyclerViewItem {
     constructor(
         ultronRecyclerView: UltronRecyclerView,
         itemViewMatcher: Matcher<View>,
-        autoScroll: Boolean = true
+        autoScroll: Boolean = true,
+        scrollOffset: Int = 0
     ) {
         setExecutor(ultronRecyclerView, itemViewMatcher)
-        if (autoScroll) scrollToItem()
+        if (autoScroll) scrollToItem(scrollOffset)
     }
 
     constructor(
         ultronRecyclerView: UltronRecyclerView,
         position: Int,
-        autoScroll: Boolean = true
+        autoScroll: Boolean = true,
+        scrollOffset: Int = 0
     ) {
         setExecutor(ultronRecyclerView, position)
         if (autoScroll) scrollToItem()
     }
 
-    fun scrollToItem(): UltronRecyclerViewItem = apply {
-        executor?.scrollToItem()
+    fun scrollToItem(offset: Int = 0): UltronRecyclerViewItem = apply {
+        executor?.scrollToItem(offset)
     }
 
     fun getViewHolder(): RecyclerView.ViewHolder? {
@@ -81,12 +84,16 @@ open class UltronRecyclerViewItem {
     fun isDisplayed() = apply { this.getMatcher().isDisplayed() }
     fun isNotDisplayed() = apply { this.getMatcher().isNotDisplayed() }
     fun isCompletelyDisplayed() = apply { this.getMatcher().isCompletelyDisplayed() }
-    fun isDisplayingAtLeast(percentage: Int) = apply { this.getMatcher().isDisplayingAtLeast(percentage) }
+    fun isDisplayingAtLeast(percentage: Int) =
+        apply { this.getMatcher().isDisplayingAtLeast(percentage) }
+
     fun isClickable() = apply { this.getMatcher().isClickable() }
     fun isNotClickable() = apply { this.getMatcher().isNotClickable() }
     fun isEnabled() = apply { this.getMatcher().isEnabled() }
     fun isNotEnabled() = apply { this.getMatcher().isNotEnabled() }
-    fun assertMatches(condition: Matcher<View>) = apply { this.getMatcher().assertMatches(condition) }
+    fun assertMatches(condition: Matcher<View>) =
+        apply { this.getMatcher().assertMatches(condition) }
+
     fun hasContentDescription(contentDescription: String) =
         apply { this.getMatcher().hasContentDescription(contentDescription) }
 
@@ -121,7 +128,8 @@ open class UltronRecyclerViewItem {
         inline fun <reified T : UltronRecyclerViewItem> getInstance(
             ultronRecyclerView: UltronRecyclerView,
             itemViewMatcher: Matcher<View>,
-            autoScroll: Boolean = true
+            autoScroll: Boolean = true,
+            scrollOffset: Int = 0
         ): T {
             val item = this.createUltronRecyclerViewItemInstance<T>()
             item.setExecutor(ultronRecyclerView, itemViewMatcher)
@@ -132,7 +140,8 @@ open class UltronRecyclerViewItem {
         inline fun <reified T : UltronRecyclerViewItem> getInstance(
             ultronRecyclerView: UltronRecyclerView,
             position: Int,
-            autoScroll: Boolean = true
+            autoScroll: Boolean = true,
+            scrollOffset: Int = 0
         ): T {
             val item = this.createUltronRecyclerViewItemInstance<T>()
             item.setExecutor(ultronRecyclerView, position)
@@ -140,10 +149,10 @@ open class UltronRecyclerViewItem {
             return item
         }
 
-        inline fun <reified T : UltronRecyclerViewItem> createUltronRecyclerViewItemInstance() : T{
+        inline fun <reified T : UltronRecyclerViewItem> createUltronRecyclerViewItemInstance(): T {
             return try {
                 T::class.java.newInstance()
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 val desc = when {
                     T::class.isInner -> {
                         "${T::class.simpleName} is an inner class so you have to delete inner modifier (It is often when kotlin throws 'has no zero argument constructor' but real reason is an inner modifier)"
@@ -153,11 +162,13 @@ open class UltronRecyclerViewItem {
                     }
                     else -> ex.message
                 }
-                throw UltronException("""
+                throw UltronException(
+                    """
                     |Couldn't create an instance of ${T::class.simpleName}. 
                     |Possible reason: $desc 
                     |Original exception: ${ex.message}, cause ${ex.cause}
-                """.trimMargin())
+                """.trimMargin()
+                )
             }
         }
     }

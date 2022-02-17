@@ -17,7 +17,7 @@ class RecyclerViewItemPositionalExecutor(
         }
     }
 
-    override fun scrollToItem() {
+    override fun scrollToItem(offset: Int) {
         ultronRecyclerView.assertHasItemAtPosition(position)
         ultronRecyclerView.recyclerViewMatcher.perform(
             viewAction = RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(position),
