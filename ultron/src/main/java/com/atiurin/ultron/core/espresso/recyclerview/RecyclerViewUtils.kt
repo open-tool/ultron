@@ -4,6 +4,7 @@ import android.util.SparseArray
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.util.HumanReadables
+import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
@@ -26,7 +27,10 @@ internal fun <T : VH, VH : RecyclerView.ViewHolder> itemsMatching(
             viewHolderCache.put(itemType, cachedViewHolder)
         }
         // Bind data to ViewHolder and apply matcher to view descendants.
-        adapter.bindViewHolder((cachedViewHolder as T?)!!, position)
+        runOnUiThread{
+            //requires UI thread to create handler in some cases
+            adapter.bindViewHolder((cachedViewHolder as T?)!!, position)
+        }
         if (viewHolderMatcher.matches(cachedViewHolder)) {
             matchedItems.add(MatchedItem(position,
                 HumanReadables.getViewHierarchyErrorMessage(

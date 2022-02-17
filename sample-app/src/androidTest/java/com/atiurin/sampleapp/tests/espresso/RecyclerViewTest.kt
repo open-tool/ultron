@@ -386,4 +386,9 @@ class RecyclerViewTest : BaseTest() {
             .item(hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(CONTACTS[2].name)))))
             .isDisplayed()
     }
+
+    @Test
+    fun createHandlerFromUiTest(){
+        page.recycler.getItemAdapterPositionAtIndex(hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(CONTACTS.last().name)))), 0)
+    }
 }
