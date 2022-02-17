@@ -1,17 +1,41 @@
 package com.atiurin.sampleapp.tests.testlifecycle
 
 import com.atiurin.sampleapp.framework.Log
+import com.atiurin.sampleapp.framework.step
+import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.testlifecycle.rulesequence.RuleSequence
-import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
-import com.atiurin.ultron.testlifecycle.setupteardown.TearDownRule
+import com.atiurin.ultron.testlifecycle.setupteardown.*
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.reflect.KClass
 
 class SetUpTearDownRuleTest {
     val counter = AtomicInteger(0)
     val conditionsOrderMap = mutableMapOf<Int, String>()
+
+    init {
+        UltronConfig.Conditions.conditionExecutorWrapper = CustomConditionExecutorWrapper()
+        UltronConfig.Conditions.conditionsExecutor = CustomConditionsExecutor()
+    }
+
+    class CustomConditionExecutorWrapper : ConditionExecutorWrapper {
+        override fun execute(condition: Condition) {
+            step(condition.name) { condition.actions() }
+        }
+    }
+    class CustomConditionsExecutor : DefaultConditionsExecutor(){
+        var lastRuleName: String = ""
+        override val conditionExecutor: ConditionExecutorWrapper = CustomConditionExecutorWrapper()
+        override fun before(name: String, ruleClass: KClass<*>) {
+            this.lastRuleName = name
+            super.before(name, ruleClass)
+        }
+        override fun execute(conditions: List<Condition>, keys: List<String>, description: String) {
+            step(lastRuleName){ super.execute(conditions, keys, description) }
+        }
+    }
 
     companion object {
         const val firstSetUpKey = "firstSetUp"
@@ -75,9 +99,9 @@ class SetUpTearDownRuleTest {
     @get:Rule
     val ruleSequence =
         RuleSequence(setUp1, tearDown1)
-        .add(tearDown2, setUp2)
-        .addFirst(firstSetUp, firstTearDown)
-        .addLast(lastTearDown, lastSetUp, controlTearDown)
+            .add(tearDown2, setUp2)
+            .addFirst(firstSetUp, firstTearDown)
+            .addLast(lastTearDown, lastSetUp, controlTearDown)
 
     @Test
     fun mockTestConditions() {

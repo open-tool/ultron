@@ -382,7 +382,8 @@ open class UltronRecyclerView(
     /** set timeout for operations with RecyclerView.
      * Note: it doesn't modify [loadTimeoutMs] (waiting a RecyclerView to be loaded)
      * */
-    open fun withTimeout(timeoutMs: Long) = apply { operationTimeoutMs = timeoutMs }
+    open fun withTimeout(timeoutMs: Long) =
+        UltronRecyclerView(this.recyclerViewMatcher, this.loadTimeoutMs, this.itemSearchLimit, operationTimeoutMs = timeoutMs)
     open fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
         recyclerViewMatcher.withResultHandler(resultHandler)
 

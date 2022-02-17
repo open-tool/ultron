@@ -12,6 +12,7 @@ import com.atiurin.ultron.core.espresso.UltronEspresso.executeAction
 import com.atiurin.ultron.core.espresso.UltronEspresso.executeAssertion
 import com.atiurin.ultron.core.espresso.action.EspressoActionType
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
+import com.atiurin.ultron.custom.espresso.assertion.ExistsEspressoViewAssertion
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.getDataMatcher
 import com.atiurin.ultron.extensions.getRootMatcher
@@ -275,6 +276,23 @@ class UltronEspressoInteraction<T>(
                 name = "IsNotDisplayed of '${getInteractionMatcher()}'",
                 type = EspressoAssertionType.IS_NOT_DISPLAYED,
                 description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_NOT_DISPLAYED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeout ms",
+                timeoutMs = timeout
+            ),
+            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+        )
+    }
+
+    /**
+     * Asserts ui element presents in view hierarchy
+     */
+    fun exists() = apply {
+        val timeout = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
+        executeAssertion(
+            UltronEspressoOperation(
+                operationBlock = getInteractionAssertionBlock(ExistsEspressoViewAssertion()),
+                name = "Exists of '${getInteractionMatcher()}'",
+                type = EspressoAssertionType.EXISTS,
+                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.EXISTS}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeout ms",
                 timeoutMs = timeout
             ),
             resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler

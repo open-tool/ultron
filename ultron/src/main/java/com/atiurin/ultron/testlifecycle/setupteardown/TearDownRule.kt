@@ -12,10 +12,10 @@ open class TearDownRule(override val name: String = "") : ConditionRule(name), R
                 keys.addAll(tearDownAnnotation.value.toList()) //get the list of keys in annotation TearDown
             }
             conditionsExecutor.before(name, this::class)
-            conditionsExecutor.execute(conditions, keys)
+            conditionsExecutor.execute(conditions, keys, name)
         } else {
             conditionsExecutor.before(name, this::class)
-            conditionsExecutor.execute(conditions, commonConditionKeys)
+            conditionsExecutor.execute(conditions, commonConditionKeys, name)
         }
         super.finished(description)
     }

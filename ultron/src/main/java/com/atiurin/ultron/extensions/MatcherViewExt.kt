@@ -38,6 +38,7 @@ fun Matcher<View>.perform(viewAction: ViewAction, description: String = "") = Ul
 //assertions
 fun Matcher<View>.isDisplayed() = UltronEspressoInteraction(onView(this)).isDisplayed()
 fun Matcher<View>.isNotDisplayed() = UltronEspressoInteraction(onView(this)).isNotDisplayed()
+fun Matcher<View>.exists() = UltronEspressoInteraction(onView(this)).exists()
 fun Matcher<View>.doesNotExist() = UltronEspressoInteraction(onView(this)).doesNotExist()
 fun Matcher<View>.isCompletelyDisplayed() = UltronEspressoInteraction(onView(this)).isCompletelyDisplayed()
 fun Matcher<View>.isDisplayingAtLeast(percentage: Int) =
