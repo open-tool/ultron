@@ -39,8 +39,8 @@ open class UltronRecyclerViewItem {
         scrollOffset: Int = 0
     ) {
         setExecutor(ultronRecyclerView, position)
-        if (autoScroll) scrollToItem()
-    }
+        if (autoScroll) scrollToItem(scrollOffset)
+    } 
 
     fun scrollToItem(offset: Int = 0): UltronRecyclerViewItem = apply {
         executor?.scrollToItem(offset)
@@ -133,7 +133,7 @@ open class UltronRecyclerViewItem {
         ): T {
             val item = this.createUltronRecyclerViewItemInstance<T>()
             item.setExecutor(ultronRecyclerView, itemViewMatcher)
-            if (autoScroll) item.scrollToItem()
+            if (autoScroll) item.scrollToItem(scrollOffset)
             return item
         }
 
@@ -145,7 +145,7 @@ open class UltronRecyclerViewItem {
         ): T {
             val item = this.createUltronRecyclerViewItemInstance<T>()
             item.setExecutor(ultronRecyclerView, position)
-            if (autoScroll) item.scrollToItem()
+            if (autoScroll) item.scrollToItem(scrollOffset)
             return item
         }
 

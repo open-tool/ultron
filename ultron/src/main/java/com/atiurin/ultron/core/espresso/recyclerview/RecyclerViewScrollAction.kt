@@ -30,7 +30,7 @@ class RecyclerViewScrollAction(private val itemMatcher: Matcher<View>, private v
         val positionToScroll = matchedItem.position + offset
         val finalPositionToScroll = when {
             positionToScroll in 1 until itemCount -> positionToScroll
-            positionToScroll > itemCount -> itemCount
+            positionToScroll >= itemCount -> itemCount - 1
             else -> 0
         }
         recyclerView.scrollToPosition(finalPositionToScroll)

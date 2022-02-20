@@ -5,6 +5,8 @@ import com.atiurin.ultron.page.Page
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
 import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.R
+import com.atiurin.sampleapp.data.entities.Contact
+import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.step
 import com.atiurin.ultron.extensions.click
@@ -60,4 +62,6 @@ object FriendsListPage : Page<FriendsListPage>() {
     fun assertFriendsListSize(size: Int) {
         Assert.assertEquals(size, recycler.getSize())
     }
+
+    fun getItemMatcher(contact: Contact) = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(contact.name))))
 }

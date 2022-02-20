@@ -391,4 +391,271 @@ class RecyclerViewTest : BaseTest() {
     fun createHandlerFromUiTest(){
         page.recycler.getItemAdapterPositionAtIndex(hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(CONTACTS.last().name)))), 0)
     }
+
+    //item+offset
+    @Test
+    fun item_scrollOffsetInItemCountRange_MatcherItem(){
+        val target = 5
+        val offset = 10
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.item(page.getItemMatcher(targetContact), scrollOffset = offset)
+        page.recycler.item(page.getItemMatcher(offsetContact), autoScroll = false).isDisplayed().click()
+    }
+
+    @Test
+    fun item_scrollOffsetInItemCountRangeBothAreVisible_MatcherItem(){
+        val target = 8
+        val offset = 2
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.item(page.getItemMatcher(targetContact), scrollOffset = offset).isDisplayed()
+        page.recycler.item(page.getItemMatcher(offsetContact), autoScroll = false).isDisplayed()
+    }
+
+    @Test
+    fun item_scrollOffsetOutOfItemCountRange_MatcherItem(){
+        val target = 5
+        val offset = CONTACTS.size
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS.last()
+        page.recycler.item(page.getItemMatcher(targetContact), scrollOffset = offset)
+        page.recycler.item(page.getItemMatcher(offsetContact), autoScroll = false).isDisplayed().click()
+    }
+
+    @Test
+    fun item_scrollOffsetLessThenZero_MatcherItem(){
+        val target = 8
+        val offset = -18
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS.first()
+        page.recycler.item(page.getItemMatcher(targetContact), scrollOffset = offset)
+        page.recycler.item(page.getItemMatcher(offsetContact), autoScroll = false).isDisplayed().click()
+    }
+
+    @Test
+    fun item_scrollOffsetInItemCountRange_positionItem(){
+        val target = 2
+        val offset = 12
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.item(target, scrollOffset = offset)
+        page.recycler.item(target + offset, autoScroll = false).isDisplayed()
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(target + offset, autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    @Test
+    fun item_scrollOffsetInItemCountRangeBothAreVisible_positionItem(){
+        val target = 8
+        val offset = 2
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.item(target, scrollOffset = offset).isDisplayed()
+        page.recycler.item(target + offset, autoScroll = false).isDisplayed()
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(target, autoScroll = false).name.hasText(targetContact.name).isDisplayed()
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(target + offset, autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    @Test
+    fun item_scrollOffsetOutOfItemCountRange_positionItem(){
+        val target = 5
+        val offset = CONTACTS.size
+        val offsetContact = CONTACTS.last()
+        page.recycler.item(target, scrollOffset = offset)
+        page.recycler.lastItem(autoScroll = false).isDisplayed()
+        page.recycler.getLastItem<FriendsListPage.FriendRecyclerItem>(autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    @Test
+    fun item_scrollOffsetLessThenZero_positionItem(){
+        val target = 10
+        val offset = -18
+        val offsetContact = CONTACTS.first()
+        page.recycler.item(target, scrollOffset = offset)
+        page.recycler.getFirstItem<FriendsListPage.FriendRecyclerItem>(autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    //itemMatched+offset
+    @Test
+    fun itemMatched_scrollOffsetInItemCountRange_MatcherItem(){
+        val target = 5
+        val offset = 10
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.itemMatched(page.getItemMatcher(targetContact), 0, scrollOffset = offset)
+        page.recycler.item(page.getItemMatcher(offsetContact), autoScroll = false).isDisplayed().click()
+    }
+
+    @Test
+    fun itemMatched_scrollOffsetInItemCountRangeBothAreVisible_MatcherItem(){
+        val target = 8
+        val offset = 2
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.itemMatched(page.getItemMatcher(targetContact), 0, scrollOffset = offset).isDisplayed()
+        page.recycler.item(page.getItemMatcher(offsetContact), autoScroll = false).isDisplayed()
+    }
+
+    @Test
+    fun itemMatched_scrollOffsetOutOfItemCountRange_MatcherItem(){
+        val target = 5
+        val offset = CONTACTS.size
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS.last()
+        page.recycler.itemMatched(page.getItemMatcher(targetContact), 0,  scrollOffset = offset)
+        page.recycler.item(page.getItemMatcher(offsetContact), autoScroll = false).isDisplayed().click()
+    }
+
+    //firstItemMatched+offset
+    @Test
+    fun firstItemMatched_scrollOffsetInItemCountRange_MatcherItem(){
+        val target = 5
+        val offset = 10
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.firstItemMatched(page.getItemMatcher(targetContact), scrollOffset = offset)
+        page.recycler.item(page.getItemMatcher(offsetContact), autoScroll = false).isDisplayed().click()
+    }
+
+    //lastItemMatched+offset
+    @Test
+    fun lastItemMatched_scrollOffsetInItemCountRange_MatcherItem(){
+        val target = 5
+        val offset = 10
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.lastItemMatched(page.getItemMatcher(targetContact), scrollOffset = offset)
+        page.recycler.item(page.getItemMatcher(offsetContact), autoScroll = false).isDisplayed().click()
+    }
+
+    //getItem+offset
+    @Test
+    fun getItem_scrollOffsetInItemCountRange_MatcherItem(){
+        val target = 5
+        val offset = 10
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(targetContact), scrollOffset = offset)
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(offsetContact), autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    @Test
+    fun getItem_scrollOffsetInItemCountRangeBothAreVisible_MatcherItem(){
+        val target = 8
+        val offset = 2
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(targetContact), scrollOffset = offset)
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(offsetContact), autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    @Test
+    fun getItem_scrollOffsetOutOfItemCountRange_MatcherItem(){
+        val target = 5
+        val offset = CONTACTS.size
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS.last()
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(targetContact), scrollOffset = offset)
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(offsetContact), autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    @Test
+    fun getItem_scrollOffsetLessThenZero_MatcherItem(){
+        val target = 8
+        val offset = -18
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS.first()
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(targetContact), scrollOffset = offset)
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(offsetContact), autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    @Test
+    fun getItem_scrollOffsetInItemCountRange_positionItem(){
+        val target = 2
+        val offset = 12
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(target, scrollOffset = offset)
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(target + offset, autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    @Test
+    fun getItem_scrollOffsetInItemCountRangeBothAreVisible_positionItem(){
+        val target = 8
+        val offset = 2
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(target, scrollOffset = offset).name.hasText(targetContact.name).isDisplayed()
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(target + offset, autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    @Test
+    fun getItem_scrollOffsetOutOfItemCountRange_positionItem(){
+        val target = 5
+        val offset = CONTACTS.size
+        val offsetContact = CONTACTS.last()
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(target, scrollOffset = offset)
+        page.recycler.getLastItem<FriendsListPage.FriendRecyclerItem>(autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    @Test
+    fun getItem_scrollOffsetLessThenZero_positionItem(){
+        val target = 10
+        val offset = -18
+        val offsetContact = CONTACTS.first()
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(target, scrollOffset = offset)
+        page.recycler.getFirstItem<FriendsListPage.FriendRecyclerItem>(autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    //getItemMatched+offset
+    @Test
+    fun getItemMatched_scrollOffsetInItemCountRange_MatcherItem(){
+        val target = 5
+        val offset = 10
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.getItemMatched<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(targetContact), 0, scrollOffset = offset)
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(offsetContact), autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    @Test
+    fun getItemMatched_scrollOffsetInItemCountRangeBothAreVisible_MatcherItem(){
+        val target = 8
+        val offset = 2
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.getItemMatched<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(targetContact), 0, scrollOffset = offset)
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(offsetContact), autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    @Test
+    fun getItemMatched_scrollOffsetOutOfItemCountRange_MatcherItem(){
+        val target = 5
+        val offset = CONTACTS.size
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS.last()
+        page.recycler.getItemMatched<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(targetContact), 0, scrollOffset = offset)
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(offsetContact), autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    //getFirstItemMatched+offset
+    @Test
+    fun getFirstItemMatched_scrollOffsetInItemCountRange_MatcherItem(){
+        val target = 5
+        val offset = 10
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.getFirstItemMatched<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(targetContact), scrollOffset = offset)
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(offsetContact), autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
+
+    //getLastItemMatched+offset
+    @Test
+    fun getLastItemMatched_scrollOffsetInItemCountRange_MatcherItem(){
+        val target = 5
+        val offset = 10
+        val targetContact = CONTACTS[target]
+        val offsetContact = CONTACTS[target + offset]
+        page.recycler.getLastItemMatched<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(targetContact), scrollOffset = offset)
+        page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(offsetContact), autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
+    }
 }
+
