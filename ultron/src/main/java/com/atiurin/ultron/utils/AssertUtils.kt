@@ -2,6 +2,7 @@ package com.atiurin.ultron.utils
 
 import android.os.SystemClock
 import com.atiurin.ultron.exceptions.UltronException
+import java.util.concurrent.atomic.AtomicReference
 
 object AssertUtils {
     fun assertTrue(block: () -> Boolean, timeoutMs: Long = 5_000, desc: String = "") {
@@ -15,6 +16,15 @@ object AssertUtils {
         val finishTime = SystemClock.elapsedRealtime() + timeoutMs
         while (SystemClock.elapsedRealtime() < finishTime){
             if (block(resultContainer)) return resultContainer
+        }
+        throw UltronException("Assertion '$desc' failed during $timeoutMs ms")
+    }
+
+    fun <R> assertTrueAndReturnValue(block: (AtomicReference<R>) -> Boolean, timeoutMs: Long = 5_000, desc: String = ""): R {
+        val resultContainer = AtomicReference<R>()
+        val finishTime = SystemClock.elapsedRealtime() + timeoutMs
+        while (SystemClock.elapsedRealtime() < finishTime){
+            if (block(resultContainer)) return resultContainer.get()
         }
         throw UltronException("Assertion '$desc' failed during $timeoutMs ms")
     }
