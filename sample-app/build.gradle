@@ -6,8 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 ext.versions = [
         'minSdk'            : 21,
-        'compileSdk'        : 29,
-        'targetSdk'         : 29,
+        'compileSdk'        : 30,
+        'targetSdk'         : 30,
         'buildTools'        : '29.0.3',
         'coroutine'         : '1.4.2',
         'appcompat'         : '1.3.1',
@@ -24,7 +24,8 @@ ext.versions = [
         'mockito'           : '3.9.0',
         'junit_ext'         : '1.1.3',
         'truth'             : '4.13',
-        'uiautomator'       : '2.2.0'
+        'uiautomator'       : '2.2.0',
+        'compose'           : '1.0.5'
 ]
 
 android {
@@ -47,6 +48,16 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        compose true
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.5'
+    }
 }
 
 dependencies {
@@ -62,6 +73,21 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:${versions.recyclerview}"
     implementation "androidx.test.espresso:espresso-idling-resource:${versions.espresso}"
     implementation "androidx.cardview:cardview:${versions.cardview}"
+
+    //compose
+    implementation "androidx.compose.ui:ui:${versions.compose}"
+    // Tooling support (Previews, etc.)
+    implementation "androidx.compose.ui:ui-tooling:${versions.compose}"
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation "androidx.compose.foundation:foundation:${versions.compose}"
+    // Material Design
+    implementation "androidx.compose.material:material:${versions.compose}"
+    // Material design icons
+    implementation "androidx.compose.material:material-icons-core:${versions.compose}"
+    implementation "androidx.compose.material:material-icons-extended:${versions.compose}"
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.3.1'
+
     // AndroidJUnitRunner and JUnit Rules
 
     testImplementation "junit:junit:${versions.junit}"
