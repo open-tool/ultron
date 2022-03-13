@@ -11,30 +11,39 @@ import org.hamcrest.TypeSafeMatcher
 import java.util.ArrayList
 
 internal fun <T : VH, VH : RecyclerView.ViewHolder> itemsMatching(
-    recyclerView: RecyclerView, viewHolderMatcher: Matcher<VH>, maxItemsCount: Int = -1, itemSearchLimit: Int = -1
+    recyclerView: RecyclerView,
+    viewHolderMatcher: Matcher<VH>,
+    maxItemsCount: Int = -1,
+    itemSearchLimit: Int = -1
 ): List<MatchedItem> {
     val adapter = recyclerView.adapter
     val viewHolderCache = SparseArray<VH>()
     val matchedItems = ArrayList<MatchedItem>()
     if (adapter == null) return matchedItems
-    val itemsToBeResearched = if (adapter.itemCount > itemSearchLimit && itemSearchLimit > 0) itemSearchLimit else adapter.itemCount
+    val itemsToBeResearched =
+        if (adapter.itemCount > itemSearchLimit && itemSearchLimit > 0) itemSearchLimit else adapter.itemCount
     for (position in 0 until itemsToBeResearched) {
         val itemType = adapter.getItemViewType(position)
         var cachedViewHolder: VH? = viewHolderCache.get(itemType)
-        // Create a view holder per type if not exists
-        if (cachedViewHolder == null) {
-            cachedViewHolder = adapter.createViewHolder(recyclerView, itemType) as VH?
-            viewHolderCache.put(itemType, cachedViewHolder)
-        }
-        // Bind data to ViewHolder and apply matcher to view descendants.
-        runOnUiThread{
-            //requires UI thread to create handler in some cases
+        //requires UI thread to create handler in some cases
+        runOnUiThread {
+            // Create a view holder per type if not exists
+            if (cachedViewHolder == null) {
+                cachedViewHolder = adapter.createViewHolder(recyclerView, itemType) as VH?
+                viewHolderCache.put(itemType, cachedViewHolder)
+            }
+            // Bind data to ViewHolder and apply matcher to view descendants.
             adapter.bindViewHolder((cachedViewHolder as T?)!!, position)
         }
         if (viewHolderMatcher.matches(cachedViewHolder)) {
-            matchedItems.add(MatchedItem(position,
-                HumanReadables.getViewHierarchyErrorMessage(
-                        cachedViewHolder!!.itemView, null, "\n\n*** Matched ViewHolder item at position: $position ***", null
+            matchedItems.add(
+                MatchedItem(
+                    position,
+                    HumanReadables.getViewHierarchyErrorMessage(
+                        cachedViewHolder!!.itemView,
+                        null,
+                        "\n\n*** Matched ViewHolder item at position: $position ***",
+                        null
                     )
                 )
             )
