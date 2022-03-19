@@ -209,3 +209,8 @@ dependencies {
 ## AndroidX
 
 It is required to use AndroidX libraries. You can get some problems with Android Support ones.
+
+## Roadmap
+
+- https://github.com/open-tool/ultron/issues/11 Jetpack Compose support
+- https://github.com/open-tool/ultron/issues/10 Extend click action api for espresso
