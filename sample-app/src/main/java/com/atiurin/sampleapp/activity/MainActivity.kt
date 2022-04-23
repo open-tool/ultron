@@ -132,8 +132,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val intent = Intent(applicationContext, WebViewActivity::class.java)
                 startActivity(intent)
             }
-            R.id.compose -> {
-                startActivity(Intent(applicationContext, ComposeActivity::class.java))
+            R.id.compose_elements -> {
+                startActivity(Intent(applicationContext, ComposeElementsActivity::class.java))
+            }
+            R.id.compose_list -> {
+                startActivity(Intent(applicationContext, ComposeListActivity::class.java))
             }
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)

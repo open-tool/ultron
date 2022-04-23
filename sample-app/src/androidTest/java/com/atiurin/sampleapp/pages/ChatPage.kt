@@ -14,7 +14,6 @@ import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
-import org.junit.Assert
 
 object ChatPage : Page<ChatPage>() {
     fun assertPageDisplayed() = apply {

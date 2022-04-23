@@ -23,7 +23,7 @@ abstract class UiAutomatorOperationExecutor<T : Operation>(
         return UiAutomatorOperationResult(
             operation = operation,
             success = success,
-            exception = exceptions.lastOrNull(),
+            exceptions = exceptions,
             description = description,
             operationIterationResult = operationIterationResult
         )

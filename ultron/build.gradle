@@ -33,7 +33,8 @@ ext.versions = [
         'test'              : '1.3.0',
         'junit'             : '4.13.2',
         'espresso'          : '3.3.0',
-        'uiautomator'       : '2.2.0'
+        'uiautomator'       : '2.2.0',
+        'compose'           : '1.1.1'
 ]
 
 android {
@@ -69,6 +70,7 @@ dependencies {
     implementation "androidx.test.espresso:espresso-web:${versions.espresso}"
     testImplementation "junit:junit:${versions.junit}"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "androidx.compose.ui:ui-test-junit4:${versions.compose}"
 }
 
 group = publishedGroupId

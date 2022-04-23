@@ -6,7 +6,7 @@ package com.atiurin.ultron.core.common
 interface OperationResult<T : Operation> {
     val operation: T
     val success: Boolean
-    val exception: Throwable?
+    val exceptions: List<Throwable>
     var description: String
     var operationIterationResult: OperationIterationResult?
 }

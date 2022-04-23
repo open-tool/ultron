@@ -31,8 +31,13 @@ val CONTACTS = arrayListOf(
     Contact(23, "Friend11", "Time fluid capacitor", Avatars.DEFAULT.drawable),
     Contact(24, "Friend12", "Time fluid capacitor", Avatars.DEFAULT.drawable),
     Contact(25, "Friend13", "Time fluid capacitor", Avatars.DEFAULT.drawable),
-    Contact(26, "Friend14", "Time fluid capacitor", Avatars.DEFAULT.drawable)
-
+    Contact(26, "Friend14", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(27, "Friend15", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(28, "Friend16", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(29, "Friend17", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(30, "Friend18", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(31, "Friend19", "Time fluid capacitor", Avatars.DEFAULT.drawable),
+    Contact(32, "Friend20", "Time fluid capacitor", Avatars.DEFAULT.drawable)
 )
 
 enum class Avatars(val drawable: Int) {

@@ -21,7 +21,7 @@ internal abstract class WebOperationExecutor<T : Operation>(
         return WebOperationResult(
             operation = operation,
             success = success,
-            exception = exceptions.lastOrNull(),
+            exceptions = exceptions,
             description = description,
             operationIterationResult = operationIterationResult
         )
