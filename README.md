@@ -1,7 +1,7 @@
 # Ultron
 
 [ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.atiurin/ultron/badge.svg) ](https://maven-badges.herokuapp.com/maven-central/com.atiurin/ultron)
-![Android CI](https://github.com/alex-tiurin/ultron/workflows/AndroidCI/badge.svg)
+![Android CI](https://github.com/open-tool/ultron/workflows/AndroidCI/badge.svg)
 
 Ultron is an easiest framework to develop Android UI tests. It makes your tests stable, short and understandable.
 It's based on Espresso and UI Automator and it provides a lot of new great features.
@@ -41,7 +41,7 @@ withId(R.id.send_button).isDisplayed().click()
 ```
 It looks better. Names of all Ultron operations are the same as Espresso. It also provide a list of additional operations.
 
-See [wiki](https://github.com/alex-tiurin/ultron/wiki/Espresso-operations) for more info.
+See [wiki](https://github.com/open-tool/ultron/wiki/Espresso-operations) for more info.
 
 2. Action on RecyclerView list item
 
@@ -69,7 +69,7 @@ withRecyclerView(R.id.recycler_friends)
     .click()
 ```
 
-Read [wiki](https://github.com/alex-tiurin/ultron/wiki/RecyclerView) and realise the magic of how *Ultron* interacts with RecyclerView.
+Read [wiki](https://github.com/open-tool/ultron/wiki/RecyclerView) and realise the magic of how *Ultron* interacts with RecyclerView.
 
 3. Espresso WebView operations 
 
@@ -93,7 +93,7 @@ id("button1").webClick()
 id("title").hasText(newTitle)
 ```
 
-Read [wiki](https://github.com/alex-tiurin/ultron/wiki/WebView) 
+Read [wiki](https://github.com/open-tool/ultron/wiki/WebView) 
 
 4. UI Automator operations
 
@@ -111,7 +111,7 @@ _Ultron_
 ```kotlin
 byResId(R.id.button1).click() 
 ```
-Read [wiki](https://github.com/alex-tiurin/ultron/wiki/UI-Automator-operation) 
+Read [wiki](https://github.com/open-tool/ultron/wiki/UI-Automator-operation) 
 
 ### You can get the result of any operation as boolean value
 
@@ -167,7 +167,7 @@ object ChatPage : Page<ChatPage>() {
     }
 }
 ```
-Full code sample [ChatPage.class](https://github.com/alex-tiurin/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/pages/ChatPage.kt)
+Full code sample [ChatPage.class](https://github.com/open-tool/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/pages/ChatPage.kt)
 
 3. Call user steps in test
 
@@ -188,7 +188,7 @@ Full code sample [ChatPage.class](https://github.com/alex-tiurin/ultron/blob/mas
         }
     }
 ```
-Full code sample [DemoEspressoTest.class](https://github.com/alex-tiurin/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/espresso/DemoEspressoTest.kt)
+Full code sample [DemoEspressoTest.class](https://github.com/open-tool/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/espresso/DemoEspressoTest.kt)
 
 In general, it all comes down to the fact that the architecture of your project will look like this.
 
