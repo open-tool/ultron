@@ -22,6 +22,16 @@ fun Matcher<View>.withResultHandler(resultHandler: (EspressoOperationResult<Ultr
 fun Matcher<View>.click() = UltronEspressoInteraction(onView(this)).click()
 fun Matcher<View>.doubleClick() = UltronEspressoInteraction(onView(this)).doubleClick()
 fun Matcher<View>.longClick() = UltronEspressoInteraction(onView(this)).longClick()
+
+fun Matcher<View>.clickTopLeft(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(onView(this)).clickTopLeft(offsetX, offsetY)
+fun Matcher<View>.clickTopCenter(offsetY: Int) = UltronEspressoInteraction(onView(this)).clickTopCenter(offsetY)
+fun Matcher<View>.clickTopRight(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(onView(this)).clickTopRight(offsetX, offsetY)
+fun Matcher<View>.clickCenterRight(offsetX: Int = 0) = UltronEspressoInteraction(onView(this)).clickCenterRight(offsetX)
+fun Matcher<View>.clickBottomRight(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(onView(this)).clickBottomRight(offsetX, offsetY)
+fun Matcher<View>.clickBottomCenter(offsetY: Int = 0) = UltronEspressoInteraction(onView(this)).clickBottomCenter(offsetY)
+fun Matcher<View>.clickBottomLeft(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(onView(this)).clickBottomLeft(offsetX, offsetY)
+fun Matcher<View>.clickCenterLeft(offsetX: Int = 0) = UltronEspressoInteraction(onView(this)).clickCenterLeft(offsetX)
+
 fun Matcher<View>.typeText(text: String) = UltronEspressoInteraction(onView(this)).typeText(text)
 fun Matcher<View>.replaceText(text: String) = UltronEspressoInteraction(onView(this)).replaceText(text)
 fun Matcher<View>.clearText() = UltronEspressoInteraction(onView(this)).clearText()

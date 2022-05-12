@@ -132,6 +132,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val intent = Intent(applicationContext, WebViewActivity::class.java)
                 startActivity(intent)
             }
+            R.id.custom_clicks_nav_item -> {
+                val intent = Intent(applicationContext, CustomClicksActivity::class.java)
+                startActivity(intent)
+            }
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         drawerLayout.closeDrawer(GravityCompat.START)
