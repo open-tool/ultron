@@ -3,7 +3,9 @@ package com.atiurin.ultron.core.espresso.recyclerview
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.ViewInteraction
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
+import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.*
@@ -74,6 +76,16 @@ open class UltronRecyclerViewItem {
     fun click() = apply { this.getMatcher().click() }
     fun longClick() = apply { this.getMatcher().longClick() }
     fun doubleClick() = apply { this.getMatcher().doubleClick() }
+
+    fun clickTopLeft(offsetX: Int = 0, offsetY: Int = 0) = apply { this.getMatcher().clickTopLeft(offsetX, offsetY) }
+    fun clickTopCenter(offsetY: Int) = apply { this.getMatcher().clickTopCenter(offsetY) }
+    fun clickTopRight(offsetX: Int = 0, offsetY: Int = 0) = apply { this.getMatcher().clickTopRight(offsetX, offsetY) }
+    fun clickCenterRight(offsetX: Int = 0) = apply { this.getMatcher().clickCenterRight(offsetX) }
+    fun clickBottomRight(offsetX: Int = 0, offsetY: Int = 0) = apply { this.getMatcher().clickBottomRight(offsetX, offsetY) }
+    fun clickBottomCenter(offsetY: Int = 0) = apply { this.getMatcher().clickBottomCenter(offsetY) }
+    fun clickBottomLeft(offsetX: Int = 0, offsetY: Int = 0) = apply { this.getMatcher().clickBottomLeft(offsetX, offsetY) }
+    fun clickCenterLeft(offsetX: Int = 0) = apply { this.getMatcher().clickCenterLeft(offsetX) }
+
     fun swipeDown() = apply { this.getMatcher().swipeDown() }
     fun swipeLeft() = apply { this.getMatcher().swipeLeft() }
     fun swipeRight() = apply { this.getMatcher().swipeRight() }
