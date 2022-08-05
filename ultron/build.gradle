@@ -33,7 +33,9 @@ ext.versions = [
         'test'              : '1.4.0',
         'junit'             : '4.13.2',
         'espresso'          : '3.4.0',
-        'uiautomator'       : '2.2.0'
+        'uiautomator'       : '2.2.0',
+        'accessibility'     : '4.0.0',
+        'hamcrest_core'     : '2.2'
 ]
 
 android {
@@ -68,8 +70,8 @@ dependencies {
     implementation "androidx.test.uiautomator:uiautomator:${versions.uiautomator}"
     implementation "androidx.test.espresso:espresso-web:${versions.espresso}"
     testImplementation "junit:junit:${versions.junit}"
-    implementation "com.google.android.apps.common.testing.accessibility.framework:accessibility-test-framework:4.0.0"
-    implementation "org.hamcrest:hamcrest-core:2.2"
+    implementation "com.google.android.apps.common.testing.accessibility.framework:accessibility-test-framework:${versions.accessibility}"
+    implementation "org.hamcrest:hamcrest-core:${versions.hamcrest_core}"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 }
 
