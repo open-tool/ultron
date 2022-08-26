@@ -7,7 +7,7 @@ import com.atiurin.ultron.core.common.OperationResult
 class UiAutomatorOperationResult<T : Operation> (
         override val operation: T,
         override val success: Boolean,
-        override val exception: Throwable? = null,
+        override val exceptions: List<Throwable> = emptyList(),
         override var description: String = "",
         override var operationIterationResult: OperationIterationResult?
 ) : OperationResult<T>

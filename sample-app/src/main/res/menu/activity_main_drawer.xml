@@ -34,6 +34,15 @@
             android:id="@+id/custom_clicks_nav_item"
             android:icon="@android:drawable/ic_dialog_dialer"
             android:title="@string/menu_custom_clicks" />
+            android:title="@string/menu_web_view"/>
+        <item
+            android:id="@+id/compose_elements"
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:title="@string/menu_compose_ui_elements"/>
+        <item
+            android:id="@+id/compose_list"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="@string/menu_compose_list"/>
     </group>
 
     <!--<item android:title="Communicate">-->

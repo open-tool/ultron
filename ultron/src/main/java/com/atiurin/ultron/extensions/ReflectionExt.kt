@@ -1,6 +1,8 @@
 package com.atiurin.ultron.extensions
 
 import android.view.View
+import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.Root
 import androidx.test.espresso.ViewInteraction
@@ -9,7 +11,7 @@ import androidx.test.espresso.web.sugar.Web
 import org.hamcrest.Matcher
 import java.util.concurrent.atomic.AtomicReference
 
-internal inline fun <reified T> Any.getProperty(propertyName: String): T? {
+inline fun <reified T> Any.getProperty(propertyName: String): T? {
     return try {
         val property = this.javaClass.getDeclaredField(propertyName)
         property.isAccessible = true
@@ -58,7 +60,12 @@ internal fun <T> Web.WebInteraction<T>.getViewMatcher(): Matcher<View>? {
 internal fun <T> Web.WebInteraction<T>.getElementReference(): ElementReference? {
     return this.getProperty("element")
 }
-
+internal fun  SemanticsNodeInteraction.getUseMergedTree(): Boolean? {
+    return this.getProperty("useUnmergedTree")
+}
+internal fun  SemanticsNodeInteractionCollection.getUseMergedTree(): Boolean? {
+    return this.getProperty("useUnmergedTree")
+}
 /** Transforms any method call to Boolean value */
 internal fun <T> T.methodToBoolean(
     block: T.() -> Unit

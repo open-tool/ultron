@@ -132,6 +132,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val intent = Intent(applicationContext, WebViewActivity::class.java)
                 startActivity(intent)
             }
+            R.id.compose_elements -> {
+                startActivity(Intent(applicationContext, ComposeElementsActivity::class.java))
+            }
+            R.id.compose_list -> {
+                startActivity(Intent(applicationContext, ComposeListActivity::class.java))
+            }
             R.id.custom_clicks_nav_item -> {
                 val intent = Intent(applicationContext, CustomClicksActivity::class.java)
                 startActivity(intent)

@@ -166,7 +166,7 @@ class UltronUiObjectAssertionsTest: UiElementsTest() {
     @Test
     fun contentDescriptionIsNotNullOrEmpty_nullText(){
         page.editTextContentDesc.clearTextField()
-        AssertUtils.assertException { page.button.withTimeout(100).contentDescriptionIsNotNullOrEmpty() }
+        page.button.contentDescriptionIsNullOrEmpty()
     }
     //exists
     @Test

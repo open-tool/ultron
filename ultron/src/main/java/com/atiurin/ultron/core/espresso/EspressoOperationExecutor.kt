@@ -16,12 +16,11 @@ abstract class EspressoOperationExecutor<T : Operation>(
         exceptions: List<Throwable>,
         description: String,
         operationIterationResult: OperationIterationResult?
-    )
-            : EspressoOperationResult<T> {
+    ): EspressoOperationResult<T> {
         return EspressoOperationResult(
             operation = operation,
             success = success,
-            exception = exceptions.lastOrNull(),
+            exceptions = exceptions,
             description = description,
             operationIterationResult = operationIterationResult
         )

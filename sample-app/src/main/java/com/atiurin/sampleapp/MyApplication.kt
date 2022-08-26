@@ -10,5 +10,5 @@ object MyApplication : Application() {
         context = applicationContext
     }
 
-    var CONTACTS_LOADING_TIMEOUT_MS = 100L
+    var CONTACTS_LOADING_TIMEOUT_MS = 2000L
 }

@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger
 open class UltronRecyclerView(
     val recyclerViewMatcher: Matcher<View>,
     val loadTimeoutMs: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
-    private val itemSearchLimit: Int = -1,
+    private val itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
     private var operationTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
 ) {
     private var recyclerView: RecyclerView? = null
@@ -305,7 +305,7 @@ open class UltronRecyclerView(
     }
 
     /**
-     * Asserts RecyclerView has no item
+     * Asserts RecyclerView has any item
      */
     fun assertNotEmpty() {
         AssertUtils.assertTrue(

@@ -3,12 +3,15 @@ package com.atiurin.ultron.utils
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.os.Looper
 import androidx.annotation.AnyRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.IntegerRes
 import androidx.annotation.StringRes
 import androidx.test.platform.app.InstrumentationRegistry
 import com.atiurin.ultron.exceptions.UltronException
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.FutureTask
 
 fun getResourceName(@AnyRes resourceId: Int, context: Context): String {
     return context.resources.getResourceName(resourceId)
@@ -48,4 +51,19 @@ fun getTargetDrawable(@DrawableRes resourceId: Int): Drawable? {
 
 fun getTestDrawable(@DrawableRes resourceId: Int): Drawable? {
     return getDrawable(resourceId, InstrumentationRegistry.getInstrumentation().context)
+}
+
+fun <T> runOnUiThread(action: () -> T): T {
+    if (Looper.myLooper() == Looper.getMainLooper()) {
+        return action()
+    }
+
+    // Note: This implementation is directly taken from ActivityTestRule
+    val task: FutureTask<T> = FutureTask(action)
+    InstrumentationRegistry.getInstrumentation().runOnMainSync(task)
+    try {
+        return task.get()
+    } catch (e: ExecutionException) { // Expose the original exception
+        throw e.cause!!
+    }
 }

@@ -32,7 +32,10 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
                     val error =
                         result.exception ?: UnknownError("Create an issue to ULTRON project")
                     if (error::class.java.isAssignedFrom(getAllowedExceptions(operation))) {
-                        if (exceptions.find { it.javaClass.simpleName == error.javaClass.simpleName } == null) {
+                        if (exceptions.find {
+                                it.javaClass.simpleName == error.javaClass.simpleName &&
+                                        it.message == error.message
+                        } == null) {
                             exceptions.add(error)
                         }
                     } else {
@@ -42,9 +45,10 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
                         throw error
                     }
                 }
-                    if (!success) {
-                        if (pollingTimeout > 0) SystemClock.sleep(pollingTimeout)
-                    } else lastIteration = result
+                lastIteration = result
+                if (!success) {
+                    if (pollingTimeout > 0) SystemClock.sleep(pollingTimeout)
+                }
             } while (SystemClock.elapsedRealtime() < endTime && !success)
         } catch (th: Throwable) {
             success = false // just make sure we will have correct action status

@@ -19,7 +19,7 @@ ext {
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.vanniktech.maven.publish'
 
 ext.versions = [
@@ -35,7 +35,8 @@ ext.versions = [
         'espresso'          : '3.4.0',
         'uiautomator'       : '2.2.0',
         'accessibility'     : '4.0.0',
-        'hamcrest_core'     : '2.2'
+        'hamcrest_core'     : '2.2',
+        'compose'           : '1.1.1'
 ]
 
 android {
@@ -70,6 +71,7 @@ dependencies {
     implementation "com.google.android.apps.common.testing.accessibility.framework:accessibility-test-framework:${versions.accessibility}"
     implementation "org.hamcrest:hamcrest-core:${versions.hamcrest_core}"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "androidx.compose.ui:ui-test-junit4:${versions.compose}"
 }
 
 group = publishedGroupId

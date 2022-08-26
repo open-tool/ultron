@@ -81,7 +81,10 @@ class ViewInteractionActionsTest : UiElementsTest() {
     fun typeText_onEditable() {
         val text1 = "begin"
         val text2 = "simple text"
-        page.editTextContentDesc.replaceText(text1).typeText(text2).hasText("$text1$text2")
+        page.editTextContentDesc
+            .replaceText(text1)
+            .typeText(text2)
+            .hasText("$text1$text2")
     }
 
     @Test

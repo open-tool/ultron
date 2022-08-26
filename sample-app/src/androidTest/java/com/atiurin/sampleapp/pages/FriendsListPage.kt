@@ -6,13 +6,9 @@ import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
 import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.data.entities.Contact
-import com.atiurin.sampleapp.data.repositories.CONTACTS
-import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.step
-import com.atiurin.ultron.extensions.click
 import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
-import com.atiurin.ultron.extensions.textContains
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import org.junit.Assert

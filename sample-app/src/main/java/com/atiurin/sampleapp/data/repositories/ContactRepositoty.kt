@@ -22,6 +22,7 @@ object ContactRepositoty {
     fun getLast() : Contact{
         return contacts.last()
     }
+    fun all() = contacts.toList()
 
     private val contacts = CONTACTS
 }

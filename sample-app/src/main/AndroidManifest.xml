@@ -14,6 +14,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name="com.atiurin.sampleapp.activity.SplashActivity"
+            android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,11 +39,24 @@
         <activity
             android:name="com.atiurin.sampleapp.activity.UiElementsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name="com.atiurin.sampleapp.activity.WebViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.atiurin.sampleapp.activity.CustomClicksActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.atiurin.sampleapp.activity.ComposeElementsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.atiurin.sampleapp.activity.ComposeListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.atiurin.sampleapp.activity.ComposeListWithPositionTestTagActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.atiurin.sampleapp.activity.ComposeSecondActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
