@@ -2,6 +2,7 @@ package com.atiurin.ultron.extensions
 
 import android.view.View
 import androidx.annotation.DrawableRes
+import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.EspressoKey
@@ -28,6 +29,16 @@ fun ViewInteraction.withResultHandler(resultHandler: (EspressoOperationResult<Ul
 fun ViewInteraction.click() = UltronEspressoInteraction(this).click()
 fun ViewInteraction.doubleClick() = UltronEspressoInteraction(this).doubleClick()
 fun ViewInteraction.longClick() = UltronEspressoInteraction(this).longClick()
+
+fun ViewInteraction.clickTopLeft(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(this).clickTopLeft(offsetX, offsetY)
+fun ViewInteraction.clickTopCenter(offsetY: Int) = UltronEspressoInteraction(this).clickTopCenter(offsetY)
+fun ViewInteraction.clickTopRight(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(this).clickTopRight(offsetX, offsetY)
+fun ViewInteraction.clickCenterRight(offsetX: Int = 0) = UltronEspressoInteraction(this).clickCenterRight(offsetX)
+fun ViewInteraction.clickBottomRight(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(this).clickBottomRight(offsetX, offsetY)
+fun ViewInteraction.clickBottomCenter(offsetY: Int = 0) = UltronEspressoInteraction(this).clickBottomCenter(offsetY)
+fun ViewInteraction.clickBottomLeft(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(this).clickBottomLeft(offsetX, offsetY)
+fun ViewInteraction.clickCenterLeft(offsetX: Int = 0) = UltronEspressoInteraction(this).clickCenterLeft(offsetX)
+
 fun ViewInteraction.typeText(text: String) = UltronEspressoInteraction(this).typeText(text)
 fun ViewInteraction.replaceText(text: String) = UltronEspressoInteraction(this).replaceText(text)
 fun ViewInteraction.clearText() = UltronEspressoInteraction(this).clearText()

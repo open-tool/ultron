@@ -36,5 +36,6 @@
     <string name="button_event_double_click">Double Click</string>
 
     <string name="app_compat_text">Default AppCompatTextView</string>
+    <string name="menu_custom_clicks">Custom Clicks</string>
 
 </resources>

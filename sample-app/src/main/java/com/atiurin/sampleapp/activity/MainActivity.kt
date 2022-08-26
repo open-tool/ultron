@@ -138,6 +138,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.compose_list -> {
                 startActivity(Intent(applicationContext, ComposeListActivity::class.java))
             }
+            R.id.custom_clicks_nav_item -> {
+                val intent = Intent(applicationContext, CustomClicksActivity::class.java)
+                startActivity(intent)
+            }
         }
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
         drawerLayout.closeDrawer(GravityCompat.START)

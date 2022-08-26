@@ -39,6 +39,13 @@
         <activity
             android:name="com.atiurin.sampleapp.activity.UiElementsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="com.atiurin.sampleapp.activity.WebViewActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.atiurin.sampleapp.activity.CustomClicksActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.atiurin.sampleapp.activity.ComposeElementsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -50,9 +57,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.atiurin.sampleapp.activity.ComposeSecondActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name="com.atiurin.sampleapp.activity.WebViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
