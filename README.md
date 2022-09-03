@@ -3,15 +3,14 @@
 [ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.atiurin/ultron/badge.svg) ](https://maven-badges.herokuapp.com/maven-central/com.atiurin/ultron)
 ![Android CI](https://github.com/open-tool/ultron/workflows/AndroidCI/badge.svg)
 
-Ultron is an easiest framework to develop Android UI tests. It makes your tests stable, short and understandable.
-It's based on Espresso and UI Automator and it provides a lot of new great features.
+Ultron is an easiest framework to develop Android UI tests. It makes your tests simple, stable and supportable.
+It's based on Espresso, UI Automator and Compose UI testing framework. Ultron provides a lot of new great features.
 Ultron also gives you a full control under your tests!
 
 Moreover, you don't need to learn any new classes or special syntax. All magic actions and assertions are provided from crunch.
 Ultron can be easially customised and extended. Wish you only stable tests!
 
 ![logo](https://user-images.githubusercontent.com/12834123/112367915-96321580-8ceb-11eb-90f6-ed44b5b53ab0.png)
-
 
 ## What are the benefits of using the framework?
 
@@ -20,14 +19,52 @@ Ultron can be easially customised and extended. Wish you only stable tests!
 - Full control under any action or assertion
 - An architectural approach to UI tests development
 - Amazing mechanism of setups and teardowns (You even can setup preconditions for single test in test class. It won't affect the others)
-
+***
+### Attention! Ultron 2.x.x supports compose UI testing!
+***
 ### A few words about syntax
 
-The standard Espresso syntax is complex and not intuitive to understand. This is especially evident when interacting with the RecyclerView
+The standard Google syntax is complex and not intuitive to understand. This is especially evident when interacting with the RecyclerView
 
-Let's look at 2 examples:
+Let's look at some examples:
 
-1. Simple assertion and action.
+#### 1. Simple compose operation (read wiki [here](https://github.com/open-tool/ultron/wiki/Compose#ultron-compose))
+
+_Compose framework_
+
+```kotlin
+composeTestRule.onNode(hasTestTag("Continue")).performClick()
+composeTestRule.onNodeWithText("Welcome").assertIsDisplayed()
+```
+_Ultron_
+
+```kotlin
+hasTestTag("Continue").click()
+hasText("Welcome").assertIsDisplayed()
+```
+
+#### 2. Compose list operation (read wiki [here](https://github.com/open-tool/ultron/wiki/Compose#ultron-compose-lazycolumnlazyrow))
+
+_Compose framework_
+
+```kotlin
+val itemMatcher = hasText(contact.name)
+composeRule
+    .onNodeWithTag(contactsListTestTag)
+    .performScrollToNode(itemMatcher)
+    .onChildren()
+    .filterToOne(itemMatcher)
+    .assertTextContains(contact.name)
+```
+
+_Ultron_
+
+```kotlin
+composeList(hasTestTag(contactsListTestTag))
+    .item(hasText(contact.name))
+    .assertTextContains(contact.name)
+```
+#### 3. Simple Espresso assertion and action.
 
 _Espresso_
 
@@ -43,7 +80,7 @@ It looks better. Names of all Ultron operations are the same as Espresso. It als
 
 See [wiki](https://github.com/open-tool/ultron/wiki/Espresso-operations) for more info.
 
-2. Action on RecyclerView list item
+#### 4. Action on RecyclerView list item
 
 _Espresso_
 
@@ -71,7 +108,7 @@ withRecyclerView(R.id.recycler_friends)
 
 Read [wiki](https://github.com/open-tool/ultron/wiki/RecyclerView) and realise the magic of how *Ultron* interacts with RecyclerView.
 
-3. Espresso WebView operations 
+#### 5. Espresso WebView operations 
 
 _Espresso_
 
@@ -95,7 +132,7 @@ id("title").hasText(newTitle)
 
 Read [wiki](https://github.com/open-tool/ultron/wiki/WebView) 
 
-4. UI Automator operations
+#### 6. UI Automator operations
 
 _UI Automator_
 
@@ -112,7 +149,7 @@ _Ultron_
 byResId(R.id.button1).click() 
 ```
 Read [wiki](https://github.com/open-tool/ultron/wiki/UI-Automator-operation) 
-
+***
 ### You can get the result of any operation as boolean value
 
 ```kotlin
@@ -121,6 +158,7 @@ if (isButtonDisplayed) {
     //do some reasonable actions
 }
 ```
+***
 ### Why all Ultron actions and assertions are much more stable?
 
 The framework catches a list of specified exceptions and tries to repeat operation during timeout (5 sec by default). Ofcourse, you are able to customise the list of processed exceptions. It is also available to specify custom timeout for any operation. 
@@ -128,7 +166,7 @@ The framework catches a list of specified exceptions and tries to repeat operati
 ```kotlin
 withId(R.id.result).withTimeout(10_000).hasText("Passed")
 ```
-
+***
 ## 3 steps to develop a test using Ultron
 
 We try to advocate the correct construction of the test framework architecture, the division of responsibilities between the layers and other proper things.
@@ -212,5 +250,7 @@ It is required to use AndroidX libraries. You can get some problems with Android
 
 ## Roadmap
 
-- https://github.com/open-tool/ultron/issues/11 Jetpack Compose support
-- https://github.com/open-tool/ultron/issues/10 Extend click action api for espresso
+- https://github.com/open-tool/ultron/issues/23 Custom assertion on action result
+- https://github.com/open-tool/ultron/issues/11 Jetpack Compose support improvement
+- https://github.com/open-tool/ultron/issues/21 Add hasTextColor matcher
+
