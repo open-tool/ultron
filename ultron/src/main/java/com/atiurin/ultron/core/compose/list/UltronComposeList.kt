@@ -57,7 +57,9 @@ class UltronComposeList(
     ): T {
         return UltronComposeListItem.getInstance(this, index)
     }
+
     inline fun <reified T : UltronComposeListItem> getFirstVisibleItem(): T = getVisibleItem(0)
+    inline fun <reified T : UltronComposeListItem> getLastVisibleItem(): T = getVisibleItem(getMatcher().perform { it.fetchSemanticsNode().children.lastIndex })
     /**
      * Provide a scope with references to list SemanticsNode and SemanticsNodeInteraction.
      * It is possible to evaluate any action or assertion on this node.
@@ -123,7 +125,6 @@ class UltronComposeList(
             listInteraction.performScrollToNode(itemMatcher)
         }
     }
-
     fun scrollToIndex(index: Int) = apply { getMatcher().perform { it.performScrollToIndex(index) } }
     fun scrollToKey(key: Any) = apply { getMatcher().perform { it.performScrollToKey(key) } }
     fun assertIsDisplayed() = apply { getMatcher().withTimeout(getOperationTimeout()).assertIsDisplayed() }
@@ -134,19 +135,21 @@ class UltronComposeList(
     fun assertContentDescriptionContains(expected: String, option: ContentDescriptionContainsOption? = null) =
         apply { getMatcher().withTimeout(getOperationTimeout()).assertContentDescriptionContains(expected, option) }
 
-    fun assertNotEmpty() = AssertUtils.assertTrue(
-        { getVisibleItemsCount() > 0 }, getOperationTimeout(),
-        "Compose list (${listMatcher.description}) is NOT empty"
-    )
+    fun assertNotEmpty() = apply {
+        AssertUtils.assertTrue(
+            { getVisibleItemsCount() > 0 }, getOperationTimeout(),
+            "Compose list (${listMatcher.description}) is NOT empty"
+        )
+    }
 
-    fun assertEmpty() {
+    fun assertEmpty() = apply {
         AssertUtils.assertTrue(
             { getVisibleItemsCount() == 0 }, getOperationTimeout(),
             "Compose list (${listMatcher.description}) has no items (visible items count = ${getVisibleItemsCount()})"
         )
     }
 
-    fun assertVisibleItemsCount(expected: Int) {
+    fun assertVisibleItemsCount(expected: Int) = apply {
         AssertUtils.assertTrue(
             { getVisibleItemsCount() == expected }, getOperationTimeout(),
             "Compose list (${listMatcher.description}) has visible items count = $expected (actual visible items count = ${getVisibleItemsCount()})"
@@ -154,7 +157,6 @@ class UltronComposeList(
     }
 
     fun getVisibleItemsCount(): Int = getMatcher().perform { it.fetchSemanticsNode().children.size }
-
     fun getMatcher() = UltronComposeSemanticsMatcher(listMatcher, useUnmergedTree)
 }
 

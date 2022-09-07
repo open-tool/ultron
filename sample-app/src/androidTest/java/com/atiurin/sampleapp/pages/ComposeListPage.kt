@@ -16,12 +16,15 @@ import com.atiurin.ultron.page.Page
 object ComposeListPage : Page<ComposeListPage>() {
     val lazyList = composeList(hasContentDescription(contactsListContentDesc))
 
-    class ComposeFriendListItem : UltronComposeListItem(){
-        val name by lazy { getChild(hasTestTag(contactNameTestTag)) }
-        val status by lazy { getChild(hasTestTag(contactStatusTestTag)) }
+    fun assertContactStatus(contact: Contact) = apply {
+        getContactItemById(contact).status.assertTextEquals(contact.status)
     }
     fun getFirstVisibleItem(): ComposeFriendListItem = lazyList.getFirstVisibleItem()
     fun getItemByIndex(index: Int): ComposeFriendListItem = lazyList.getVisibleItem(index)
     fun getContactItemById(contact: Contact): ComposeFriendListItem = lazyList.getItem(hasTestTag(getContactItemTestTagById(contact)))
     fun getContactItemByName(contact: Contact): ComposeFriendListItem = lazyList.getItem(hasAnyDescendant(hasText(contact.name) and hasTestTag(contactNameTestTag)))
+    class ComposeFriendListItem : UltronComposeListItem(){
+        val name by lazy { getChild(hasTestTag(contactNameTestTag)) }
+        val status by lazy { getChild(hasTestTag(contactStatusTestTag)) }
+    }
 }
