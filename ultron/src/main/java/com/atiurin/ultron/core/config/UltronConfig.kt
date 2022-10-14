@@ -38,6 +38,7 @@ import org.hamcrest.Matcher
 object UltronConfig {
     var LOGCAT_TAG = "Ultron"
     val operationsExcludedFromListeners = mutableListOf<UltronOperationType>(EspressoAssertionType.IDENTIFY_RECYCLER_VIEW)
+    var isListenersOn = true
 
     fun addGlobalListener(lifecycleListener: UltronLifecycleListener){
         UltronEspressoOperationLifecycle.addListener(lifecycleListener)
@@ -71,6 +72,7 @@ object UltronConfig {
             var RECYCLER_VIEW_LOAD_TIMEOUT = DEFAULT_RECYCLER_VIEW_LOAD_TIMEOUT
             var RECYCLER_VIEW_OPERATIONS_TIMEOUT = DEFAULT_RECYCLER_VIEW_OPERATION_TIMEOUT
             var RECYCLER_VIEW_ITEM_SEARCH_LIMIT = -1
+            var INCLUDE_VIEW_HIERARCHY_TO_EXCEPTION = false //where it applicable
 
             var resultAnalyzer: OperationResultAnalyzer = UltronDefaultOperationResultAnalyzer()
 
@@ -84,8 +86,7 @@ object UltronConfig {
                 }
             }
 
-            var webViewMatcher: Matcher<View> =
-                allOf(isAssignableFrom(WebView::class.java), isDisplayed())
+            var webViewMatcher: Matcher<View> = allOf(isAssignableFrom(WebView::class.java), isDisplayed())
         }
 
         class ViewActionConfig {

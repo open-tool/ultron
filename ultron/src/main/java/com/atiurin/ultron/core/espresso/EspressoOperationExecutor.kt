@@ -1,8 +1,10 @@
 package com.atiurin.ultron.core.espresso
 
+import androidx.test.espresso.NoMatchingViewException
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationExecutor
 import com.atiurin.ultron.core.common.OperationIterationResult
+import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.ESPRESSO_OPERATION_POLLING_TIMEOUT
 
 abstract class EspressoOperationExecutor<T : Operation>(
@@ -15,14 +17,22 @@ abstract class EspressoOperationExecutor<T : Operation>(
         success: Boolean,
         exceptions: List<Throwable>,
         description: String,
-        operationIterationResult: OperationIterationResult?
+        lastOperationIterationResult: OperationIterationResult?,
+        executionTimeMs: Long
     ): EspressoOperationResult<T> {
         return EspressoOperationResult(
             operation = operation,
             success = success,
             exceptions = exceptions,
             description = description,
-            operationIterationResult = operationIterationResult
+            operationIterationResult = lastOperationIterationResult,
+            executionTimeMs = executionTimeMs
         )
+    }
+
+    override fun getWrapperException(originalException: Throwable): Throwable {
+        return if (originalException is NoMatchingViewException){
+            NoMatchingViewException.Builder().from(originalException).includeViewHierarchy(UltronConfig.Espresso.INCLUDE_VIEW_HIERARCHY_TO_EXCEPTION).build()
+        } else originalException
     }
 }

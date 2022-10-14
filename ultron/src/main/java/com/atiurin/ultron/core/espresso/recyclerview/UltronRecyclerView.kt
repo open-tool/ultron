@@ -397,6 +397,7 @@ open class UltronRecyclerView(
      * */
     open fun withTimeout(timeoutMs: Long) =
         UltronRecyclerView(this.recyclerViewMatcher, this.loadTimeoutMs, this.itemSearchLimit, operationTimeoutMs = timeoutMs)
+
     open fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
         recyclerViewMatcher.withResultHandler(resultHandler)
 
@@ -632,5 +633,5 @@ private fun <T> UltronEspressoInteraction<T>.identifyRecyclerView(matcher: Match
     )
 }
 
-private fun Matcher<View>.identifyRecyclerView(matcher: Matcher<View>) : Unit =
+private fun Matcher<View>.identifyRecyclerView(matcher: Matcher<View>): Unit =
     UltronEspressoInteraction(onView(this)).identifyRecyclerView(matcher)

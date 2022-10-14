@@ -3,7 +3,6 @@ package com.atiurin.ultron.core.uiautomator
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationExecutor
 import com.atiurin.ultron.core.common.OperationIterationResult
-import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.config.UltronConfig.UiAutomator.Companion.UIAUTOMATOR_OPERATION_POLLING_TIMEOUT
 import com.atiurin.ultron.exceptions.UltronWrapperException
 import java.lang.NullPointerException
@@ -18,14 +17,16 @@ abstract class UiAutomatorOperationExecutor<T : Operation>(
         success: Boolean,
         exceptions: List<Throwable>,
         description: String,
-        operationIterationResult: OperationIterationResult?
+        lastOperationIterationResult: OperationIterationResult?,
+        executionTimeMs: Long
     ): UiAutomatorOperationResult<T> {
         return UiAutomatorOperationResult(
             operation = operation,
             success = success,
             exceptions = exceptions,
             description = description,
-            operationIterationResult = operationIterationResult
+            operationIterationResult = lastOperationIterationResult,
+            executionTimeMs = executionTimeMs
         )
     }
 

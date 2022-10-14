@@ -656,5 +656,23 @@ class RecyclerViewTest : BaseTest() {
         page.recycler.getLastItemMatched<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(targetContact), scrollOffset = offset)
         page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(page.getItemMatcher(offsetContact), autoScroll = false).name.hasText(offsetContact.name).isDisplayed()
     }
+
+    @Test
+    fun validCustomAssertion(){
+        val contact = CONTACTS.first()
+        page.recycler.firstItem().withAssertion("Toolbar title = ${contact.name}") {
+            ChatPage.assertToolbarTitle(contact.name)
+        }.click()
+    }
+
+    @Test
+    fun invalidCustomAssertion(){
+        AssertUtils.assertException {
+            val invalidExpectedName = "InvalidTitle"
+            page.recycler.firstItem().withTimeout(3000).withAssertion("Toolbar title = $invalidExpectedName") {
+                ChatPage.assertToolbarTitle(invalidExpectedName)
+            }.click()
+        }
+    }
 }
 

@@ -6,7 +6,6 @@ import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.exceptions.UltronWrapperException
 import java.lang.AssertionError
-import java.lang.NullPointerException
 
 internal class ComposeOperationExecutor(
     override val operation: UltronComposeOperation
@@ -18,14 +17,16 @@ internal class ComposeOperationExecutor(
         success: Boolean,
         exceptions: List<Throwable>,
         description: String,
-        operationIterationResult: OperationIterationResult?
+        lastOperationIterationResult: OperationIterationResult?,
+        executionTimeMs: Long
     ): ComposeOperationResult<UltronComposeOperation> {
         return ComposeOperationResult(
             operation = operation,
             success = success,
             exceptions = exceptions,
             description = description,
-            operationIterationResult = operationIterationResult
+            operationIterationResult = lastOperationIterationResult,
+            executionTimeMs = executionTimeMs
         )
     }
 
