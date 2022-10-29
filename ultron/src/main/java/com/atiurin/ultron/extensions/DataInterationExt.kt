@@ -89,12 +89,12 @@ fun DataInteraction.contentDescriptionContains(text: String) =
 fun DataInteraction.assertMatches(condition: Matcher<View>) =
     UltronEspressoInteraction(this).assertMatches(condition)
 //root view searching
-fun DataInteraction.withSuitableRoot(): UltronEspressoInteraction<DataInteraction> {
+fun DataInteraction.withSuitableRoot(): DataInteraction {
     val viewMatcher: Matcher<View>? = this.getTargetMatcher()
     var decorView: View? = null
     runOnUiThread { decorView = viewMatcher?.let { createRootViewPicker(it).get() } }
     return when {
-        decorView != null -> { UltronEspressoInteraction(this.inRoot(withDecorView(`is`(decorView)))) }
-        else -> { UltronEspressoInteraction(this) }
+        decorView != null -> { this.inRoot(withDecorView(`is`(decorView))) }
+        else -> { this }
     }
 }
