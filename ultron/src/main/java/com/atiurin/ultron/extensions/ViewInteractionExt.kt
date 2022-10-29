@@ -1,14 +1,16 @@
 package com.atiurin.ultron.extensions
 
 import android.view.View
-import androidx.annotation.DrawableRes
-import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.EspressoKey
+import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.custom.espresso.base.createRootViewPicker
+import com.atiurin.ultron.utils.runOnUiThread
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.Matcher
 
 fun ViewInteraction.isSuccess(
@@ -87,3 +89,13 @@ fun ViewInteraction.contentDescriptionContains(text: String) =
     UltronEspressoInteraction(this).contentDescriptionContains(text)
 fun ViewInteraction.assertMatches(condition: Matcher<View>) =
     UltronEspressoInteraction(this).assertMatches(condition)
+//root view searching
+fun ViewInteraction.withSuitableRoot(): ViewInteraction {
+    val viewMatcher: Matcher<View>? = this.getViewMatcher()
+    var decorView: View? = null
+    runOnUiThread { decorView = viewMatcher?.let { createRootViewPicker(it).get() } }
+    return when {
+        decorView != null -> { this.inRoot(withDecorView(`is`(decorView))) }
+        else -> { this }
+    }
+}

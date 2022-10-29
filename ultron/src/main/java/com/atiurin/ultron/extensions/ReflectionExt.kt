@@ -19,6 +19,14 @@ inline fun <reified T> Any.getProperty(propertyName: String): T? {
     } catch (ex: Throwable) { null }
 }
 
+inline fun <reified T> Any.getMethodResult(methodName: String, vararg args: Any?): T? {
+    return try {
+        val method = this.javaClass.getDeclaredMethod(methodName)
+        method.isAccessible = true
+        method.invoke(this, *args) as T
+    } catch (ex: Throwable) { null }
+}
+
 internal fun Class<*>.isAssignedFrom(klasses: List<Class<*>>): Boolean{
     klasses.forEach {
         if (it.isAssignableFrom(this)) return true
@@ -36,6 +44,10 @@ internal fun DataInteraction.getRootMatcher(): Matcher<Root>? {
 
 internal fun DataInteraction.getDataMatcher(): Matcher<View>? {
     return this.getProperty("dataMatcher")
+}
+
+internal fun DataInteraction.getTargetMatcher(): Matcher<View>? {
+    return this.getMethodResult("makeTargetMatcher")
 }
 
 internal fun ViewInteraction.getMatcher(propertyName: String): Matcher<View>? {

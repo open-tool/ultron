@@ -36,7 +36,8 @@ ext.versions = [
         'uiautomator'       : '2.2.0',
         'accessibility'     : '4.0.0',
         'hamcrest_core'     : '2.2',
-        'compose'           : '1.1.1'
+        'compose'           : '1.1.1',
+        'ktx'               : '1.6.0'
 ]
 
 android {
@@ -72,6 +73,7 @@ dependencies {
     implementation "org.hamcrest:hamcrest-core:${versions.hamcrest_core}"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "androidx.compose.ui:ui-test-junit4:${versions.compose}"
+    implementation "androidx.core:core-ktx:${versions.ktx}"
 }
 
 group = publishedGroupId
