@@ -70,7 +70,7 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
                 isSuccess = false // just make sure we will have correct action status
             }
         }
-        val operationExceptions = exceptions.distinctBy { it.javaClass.name + it.message }.map { getWrapperException(it) }
+        val operationExceptions = exceptions.map { getWrapperException(it) }.distinctBy { it.javaClass.name + it.message }
         descriptor.describeResult(description, isSuccess, execTime, operationExceptions)
         descriptor.decreaseLevel()
         descriptor.append(description,"------ End of operation '${operation.name}' ------")

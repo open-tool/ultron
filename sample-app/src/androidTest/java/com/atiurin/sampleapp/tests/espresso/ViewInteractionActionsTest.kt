@@ -268,12 +268,14 @@ class ViewInteractionActionsTest : UiElementsTest() {
 
     @Test
     fun withAssertion_failedAssertion_timeout() {
-        var execTime = 0L
         val operationTime = 1000L
-        page.editTextContentDesc.isSuccess {
-            withTimeout(operationTime).withAssertion {
-                withText("asd23213 12312").withTimeout(100).isDisplayed()
-            }.typeText("1")
+        val execTime = measureTimeMillis {
+            page.editTextContentDesc.isSuccess {
+                withTimeout(operationTime).withAssertion {
+                    withText("asd23213 12312").withTimeout(100).isDisplayed()
+                }.typeText("1")
+            }
         }
+        Assert.assertTrue(execTime > operationTime)
     }
 }

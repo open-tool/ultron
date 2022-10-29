@@ -1,6 +1,9 @@
 package com.atiurin.sampleapp.tests.espresso
 
+import android.view.View
+import androidx.core.view.allViews
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.atiurin.sampleapp.MyApplication
 import com.atiurin.sampleapp.R
@@ -12,9 +15,7 @@ import com.atiurin.sampleapp.pages.ChatPage
 import com.atiurin.sampleapp.pages.FriendsListPage
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
-import com.atiurin.ultron.extensions.hasText
-import com.atiurin.ultron.extensions.isDisplayed
-import com.atiurin.ultron.extensions.withTimeout
+import com.atiurin.ultron.extensions.*
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
 import com.atiurin.ultron.testlifecycle.setupteardown.TearDown
@@ -199,44 +200,44 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun transferFromGenericToSubclass(){
+    fun transferFromGenericToSubclass() {
         val position = 5
         page.recycler.getItem<FriendsListPage.FriendRecyclerItem>(position)
             .status.hasText(CONTACTS[position].status).isDisplayed()
     }
 
     @Test
-    fun getViewHolderList(){
+    fun getViewHolderList() {
         page.recycler.waitItemsLoaded()
         Assert.assertTrue(page.recycler.getViewHolderList(hasDescendant(withId(R.id.tv_name))).isNotEmpty())
     }
 
     @Test
-    fun waitLoaded_ofAlreadyLoadedList(){
+    fun waitLoaded_ofAlreadyLoadedList() {
         page.recycler.waitItemsLoaded()
         page.recycler.waitItemsLoaded()
     }
 
     @Test
-    fun waitLoaded_allItemsLoaded(){
+    fun waitLoaded_allItemsLoaded() {
         val count = page.recycler.waitItemsLoaded().getSize()
         Assert.assertEquals(CONTACTS.size, count)
     }
 
     @Test
-    fun getLastItem(){
+    fun getLastItem() {
         page.recycler.lastItem().isDisplayed().click()
     }
 
     @Test
-    fun getLastItemWithCustomType(){
+    fun getLastItemWithCustomType() {
         page.recycler.getLastItem<FriendsListPage.FriendRecyclerItem>().name.hasText(ContactRepositoty.getLast().name)
     }
 
     @Test
-    fun perfScroll(){
+    fun perfScroll() {
         page.recycler.apply {
-            for (i in 0 ..10){
+            for (i in 0..10) {
                 lastItem().isDisplayed()
                 firstItem().isDisplayed()
             }
@@ -244,17 +245,17 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getViewHolderAtPosition_outOfVisibleList(){
+    fun getViewHolderAtPosition_outOfVisibleList() {
         Assert.assertNull(page.recycler.waitItemsLoaded().getViewHolderAtPosition(15))
     }
 
     @Test
-    fun getViewHolderAtPosition_inVisibleList(){
+    fun getViewHolderAtPosition_inVisibleList() {
         Assert.assertNotNull(page.recycler.waitItemsLoaded().getViewHolderAtPosition(2))
     }
 
     @Test
-    fun getItemsAdapterPositionList(){
+    fun getItemsAdapterPositionList() {
         page.recycler.waitItemsLoaded()
         val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString("Friend"))))
         Assert.assertEquals(0, page.recycler.getViewHolderList(matcher).size)
@@ -262,7 +263,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun firstItemMatched_existItem(){
+    fun firstItemMatched_existItem() {
         val pattern = "Friend"
         val expectedContacts = CONTACTS.filter { it.name.contains(pattern) }
         val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(pattern))))
@@ -272,7 +273,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun itemMatched_existItem(){
+    fun itemMatched_existItem() {
         val pattern = "Friend"
         val expectedContacts = CONTACTS.filter { it.name.contains(pattern) }
         val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(pattern))))
@@ -282,13 +283,13 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun itemMatched_notExistItem(){
+    fun itemMatched_notExistItem() {
         val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString("Friend"))))
         AssertUtils.assertException { page.recycler.withTimeout(1000).itemMatched(matcher, 99) }
     }
 
     @Test
-    fun lastItemMatched_existItem(){
+    fun lastItemMatched_existItem() {
         val pattern = "Friend"
         val expectedContacts = CONTACTS.filter { it.name.contains(pattern) }
         val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(pattern))))
@@ -298,7 +299,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getFirstItemMatched_existItem(){
+    fun getFirstItemMatched_existItem() {
         val pattern = "Friend"
         val expectedContact = CONTACTS.filter { it.name.contains(pattern) }.first()
         val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(pattern))))
@@ -312,7 +313,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getItemMatched_existItem(){
+    fun getItemMatched_existItem() {
         val pattern = "Friend"
         val expectedContact = CONTACTS.filter { it.name.contains(pattern) }[1]
         val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(pattern))))
@@ -326,13 +327,13 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getItemMatched_notExistItem(){
+    fun getItemMatched_notExistItem() {
         val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString("Friend"))))
         AssertUtils.assertException { page.recycler.withTimeout(1000).getItemMatched<FriendsListPage.FriendRecyclerItem>(matcher, 99) }
     }
 
     @Test
-    fun getLastItemMatched_existItem(){
+    fun getLastItemMatched_existItem() {
         val pattern = "Friend"
         val expectedContacts = CONTACTS.filter { it.name.contains(pattern) }
         val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(pattern))))
@@ -346,30 +347,30 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun assertItemNotExist_notExistItem(){
+    fun assertItemNotExist_notExistItem() {
         page.recycler.assertItemNotExist(notExistItemMatcher, 2000)
     }
 
     @Test
-    fun assertItemNotExist_existItem(){
+    fun assertItemNotExist_existItem() {
         val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(CONTACTS.first().name))))
         AssertUtils.assertException { page.recycler.assertItemNotExist(matcher, 2000) }
     }
 
     @Test
-    fun assertItemNotExistImmediately_notExistItem(){
+    fun assertItemNotExistImmediately_notExistItem() {
         page.recycler.assertItemNotExistImmediately(notExistItemMatcher, 2000)
     }
 
     @Test
-    fun assertItemNotExistImmediately_existItem(){
+    fun assertItemNotExistImmediately_existItem() {
         page.recycler.waitItemsLoaded()
         val matcher = hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(CONTACTS.first().name))))
         AssertUtils.assertException { page.recycler.assertItemNotExistImmediately(matcher, 2000) }
     }
 
     @Test
-    fun assertItemOutOfLimitNotFound(){
+    fun assertItemOutOfLimitNotFound() {
         val rv = withRecyclerView(R.id.recycler_friends, itemSearchLimit = 2)
         AssertUtils.assertException {
             rv.withTimeout(2000L)
@@ -379,7 +380,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun assertItemInLimitFound(){
+    fun assertItemInLimitFound() {
         val rv = withRecyclerView(R.id.recycler_friends, itemSearchLimit = 10)
         rv.withTimeout(2000L)
             .item(hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(CONTACTS[2].name)))))
@@ -387,13 +388,13 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun createHandlerFromUiTest(){
+    fun createHandlerFromUiTest() {
         page.recycler.getItemAdapterPositionAtIndex(hasDescendant(allOf(withId(R.id.tv_name), withText(containsString(CONTACTS.last().name)))), 0)
     }
 
     //item+offset
     @Test
-    fun item_scrollOffsetInItemCountRange_MatcherItem(){
+    fun item_scrollOffsetInItemCountRange_MatcherItem() {
         val target = 5
         val offset = 10
         val targetContact = CONTACTS[target]
@@ -403,7 +404,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun item_scrollOffsetInItemCountRangeBothAreVisible_MatcherItem(){
+    fun item_scrollOffsetInItemCountRangeBothAreVisible_MatcherItem() {
         val target = 8
         val offset = 2
         val targetContact = CONTACTS[target]
@@ -413,7 +414,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun item_scrollOffsetOutOfItemCountRange_MatcherItem(){
+    fun item_scrollOffsetOutOfItemCountRange_MatcherItem() {
         val target = 5
         val offset = CONTACTS.size
         val targetContact = CONTACTS[target]
@@ -423,7 +424,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun item_scrollOffsetLessThenZero_MatcherItem(){
+    fun item_scrollOffsetLessThenZero_MatcherItem() {
         val target = 8
         val offset = -18
         val targetContact = CONTACTS[target]
@@ -433,7 +434,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun item_scrollOffsetInItemCountRange_positionItem(){
+    fun item_scrollOffsetInItemCountRange_positionItem() {
         val target = 2
         val offset = 12
         val offsetContact = CONTACTS[target + offset]
@@ -443,7 +444,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun item_scrollOffsetInItemCountRangeBothAreVisible_positionItem(){
+    fun item_scrollOffsetInItemCountRangeBothAreVisible_positionItem() {
         val target = 8
         val offset = 2
         val targetContact = CONTACTS[target]
@@ -455,7 +456,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun item_scrollOffsetOutOfItemCountRange_positionItem(){
+    fun item_scrollOffsetOutOfItemCountRange_positionItem() {
         val target = 5
         val offset = CONTACTS.size
         val offsetContact = CONTACTS.last()
@@ -465,7 +466,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun item_scrollOffsetLessThenZero_positionItem(){
+    fun item_scrollOffsetLessThenZero_positionItem() {
         val target = 10
         val offset = -18
         val offsetContact = CONTACTS.first()
@@ -475,7 +476,7 @@ class RecyclerViewTest : BaseTest() {
 
     //itemMatched+offset
     @Test
-    fun itemMatched_scrollOffsetInItemCountRange_MatcherItem(){
+    fun itemMatched_scrollOffsetInItemCountRange_MatcherItem() {
         val target = 5
         val offset = 10
         val targetContact = CONTACTS[target]
@@ -485,7 +486,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun itemMatched_scrollOffsetInItemCountRangeBothAreVisible_MatcherItem(){
+    fun itemMatched_scrollOffsetInItemCountRangeBothAreVisible_MatcherItem() {
         val target = 8
         val offset = 2
         val targetContact = CONTACTS[target]
@@ -495,18 +496,18 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun itemMatched_scrollOffsetOutOfItemCountRange_MatcherItem(){
+    fun itemMatched_scrollOffsetOutOfItemCountRange_MatcherItem() {
         val target = 5
         val offset = CONTACTS.size
         val targetContact = CONTACTS[target]
         val offsetContact = CONTACTS.last()
-        page.recycler.itemMatched(page.getItemMatcher(targetContact), 0,  scrollOffset = offset)
+        page.recycler.itemMatched(page.getItemMatcher(targetContact), 0, scrollOffset = offset)
         page.recycler.item(page.getItemMatcher(offsetContact), autoScroll = false).isDisplayed().click()
     }
 
     //firstItemMatched+offset
     @Test
-    fun firstItemMatched_scrollOffsetInItemCountRange_MatcherItem(){
+    fun firstItemMatched_scrollOffsetInItemCountRange_MatcherItem() {
         val target = 5
         val offset = 10
         val targetContact = CONTACTS[target]
@@ -517,7 +518,7 @@ class RecyclerViewTest : BaseTest() {
 
     //lastItemMatched+offset
     @Test
-    fun lastItemMatched_scrollOffsetInItemCountRange_MatcherItem(){
+    fun lastItemMatched_scrollOffsetInItemCountRange_MatcherItem() {
         val target = 5
         val offset = 10
         val targetContact = CONTACTS[target]
@@ -528,7 +529,7 @@ class RecyclerViewTest : BaseTest() {
 
     //getItem+offset
     @Test
-    fun getItem_scrollOffsetInItemCountRange_MatcherItem(){
+    fun getItem_scrollOffsetInItemCountRange_MatcherItem() {
         val target = 5
         val offset = 10
         val targetContact = CONTACTS[target]
@@ -538,7 +539,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getItem_scrollOffsetInItemCountRangeBothAreVisible_MatcherItem(){
+    fun getItem_scrollOffsetInItemCountRangeBothAreVisible_MatcherItem() {
         val target = 8
         val offset = 2
         val targetContact = CONTACTS[target]
@@ -548,7 +549,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getItem_scrollOffsetOutOfItemCountRange_MatcherItem(){
+    fun getItem_scrollOffsetOutOfItemCountRange_MatcherItem() {
         val target = 5
         val offset = CONTACTS.size
         val targetContact = CONTACTS[target]
@@ -558,7 +559,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getItem_scrollOffsetLessThenZero_MatcherItem(){
+    fun getItem_scrollOffsetLessThenZero_MatcherItem() {
         val target = 8
         val offset = -18
         val targetContact = CONTACTS[target]
@@ -568,7 +569,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getItem_scrollOffsetInItemCountRange_positionItem(){
+    fun getItem_scrollOffsetInItemCountRange_positionItem() {
         val target = 2
         val offset = 12
         val offsetContact = CONTACTS[target + offset]
@@ -577,7 +578,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getItem_scrollOffsetInItemCountRangeBothAreVisible_positionItem(){
+    fun getItem_scrollOffsetInItemCountRangeBothAreVisible_positionItem() {
         val target = 8
         val offset = 2
         val targetContact = CONTACTS[target]
@@ -587,7 +588,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getItem_scrollOffsetOutOfItemCountRange_positionItem(){
+    fun getItem_scrollOffsetOutOfItemCountRange_positionItem() {
         val target = 5
         val offset = CONTACTS.size
         val offsetContact = CONTACTS.last()
@@ -596,7 +597,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getItem_scrollOffsetLessThenZero_positionItem(){
+    fun getItem_scrollOffsetLessThenZero_positionItem() {
         val target = 10
         val offset = -18
         val offsetContact = CONTACTS.first()
@@ -606,7 +607,7 @@ class RecyclerViewTest : BaseTest() {
 
     //getItemMatched+offset
     @Test
-    fun getItemMatched_scrollOffsetInItemCountRange_MatcherItem(){
+    fun getItemMatched_scrollOffsetInItemCountRange_MatcherItem() {
         val target = 5
         val offset = 10
         val targetContact = CONTACTS[target]
@@ -616,7 +617,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getItemMatched_scrollOffsetInItemCountRangeBothAreVisible_MatcherItem(){
+    fun getItemMatched_scrollOffsetInItemCountRangeBothAreVisible_MatcherItem() {
         val target = 8
         val offset = 2
         val targetContact = CONTACTS[target]
@@ -626,7 +627,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun getItemMatched_scrollOffsetOutOfItemCountRange_MatcherItem(){
+    fun getItemMatched_scrollOffsetOutOfItemCountRange_MatcherItem() {
         val target = 5
         val offset = CONTACTS.size
         val targetContact = CONTACTS[target]
@@ -637,7 +638,7 @@ class RecyclerViewTest : BaseTest() {
 
     //getFirstItemMatched+offset
     @Test
-    fun getFirstItemMatched_scrollOffsetInItemCountRange_MatcherItem(){
+    fun getFirstItemMatched_scrollOffsetInItemCountRange_MatcherItem() {
         val target = 5
         val offset = 10
         val targetContact = CONTACTS[target]
@@ -648,7 +649,7 @@ class RecyclerViewTest : BaseTest() {
 
     //getLastItemMatched+offset
     @Test
-    fun getLastItemMatched_scrollOffsetInItemCountRange_MatcherItem(){
+    fun getLastItemMatched_scrollOffsetInItemCountRange_MatcherItem() {
         val target = 5
         val offset = 10
         val targetContact = CONTACTS[target]
@@ -658,7 +659,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun validItemCustomAssertion(){
+    fun validItemCustomAssertion() {
         val contact = CONTACTS.first()
         page.recycler.firstItem().withAssertion("Toolbar title = ${contact.name}") {
             ChatPage.assertToolbarTitle(contact.name)
@@ -666,13 +667,20 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun invalidItemCustomAssertion(){
+    fun invalidItemCustomAssertion() {
         AssertUtils.assertException {
             val invalidExpectedName = "InvalidTitle"
             page.recycler.firstItem().withTimeout(3000).withAssertion("Toolbar title = $invalidExpectedName") {
                 ChatPage.assertToolbarTitle(invalidExpectedName)
             }.click()
         }
+    }
+
+    @Test
+    fun swipeUntil() {
+        withId(R.id.recycler_friends).withAssertion(isListened = true) {
+            withText(CONTACTS.last().name).withTimeout(200).isDisplayed()
+        }.swipeUp()
     }
 }
 

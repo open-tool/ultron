@@ -2,9 +2,6 @@ package com.atiurin.ultron.core.espresso.recyclerview
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.espresso.contrib.RecyclerViewActions
-import com.atiurin.ultron.extensions.perform
-import com.atiurin.ultron.extensions.withTimeout
 import org.hamcrest.Matcher
 
 class RecyclerViewItemMatchingExecutor(
