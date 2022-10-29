@@ -21,6 +21,7 @@ import com.atiurin.ultron.custom.espresso.assertion.hasAnyDrawable
 import com.atiurin.ultron.custom.espresso.assertion.hasDrawable
 import com.atiurin.ultron.extensions.*
 import com.atiurin.ultron.listeners.executeWithoutListeners
+import com.atiurin.ultron.utils.UltronLog
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
 import org.junit.Test
@@ -258,15 +259,21 @@ class ViewInteractionActionsTest : UiElementsTest() {
 
     @Test
     fun withAssertion_failedAssertion() {
+        AssertUtils.assertException {
+            page.editTextContentDesc.withTimeout(1000).withAssertion {
+                withText("asd23213 12312").withTimeout(500).isDisplayed()
+            }.typeText("1")
+        }
+    }
+
+    @Test
+    fun withAssertion_failedAssertion_timeout() {
         var execTime = 0L
-        val operationTime = 5000L
-//        AssertUtils.assertException {
-            execTime = measureTimeMillis {
-                page.editTextContentDesc.withAssertion {
-                    withText("asd23213 12312").isDisplayed()
-                }.typeText("1")
-            }
-//        }
-//        Assert.assertTrue(execTime > operationTime)
+        val operationTime = 1000L
+        page.editTextContentDesc.isSuccess {
+            withTimeout(operationTime).withAssertion {
+                withText("asd23213 12312").withTimeout(100).isDisplayed()
+            }.typeText("1")
+        }
     }
 }

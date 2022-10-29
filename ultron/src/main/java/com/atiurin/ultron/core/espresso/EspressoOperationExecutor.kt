@@ -4,12 +4,15 @@ import androidx.test.espresso.NoMatchingViewException
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationExecutor
 import com.atiurin.ultron.core.common.OperationIterationResult
+import com.atiurin.ultron.core.common.ResultDescriptor
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.ESPRESSO_OPERATION_POLLING_TIMEOUT
 
 abstract class EspressoOperationExecutor<T : Operation>(
     override val operation: T
 ) : OperationExecutor<T, EspressoOperationResult<T>> {
+    override val descriptor: ResultDescriptor
+        get() = ResultDescriptor()
     override val pollingTimeout: Long
         get() = ESPRESSO_OPERATION_POLLING_TIMEOUT
 

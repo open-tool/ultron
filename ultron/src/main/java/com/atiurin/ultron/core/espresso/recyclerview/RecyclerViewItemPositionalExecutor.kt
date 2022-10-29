@@ -4,6 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.contrib.RecyclerViewActions
 import com.atiurin.ultron.exceptions.UltronException
+import com.atiurin.ultron.exceptions.UltronOperationException
 import com.atiurin.ultron.extensions.perform
 import org.hamcrest.Matcher
 
@@ -13,7 +14,7 @@ class RecyclerViewItemPositionalExecutor(
 ) : RecyclerViewItemExecutor {
     init {
         if (position < 0) {
-            throw UltronException("Position value can't be negative: '$position'")
+            throw UltronOperationException("Position value can't be negative: '$position'")
         }
     }
 

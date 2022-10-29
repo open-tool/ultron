@@ -9,6 +9,7 @@ import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.uiautomator.*
 import com.atiurin.ultron.exceptions.UltronException
+import com.atiurin.ultron.exceptions.UltronOperationException
 import com.atiurin.ultron.extensions.methodToBoolean
 import com.atiurin.ultron.utils.getTargetResourceName
 import org.hamcrest.Matcher
@@ -656,7 +657,7 @@ class UltronUiObject internal constructor(
             operationBlock = {
                 val actualText = uiObjectProviderBlock().text
                 if (!textMatcher.matches(actualText)) {
-                    throw UltronException("Expected: text matches '$textMatcher', got '$actualText'.")
+                    throw UltronOperationException("Expected: text matches '$textMatcher', got '$actualText'.")
                 }
                 true
             },
@@ -694,7 +695,7 @@ class UltronUiObject internal constructor(
             operationBlock = {
                 val contentDesc = uiObjectProviderBlock().contentDescription
                 if (!contentDescMatcher.matches(contentDesc)) {
-                    throw UltronException("Expected: contentDescription matches '$contentDescMatcher', got '$contentDesc'.")
+                    throw UltronOperationException("Expected: contentDescription matches '$contentDescMatcher', got '$contentDesc'.")
                 }
                 true },
             name = "HasContentDescription $contentDescMatcher in $selectorDesc",

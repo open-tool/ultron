@@ -658,7 +658,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun validCustomAssertion(){
+    fun validItemCustomAssertion(){
         val contact = CONTACTS.first()
         page.recycler.firstItem().withAssertion("Toolbar title = ${contact.name}") {
             ChatPage.assertToolbarTitle(contact.name)
@@ -666,7 +666,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
-    fun invalidCustomAssertion(){
+    fun invalidItemCustomAssertion(){
         AssertUtils.assertException {
             val invalidExpectedName = "InvalidTitle"
             page.recycler.firstItem().withTimeout(3000).withAssertion("Toolbar title = $invalidExpectedName") {

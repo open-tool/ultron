@@ -1,15 +1,16 @@
 package com.atiurin.ultron.core.common
 
 import android.os.SystemClock
-import com.atiurin.ultron.exceptions.UltronWrapperException
+import com.atiurin.ultron.exceptions.UltronAssertionBlockException
 import com.atiurin.ultron.extensions.isAssignedFrom
 import kotlin.system.measureTimeMillis
 
 interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
     val operation: Op
     val pollingTimeout: Long
-    fun getAllowedExceptions(operation: Operation): List<Class<out Throwable>>
+    val descriptor: ResultDescriptor
 
+    fun getAllowedExceptions(operation: Operation): List<Class<out Throwable>>
     fun generateResult(
         success: Boolean,
         exceptions: List<Throwable>,
@@ -21,7 +22,7 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
     fun getWrapperException(originalException: Throwable): Throwable
 
     fun execute(): OpRes {
-        return execWithAssertion(operation.timeoutMs, null, true)
+        return descriptor.nestedOperation { execWithAssertion(operation.timeoutMs, null, true) }
     }
 
     private tailrec fun execWithAssertion(operationDuration: Long, previousResult: OpRes?, isFirstIteration: Boolean = false): OpRes {
@@ -37,7 +38,9 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
 
     fun execOperation(operationDuration: Long, previousResult: OpRes?): OpRes {
         var isSuccess: Boolean
-        val description = StringBuilder("------ Operation ${operation.name} ------\n")
+        val description = StringBuilder()
+        descriptor.appendLine(description, "------ Operation ${operation.name} ------")
+        descriptor.increaseLevel()
         val exceptions = mutableListOf<Throwable>()
         val endTime = SystemClock.elapsedRealtime() + operationDuration
         var lastIteration: OperationIterationResult? = null
@@ -53,7 +56,7 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
                                 exceptions.add(error)
                             }
                         } else {
-                            description.appendLine("Not allowed exception occurs - ${error.javaClass.simpleName}, cause - ${error.cause}")
+                            descriptor.appendLine(description,"Not allowed exception occurs - ${error.javaClass.simpleName}, cause - ${error.cause}")
                             exceptions.add(error)
                             throw error
                         }
@@ -67,9 +70,10 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
                 isSuccess = false // just make sure we will have correct action status
             }
         }
-        val operationExceptions = exceptions.map { getWrapperException(it) }
-        description.describeResult(isSuccess, execTime, operationExceptions)
-        description.appendLine("------ End of operation '${operation.name}' ------")
+        val operationExceptions = exceptions.distinctBy { it.javaClass.name + it.message }.map { getWrapperException(it) }
+        descriptor.describeResult(description, isSuccess, execTime, operationExceptions)
+        descriptor.decreaseLevel()
+        descriptor.append(description,"------ End of operation '${operation.name}' ------")
         val operationResult = generateResult(
             success = isSuccess,
             exceptions = operationExceptions,
@@ -82,21 +86,31 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
 
     fun execAssertion(previousResult: OpRes): OpRes {
         var isSuccess = true
-        val description = StringBuilder("------ Assertion block '${operation.assertion.name}' ------\n")
+        val description = StringBuilder()
+        descriptor.appendLine(description, "\n------ Assertion block '${operation.assertion.name}' ------")
+        descriptor.increaseLevel()
         val exceptions: MutableList<Throwable> = mutableListOf()
         val assertionExecTime = measureTimeMillis {
             try {
                 operation.assertion.block.invoke()
-                description.appendLine("Result = PASSED!")
+                descriptor.appendLine(description,"Result = PASSED!")
             } catch (ex: Throwable) {
                 isSuccess = false
+                val originalException = getWrapperException(ex)
                 exceptions.add(
-                    UltronWrapperException("Exception in assertion block '${operation.assertion.name}' of operation '${operation.name}'", cause = getWrapperException(ex))
+                    UltronAssertionBlockException(
+                        """
+                        |Exception in assertion block '${operation.assertion.name}' of operation '${operation.name}'. 
+                        |${"exception: ${originalException::class.java.canonicalName}".prefixTab()}
+                        |${"message: ${originalException.message}".prefixTabForAllLines()}
+                    """.trimMargin()
+                    )
                 )
             }
         }
-        description.describeResult(isSuccess, assertionExecTime, exceptions)
-        description.appendLine("------ End of assertion block '${operation.assertion.name}' ------")
+        descriptor.describeResult(description, isSuccess, assertionExecTime, exceptions)
+        descriptor.decreaseLevel()
+        descriptor.appendLine(description,"------ End of assertion block '${operation.assertion.name}' ------")
         val assertionResult = generateResult(
             success = isSuccess,
             exceptions = exceptions,
@@ -119,27 +133,6 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
             executionTimeMs = (previousResult?.executionTimeMs ?: 0) + currentResult.executionTimeMs
         )
     }
-
-    private fun StringBuilder.describeResult(isSuccess: Boolean, execTimeMs: Long, exceptions: List<Throwable>) = apply {
-        if (!isSuccess && exceptions.isNotEmpty()) {
-            this.appendLine("Result = FAILED (${execTimeMs} ms) ")
-            this.appendLine(
-                if (exceptions.size > 1) {
-                    """
-                    |Errors were caught: 
-                    |${exceptions.map { "- '${it.javaClass.simpleName}', message: '${it.message}' cause: '${it.cause}'\n" }}
-                    |Last error is ${exceptions.last()::class.java.canonicalName}
-                    |message: ${exceptions.last().message}
-                    """.trimMargin()
-                } else {
-                    """
-                    |${exceptions.last()::class.java.canonicalName} 
-                    |message: ${exceptions.last().message}
-                    """.trimMargin()
-                }
-            )
-        } else {
-            this.appendLine("Result = PASSED ($execTimeMs ms)")
-        }
-    }
 }
+
+

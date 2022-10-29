@@ -24,6 +24,7 @@ import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.UltronUiAutomatorLifecycle
 import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
+import com.atiurin.ultron.exceptions.UltronAssertionException
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.exceptions.UltronWrapperException
 import com.atiurin.ultron.listeners.UltronLifecycleListener
@@ -94,6 +95,7 @@ object UltronConfig {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     UltronWrapperException::class.java,
                     UltronException::class.java,
+                    UltronAssertionException::class.java,
                     PerformException::class.java,
                     NoMatchingViewException::class.java
                 )
@@ -108,6 +110,7 @@ object UltronConfig {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     UltronWrapperException::class.java,
                     UltronException::class.java,
+                    UltronAssertionException::class.java,
                     PerformException::class.java,
                     NoMatchingViewException::class.java,
                     AssertionFailedError::class.java
@@ -173,6 +176,7 @@ object UltronConfig {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     UltronWrapperException::class.java,
+                    UltronAssertionException::class.java,
                     UltronException::class.java,
                     UiObjectNotFoundException::class.java,
                     NullPointerException::class.java
@@ -189,6 +193,7 @@ object UltronConfig {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     UltronWrapperException::class.java,
+                    UltronAssertionException::class.java,
                     UltronException::class.java,
                     UiObjectNotFoundException::class.java,
                     NullPointerException::class.java
@@ -229,6 +234,7 @@ object UltronConfig {
             var allowedExceptions = mutableListOf<Class<out Throwable>>(
                 AssertionError::class.java,
                 UltronWrapperException::class.java,
+                UltronAssertionException::class.java,
                 UltronException::class.java,
                 PerformException::class.java
             )

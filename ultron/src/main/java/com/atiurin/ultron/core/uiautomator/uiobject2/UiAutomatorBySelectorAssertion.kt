@@ -5,6 +5,7 @@ import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 import com.atiurin.ultron.exceptions.UltronException
+import com.atiurin.ultron.exceptions.UltronOperationException
 
 class UiAutomatorBySelectorAssertion(
     private val assertionBlock: () -> Boolean,
@@ -19,7 +20,7 @@ class UiAutomatorBySelectorAssertion(
         var exception: Throwable? = null
         try {
             success = assertionBlock()
-            if (!success) throw UltronException("$name returns false. It means assertion failed.")
+            if (!success) throw UltronOperationException("$name returns false. It means assertion failed.")
         } catch (error: Throwable) {
             success = false
             exception = error
