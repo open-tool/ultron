@@ -7,6 +7,7 @@ import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.data.entities.Contact
 import com.atiurin.sampleapp.framework.step
+import com.atiurin.ultron.custom.espresso.matcher.withSuitableRoot
 import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
 import org.hamcrest.Matchers.allOf
@@ -19,6 +20,12 @@ object FriendsListPage : Page<FriendsListPage>() {
     fun assertPageDisplayed() = apply {
         step("Assert friends list page displayed") {
             recycler.recyclerViewMatcher.isDisplayed()
+        }
+    }
+
+    fun assertPageDisplayedWithSuitableRoot() = apply {
+        step("Assert friends list page displayed with suitable root") {
+            recycler.withSuitableRoot().isDisplayed()
         }
     }
 

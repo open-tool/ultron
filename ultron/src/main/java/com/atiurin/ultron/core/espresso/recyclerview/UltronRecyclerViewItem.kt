@@ -3,10 +3,9 @@ package com.atiurin.ultron.core.espresso.recyclerview
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.ViewInteraction
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
-import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
+import com.atiurin.ultron.custom.espresso.matcher.withSuitableRoot
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.*
 import org.hamcrest.Matcher
@@ -71,6 +70,9 @@ open class UltronRecyclerViewItem {
     fun withTimeout(timeoutMs: Long) = getMatcher().withTimeout(timeoutMs)
     fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
         getMatcher().withResultHandler(resultHandler)
+
+    //root view searching
+    fun withSuitableRoot() = apply { this.getMatcher().withSuitableRoot() }
 
     //actions
     fun click() = apply { this.getMatcher().click() }
