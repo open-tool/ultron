@@ -7,6 +7,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.Dp
+import com.atiurin.ultron.core.common.CommonOperationType
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
@@ -706,8 +707,12 @@ open class UltronComposeSemanticsNodeInteraction constructor(
 
     fun executeOperation(operation: UltronComposeOperation) = UltronComposeOperationLifecycle.execute(ComposeOperationExecutor(operation), resultHandler)
 
-    fun executeOperation(operationBlock: () -> Unit, name: String = "empty name", type: UltronOperationType = EMPTY_TYPE, description: String = "empty description") =
-        UltronComposeOperationLifecycle.execute(ComposeOperationExecutor(getComposeOperation(operationBlock, name, type, description)), resultHandler)
+    fun executeOperation(
+        operationBlock: () -> Unit,
+        name: String = "empty name",
+        type: UltronOperationType = CommonOperationType.DEFAULT,
+        description: String = "empty description"
+    ) = UltronComposeOperationLifecycle.execute(ComposeOperationExecutor(getComposeOperation(operationBlock, name, type, description)), resultHandler)
 
     fun getComposeOperation(operationBlock: () -> Unit, name: String, type: UltronOperationType, description: String) =
         UltronComposeOperation(
