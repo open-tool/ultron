@@ -12,22 +12,13 @@ import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.listeners.setListenersState
 import org.hamcrest.Matcher
 
-fun ViewInteraction.isSuccess(
-    action: ViewInteraction.() -> Unit
-): Boolean {
-    var success = true
-    try {
-        action()
-    } catch (th: Throwable) {
-        success = false
-    }
-    return success
-}
+fun ViewInteraction.isSuccess(action: ViewInteraction.() -> Unit): Boolean = runCatching { action() }.isSuccess
 
 fun ViewInteraction.withTimeout(timeoutMs: Long) = UltronEspressoInteraction(this).withTimeout(timeoutMs)
 fun ViewInteraction.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) = UltronEspressoInteraction(this).withResultHandler(resultHandler)
 fun ViewInteraction.withAssertion(assertion: OperationAssertion) = UltronEspressoInteraction(this).withAssertion(assertion)
-fun ViewInteraction.withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) = UltronEspressoInteraction(this).withAssertion(DefaultOperationAssertion(name, block.setListenersState(isListened)))
+fun ViewInteraction.withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
+    UltronEspressoInteraction(this).withAssertion(DefaultOperationAssertion(name, block.setListenersState(isListened)))
 
 //actions
 fun ViewInteraction.click() = UltronEspressoInteraction(this).click()

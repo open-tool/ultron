@@ -33,7 +33,6 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
-
 class ComposeUIElementsTest {
     val page = ComposeElementsPage
 
@@ -44,7 +43,7 @@ class ComposeUIElementsTest {
 
     @Test
     fun simpleClick() {
-        hasText(initialText).click()
+        hasText(initialText).assertIsDisplayed().click()
         hasText(expectedText).assertIsDisplayed()
     }
 

@@ -3,6 +3,7 @@ package com.atiurin.ultron.core.compose.operation
 import com.atiurin.ultron.core.common.UltronOperationType
 
 enum class ComposeOperationType : UltronOperationType {
+    EMPTY_TYPE,
     CLICK, LONG_CLICK, DOUBLE_CLICK,
     TEXT_INPUT, REPLACE_TEXT, CLEAR_TEXT, PRESS_KEY, TEXT_INPUT_SELECTION, COPY_TEXT, PASTE_TEXT, CUT_TEXT, SET_TEXT, GET_TEXT,
     IME_ACTION, COLLAPSE, EXPAND, DISMISS, SET_PROGRESS, SET_SELECTION,

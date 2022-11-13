@@ -13,12 +13,11 @@ import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
-import com.atiurin.ultron.core.espressoweb.operation.*
+import com.atiurin.ultron.core.espressoweb.operation.EspressoWebOperationType
+import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
+import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebDocument.Companion.executeOperation
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebDocument.Companion.executeOperationVoid
-import com.atiurin.ultron.exceptions.UltronException
-import com.atiurin.ultron.extensions.methodToBoolean
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.containsString
@@ -253,7 +252,7 @@ open class UltronWebElement internal constructor(
     }
 
     /** Transforms any action or assertion to Boolean value */
-    fun isSuccess(block: UltronWebElement.() -> Unit): Boolean = this.methodToBoolean(block)
+    fun isSuccess(block: UltronWebElement.() -> Unit): Boolean = runCatching { block() }.isSuccess
 
     /** Removes the Element and Window references from this interaction */
     fun reset() = apply { webViewInteraction.reset() }

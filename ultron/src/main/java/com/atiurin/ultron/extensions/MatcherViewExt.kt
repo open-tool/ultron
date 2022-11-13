@@ -12,12 +12,7 @@ import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.listeners.setListenersState
 import org.hamcrest.Matcher
 
-fun Matcher<View>.isSuccess(
-    action: Matcher<View>.() -> Unit
-): Boolean {
-    return onView(this).isSuccess { action() }
-}
-
+fun Matcher<View>.isSuccess(action: Matcher<View>.() -> Unit): Boolean = onView(this).isSuccess { action() }
 fun Matcher<View>.withTimeout(timeoutMs: Long) = UltronEspressoInteraction(onView(this)).withTimeout(timeoutMs)
 fun Matcher<View>.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
     UltronEspressoInteraction(onView(this)).withResultHandler(resultHandler)

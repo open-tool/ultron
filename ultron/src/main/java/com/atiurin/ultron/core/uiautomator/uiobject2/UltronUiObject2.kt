@@ -10,9 +10,7 @@ import androidx.test.uiautomator.UiObject2
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.uiautomator.*
-import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.exceptions.UltronOperationException
-import com.atiurin.ultron.extensions.methodToBoolean
 import com.atiurin.ultron.utils.getTargetResourceName
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.*
@@ -24,11 +22,7 @@ class UltronUiObject2 internal constructor(
     val resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit = UltronConfig.UiAutomator.UiObject2Config.resultHandler,
     val timeoutMs: Long = UltronConfig.UiAutomator.OPERATION_TIMEOUT
 ) {
-    fun isSuccess(
-        action: UltronUiObject2.() -> Unit
-    ): Boolean {
-        return this.methodToBoolean(action)
-    }
+    fun isSuccess(action: UltronUiObject2.() -> Unit): Boolean = runCatching { action() }.isSuccess
 
     fun withResultHandler(
         resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit
