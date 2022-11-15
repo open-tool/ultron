@@ -40,6 +40,6 @@ abstract class UiAutomatorOperationExecutor<T : Operation>(
                 |Original error NullPointerException[${originalException.message}] 
                 |Usually it happens while searching for an object 
              """.trimMargin())
-        } else UltronWrapperException("${operation.description} failed", originalException)
+        } else originalException
     }
 }
