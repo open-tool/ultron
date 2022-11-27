@@ -9,6 +9,8 @@ import androidx.test.espresso.web.model.WindowReference
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import com.atiurin.ultron.core.common.UltronOperationType
+import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
+import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
 import com.atiurin.ultron.core.espressoweb.operation.*
@@ -211,12 +213,13 @@ class UltronWebDocument {
             type: UltronOperationType,
             description: String,
             timeoutMs: Long,
-            resultHandler: (WebOperationResult<WebInteractionOperation<R>>) -> Unit
+            resultHandler: (WebOperationResult<WebInteractionOperation<R>>) -> Unit,
+            assertion: OperationAssertion = DefaultOperationAssertion("") {}
         ): R {
             val result = UltronWebLifecycle.execute(
                 WebInteractionOperationExecutor(
                     WebInteractionOperation(
-                        webInteractionBlock = webInteractionBlock, name = name, type = type, description = description, timeoutMs = timeoutMs
+                        webInteractionBlock = webInteractionBlock, name = name, type = type, description = description, timeoutMs = timeoutMs, assertion = assertion
                     )
                 ), resultHandler
             )
@@ -230,12 +233,13 @@ class UltronWebDocument {
             type: UltronOperationType,
             description: String,
             timeoutMs: Long,
-            resultHandler: (WebOperationResult<WebInteractionOperation<Void>>) -> Unit
+            resultHandler: (WebOperationResult<WebInteractionOperation<Void>>) -> Unit,
+            assertion: OperationAssertion = DefaultOperationAssertion("") {}
         ){
             UltronWebLifecycle.execute(
                 WebInteractionOperationExecutor(
                     WebInteractionOperation(
-                        webInteractionBlock = webInteractionBlock, name = name, type = type, description = description, timeoutMs = timeoutMs
+                        webInteractionBlock = webInteractionBlock, name = name, type = type, description = description, timeoutMs = timeoutMs, assertion = assertion
                     )
                 ), resultHandler
             )
