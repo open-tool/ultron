@@ -1,7 +1,7 @@
 package com.atiurin.ultron.utils
 
 import android.os.SystemClock
-import com.atiurin.ultron.exceptions.UltronException
+import com.atiurin.ultron.exceptions.UltronAssertionException
 import java.util.concurrent.atomic.AtomicReference
 
 object AssertUtils {
@@ -10,14 +10,14 @@ object AssertUtils {
         while (SystemClock.elapsedRealtime() < startTime + timeoutMs){
             if (block()) return
         }
-        throw UltronException("Assertion '$desc' failed during $timeoutMs ms")
+        throw UltronAssertionException("Assertion '$desc' failed during $timeoutMs ms")
     }
     fun <R> assertTrueAndReturn(resultContainer: R, block: (R) -> Boolean, timeoutMs: Long = 5_000, desc: String = ""): R {
         val finishTime = SystemClock.elapsedRealtime() + timeoutMs
         while (SystemClock.elapsedRealtime() < finishTime){
             if (block(resultContainer)) return resultContainer
         }
-        throw UltronException("Assertion '$desc' failed during $timeoutMs ms")
+        throw UltronAssertionException("Assertion '$desc' failed during $timeoutMs ms")
     }
 
     fun <R> assertTrueAndReturnValue(block: (AtomicReference<R>) -> Boolean, timeoutMs: Long = 5_000, desc: String = ""): R {
@@ -26,7 +26,7 @@ object AssertUtils {
         while (SystemClock.elapsedRealtime() < finishTime){
             if (block(resultContainer)) return resultContainer.get()
         }
-        throw UltronException("Assertion '$desc' failed during $timeoutMs ms")
+        throw UltronAssertionException("Assertion '$desc' failed during $timeoutMs ms")
     }
 
     /**
@@ -35,7 +35,7 @@ object AssertUtils {
     fun assertTrueWhileTime(block: () -> Boolean, timeoutMs: Long = 5_000, desc: String = ""){
         val startTime = SystemClock.elapsedRealtime()
         while (SystemClock.elapsedRealtime() < startTime + timeoutMs){
-            if (!block()) throw UltronException("Assertion '$desc' failed")
+            if (!block()) throw UltronAssertionException("Assertion '$desc' failed")
         }
     }
 

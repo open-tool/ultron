@@ -66,15 +66,3 @@ internal fun  SemanticsNodeInteraction.getUseMergedTree(): Boolean? {
 internal fun  SemanticsNodeInteractionCollection.getUseMergedTree(): Boolean? {
     return this.getProperty("useUnmergedTree")
 }
-/** Transforms any method call to Boolean value */
-internal fun <T> T.methodToBoolean(
-    block: T.() -> Unit
-): Boolean {
-    var success = true
-    try {
-        block()
-    } catch (th: Throwable) {
-        success = false
-    }
-    return success
-}

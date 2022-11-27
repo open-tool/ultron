@@ -46,3 +46,4 @@ fun <T> UltronEspressoInteraction<T>.getText() : String {
 fun ViewInteraction.getText() = UltronEspressoInteraction(this).getText()
 fun DataInteraction.getText() = UltronEspressoInteraction(this).getText()
 fun Matcher<View>.getText() = UltronEspressoInteraction(onView(this)).getText()
+

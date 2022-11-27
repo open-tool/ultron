@@ -20,6 +20,7 @@ import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
 import com.atiurin.ultron.exceptions.UltronException
+import com.atiurin.ultron.exceptions.UltronOperationException
 import com.atiurin.ultron.extensions.*
 import com.atiurin.ultron.utils.AssertUtils
 import org.hamcrest.Description
@@ -270,7 +271,7 @@ open class UltronRecyclerView(
     open fun getRecyclerViewList(): RecyclerView {
         recyclerViewMatcher.identifyRecyclerView(recyclerViewIdentifierMatcher())
         return recyclerView
-            ?: throw UltronException("Couldn't find recyclerView with matcher $recyclerViewMatcher")
+            ?: throw UltronOperationException("Couldn't find recyclerView with matcher $recyclerViewMatcher")
     }
 
     /**
@@ -397,6 +398,7 @@ open class UltronRecyclerView(
      * */
     open fun withTimeout(timeoutMs: Long) =
         UltronRecyclerView(this.recyclerViewMatcher, this.loadTimeoutMs, this.itemSearchLimit, operationTimeoutMs = timeoutMs)
+
     open fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
         recyclerViewMatcher.withResultHandler(resultHandler)
 
@@ -406,7 +408,7 @@ open class UltronRecyclerView(
 
     /**
      * It's waiting while RecyclerView items to be loaded
-     * @throws [UltronException] if no item is loaded during [loadTimeoutMs]
+     * @throws [UltronOperationException] if no item is loaded during [loadTimeoutMs]
      */
     fun waitItemsLoaded(recyclerView: RecyclerView = getRecyclerViewList()) = apply {
         var isLoaded = false
@@ -419,7 +421,7 @@ open class UltronRecyclerView(
         })
         val finishTime = SystemClock.elapsedRealtime() + loadTimeoutMs
         while (!isLoaded && (finishTime > SystemClock.elapsedRealtime())) {}
-        if (!isLoaded) throw UltronException("RecyclerView matches '$recyclerViewMatcher' doesn't load any item during $loadTimeoutMs ms")
+        if (!isLoaded) throw UltronOperationException("RecyclerView matches '$recyclerViewMatcher' doesn't load any item during $loadTimeoutMs ms")
     }
 
     /**
@@ -632,5 +634,5 @@ private fun <T> UltronEspressoInteraction<T>.identifyRecyclerView(matcher: Match
     )
 }
 
-private fun Matcher<View>.identifyRecyclerView(matcher: Matcher<View>) : Unit =
+private fun Matcher<View>.identifyRecyclerView(matcher: Matcher<View>): Unit =
     UltronEspressoInteraction(onView(this)).identifyRecyclerView(matcher)

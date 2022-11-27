@@ -9,5 +9,6 @@ class EspressoOperationResult<T : Operation>(
     override val success: Boolean,
     override val exceptions: List<Throwable> = emptyList(),
     override var description: String,
-    override var operationIterationResult: OperationIterationResult?
+    override var operationIterationResult: OperationIterationResult?,
+    override val executionTimeMs: Long
 ) : OperationResult<T>

@@ -9,4 +9,5 @@ interface OperationResult<T : Operation> {
     val exceptions: List<Throwable>
     var description: String
     var operationIterationResult: OperationIterationResult?
+    val executionTimeMs: Long
 }

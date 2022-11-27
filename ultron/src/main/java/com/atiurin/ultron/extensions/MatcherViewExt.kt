@@ -1,23 +1,26 @@
 package com.atiurin.ultron.extensions
 
 import android.view.View
-import androidx.annotation.DrawableRes
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.EspressoKey
+import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
+import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
+import com.atiurin.ultron.listeners.setListenersState
 import org.hamcrest.Matcher
 
-fun Matcher<View>.isSuccess(
-    action: Matcher<View>.() -> Unit
-): Boolean {
-    return onView(this).isSuccess { action() }
-}
-
+fun Matcher<View>.isSuccess(action: Matcher<View>.() -> Unit): Boolean = onView(this).isSuccess { action() }
 fun Matcher<View>.withTimeout(timeoutMs: Long) = UltronEspressoInteraction(onView(this)).withTimeout(timeoutMs)
-fun Matcher<View>.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) = UltronEspressoInteraction(onView(this)).withResultHandler(resultHandler)
+fun Matcher<View>.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
+    UltronEspressoInteraction(onView(this)).withResultHandler(resultHandler)
+
+fun Matcher<View>.withAssertion(assertion: OperationAssertion) = UltronEspressoInteraction(onView(this)).withAssertion(assertion)
+fun Matcher<View>.withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
+    UltronEspressoInteraction(onView(this)).withAssertion(DefaultOperationAssertion(name, block.setListenersState(isListened)))
+
 //actions
 fun Matcher<View>.click() = UltronEspressoInteraction(onView(this)).click()
 fun Matcher<View>.doubleClick() = UltronEspressoInteraction(onView(this)).doubleClick()
@@ -53,6 +56,7 @@ fun Matcher<View>.doesNotExist() = UltronEspressoInteraction(onView(this)).doesN
 fun Matcher<View>.isCompletelyDisplayed() = UltronEspressoInteraction(onView(this)).isCompletelyDisplayed()
 fun Matcher<View>.isDisplayingAtLeast(percentage: Int) =
     UltronEspressoInteraction(onView(this)).isDisplayingAtLeast(percentage)
+
 fun Matcher<View>.isEnabled() = UltronEspressoInteraction(onView(this)).isEnabled()
 fun Matcher<View>.isNotEnabled() = UltronEspressoInteraction(onView(this)).isNotEnabled()
 fun Matcher<View>.isSelected() = UltronEspressoInteraction(onView(this)).isSelected()
@@ -69,14 +73,19 @@ fun Matcher<View>.hasText(text: String) = UltronEspressoInteraction(onView(this)
 fun Matcher<View>.hasText(resourceId: Int) = UltronEspressoInteraction(onView(this)).hasText(resourceId)
 fun Matcher<View>.hasText(stringMatcher: Matcher<String>) =
     UltronEspressoInteraction(onView(this)).hasText(stringMatcher)
+
 fun Matcher<View>.textContains(text: String) = UltronEspressoInteraction(onView(this)).textContains(text)
 fun Matcher<View>.hasContentDescription(text: String) =
     UltronEspressoInteraction(onView(this)).hasContentDescription(text)
+
 fun Matcher<View>.hasContentDescription(resourceId: Int) =
     UltronEspressoInteraction(onView(this)).hasContentDescription(resourceId)
+
 fun Matcher<View>.hasContentDescription(charSequenceMatcher: Matcher<CharSequence>) =
     UltronEspressoInteraction(onView(this)).hasContentDescription(charSequenceMatcher)
+
 fun Matcher<View>.contentDescriptionContains(text: String) =
     UltronEspressoInteraction(onView(this)).contentDescriptionContains(text)
+
 fun Matcher<View>.assertMatches(condition: Matcher<View>) =
     UltronEspressoInteraction(onView(this)).assertMatches(condition)

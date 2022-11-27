@@ -1,30 +1,24 @@
 package com.atiurin.ultron.extensions
 
 import android.view.View
-import androidx.annotation.DrawableRes
 import androidx.test.espresso.DataInteraction
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.EspressoKey
+import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
+import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.listeners.setListenersState
 import org.hamcrest.Matcher
 
-fun DataInteraction.isSuccess(
-    action: DataInteraction.() -> Unit
-): Boolean {
-    var success = true
-    try {
-        action()
-    }catch (th: Throwable){
-        success = false
-    }
-    return success
-}
+fun DataInteraction.isSuccess(action: DataInteraction.() -> Unit): Boolean = runCatching { action() }.isSuccess
 fun DataInteraction.withTimeout(timeoutMs: Long) = UltronEspressoInteraction(this).withTimeout(timeoutMs)
 fun DataInteraction.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) = UltronEspressoInteraction(this).withResultHandler(resultHandler)
+fun DataInteraction.withAssertion(assertion: OperationAssertion) = UltronEspressoInteraction(this).withAssertion(assertion)
+fun DataInteraction.withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
+    UltronEspressoInteraction(this).withAssertion(DefaultOperationAssertion(name, block.setListenersState(isListened)))
+
 //actions
 fun DataInteraction.click() = UltronEspressoInteraction(this).click()
 fun DataInteraction.doubleClick() = UltronEspressoInteraction(this).doubleClick()
@@ -60,6 +54,7 @@ fun DataInteraction.doesNotExist() = UltronEspressoInteraction(this).doesNotExis
 fun DataInteraction.isCompletelyDisplayed() = UltronEspressoInteraction(this).isCompletelyDisplayed()
 fun DataInteraction.isDisplayingAtLeast(percentage: Int) =
     UltronEspressoInteraction(this).isDisplayingAtLeast(percentage)
+
 fun DataInteraction.isEnabled() = UltronEspressoInteraction(this).isEnabled()
 fun DataInteraction.isNotEnabled() = UltronEspressoInteraction(this).isNotEnabled()
 fun DataInteraction.isSelected() = UltronEspressoInteraction(this).isSelected()
@@ -76,14 +71,19 @@ fun DataInteraction.hasText(text: String) = UltronEspressoInteraction(this).hasT
 fun DataInteraction.hasText(resourceId: Int) = UltronEspressoInteraction(this).hasText(resourceId)
 fun DataInteraction.hasText(stringMatcher: Matcher<String>) =
     UltronEspressoInteraction(this).hasText(stringMatcher)
+
 fun DataInteraction.textContains(text: String) = UltronEspressoInteraction(this).textContains(text)
 fun DataInteraction.hasContentDescription(text: String) =
     UltronEspressoInteraction(this).hasContentDescription(text)
+
 fun DataInteraction.hasContentDescription(resourceId: Int) =
     UltronEspressoInteraction(this).hasContentDescription(resourceId)
+
 fun DataInteraction.hasContentDescription(charSequenceMatcher: Matcher<CharSequence>) =
     UltronEspressoInteraction(this).hasContentDescription(charSequenceMatcher)
+
 fun DataInteraction.contentDescriptionContains(text: String) =
     UltronEspressoInteraction(this).contentDescriptionContains(text)
+
 fun DataInteraction.assertMatches(condition: Matcher<View>) =
     UltronEspressoInteraction(this).assertMatches(condition)

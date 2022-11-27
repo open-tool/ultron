@@ -3,12 +3,13 @@ package com.atiurin.ultron.core.espresso.recyclerview
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.ViewInteraction
+import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
+import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
-import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.*
+import com.atiurin.ultron.listeners.setListenersState
 import org.hamcrest.Matcher
 
 /**
@@ -42,7 +43,7 @@ open class UltronRecyclerViewItem {
     ) {
         setExecutor(ultronRecyclerView, position)
         if (autoScroll) scrollToItem(scrollOffset)
-    } 
+    }
 
     fun scrollToItem(offset: Int = 0): UltronRecyclerViewItem = apply {
         executor?.scrollToItem(offset)
@@ -71,6 +72,10 @@ open class UltronRecyclerViewItem {
     fun withTimeout(timeoutMs: Long) = getMatcher().withTimeout(timeoutMs)
     fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
         getMatcher().withResultHandler(resultHandler)
+
+    fun withAssertion(assertion: OperationAssertion) = getMatcher().withAssertion(assertion)
+    fun withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
+        getMatcher().withAssertion(DefaultOperationAssertion(name, block.setListenersState(isListened)))
 
     //actions
     fun click() = apply { this.getMatcher().click() }

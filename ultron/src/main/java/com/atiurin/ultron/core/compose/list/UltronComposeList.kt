@@ -3,7 +3,6 @@ package com.atiurin.ultron.core.compose.list
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.test.*
 import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
-import com.atiurin.ultron.core.compose.UltronComposeSemanticsMatcher
 import com.atiurin.ultron.core.compose.nodeinteraction.UltronComposeSemanticsNodeInteraction
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
@@ -65,7 +64,7 @@ class UltronComposeList(
      * It is possible to evaluate any action or assertion on this node.
      */
     fun <T> performOnList(block: (SemanticsNode, SemanticsNodeInteraction) -> T): T =
-        UltronComposeSemanticsMatcher(listMatcher, useUnmergedTree).perform { listSemanticsNodeInteraction ->
+        UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree).perform { listSemanticsNodeInteraction ->
             val listSemanticsNode = listSemanticsNodeInteraction.fetchSemanticsNode()
             block(listSemanticsNode, listSemanticsNodeInteraction)
         }
@@ -80,7 +79,7 @@ class UltronComposeList(
     )
 
     fun onItemChild(itemMatcher: SemanticsMatcher, childMatcher: SemanticsMatcher): UltronComposeSemanticsNodeInteraction =
-        UltronComposeSemanticsNodeInteraction(UltronComposeSemanticsMatcher(listMatcher, true)
+        UltronComposeSemanticsNodeInteraction(UltronComposeSemanticsNodeInteraction(listMatcher, true)
             .perform { listInteraction ->
                 listInteraction.performScrollToNode(itemMatcher)
                     .onChildren().filterToOne(itemMatcher)
@@ -157,7 +156,7 @@ class UltronComposeList(
     }
 
     fun getVisibleItemsCount(): Int = getMatcher().perform { it.fetchSemanticsNode().children.size }
-    fun getMatcher() = UltronComposeSemanticsMatcher(listMatcher, useUnmergedTree)
+    fun getMatcher() = UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree)
 }
 
 fun composeList(listMatcher: SemanticsMatcher, useUnmergedTree: Boolean = true) = UltronComposeList(listMatcher, useUnmergedTree)

@@ -5,8 +5,11 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.getText
 import com.atiurin.sampleapp.framework.ultronext.appendText
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.WebViewPage
+import com.atiurin.ultron.core.compose.nodeinteraction.click
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.className
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.id
+import com.atiurin.ultron.extensions.withAssertion
+import com.atiurin.ultron.extensions.withTimeout
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Test
@@ -199,5 +202,26 @@ class UltronWebElementTest : BaseWebViewTest() {
             .appendText(finishText)
         page.buttonUpdTitle.webClick()
         page.title.hasText(initText+finishText)
+    }
+
+
+    @Test
+    fun validAssertion(){
+        val text = "start"
+        page.textInput.replaceText(text)
+        page.buttonUpdTitle.withAssertion {
+            page.title.hasText(text)
+        }.webClick()
+    }
+
+    @Test
+    fun invalidAssertion(){
+        val text = "start"
+        AssertUtils.assertException {
+            page.textInput.replaceText(text)
+            page.buttonUpdTitle.withTimeout(3000).withAssertion {
+                page.title.withTimeout(500).hasText(text + "adas")
+            }.webClick()
+        }
     }
 }

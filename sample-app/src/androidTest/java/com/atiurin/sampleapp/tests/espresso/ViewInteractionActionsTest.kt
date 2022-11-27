@@ -5,6 +5,7 @@ import android.os.SystemClock
 import android.view.KeyEvent
 import androidx.test.espresso.action.EspressoKey
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.ultronext.appendText
 import com.atiurin.sampleapp.framework.utils.AssertUtils
@@ -19,15 +20,18 @@ import com.atiurin.ultron.custom.espresso.action.getText
 import com.atiurin.ultron.custom.espresso.assertion.hasAnyDrawable
 import com.atiurin.ultron.custom.espresso.assertion.hasDrawable
 import com.atiurin.ultron.extensions.*
+import com.atiurin.ultron.listeners.executeWithoutListeners
+import com.atiurin.ultron.utils.UltronLog
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
 import org.junit.Test
+import kotlin.system.measureTimeMillis
 
 class ViewInteractionActionsTest : UiElementsTest() {
     val page = UiElementsPage
 
     @Test
-    fun isSuccess_notExistedElement_return_false(){
+    fun isSuccess_notExistedElement_return_false() {
         val startTime = SystemClock.elapsedRealtime()
         val result = page.notExistElement.isSuccess { isDisplayed() }
         val endTime = SystemClock.elapsedRealtime()
@@ -36,7 +40,7 @@ class ViewInteractionActionsTest : UiElementsTest() {
     }
 
     @Test
-    fun isSuccess_existedElement_return_true(){
+    fun isSuccess_existedElement_return_true() {
         Assert.assertTrue(page.button.isSuccess { isDisplayed() })
     }
 
@@ -61,17 +65,19 @@ class ViewInteractionActionsTest : UiElementsTest() {
     fun longClick_notExisted() {
         AssertUtils.assertException { page.notExistElement.withTimeout(100).longClick() }
     }
+
     @Test
     fun doubleClick_onClickable() {
         page.button.doubleClick()
         page.button.withTimeout(1000).isDisplayed()
         var success = false
-        with(page.eventStatus){
+        with(page.eventStatus) {
             textContains(getResourceString(R.string.button_event_click))
-            success = isSuccess { withTimeout(3000).textContains("1") } ||  isSuccess { withTimeout(2000).textContains("2") }
+            success = isSuccess { withTimeout(3000).textContains("1") } || isSuccess { withTimeout(2000).textContains("2") }
         }
         Assert.assertTrue(success)
     }
+
     @Test
     fun doubleClick_notExisted() {
         AssertUtils.assertException { page.notExistElement.withTimeout(100).doubleClick() }
@@ -91,6 +97,7 @@ class ViewInteractionActionsTest : UiElementsTest() {
     fun typeText_onNotEditable() {
         AssertUtils.assertException { page.eventStatus.withTimeout(100).typeText("simple text") }
     }
+
     @Test
     fun typeText_notExisted() {
         AssertUtils.assertException { page.notExistElement.withTimeout(100).typeText("asd") }
@@ -101,6 +108,7 @@ class ViewInteractionActionsTest : UiElementsTest() {
         val text = "simple text"
         page.editTextContentDesc.replaceText(text).hasText(text)
     }
+
     @Test
     fun replaceText_notExisted() {
         AssertUtils.assertException { page.notExistElement.withTimeout(100).replaceText("asd") }
@@ -110,6 +118,7 @@ class ViewInteractionActionsTest : UiElementsTest() {
     fun clearText_onEditable() {
         page.editTextContentDesc.clearText().hasText("")
     }
+
     @Test
     fun clearText_notExisted() {
         AssertUtils.assertException { page.notExistElement.withTimeout(100).clearText() }
@@ -148,14 +157,14 @@ class ViewInteractionActionsTest : UiElementsTest() {
     }
 
     @Test
-    fun closeSoftKeyboard_whenItOpened(){
+    fun closeSoftKeyboard_whenItOpened() {
         page.editTextContentDesc.click()
         SystemClock.sleep(500)
         page.editTextContentDesc.closeSoftKeyboard()
     }
 
     @Test
-    fun preformCustomClick_onClickable(){
+    fun preformCustomClick_onClickable() {
         page.button.perform(click())
         page.eventStatus.textContains(getResourceString(R.string.button_event_click))
     }
@@ -166,72 +175,107 @@ class ViewInteractionActionsTest : UiElementsTest() {
     }
 
     @Test
-    fun closeSoftKeyboardTest(){
+    fun closeSoftKeyboardTest() {
         page.editTextContentDesc.click()
         UltronEspresso.closeSoftKeyboard()
         page.imageView.isDisplayed()
     }
 
     @Test
-    fun customVisibilityAction(){
+    fun customVisibilityAction() {
         val text = "appended"
         page.editTextContentDesc.appendText(text)
-            .hasText(getTargetString(R.string.button_default_content_desc)+text)
+            .hasText(getTargetString(R.string.button_default_content_desc) + text)
         page.button.appendText(text)
     }
 
     @Test
-    fun getTextActionTest_textExist(){
+    fun getTextActionTest_textExist() {
         val text = page.appCompatTextView.getText()
         Assert.assertEquals(getTargetString(R.string.app_compat_text), text)
     }
 
     @Test
-    fun getTextActionTest_noTextInView(){
+    fun getTextActionTest_noTextInView() {
         AssertUtils.assertException { page.imageView.withTimeout(100).getText() }
     }
 
     @Test
-    fun getDrawable_drawableExist(){
+    fun getDrawable_drawableExist() {
         Assert.assertNotNull(page.imageView.getDrawable())
     }
 
     @Test
-    fun hasDrawableTest(){
+    fun hasDrawableTest() {
         page.imageView.hasDrawable(R.drawable.ic_account)
     }
 
     @Test
-    fun hasDrawable_wrongResourceId(){
+    fun hasDrawable_wrongResourceId() {
         AssertUtils.assertException {
             page.imageView.withTimeout(1000).hasDrawable(R.drawable.chandler)
         }
     }
 
     @Test
-    fun  drawableCompare(){
+    fun drawableCompare() {
         val actDr = page.imageView.getDrawable()
         val actDr2 = page.imageView2.getDrawable()
         Assert.assertTrue(actDr!!.isSameAs(actDr2!!))
     }
 
     @Test
-    fun hasAnyDrawable_noDrawable(){
+    fun hasAnyDrawable_noDrawable() {
         AssertUtils.assertException { page.emptyNotClickableImageView.withTimeout(1000).hasAnyDrawable() }
     }
 
     @Test
-    fun hasAnyDrawable_imageHasDrawable(){
+    fun hasAnyDrawable_imageHasDrawable() {
         page.imageView.hasAnyDrawable()
     }
 
     @Test
-    fun getContentDesc_descIsNull(){
+    fun getContentDesc_descIsNull() {
         Assert.assertEquals(null, page.imageView.getContentDescription())
     }
 
     @Test
-    fun getContentDesc_descNotNull(){
+    fun getContentDesc_descNotNull() {
         Assert.assertEquals(getTargetString(R.string.button_default_content_desc), page.button.getContentDescription())
+    }
+
+    @Test
+    fun customAssertionTest() {
+        val text = "some text"
+        val execTime = measureTimeMillis {
+            page.editTextContentDesc.withAssertion("demo name") {
+                executeWithoutListeners {
+                    page.editTextContentDesc.hasText(text)
+                }
+            }.replaceText(text)
+        }
+        Assert.assertTrue(execTime < UltronConfig.Espresso.ACTION_TIMEOUT)
+    }
+
+    @Test
+    fun withAssertion_failedAssertion() {
+        AssertUtils.assertException {
+            page.editTextContentDesc.withTimeout(1000).withAssertion {
+                withText("asd23213 12312").withTimeout(500).isDisplayed()
+            }.typeText("1")
+        }
+    }
+
+    @Test
+    fun withAssertion_failedAssertion_timeout() {
+        val operationTime = 1000L
+        val execTime = measureTimeMillis {
+            page.editTextContentDesc.isSuccess {
+                withTimeout(operationTime).withAssertion {
+                    withText("asd23213 12312").withTimeout(100).isDisplayed()
+                }.typeText("1")
+            }
+        }
+        Assert.assertTrue(execTime > operationTime)
     }
 }

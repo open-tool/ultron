@@ -16,14 +16,16 @@ internal abstract class WebOperationExecutor<T : Operation>(
         success: Boolean,
         exceptions: List<Throwable>,
         description: String,
-        operationIterationResult: OperationIterationResult?
+        lastOperationIterationResult: OperationIterationResult?,
+        executionTimeMs: Long
     ): WebOperationResult<T> {
         return WebOperationResult(
             operation = operation,
             success = success,
             exceptions = exceptions,
             description = description,
-            operationIterationResult = operationIterationResult
+            operationIterationResult = lastOperationIterationResult,
+            executionTimeMs = executionTimeMs
         )
     }
 

@@ -1,6 +1,8 @@
 package com.atiurin.ultron.core.common
 
+import android.util.Log
 import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.core.config.UltronConfig.isListenersOn
 import com.atiurin.ultron.listeners.UltronLifecycleListener
 import com.atiurin.ultron.listeners.LogLifecycleListener
 import kotlin.reflect.KClass
@@ -26,9 +28,10 @@ abstract class AbstractOperationLifecycle {
         resultHandler: (OpRes) -> Unit = {}
     ): OpRes {
         val listeners = getListeners()
-        listeners.forEach { it.before(executor.operation) }
+        val isListen = executor.operation.type !in UltronConfig.operationsExcludedFromListeners && isListenersOn
+        if (isListen) listeners.forEach { it.before(executor.operation) }
         val operationResult = operationProcessor.process(executor)
-        if (operationResult.operation.type !in UltronConfig.operationsExcludedFromListeners){
+        if (isListen){
             if (operationResult.success) {
                 listeners.forEach { it.afterSuccess(operationResult as OperationResult<Operation>) }
             } else {

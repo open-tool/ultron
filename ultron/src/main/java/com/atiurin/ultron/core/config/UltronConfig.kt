@@ -24,6 +24,7 @@ import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.UltronUiAutomatorLifecycle
 import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
+import com.atiurin.ultron.exceptions.UltronAssertionException
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.exceptions.UltronWrapperException
 import com.atiurin.ultron.listeners.UltronLifecycleListener
@@ -38,6 +39,7 @@ import org.hamcrest.Matcher
 object UltronConfig {
     var LOGCAT_TAG = "Ultron"
     val operationsExcludedFromListeners = mutableListOf<UltronOperationType>(EspressoAssertionType.IDENTIFY_RECYCLER_VIEW)
+    var isListenersOn = true
 
     fun addGlobalListener(lifecycleListener: UltronLifecycleListener){
         UltronEspressoOperationLifecycle.addListener(lifecycleListener)
@@ -71,6 +73,7 @@ object UltronConfig {
             var RECYCLER_VIEW_LOAD_TIMEOUT = DEFAULT_RECYCLER_VIEW_LOAD_TIMEOUT
             var RECYCLER_VIEW_OPERATIONS_TIMEOUT = DEFAULT_RECYCLER_VIEW_OPERATION_TIMEOUT
             var RECYCLER_VIEW_ITEM_SEARCH_LIMIT = -1
+            var INCLUDE_VIEW_HIERARCHY_TO_EXCEPTION = false //where it applicable
 
             var resultAnalyzer: OperationResultAnalyzer = UltronDefaultOperationResultAnalyzer()
 
@@ -84,8 +87,7 @@ object UltronConfig {
                 }
             }
 
-            var webViewMatcher: Matcher<View> =
-                allOf(isAssignableFrom(WebView::class.java), isDisplayed())
+            var webViewMatcher: Matcher<View> = allOf(isAssignableFrom(WebView::class.java), isDisplayed())
         }
 
         class ViewActionConfig {
@@ -93,6 +95,7 @@ object UltronConfig {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     UltronWrapperException::class.java,
                     UltronException::class.java,
+                    UltronAssertionException::class.java,
                     PerformException::class.java,
                     NoMatchingViewException::class.java
                 )
@@ -107,6 +110,7 @@ object UltronConfig {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     UltronWrapperException::class.java,
                     UltronException::class.java,
+                    UltronAssertionException::class.java,
                     PerformException::class.java,
                     NoMatchingViewException::class.java,
                     AssertionFailedError::class.java
@@ -172,6 +176,7 @@ object UltronConfig {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     UltronWrapperException::class.java,
+                    UltronAssertionException::class.java,
                     UltronException::class.java,
                     UiObjectNotFoundException::class.java,
                     NullPointerException::class.java
@@ -188,6 +193,7 @@ object UltronConfig {
             companion object {
                 var allowedExceptions = mutableListOf<Class<out Throwable>>(
                     UltronWrapperException::class.java,
+                    UltronAssertionException::class.java,
                     UltronException::class.java,
                     UiObjectNotFoundException::class.java,
                     NullPointerException::class.java
@@ -228,6 +234,7 @@ object UltronConfig {
             var allowedExceptions = mutableListOf<Class<out Throwable>>(
                 AssertionError::class.java,
                 UltronWrapperException::class.java,
+                UltronAssertionException::class.java,
                 UltronException::class.java,
                 PerformException::class.java
             )
