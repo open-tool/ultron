@@ -8,6 +8,7 @@ import com.atiurin.ultron.page.Page
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
 import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.ultron.core.espresso.UltronEspresso
+import com.atiurin.ultron.custom.espresso.matcher.withSuitableRoot
 import com.atiurin.ultron.extensions.*
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
@@ -64,6 +65,11 @@ object ChatPage : Page<ChatPage>() {
     fun assertToolbarTitle(text: String){
         toolbarTitle.withTimeout(1000).hasText(text)
     }
+
+    fun assertToolbarTitleWithSuitableRoot(text: String){
+        toolbarTitle.withSuitableRoot().hasText(text)
+    }
+
     fun clearHistory() = apply {
         step("Clear chat history") {
             UltronEspresso.openContextualActionModeOverflowMenu()
