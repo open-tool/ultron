@@ -17,7 +17,7 @@ fun UltronComposeSemanticsNodeInteraction.assertProgress(expected: Float) = appl
     executeOperation(
         operationBlock = { semanticsNodeInteraction.assert(hasProgress(expected)) },
         name = "Assert '${semanticsNodeInteraction.getDescription()}' has progress $expected",
-        type = ComposeOperationTypeExt.ASSERT_PROGRESS,
+        type = ComposeOperationTypeExt.ASSERT_PROGRESS, //it's not required, you can skip this param. DEFAULT one will be used
         description = "Compose assertProgress = $expected in '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
     )
 }

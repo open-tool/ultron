@@ -1,10 +1,7 @@
 package com.atiurin.ultron.listeners
 
-import android.util.Log
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationResult
-import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.utils.UltronLog
 import com.atiurin.ultron.utils.UltronLog.info
 
 class LogLifecycleListener : UltronLifecycleListener() {

@@ -9,9 +9,6 @@ fun UltronUiObject2.appendText(appendText: String) = apply {
     executeAction(
         actionBlock = { uiObject2ProviderBlock()!!.text += appendText },
         name = "AppendText '$appendText' to $selectorDesc",
-        type = UiAutomatorActionType.ADD_TEXT,
-        description = "UiObject2 action '${UiAutomatorActionType.ADD_TEXT}' $selectorDesc appendText '$appendText' during $timeoutMs ms",
-        timeoutMs = timeoutMs,
-        resultHandler = resultHandler
+        description = "UiObject2 action '${UiAutomatorActionType.ADD_TEXT}' $selectorDesc appendText '$appendText' during $timeoutMs ms"
     )
 }

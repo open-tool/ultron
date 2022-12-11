@@ -1,3 +1,5 @@
+@file:Suppress("DeprecatedCallableAddReplaceWith")
+
 package com.atiurin.ultron.core.espresso
 
 import android.content.Context
@@ -12,7 +14,7 @@ import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionExecutor
 object UltronEspresso {
     /** Closes soft keyboard if open. */
     fun closeSoftKeyboard() {
-        executeAction(
+        executeUltronAction(
             UltronEspressoOperation(
                 operationBlock = { Espresso.closeSoftKeyboard() },
                 name = "Espresso.closeSoftKeyboard()",
@@ -31,7 +33,7 @@ object UltronEspresso {
      *     button would result in application closing.
      */
     fun pressBack() {
-        executeAction(
+        executeUltronAction(
             UltronEspressoOperation(
                 operationBlock = { Espresso.pressBack() },
                 name = "Espresso.pressBack()",
@@ -53,7 +55,7 @@ object UltronEspresso {
      * ActionBars and can only be interacted with via menu key presses.
      */
     fun openActionBarOverflowOrOptionsMenu(context: Context = InstrumentationRegistry.getInstrumentation().targetContext) {
-        executeAction(
+        executeUltronAction(
             UltronEspressoOperation(
                 operationBlock = { Espresso.openActionBarOverflowOrOptionsMenu(context) },
                 name = "Espresso.openActionBarOverflowOrOptionsMenu(context)",
@@ -75,7 +77,7 @@ object UltronEspresso {
      * button (if present) has no impact on it.
      */
     fun openContextualActionModeOverflowMenu() {
-        executeAction(
+        executeUltronAction(
             UltronEspressoOperation(
                 operationBlock = { Espresso.openContextualActionModeOverflowMenu() },
                 name = "Espresso.openContextualActionModeOverflowMenu()",
@@ -90,6 +92,7 @@ object UltronEspresso {
     /**
      * Executes any espresso action inside Ultron lifecycle
      */
+    @Deprecated("It doesn't support withAssertion(). Consider usage of UltronEspressoInteraction().executeAction() instead")
     fun executeAction(
         operation: UltronEspressoOperation,
         resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = UltronConfig.Espresso.ViewActionConfig.resultHandler
@@ -100,10 +103,18 @@ object UltronEspresso {
     /**
      * Executes any espresso assertion inside Ultron lifecycle
      */
+    @Deprecated("It doesn't support withAssertion(). Consider usage of UltronEspressoInteraction().executeAction() instead")
     fun executeAssertion(
         operation: UltronEspressoOperation,
         resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = UltronConfig.Espresso.ViewAssertionConfig.resultHandler
     ) {
         UltronEspressoOperationLifecycle.execute(EspressoAssertionExecutor(operation), resultHandler)
+    }
+
+    private fun executeUltronAction(
+        operation: UltronEspressoOperation,
+        resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = UltronConfig.Espresso.ViewActionConfig.resultHandler
+    ) {
+        UltronEspressoOperationLifecycle.execute(EspressoActionExecutor(operation), resultHandler)
     }
 }

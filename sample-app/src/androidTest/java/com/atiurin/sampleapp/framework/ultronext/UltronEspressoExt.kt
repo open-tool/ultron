@@ -21,14 +21,10 @@ import org.hamcrest.Matchers.allOf
 
 //add new action for Ultron framework
 fun <T> UltronEspressoInteraction<T>.appendText(text: String) = apply {
-    UltronEspresso.executeAction(
-        UltronEspressoOperation(
-            operationBlock = getInteractionActionBlock(AppendTextAction(text)),
-            name = "SetVisibility to ${getInteractionMatcher()}",
-            description = "${interaction!!::class.simpleName} SET_VISIBILITY_ACTION to ${getInteractionMatcher()} during $timeoutMs ms",
-            type = EspressoActionType.CUSTOM,
-            timeoutMs = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
-        )
+    executeAction(
+        operationBlock = getInteractionActionBlock(AppendTextAction(text)),
+        name = "Append text '$text' to ${getInteractionMatcher()}",
+        description = "${interaction!!::class.simpleName} APPEND_TEXT to ${getInteractionMatcher()} during $timeoutMs ms",
     )
 }
 
@@ -39,7 +35,7 @@ fun Matcher<View>.appendText(text: String) = UltronEspressoInteraction(onView(th
 fun ViewInteraction.appendText(text: String) = UltronEspressoInteraction(this).appendText(text)
 
 //support action for all DataInteractions
-fun DataInteraction.appendText(text: String) =  UltronEspressoInteraction(this).appendText(text)
+fun DataInteraction.appendText(text: String) = UltronEspressoInteraction(this).appendText(text)
 
 //support action for RecyclerView list. appendText action is useless for RecyclerView.
 // This is just an example of how to add new behaviour for UltronRecyclerView
