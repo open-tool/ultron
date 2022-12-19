@@ -32,7 +32,7 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun isNotDisplayed_ofDisplayedObject() {
         page.radioVisibleButton.click()
-        AssertUtils.assertException { page.button.withTimeout(100).isNotDisplayed() }
+        AssertUtils.assertException { page.radioVisibleButton.withTimeout(100).isNotDisplayed() }
     }
 
     @Test
@@ -347,13 +347,13 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isSuccess_FalseTest() {
-        val success = page.button.isSuccess { withTimeout(100).isNotDisplayed() }
+        val success = page.radioVisibleButton.isSuccess { withTimeout(100).isNotDisplayed() }
         Assert.assertFalse(success)
     }
 
     @Test
     fun isSuccess_TrueTest() {
-        val success = page.button.isSuccess { withTimeout(100).isDisplayed() }
+        val success = page.radioVisibleButton.isSuccess { withTimeout(100).isDisplayed() }
         Assert.assertTrue(success)
     }
 

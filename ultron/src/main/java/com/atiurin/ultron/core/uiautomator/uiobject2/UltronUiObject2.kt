@@ -14,6 +14,7 @@ import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.uiautomator.*
+import com.atiurin.ultron.exceptions.UltronAssertionException
 import com.atiurin.ultron.exceptions.UltronOperationException
 import com.atiurin.ultron.listeners.setListenersState
 import com.atiurin.ultron.utils.getTargetResourceName
@@ -482,7 +483,7 @@ class UltronUiObject2 internal constructor(
             assertionBlock = {
                 val actualText = uiObject2ProviderBlock()!!.text
                 if (!textMatcher.matches(actualText)) {
-                    throw UltronOperationException("Expected: text matches '$textMatcher', got '$actualText'.")
+                    throw UltronAssertionException("Expected: text matches '$textMatcher', got '$actualText'.")
                 }
                 true
             },
@@ -502,7 +503,7 @@ class UltronUiObject2 internal constructor(
             assertionBlock = {
                 val actualContentDesc = uiObject2ProviderBlock()!!.contentDescription
                 if (!contentDescMatcher.matches(actualContentDesc)) {
-                    throw UltronOperationException("Expected: contentDescription matches '$contentDescMatcher', got '$actualContentDesc'.")
+                    throw UltronAssertionException("Expected: contentDescription matches '$contentDescMatcher', got '$actualContentDesc'.")
                 }
                 true
             },

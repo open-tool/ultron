@@ -18,6 +18,7 @@ import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.action.EspressoActionExecutor
 import com.atiurin.ultron.core.espresso.action.EspressoActionType
 import com.atiurin.ultron.core.espresso.action.UltronCustomClickAction
+import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionExecutor
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
 import com.atiurin.ultron.custom.espresso.assertion.ExistsEspressoViewAssertion
 import com.atiurin.ultron.exceptions.UltronException
@@ -601,7 +602,7 @@ class UltronEspressoInteraction<T>(
     ) = executeAction(getUltronEspressoActionOperation(operationBlock, name, type, description))
 
     fun executeAssertion(operation: UltronEspressoOperation) =
-        UltronEspressoOperationLifecycle.execute(EspressoActionExecutor(operation), getAssertionResultHandler())
+        UltronEspressoOperationLifecycle.execute(EspressoAssertionExecutor(operation), getAssertionResultHandler())
 
     fun executeAssertion(
         operationBlock: () -> Unit, name: String,
