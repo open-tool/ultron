@@ -5,10 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.test.espresso.*
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
-import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espresso.UltronEspresso
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
-import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import org.hamcrest.Matcher
 import java.util.concurrent.atomic.AtomicReference
 
@@ -23,19 +20,13 @@ class GetDrawableAction(private val drawableContainer: AtomicReference<Drawable>
     }
 }
 
-fun <T> UltronEspressoInteraction<T>.getDrawable() : Drawable? {
-    val timeout = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
+fun <T> UltronEspressoInteraction<T>.getDrawable(): Drawable? {
     val drawableContainer = AtomicReference<Drawable>()
-    UltronEspresso.executeAction(
-        UltronEspressoOperation(
-            operationBlock = getInteractionActionBlock(GetDrawableAction(drawableContainer)),
-            name = "GetDrawable from TextView with '${getInteractionMatcher()}'",
-            type = CustomEspressoActionType.GET_DRAWABLE,
-            description = "${interaction!!::class.java.simpleName} action '${CustomEspressoActionType.GET_DRAWABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeout ms",
-            timeoutMs = timeout
-        ),
-        resultHandler = resultHandler
-            ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+    executeAction(
+        operationBlock = getInteractionActionBlock(GetDrawableAction(drawableContainer)),
+        name = "GetDrawable from TextView with '${getInteractionMatcher()}'",
+        type = CustomEspressoActionType.GET_DRAWABLE,
+        description = "${interaction.className()} action '${CustomEspressoActionType.GET_DRAWABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
     )
     return drawableContainer.get()
 }

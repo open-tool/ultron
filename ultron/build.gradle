@@ -26,7 +26,7 @@ ext.versions = [
         'minSdk'            : 16,
         'compileSdk'        : 31,
         'targetSdk'         : 31,
-        'buildTools'        : '29.0.3',
+        'buildTools'        : '33.0.1',
         'release'           : publishedVersion,
         'code'              : 2,
         'recyclerview'      : '1.2.1',

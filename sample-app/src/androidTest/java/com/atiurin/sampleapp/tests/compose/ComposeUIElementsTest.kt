@@ -23,9 +23,6 @@ import com.atiurin.ultron.core.common.options.TextContainsOption
 import com.atiurin.ultron.core.common.options.TextEqualsOption
 import com.atiurin.ultron.core.compose.createUltronComposeRule
 import com.atiurin.ultron.core.compose.nodeinteraction.click
-import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
-import com.atiurin.ultron.core.compose.operation.ComposeOperationType
-import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
 import com.atiurin.ultron.extensions.*
 import org.junit.Assert

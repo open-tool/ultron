@@ -9,6 +9,10 @@ import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
+import com.atiurin.ultron.custom.espresso.assertion.hasCurrentHintTextColor
+import com.atiurin.ultron.custom.espresso.assertion.hasCurrentTextColor
+import com.atiurin.ultron.custom.espresso.assertion.hasHighlightColor
+import com.atiurin.ultron.custom.espresso.assertion.hasShadowColor
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import org.junit.Assert
@@ -43,23 +47,23 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     //doesNotExist
     @Test
-    fun doesNotExist_notExisted(){
+    fun doesNotExist_notExisted() {
         page.notExistElement.doesNotExist()
     }
 
     @Test
-    fun doesNotExist_existed(){
+    fun doesNotExist_existed() {
         AssertUtils.assertException { page.button.withTimeout(100).doesNotExist() }
     }
 
     //exists
     @Test
-    fun exists_ExistedHiddenView(){
+    fun exists_ExistedHiddenView() {
         page.hiddenButton.exists()
     }
 
     @Test
-    fun exists_NotExisted(){
+    fun exists_NotExisted() {
         AssertUtils.assertException { page.notExistElement.withTimeout(100).exists() }
     }
 
@@ -390,5 +394,62 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
         }
     }
 
+    @Test
+    fun hasCurrentTextColor() {
+        page.eventStatus.hasCurrentTextColor(R.color.colorPrimary)
+    }
 
+    @Test
+    fun hasCurrentTextColor_invalidColor() {
+        AssertUtils.assertException { page.eventStatus.withTimeout(100).hasCurrentTextColor(R.color.invalid) }
+    }
+
+    @Test
+    fun hasCurrentHintTextColor() {
+        page.eventStatus.hasCurrentHintTextColor(R.color.colorHint)
+    }
+
+    @Test
+    fun hasCurrentHintTextColor_invalidColor() {
+        AssertUtils.assertException { page.eventStatus.withTimeout(100).hasCurrentHintTextColor(R.color.invalid) }
+    }
+
+    @Test
+    fun hasShadowColor() {
+        page.eventStatus.hasShadowColor(R.color.colorShadow)
+    }
+
+    @Test
+    fun hasShadowColor_invalidColor() {
+        AssertUtils.assertException { page.eventStatus.withTimeout(100).hasShadowColor(R.color.invalid) }
+    }
+
+    @Test
+    fun hasHighlightColor() {
+        page.eventStatus.hasHighlightColor(R.color.colorHighlight)
+    }
+
+    @Test
+    fun hasHighlightColor_invalidColor() {
+        AssertUtils.assertException { page.eventStatus.withTimeout(100).hasHighlightColor(R.color.invalid) }
+    }
+
+    @Test
+    fun textViewColors() {
+        page.eventStatus
+            .hasCurrentTextColor(R.color.colorPrimary)
+            .hasCurrentHintTextColor(R.color.colorHint)
+            .hasShadowColor(R.color.colorShadow)
+            .hasHighlightColor(R.color.colorHighlight)
+    }
+
+    @Test
+    fun appCompatTextViewTextColor() {
+        page.appCompatTextView.hasCurrentTextColor(R.color.colorPrimary)
+    }
+
+    @Test
+    fun appCompatTextViewTextColor_invalidColor() {
+        AssertUtils.assertException { page.appCompatTextView.withTimeout(100).hasCurrentTextColor(R.color.invalid) }
+    }
 }

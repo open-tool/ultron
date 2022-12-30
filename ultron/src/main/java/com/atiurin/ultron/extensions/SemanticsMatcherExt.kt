@@ -82,7 +82,7 @@ fun SemanticsMatcher.setText(text: AnnotatedString) = UltronComposeSemanticsNode
 fun SemanticsMatcher.collapse() = UltronComposeSemanticsNodeInteraction(this).collapse()
 fun SemanticsMatcher.expand() = UltronComposeSemanticsNodeInteraction(this).expand()
 fun SemanticsMatcher.dismiss() = UltronComposeSemanticsNodeInteraction(this).dismiss()
-fun SemanticsMatcher.setProgress(value: Float) = UltronComposeSemanticsNodeInteraction(this).setProgress(value )
+fun SemanticsMatcher.setProgress(value: Float) = UltronComposeSemanticsNodeInteraction(this).setProgress(value)
 fun SemanticsMatcher.captureToImage(): ImageBitmap = UltronComposeSemanticsNodeInteraction(this).captureToImage()
 
 

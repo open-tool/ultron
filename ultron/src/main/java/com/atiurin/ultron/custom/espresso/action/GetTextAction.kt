@@ -8,11 +8,7 @@ import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
-import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.ACTION_TIMEOUT
-import com.atiurin.ultron.core.espresso.UltronEspresso.executeAction
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
-import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import org.hamcrest.Matcher
 import java.util.concurrent.atomic.AtomicReference
 
@@ -26,19 +22,13 @@ class GetTextAction(val textContainer: AtomicReference<String>) : ViewAction {
     }
 }
 
-fun <T> UltronEspressoInteraction<T>.getText() : String {
-    val timeout = timeoutMs ?: ACTION_TIMEOUT
+fun <T> UltronEspressoInteraction<T>.getText(): String {
     val textContainer = AtomicReference<String>()
     executeAction(
-        UltronEspressoOperation(
-            operationBlock = getInteractionActionBlock(GetTextAction(textContainer)),
-            name = "GetText from TextView with '${getInteractionMatcher()}'",
-            type = CustomEspressoActionType.GET_TEXT,
-            description = "${interaction!!::class.java.simpleName} action '${CustomEspressoActionType.GET_TEXT}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeout ms",
-            timeoutMs = timeout
-        ),
-        resultHandler = resultHandler
-            ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+        operationBlock = getInteractionActionBlock(GetTextAction(textContainer)),
+        name = "GetText from TextView with '${getInteractionMatcher()}'",
+        type = CustomEspressoActionType.GET_TEXT,
+        description = "${interaction.className()} action '${CustomEspressoActionType.GET_TEXT}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
     )
     return textContainer.get()
 }
