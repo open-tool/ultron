@@ -14,17 +14,12 @@ import com.atiurin.ultron.utils.getTargetResourceName
 import org.hamcrest.Matcher
 
 fun <T> UltronEspressoInteraction<T>.hasDrawable(@DrawableRes resourceId: Int) = apply {
-    val timeout = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
     val resName = getTargetResourceName(resourceId)
-    UltronEspresso.executeAssertion(
-        UltronEspressoOperation(
-            operationBlock = getInteractionAssertionBlock(withDrawable(resourceId)),
-            name = "HasDrawable with target resource $resName in '${getInteractionMatcher()}'",
-            type = CustomEspressoAssertionType.HAS_DRAWABLE,
-            description = "${interaction!!::class.java.simpleName} assertion '${CustomEspressoAssertionType.HAS_DRAWABLE}' with drawable resource '$resName' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeout ms",
-            timeoutMs = timeout
-        ),
-        resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+    executeAssertion(
+        operationBlock = getInteractionAssertionBlock(withDrawable(resourceId)),
+        name = "HasDrawable with target resource $resName in '${getInteractionMatcher()}'",
+        type = CustomEspressoAssertionType.HAS_DRAWABLE,
+        description = "${interaction.className()} assertion '${CustomEspressoAssertionType.HAS_DRAWABLE}' with drawable resource '$resName' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
     )
 }
 
@@ -32,16 +27,11 @@ fun <T> UltronEspressoInteraction<T>.hasDrawable(@DrawableRes resourceId: Int) =
  * Assert view has any drawable
  */
 fun <T> UltronEspressoInteraction<T>.hasAnyDrawable() = apply {
-    val timeout = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
-    UltronEspresso.executeAssertion(
-        UltronEspressoOperation(
-            operationBlock = getInteractionAssertionBlock(com.atiurin.ultron.custom.espresso.matcher.hasAnyDrawable()),
-            name = "HasAnyDrawable in '${getInteractionMatcher()}'",
-            type = CustomEspressoAssertionType.HAS_ANY_DRAWABLE,
-            description = "${interaction!!::class.java.simpleName} assertion '${CustomEspressoAssertionType.HAS_ANY_DRAWABLE}' with any drawable in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during $timeout ms",
-            timeoutMs = timeout
-        ),
-        resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+    executeAssertion(
+        operationBlock = getInteractionAssertionBlock(com.atiurin.ultron.custom.espresso.matcher.hasAnyDrawable()),
+        name = "HasAnyDrawable in '${getInteractionMatcher()}'",
+        type = CustomEspressoAssertionType.HAS_ANY_DRAWABLE,
+        description = "${interaction.className()} assertion '${CustomEspressoAssertionType.HAS_ANY_DRAWABLE}' with any drawable in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
     )
 }
 

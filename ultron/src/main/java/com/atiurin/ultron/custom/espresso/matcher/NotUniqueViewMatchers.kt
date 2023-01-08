@@ -5,6 +5,9 @@ import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
+/**
+ * Should be the last description of element
+ */
 fun Matcher<View>.first(): Matcher<View> {
     val initialMatcher = this
     return object : TypeSafeMatcher<View>(View::class.java) {
@@ -25,6 +28,7 @@ fun Matcher<View>.first(): Matcher<View> {
 }
 
 /**
+ * Should be the last description of element
  * @param number of matched view in hierarchy. Starts from 0
  */
 fun Matcher<View>.hierarchyNumber(number: Int): Matcher<View> {

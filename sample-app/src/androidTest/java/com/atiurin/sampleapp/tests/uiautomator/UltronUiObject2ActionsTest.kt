@@ -302,7 +302,7 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
     @Test
     fun replaceText_toUneditableObject(){
         val btnText = getTargetString(R.string.button_text)
-        page.button.withTimeout(100).replaceText("some new text").hasText(btnText)
+        page.button.replaceText("some new text").hasText(btnText)
     }
 
     @Test

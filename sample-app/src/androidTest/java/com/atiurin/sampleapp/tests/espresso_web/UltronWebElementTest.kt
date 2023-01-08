@@ -10,9 +10,11 @@ import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.id
 import com.atiurin.ultron.extensions.withAssertion
 import com.atiurin.ultron.extensions.withTimeout
+import com.atiurin.ultron.utils.UltronLog
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Test
+import java.util.logging.Logger
 
 class UltronWebElementTest : BaseWebViewTest() {
     @Test
@@ -200,6 +202,7 @@ class UltronWebElementTest : BaseWebViewTest() {
         page.textInput
             .replaceText(initText)
             .appendText(finishText)
+            .exists()
         page.buttonUpdTitle.webClick()
         page.title.hasText(initText+finishText)
     }

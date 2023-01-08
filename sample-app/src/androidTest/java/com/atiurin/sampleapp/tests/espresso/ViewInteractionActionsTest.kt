@@ -249,9 +249,7 @@ class ViewInteractionActionsTest : UiElementsTest() {
         val text = "some text"
         val execTime = measureTimeMillis {
             page.editTextContentDesc.withAssertion("demo name") {
-                executeWithoutListeners {
-                    page.editTextContentDesc.hasText(text)
-                }
+                page.editTextContentDesc.hasText(text)
             }.replaceText(text)
         }
         Assert.assertTrue(execTime < UltronConfig.Espresso.ACTION_TIMEOUT)

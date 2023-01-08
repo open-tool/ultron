@@ -11,14 +11,11 @@ import com.atiurin.ultron.extensions.getDescription
 
 fun hasProgress(value: Float): SemanticsMatcher = SemanticsMatcher.expectValue(GetProgress, value)
 
-enum class ComposeOperationTypeExt : UltronOperationType { ASSERT_PROGRESS }
-
 fun UltronComposeSemanticsNodeInteraction.assertProgress(expected: Float) = apply {
     executeOperation(
         operationBlock = { semanticsNodeInteraction.assert(hasProgress(expected)) },
         name = "Assert '${semanticsNodeInteraction.getDescription()}' has progress $expected",
-        type = ComposeOperationTypeExt.ASSERT_PROGRESS,
-        description = "Compose assertProgress = $expected in '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+        description = "Compose assertProgress = $expected in '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms"
     )
 }
 

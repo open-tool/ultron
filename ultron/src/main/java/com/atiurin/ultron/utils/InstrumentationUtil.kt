@@ -1,15 +1,14 @@
 package com.atiurin.ultron.utils
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Looper
-import androidx.annotation.AnyRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.IntegerRes
-import androidx.annotation.StringRes
+import androidx.annotation.*
 import androidx.test.platform.app.InstrumentationRegistry
 import com.atiurin.ultron.exceptions.UltronException
+import java.util.*
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.FutureTask
 
@@ -51,6 +50,24 @@ fun getTargetDrawable(@DrawableRes resourceId: Int): Drawable? {
 
 fun getTestDrawable(@DrawableRes resourceId: Int): Drawable? {
     return getDrawable(resourceId, InstrumentationRegistry.getInstrumentation().context)
+}
+
+fun getColor(@ColorRes colorResId: Int, context: Context): Int {
+    return if (Build.VERSION.SDK_INT <= 22) context.resources.getColor(colorResId) else context.getColor(colorResId)
+}
+
+fun getTargetColor(@ColorRes colorResId: Int): Int {
+    return getColor(colorResId, InstrumentationRegistry.getInstrumentation().targetContext)
+}
+
+fun getTestColor(@ColorRes colorResId: Int): Int {
+    return getColor(colorResId, InstrumentationRegistry.getInstrumentation().context)
+}
+
+fun getColorHex(color: Int): String {
+    return String.format(
+        Locale.ROOT, "#%02X%06X", 0xFF and Color.alpha(color), 0xFFFFFF and color
+    )
 }
 
 fun <T> runOnUiThread(action: () -> T): T {

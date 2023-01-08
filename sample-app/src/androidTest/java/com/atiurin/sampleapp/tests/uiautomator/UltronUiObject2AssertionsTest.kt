@@ -184,7 +184,7 @@ class UltronUiObject2AssertionsTest: UiElementsTest() {
 
     @Test
     fun isDisplayed_BooleanTrue_ofInvisibleObject() {
-        val result = page.button.isSuccess { withTimeout(100).isDisplayed() }
+        val result = page.radioVisibleButton.isSuccess { withTimeout(100).isDisplayed() }
         Assert.assertTrue(result)
     }
 

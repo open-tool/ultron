@@ -5,12 +5,14 @@ import androidx.test.espresso.web.assertion.WebAssertion
 import androidx.test.espresso.web.assertion.WebViewAssertions.webContent
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.model.ElementReference
+import androidx.test.espresso.web.model.Evaluation
 import androidx.test.espresso.web.model.WindowReference
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.Locator
+import com.atiurin.ultron.core.common.CommonOperationType
 import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
@@ -34,7 +36,7 @@ import org.w3c.dom.Document
  * It is required to create WebElement object using method in Companion object
  * like [UltronWebElement.Companion.id], [UltronWebElement.Companion.xpath], [UltronWebElement.Companion.element] and etc
  */
-@Suppress("UNCHECKED_CAST")
+@Suppress("UNCHECKED_CAST", "MemberVisibilityCanBePrivate")
 open class UltronWebElement internal constructor(
     open val locator: Locator,
     open val value: String,
@@ -277,7 +279,10 @@ open class UltronWebElement internal constructor(
     fun <R> executeOperation(
         webInteractionOperation: WebInteractionOperation<R>
     ): R {
-        val result = executeOperationVoid(webInteractionOperation)
+        val result = UltronWebLifecycle.execute(
+            executor = WebInteractionOperationExecutor(webInteractionOperation),
+            resultHandler = resultHandler as (WebOperationResult<WebInteractionOperation<R>>) -> Unit
+        )
         return (result.operationIterationResult as WebInteractionOperationIterationResult<R>).webInteraction?.get()
             ?: throw UltronException("Couldn't get result of ${webInteractionOperation.name}.")
     }
@@ -294,14 +299,14 @@ open class UltronWebElement internal constructor(
     fun <R> getUltronWebActionOperation(
         webInteractionBlock: () -> Web.WebInteraction<R>,
         name: String,
-        type: UltronOperationType,
+        type: UltronOperationType = CommonOperationType.DEFAULT,
         description: String
     ) = WebInteractionOperation(webInteractionBlock, name, type, description, getActionTimeout(), assertion)
 
     fun <R> getUltronWebAssertionOperation(
         webInteractionBlock: () -> Web.WebInteraction<R>,
         name: String,
-        type: UltronOperationType,
+        type: UltronOperationType = CommonOperationType.DEFAULT,
         description: String
     ) = WebInteractionOperation(webInteractionBlock, name, type, description, getAssertionTimeout(), assertion)
 

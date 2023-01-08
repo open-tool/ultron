@@ -9,15 +9,16 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
+import com.atiurin.ultron.core.common.CommonOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espresso.UltronEspresso.executeAction
-import com.atiurin.ultron.core.espresso.UltronEspresso.executeAssertion
+import com.atiurin.ultron.core.espresso.action.EspressoActionExecutor
 import com.atiurin.ultron.core.espresso.action.EspressoActionType
 import com.atiurin.ultron.core.espresso.action.UltronCustomClickAction
+import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionExecutor
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
 import com.atiurin.ultron.custom.espresso.assertion.ExistsEspressoViewAssertion
 import com.atiurin.ultron.exceptions.UltronException
@@ -28,6 +29,7 @@ import com.atiurin.ultron.listeners.setListenersState
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
 
+@Suppress("MemberVisibilityCanBePrivate")
 class UltronEspressoInteraction<T>(
     val interaction: T,
     val timeoutMs: Long? = null,
@@ -36,13 +38,13 @@ class UltronEspressoInteraction<T>(
 ) {
     init {
         if (interaction !is ViewInteraction && interaction !is DataInteraction) throw UltronException(
-            "Invalid interaction class provided ${interaction!!::class.java.simpleName}. Use ViewInteraction or DataInteraction"
+            "Invalid interaction class provided ${interaction.className()}. Use ViewInteraction or DataInteraction"
         )
     }
 
-    private fun getActionTimeout(): Long = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
+    fun getActionTimeout(): Long = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
 
-    private fun getAssertionTimeout(): Long = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
+    fun getAssertionTimeout(): Long = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
 
     fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit): UltronEspressoInteraction<T> {
         return UltronEspressoInteraction(this.interaction, this.timeoutMs, resultHandler)
@@ -59,15 +61,12 @@ class UltronEspressoInteraction<T>(
     // =========== CUSTOM CLICKS ============================
     private fun customClick(type: EspressoActionType, location: GeneralLocation, offsetX: Int, offsetY: Int) = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(
-                    UltronCustomClickAction(Tap.SINGLE, location, areaPercentage = 20, offsetX = offsetX, offsetY = offsetY)
-                ),
-                name = "$type for '${getInteractionMatcher()}'",
-                type = type,
-                description = "${interaction!!::class.java.simpleName} action '${type}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
+            operationBlock = getInteractionActionBlock(
+                UltronCustomClickAction(Tap.SINGLE, location, areaPercentage = 20, offsetX = offsetX, offsetY = offsetY)
             ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            name = "$type for '${getInteractionMatcher()}'",
+            type = type,
+            description = "${interaction.className()} action '${type}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
@@ -106,194 +105,145 @@ class UltronEspressoInteraction<T>(
 
     fun click() = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.click()),
-                name = "Click to '${getInteractionMatcher()}'",
-                type = EspressoActionType.CLICK,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.CLICK}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.click()),
+            name = "Click to '${getInteractionMatcher()}'",
+            type = EspressoActionType.CLICK,
+            description = "${interaction.className()} action '${EspressoActionType.CLICK}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun doubleClick() = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.doubleClick()),
-                name = "DoubleClick to '${getInteractionMatcher()}'",
-                type = EspressoActionType.CLICK,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.DOUBLE_CLICK}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.doubleClick()),
+            name = "DoubleClick to '${getInteractionMatcher()}'",
+            type = EspressoActionType.CLICK,
+            description = "${interaction.className()} action '${EspressoActionType.DOUBLE_CLICK}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun longClick() = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.longClick()),
-                name = "LongClick to '${getInteractionMatcher()}'",
-                type = EspressoActionType.LONG_CLICK,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.LONG_CLICK}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.longClick()),
+            name = "LongClick to '${getInteractionMatcher()}'",
+            type = EspressoActionType.LONG_CLICK,
+            description = "${interaction.className()} action '${EspressoActionType.LONG_CLICK}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun typeText(text: String) = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.typeText(text)),
-                name = "Type text '$text' to '${getInteractionMatcher()}'",
-                type = EspressoActionType.TYPE_TEXT,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.TYPE_TEXT}' '$text' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.typeText(text)),
+            name = "Type text '$text' to '${getInteractionMatcher()}'",
+            type = EspressoActionType.TYPE_TEXT,
+            description = "${interaction.className()} action '${EspressoActionType.TYPE_TEXT}' '$text' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun replaceText(text: String) = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.replaceText(text)),
-                name = "Replace text '$text' to '${getInteractionMatcher()}'",
-                type = EspressoActionType.REPLACE_TEXT,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.REPLACE_TEXT}' '$text' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.replaceText(text)),
+            name = "Replace text '$text' to '${getInteractionMatcher()}'",
+            type = EspressoActionType.REPLACE_TEXT,
+            description = "${interaction.className()} action '${EspressoActionType.REPLACE_TEXT}' '$text' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun clearText() = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.clearText()),
-                name = "Clear text in '${getInteractionMatcher()}'",
-                type = EspressoActionType.CLEAR_TEXT,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.CLEAR_TEXT}' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.clearText()),
+            name = "Clear text in '${getInteractionMatcher()}'",
+            type = EspressoActionType.CLEAR_TEXT,
+            description = "${interaction.className()} action '${EspressoActionType.CLEAR_TEXT}' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun pressKey(keyCode: Int) = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.pressKey(keyCode)),
-                name = "PressKey code '$keyCode' on '${getInteractionMatcher()}'",
-                type = EspressoActionType.PRESS_KEY,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.PRESS_KEY}' '$keyCode' on '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.pressKey(keyCode)),
+            name = "PressKey code '$keyCode' on '${getInteractionMatcher()}'",
+            type = EspressoActionType.PRESS_KEY,
+            description = "${interaction.className()} action '${EspressoActionType.PRESS_KEY}' '$keyCode' on '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun pressKey(key: EspressoKey) = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.pressKey(key)),
-                name = "Press EspressoKey '$key' on '${getInteractionMatcher()}'",
-                type = EspressoActionType.PRESS_KEY,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.PRESS_KEY}' EspressoKey '$key' on '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.pressKey(key)),
+            name = "Press EspressoKey '$key' on '${getInteractionMatcher()}'",
+            type = EspressoActionType.PRESS_KEY,
+            description = "${interaction.className()} action '${EspressoActionType.PRESS_KEY}' EspressoKey '$key' on '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun closeSoftKeyboard() = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.closeSoftKeyboard()),
-                name = "CloseSoftKeyboard with '${getInteractionMatcher()}'",
-                type = EspressoActionType.CLOSE_SOFT_KEYBOARD,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.CLOSE_SOFT_KEYBOARD}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.closeSoftKeyboard()),
+            name = "CloseSoftKeyboard with '${getInteractionMatcher()}'",
+            type = EspressoActionType.CLOSE_SOFT_KEYBOARD,
+            description = "${interaction.className()} action '${EspressoActionType.CLOSE_SOFT_KEYBOARD}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun swipeLeft() = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.swipeLeft()),
-                name = "SwipeLeft with '${getInteractionMatcher()}'",
-                type = EspressoActionType.SWIPE_LEFT,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.SWIPE_LEFT}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.swipeLeft()),
+            name = "SwipeLeft with '${getInteractionMatcher()}'",
+            type = EspressoActionType.SWIPE_LEFT,
+            description = "${interaction.className()} action '${EspressoActionType.SWIPE_LEFT}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun swipeRight() = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.swipeRight()),
-                name = "SwipeRight with '${getInteractionMatcher()}'",
-                type = EspressoActionType.SWIPE_RIGHT,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.SWIPE_RIGHT}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.swipeRight()),
+            name = "SwipeRight with '${getInteractionMatcher()}'",
+            type = EspressoActionType.SWIPE_RIGHT,
+            description = "${interaction.className()} action '${EspressoActionType.SWIPE_RIGHT}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun swipeUp() = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.swipeUp()),
-                name = "SwipeUp with '${getInteractionMatcher()}'",
-                type = EspressoActionType.SWIPE_UP,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.SWIPE_UP}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.swipeUp()),
+            name = "SwipeUp with '${getInteractionMatcher()}'",
+            type = EspressoActionType.SWIPE_UP,
+            description = "${interaction.className()} action '${EspressoActionType.SWIPE_UP}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun swipeDown() = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.swipeDown()),
-                name = "SwipeDown with '${getInteractionMatcher()}'",
-                type = EspressoActionType.SWIPE_DOWN,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.SWIPE_DOWN}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.swipeDown()),
+            name = "SwipeDown with '${getInteractionMatcher()}'",
+            type = EspressoActionType.SWIPE_DOWN,
+            description = "${interaction.className()} action '${EspressoActionType.SWIPE_DOWN}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun scrollTo() = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(ViewActions.scrollTo()),
-                name = "ScrollTo with '${getInteractionMatcher()}'",
-                type = EspressoActionType.SCROLL,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.SCROLL}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(ViewActions.scrollTo()),
+            name = "ScrollTo with '${getInteractionMatcher()}'",
+            type = EspressoActionType.SCROLL,
+            description = "${interaction.className()} action '${EspressoActionType.SCROLL}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun perform(viewAction: ViewAction, description: String = "") = apply {
         executeAction(
-            getUltronEspressoActionOperation(
-                operationBlock = getInteractionActionBlock(viewAction),
-                name = "Custom action '$description' to ${getInteractionMatcher()}",
-                type = EspressoActionType.CUSTOM,
-                description = "${interaction!!::class.java.simpleName} action '${EspressoActionType.CUSTOM}' of '${viewAction.description}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+            operationBlock = getInteractionActionBlock(viewAction),
+            name = "Custom action '$description' to ${getInteractionMatcher()}",
+            description = "${interaction.className()} action '$description' of '${viewAction.description}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     //assertion
     fun isDisplayed() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.isDisplayed()),
-                name = "IsDisplayed of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_DISPLAYED,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_DISPLAYED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.isDisplayed()),
+            name = "IsDisplayed of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_DISPLAYED,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_DISPLAYED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
@@ -303,13 +253,10 @@ class UltronEspressoInteraction<T>(
      */
     fun isNotDisplayed() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isDisplayed())),
-                name = "IsNotDisplayed of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_NOT_DISPLAYED,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_NOT_DISPLAYED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isDisplayed())),
+            name = "IsNotDisplayed of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_NOT_DISPLAYED,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_NOT_DISPLAYED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
@@ -318,13 +265,10 @@ class UltronEspressoInteraction<T>(
      */
     fun exists() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ExistsEspressoViewAssertion()),
-                name = "Exists of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.EXISTS,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.EXISTS}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ExistsEspressoViewAssertion()),
+            name = "Exists of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.EXISTS,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.EXISTS}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
@@ -333,315 +277,243 @@ class UltronEspressoInteraction<T>(
      */
     fun doesNotExist() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewAssertions.doesNotExist()),
-                name = "DoesNotExist of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.DOES_NOT_EXIST,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.DOES_NOT_EXIST}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewAssertions.doesNotExist()),
+            name = "DoesNotExist of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.DOES_NOT_EXIST,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.DOES_NOT_EXIST}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isCompletelyDisplayed() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.isCompletelyDisplayed()),
-                name = "IsCompletelyDisplayed of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_COMPLETELY_DISPLAYED,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_COMPLETELY_DISPLAYED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.isCompletelyDisplayed()),
+            name = "IsCompletelyDisplayed of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_COMPLETELY_DISPLAYED,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_COMPLETELY_DISPLAYED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isDisplayingAtLeast(percentage: Int) = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(
-                    ViewMatchers.isDisplayingAtLeast(
-                        percentage
-                    )
-                ),
-                name = "IsDisplayingAtLeast '$percentage'% of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_DISPLAYING_AT_LEAST,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_DISPLAYING_AT_LEAST}' '$percentage'% of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
+            operationBlock = getInteractionAssertionBlock(
+                ViewMatchers.isDisplayingAtLeast(
+                    percentage
+                )
             ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            name = "IsDisplayingAtLeast '$percentage'% of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_DISPLAYING_AT_LEAST,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_DISPLAYING_AT_LEAST}' '$percentage'% of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isEnabled() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.isEnabled()),
-                name = "IsEnabled of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_ENABLED,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_ENABLED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.isEnabled()),
+            name = "IsEnabled of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_ENABLED,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_ENABLED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isNotEnabled() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isEnabled())),
-                name = "IsNotEnabled of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_NOT_ENABLED,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_NOT_ENABLED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isEnabled())),
+            name = "IsNotEnabled of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_NOT_ENABLED,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_NOT_ENABLED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isSelected() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.isSelected()),
-                name = "IsSelected of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_SELECTED,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_SELECTED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.isSelected()),
+            name = "IsSelected of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_SELECTED,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_SELECTED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isNotSelected() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isSelected())),
-                name = "IsNotSelected of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_NOT_SELECTED,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_NOT_SELECTED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isSelected())),
+            name = "IsNotSelected of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_NOT_SELECTED,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_NOT_SELECTED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isClickable() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.isClickable()),
-                name = "IsClickable of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_CLICKABLE,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_CLICKABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.isClickable()),
+            name = "IsClickable of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_CLICKABLE,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_CLICKABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isNotClickable() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isClickable())),
-                name = "IsNotClickable of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_NOT_CLICKABLE,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_NOT_CLICKABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isClickable())),
+            name = "IsNotClickable of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_NOT_CLICKABLE,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_NOT_CLICKABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isChecked() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.isChecked()),
-                name = "IsChecked of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_CHECKED,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_CHECKED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.isChecked()),
+            name = "IsChecked of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_CHECKED,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_CHECKED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isNotChecked() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.isNotChecked()),
-                name = "IsNotChecked of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_NOT_CHECKED,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_NOT_CHECKED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.isNotChecked()),
+            name = "IsNotChecked of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_NOT_CHECKED,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_NOT_CHECKED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isFocusable() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.isFocusable()),
-                name = "IsFocusable of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_FOCUSABLE,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_FOCUSABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.isFocusable()),
+            name = "IsFocusable of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_FOCUSABLE,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_FOCUSABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isNotFocusable() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isFocusable())),
-                name = "IsNotFocusable of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_NOT_FOCUSABLE,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_NOT_FOCUSABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(Matchers.not(ViewMatchers.isFocusable())),
+            name = "IsNotFocusable of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_NOT_FOCUSABLE,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_NOT_FOCUSABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun hasFocus() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.hasFocus()),
-                name = "HasFocus of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.HAS_FOCUS,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.HAS_FOCUS}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.hasFocus()),
+            name = "HasFocus of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.HAS_FOCUS,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.HAS_FOCUS}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun isJavascriptEnabled() = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.isJavascriptEnabled()),
-                name = "IsJavascriptEnabled of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.IS_JS_ENABLED,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.IS_JS_ENABLED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.isJavascriptEnabled()),
+            name = "IsJavascriptEnabled of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.IS_JS_ENABLED,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.IS_JS_ENABLED}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun hasText(text: String) = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.withText(text)),
-                name = "HasText '$text' in '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.HAS_TEXT,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.HAS_TEXT}' '$text' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.withText(text)),
+            name = "HasText '$text' in '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.HAS_TEXT,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.HAS_TEXT}' '$text' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun hasText(resourceId: Int) = apply {
-        executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.withText(resourceId)),
-                name = "HasText with resourceId '$resourceId' in '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.HAS_TEXT,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.HAS_TEXT}' with resourceId '$resourceId' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+        executeAction(
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.withText(resourceId)),
+            name = "HasText with resourceId '$resourceId' in '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.HAS_TEXT,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.HAS_TEXT}' with resourceId '$resourceId' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun hasText(stringMatcher: Matcher<String>) = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(ViewMatchers.withText(stringMatcher)),
-                name = "HasText with matcher '$stringMatcher' in '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.HAS_TEXT,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.HAS_TEXT}' with matcher '$stringMatcher' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(ViewMatchers.withText(stringMatcher)),
+            name = "HasText with matcher '$stringMatcher' in '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.HAS_TEXT,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.HAS_TEXT}' with matcher '$stringMatcher' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun textContains(text: String) = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(
-                    ViewMatchers.withText(
-                        Matchers.containsString(
-                            text
-                        )
+            operationBlock = getInteractionAssertionBlock(
+                ViewMatchers.withText(
+                    Matchers.containsString(
+                        text
                     )
-                ),
-                name = "ContainsText '$text' in '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.CONTAINS_TEXT,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.CONTAINS_TEXT}' '$text' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
+                )
             ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            name = "ContainsText '$text' in '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.CONTAINS_TEXT,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.CONTAINS_TEXT}' '$text' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun hasContentDescription(text: String) = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(
-                    ViewMatchers.withContentDescription(
-                        text
-                    )
-                ),
-                name = "HasContentDescription '$text' in '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.HAS_CONTENT_DESCRIPTION,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.HAS_CONTENT_DESCRIPTION}' '$text' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
+            operationBlock = getInteractionAssertionBlock(
+                ViewMatchers.withContentDescription(
+                    text
+                )
             ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            name = "HasContentDescription '$text' in '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.HAS_CONTENT_DESCRIPTION,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.HAS_CONTENT_DESCRIPTION}' '$text' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun hasContentDescription(resourceId: Int) = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(
-                    ViewMatchers.withContentDescription(
-                        resourceId
-                    )
-                ),
-                name = "HasContentDescription resourceId = '$resourceId' in '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.HAS_CONTENT_DESCRIPTION,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.HAS_CONTENT_DESCRIPTION}' resourceId = '$resourceId' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
+            operationBlock = getInteractionAssertionBlock(
+                ViewMatchers.withContentDescription(
+                    resourceId
+                )
             ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            name = "HasContentDescription resourceId = '$resourceId' in '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.HAS_CONTENT_DESCRIPTION,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.HAS_CONTENT_DESCRIPTION}' resourceId = '$resourceId' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun hasContentDescription(charSequenceMatcher: Matcher<CharSequence>) = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(
-                    ViewMatchers.withContentDescription(
-                        charSequenceMatcher
-                    )
-                ),
-                name = "HasContentDescription charSequenceMatcher = '$charSequenceMatcher' in '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.HAS_CONTENT_DESCRIPTION,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.HAS_CONTENT_DESCRIPTION}' charSequenceMatcher = '$charSequenceMatcher' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
+            operationBlock = getInteractionAssertionBlock(
+                ViewMatchers.withContentDescription(
+                    charSequenceMatcher
+                )
             ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            name = "HasContentDescription charSequenceMatcher = '$charSequenceMatcher' in '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.HAS_CONTENT_DESCRIPTION,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.HAS_CONTENT_DESCRIPTION}' charSequenceMatcher = '$charSequenceMatcher' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun contentDescriptionContains(text: String) = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(
-                    ViewMatchers.withContentDescription(
-                        Matchers.containsString(text)
-                    )
-                ),
-                name = "ContentDescriptionContains text '$text' in '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT}' text '$text' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
+            operationBlock = getInteractionAssertionBlock(
+                ViewMatchers.withContentDescription(
+                    Matchers.containsString(text)
+                )
             ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            name = "ContentDescriptionContains text '$text' in '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.CONTENT_DESCRIPTION_CONTAINS_TEXT}' text '$text' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
     fun assertMatches(condition: Matcher<View>) = apply {
         executeAssertion(
-            getUltronEspressoAssertionOperation(
-                operationBlock = getInteractionAssertionBlock(condition),
-                name = "Custom assertion with '$condition' of '${getInteractionMatcher()}'",
-                type = EspressoAssertionType.ASSERT_MATCHES,
-                description = "${interaction!!::class.java.simpleName} assertion '${EspressoAssertionType.ASSERT_MATCHES}' with '$condition' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
-            ),
-            resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            operationBlock = getInteractionAssertionBlock(condition),
+            name = "Custom assertion with '$condition' of '${getInteractionMatcher()}'",
+            type = EspressoAssertionType.ASSERT_MATCHES,
+            description = "${interaction.className()} assertion '${EspressoAssertionType.ASSERT_MATCHES}' with '$condition' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 
@@ -716,5 +588,27 @@ class UltronEspressoInteraction<T>(
         type: UltronOperationType,
         description: String
     ) = UltronEspressoOperation(operationBlock, name, type, description, getAssertionTimeout(), assertion)
-}
 
+    fun getActionResultHandler() = this.resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
+    fun getAssertionResultHandler() = this.resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+
+    fun executeAction(operation: UltronEspressoOperation) =
+        UltronEspressoOperationLifecycle.execute(EspressoActionExecutor(operation), getActionResultHandler())
+
+    fun executeAction(
+        operationBlock: () -> Unit, name: String,
+        type: UltronOperationType = CommonOperationType.DEFAULT,
+        description: String
+    ) = executeAction(getUltronEspressoActionOperation(operationBlock, name, type, description))
+
+    fun executeAssertion(operation: UltronEspressoOperation) =
+        UltronEspressoOperationLifecycle.execute(EspressoAssertionExecutor(operation), getAssertionResultHandler())
+
+    fun executeAssertion(
+        operationBlock: () -> Unit, name: String,
+        type: UltronOperationType = CommonOperationType.DEFAULT,
+        description: String
+    ) = executeAssertion(getUltronEspressoAssertionOperation(operationBlock, name, type, description))
+    
+    internal fun T.className() = this?.let { it::class.java.simpleName }
+}

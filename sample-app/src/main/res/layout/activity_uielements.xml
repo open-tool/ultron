@@ -16,6 +16,10 @@
             android:id="@+id/last_event_status"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:textColorHint="@color/colorHint"
+            android:shadowColor="@color/colorShadow"
+            android:textColorHighlight="@color/colorHighlight"
             android:text="@string/button_text" />
 
         <RadioGroup
@@ -97,6 +101,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:textColor="@color/colorPrimary"
             android:text="@string/app_compat_text" />
 
     <LinearLayout

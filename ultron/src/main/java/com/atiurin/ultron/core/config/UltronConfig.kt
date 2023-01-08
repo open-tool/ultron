@@ -24,9 +24,7 @@ import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.UltronUiAutomatorLifecycle
 import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
-import com.atiurin.ultron.exceptions.UltronAssertionException
-import com.atiurin.ultron.exceptions.UltronException
-import com.atiurin.ultron.exceptions.UltronWrapperException
+import com.atiurin.ultron.exceptions.*
 import com.atiurin.ultron.listeners.UltronLifecycleListener
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionExecutorWrapper
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionsExecutor
@@ -178,8 +176,9 @@ object UltronConfig {
                     UltronWrapperException::class.java,
                     UltronAssertionException::class.java,
                     UltronException::class.java,
+                    UltronUiAutomatorException::class.java,
                     UiObjectNotFoundException::class.java,
-                    NullPointerException::class.java
+                    NullPointerException::class.java,
                 )
                 val resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit =
                     {
@@ -195,8 +194,9 @@ object UltronConfig {
                     UltronWrapperException::class.java,
                     UltronAssertionException::class.java,
                     UltronException::class.java,
+                    UltronUiAutomatorException::class.java,
                     UiObjectNotFoundException::class.java,
-                    NullPointerException::class.java
+                    NullPointerException::class.java,
                 )
                 val resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit =
                     {
