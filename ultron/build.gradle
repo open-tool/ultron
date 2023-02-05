@@ -72,7 +72,6 @@ dependencies {
     implementation "org.hamcrest:hamcrest-core:${versions.hamcrest_core}"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "androidx.compose.ui:ui-test-junit4:${versions.compose}"
-    implementation "androidx.core:core-ktx:${versions.ktx}"
 }
 
 group = publishedGroupId

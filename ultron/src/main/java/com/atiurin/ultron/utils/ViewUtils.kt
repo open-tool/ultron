@@ -2,7 +2,6 @@ package com.atiurin.ultron.utils
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.forEach
 
 /**
  * Returns a [Sequence] over this view and its descendants recursively.
@@ -30,4 +29,25 @@ val ViewGroup.descendants: Sequence<View>
                 yieldAll(child.descendants)
             }
         }
+    }
+
+/**
+ * Returns true when this view's visibility is [View.VISIBLE], false otherwise.
+ *
+ * ```
+ * if (view.isVisible) {
+ *     // Behavior...
+ * }
+ * ```
+ *
+ * Setting this property to true sets the visibility to [View.VISIBLE], false to [View.GONE].
+ *
+ * ```
+ * view.isVisible = true
+ * ```
+ */
+inline var View.isVisible: Boolean
+    get() = visibility == View.VISIBLE
+    set(value) {
+        visibility = if (value) View.VISIBLE else View.GONE
     }
