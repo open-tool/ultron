@@ -36,8 +36,7 @@ ext.versions = [
         'uiautomator'       : '2.2.0',
         'accessibility'     : '4.0.0',
         'hamcrest_core'     : '2.2',
-        'compose'           : '1.1.1',
-        'ktx'               : '1.6.0'
+        'compose'           : '1.1.1'
 ]
 
 android {

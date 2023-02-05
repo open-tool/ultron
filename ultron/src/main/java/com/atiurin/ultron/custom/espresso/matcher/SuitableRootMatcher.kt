@@ -1,13 +1,13 @@
 package com.atiurin.ultron.custom.espresso.matcher
 
 import android.view.View
-import androidx.core.view.allViews
 import androidx.core.view.isVisible
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Root
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerView
 import com.atiurin.ultron.extensions.withSuitableRoot
+import com.atiurin.ultron.utils.allViews
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
