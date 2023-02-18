@@ -1,9 +1,6 @@
 package com.atiurin.sampleapp.tests.espresso
 
-import android.view.View
-import androidx.core.view.allViews
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import com.atiurin.sampleapp.MyApplication
 import com.atiurin.sampleapp.R

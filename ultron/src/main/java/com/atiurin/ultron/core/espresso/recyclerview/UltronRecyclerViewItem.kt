@@ -7,6 +7,7 @@ import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
+import com.atiurin.ultron.custom.espresso.matcher.withSuitableRoot
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.*
 import com.atiurin.ultron.listeners.setListenersState
@@ -76,6 +77,9 @@ open class UltronRecyclerViewItem {
     fun withAssertion(assertion: OperationAssertion) = getMatcher().withAssertion(assertion)
     fun withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
         getMatcher().withAssertion(DefaultOperationAssertion(name, block.setListenersState(isListened)))
+
+    //root view searching
+    fun withSuitableRoot() = apply { this.getMatcher().withSuitableRoot() }
 
     //actions
     fun click() = apply { this.getMatcher().click() }

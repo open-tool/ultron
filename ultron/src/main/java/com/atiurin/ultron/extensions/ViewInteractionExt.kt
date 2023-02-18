@@ -4,12 +4,16 @@ import android.view.View
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.EspressoKey
+import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.custom.espresso.base.createRootViewPicker
 import com.atiurin.ultron.listeners.setListenersState
+import com.atiurin.ultron.utils.runOnUiThread
+import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.Matcher
 
 fun ViewInteraction.isSuccess(action: ViewInteraction.() -> Unit): Boolean = runCatching { action() }.isSuccess
@@ -19,6 +23,17 @@ fun ViewInteraction.withResultHandler(resultHandler: (EspressoOperationResult<Ul
 fun ViewInteraction.withAssertion(assertion: OperationAssertion) = UltronEspressoInteraction(this).withAssertion(assertion)
 fun ViewInteraction.withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
     UltronEspressoInteraction(this).withAssertion(DefaultOperationAssertion(name, block.setListenersState(isListened)))
+
+//root view searching
+fun ViewInteraction.withSuitableRoot(): ViewInteraction {
+    val viewMatcher: Matcher<View>? = this.getViewMatcher()
+    var decorView: View? = null
+    runOnUiThread { decorView = viewMatcher?.let { createRootViewPicker(it).get() } }
+    return when {
+        decorView != null -> { this.inRoot(withDecorView(`is`(decorView))) }
+        else -> { this }
+    }
+}
 
 //actions
 fun ViewInteraction.click() = UltronEspressoInteraction(this).click()
