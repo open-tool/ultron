@@ -124,4 +124,5 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:${versions.compose}"
     //magic has began
     androidTestImplementation project(':ultron')
+    androidTestImplementation project(':ultron-compose')
 }

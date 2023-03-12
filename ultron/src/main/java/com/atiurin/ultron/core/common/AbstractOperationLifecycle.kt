@@ -1,11 +1,9 @@
 package com.atiurin.ultron.core.common
 
-import android.util.Log
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.config.UltronConfig.isListenersOn
-import com.atiurin.ultron.listeners.UltronLifecycleListener
 import com.atiurin.ultron.listeners.LogLifecycleListener
-import kotlin.reflect.KClass
+import com.atiurin.ultron.listeners.UltronLifecycleListener
 
 abstract class AbstractOperationLifecycle {
     private var listeners: MutableList<UltronLifecycleListener> =

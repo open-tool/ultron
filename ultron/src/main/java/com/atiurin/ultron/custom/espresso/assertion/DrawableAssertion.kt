@@ -5,10 +5,7 @@ import androidx.annotation.DrawableRes
 import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.ViewInteraction
-import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espresso.UltronEspresso
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
-import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.custom.espresso.matcher.withDrawable
 import com.atiurin.ultron.utils.getTargetResourceName
 import org.hamcrest.Matcher

@@ -1,0 +1,46 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'com.vanniktech.maven.publish'
+
+ext.versions = [
+        'minSdk'            : 16,
+        'compileSdk'        : 31,
+        'targetSdk'         : 31,
+        'buildTools'        : '33.0.1',
+        'code'              : 2,
+        'recyclerview'      : '1.2.1',
+        'test'              : '1.4.0',
+        'junit'             : '4.13.2',
+        'espresso'          : '3.4.0',
+        'uiautomator'       : '2.2.0',
+        'accessibility'     : '4.0.0',
+        'hamcrest_core'     : '2.2',
+        'compose'           : '1.1.1'
+]
+
+android {
+    compileSdkVersion versions.compileSdk
+
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation project(':ultron')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.compose.ui:ui-test-junit4:${versions.compose}"
+    implementation "androidx.test:runner:${versions.test}"
+}

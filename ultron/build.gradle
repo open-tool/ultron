@@ -14,12 +14,10 @@ ext {
     SNAPSHOT_REPOSITORY_URL = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
     publishedVersion = project.findProperty('VERSION_NAME')
     publishedGroupId = project.findProperty('GROUP')
-
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-//apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.vanniktech.maven.publish'
 
 ext.versions = [
@@ -60,9 +58,9 @@ android {
 }
 
 dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.recyclerview:recyclerview:${versions.recyclerview}"
     implementation "androidx.test:runner:${versions.test}"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.test.espresso:espresso-core:${versions.espresso}"
     implementation "androidx.test.espresso:espresso-contrib:${versions.espresso}"
     implementation "androidx.test.uiautomator:uiautomator:${versions.uiautomator}"
@@ -71,7 +69,7 @@ dependencies {
     implementation "com.google.android.apps.common.testing.accessibility.framework:accessibility-test-framework:${versions.accessibility}"
     implementation "org.hamcrest:hamcrest-core:${versions.hamcrest_core}"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    implementation "androidx.compose.ui:ui-test-junit4:${versions.compose}"
+
 }
 
 group = publishedGroupId

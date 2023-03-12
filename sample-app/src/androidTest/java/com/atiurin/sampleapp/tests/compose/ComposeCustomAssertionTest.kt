@@ -4,9 +4,9 @@ import com.atiurin.sampleapp.activity.ComposeElementsActivity
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.ComposeElementsPage
 import com.atiurin.ultron.core.compose.createUltronComposeRule
-import com.atiurin.ultron.core.compose.nodeinteraction.click
 import com.atiurin.ultron.extensions.withAssertion
 import com.atiurin.ultron.extensions.withTimeout
+import com.atiurin.ultron.core.compose.nodeinteraction.click
 import org.junit.Rule
 import org.junit.Test
 

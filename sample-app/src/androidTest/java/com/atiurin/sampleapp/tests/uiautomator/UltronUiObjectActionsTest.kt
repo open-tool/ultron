@@ -1,16 +1,13 @@
 package com.atiurin.sampleapp.tests.uiautomator
 
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.uiautomator.UiSelector
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.UiElementsActivity
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils
 import com.atiurin.sampleapp.pages.UiObjectElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
-import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.uiautomator.uiobject.UltronUiObject.Companion.uiSelector
-import com.atiurin.ultron.utils.getTargetResourceName
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
 import org.junit.Test

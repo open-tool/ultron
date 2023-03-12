@@ -19,14 +19,12 @@ import com.atiurin.ultron.core.espresso.UltronEspresso.executeAssertion
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
-import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.exceptions.UltronOperationException
 import com.atiurin.ultron.extensions.*
 import com.atiurin.ultron.utils.AssertUtils
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
-import java.util.concurrent.atomic.AtomicInteger
 
 /**
  *  Provides a set of interactions with RecyclerView list.

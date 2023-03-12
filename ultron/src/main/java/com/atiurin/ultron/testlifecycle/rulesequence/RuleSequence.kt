@@ -1,9 +1,6 @@
 package com.atiurin.ultron.testlifecycle.rulesequence
 
-import androidx.compose.ui.test.junit4.ComposeTestRule
-import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.testlifecycle.setupteardown.RuleSequenceTearDown
-import com.atiurin.ultron.testlifecycle.setupteardown.TearDownRule
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement

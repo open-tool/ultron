@@ -15,7 +15,6 @@ import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.uiautomator.*
 import com.atiurin.ultron.exceptions.UltronAssertionException
-import com.atiurin.ultron.exceptions.UltronOperationException
 import com.atiurin.ultron.listeners.setListenersState
 import com.atiurin.ultron.utils.getTargetResourceName
 import org.hamcrest.Matcher

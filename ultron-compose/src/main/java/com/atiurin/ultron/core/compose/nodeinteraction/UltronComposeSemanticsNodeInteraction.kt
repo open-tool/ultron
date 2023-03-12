@@ -7,20 +7,25 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.Dp
+import com.atiurin.ultron.core.compose.ComposeRuleContainer.getComposeRule
+import com.atiurin.ultron.core.compose.UltronComposeConfig
 import com.atiurin.ultron.core.common.CommonOperationType
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.common.options.*
-import com.atiurin.ultron.core.compose.ComposeRuleContainer.getComposeRule
 import com.atiurin.ultron.core.compose.operation.ComposeOperationExecutor
 import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType.*
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationLifecycle
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
-import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.extensions.getDefaultDoubleClickDelay
+import com.atiurin.ultron.extensions.getDefaultLongClickDuration
+import com.atiurin.ultron.extensions.getUltronComposeOffset
+import com.atiurin.ultron.extensions.provideSwipeDownPosition
+
 import com.atiurin.ultron.extensions.*
 import com.atiurin.ultron.listeners.setListenersState
 import com.atiurin.ultron.utils.runOnUiThread
@@ -28,15 +33,15 @@ import java.util.concurrent.atomic.AtomicReference
 
 open class UltronComposeSemanticsNodeInteraction constructor(
     val semanticsNodeInteraction: SemanticsNodeInteraction,
-    val timeoutMs: Long = UltronConfig.Compose.OPERATION_TIMEOUT,
-    val resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronConfig.Compose.resultHandler,
+    val timeoutMs: Long = UltronComposeConfig.OPERATION_TIMEOUT,
+    val resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeConfig.resultHandler,
     val assertion: OperationAssertion = EmptyOperationAssertion()
 ) {
     constructor(
         matcher: SemanticsMatcher,
         useUnmergedTree: Boolean = false,
-        timeoutMs: Long = UltronConfig.Compose.OPERATION_TIMEOUT,
-        resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronConfig.Compose.resultHandler,
+        timeoutMs: Long = UltronComposeConfig.OPERATION_TIMEOUT,
+        resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeConfig.resultHandler,
         assertion: OperationAssertion = EmptyOperationAssertion()
     ) : this(getComposeRule().onNode(matcher, useUnmergedTree), timeoutMs, resultHandler, assertion)
 
@@ -51,7 +56,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         )
         fun executeOperation(
             operation: UltronComposeOperation,
-            resultHandler: (ComposeOperationResult<UltronComposeOperation>) -> Unit = UltronConfig.Compose.resultHandler
+            resultHandler: (ComposeOperationResult<UltronComposeOperation>) -> Unit = UltronComposeConfig.resultHandler
         ) {
             UltronComposeOperationLifecycle.execute(
                 ComposeOperationExecutor(operation),
@@ -705,7 +710,8 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         )
     }
 
-    fun executeOperation(operation: UltronComposeOperation) = UltronComposeOperationLifecycle.execute(ComposeOperationExecutor(operation), resultHandler)
+    fun executeOperation(operation: UltronComposeOperation) = UltronComposeOperationLifecycle.execute(
+        ComposeOperationExecutor(operation), resultHandler)
 
     fun executeOperation(
         operationBlock: () -> Unit,
