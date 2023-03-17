@@ -26,7 +26,6 @@ ext.versions = [
         'targetSdk'         : 31,
         'buildTools'        : '33.0.1',
         'release'           : publishedVersion,
-        'code'              : 2,
         'recyclerview'      : '1.2.1',
         'test'              : '1.4.0',
         'junit'             : '4.13.2',
@@ -45,12 +44,6 @@ android {
         targetSdkVersion versions.targetSdk
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
     compileOptions {
         targetCompatibility JavaVersion.VERSION_1_8
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -58,18 +51,19 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "androidx.recyclerview:recyclerview:${versions.recyclerview}"
-    implementation "androidx.test:runner:${versions.test}"
-    implementation "androidx.test.espresso:espresso-core:${versions.espresso}"
-    implementation "androidx.test.espresso:espresso-contrib:${versions.espresso}"
-    implementation "androidx.test.uiautomator:uiautomator:${versions.uiautomator}"
-    implementation "androidx.test.espresso:espresso-web:${versions.espresso}"
-    testImplementation "junit:junit:${versions.junit}"
-    implementation "com.google.android.apps.common.testing.accessibility.framework:accessibility-test-framework:${versions.accessibility}"
-    implementation "org.hamcrest:hamcrest-core:${versions.hamcrest_core}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
+    api "androidx.test.espresso:espresso-core:${versions.espresso}"
+    api "androidx.test.espresso:espresso-contrib:${versions.espresso}"
+    api "androidx.test.espresso:espresso-web:${versions.espresso}"
+    api "androidx.test.uiautomator:uiautomator:${versions.uiautomator}"
+    api "com.google.android.apps.common.testing.accessibility.framework:accessibility-test-framework:${versions.accessibility}"
+    api "org.hamcrest:hamcrest-core:${versions.hamcrest_core}"
+
+    implementation "androidx.recyclerview:recyclerview:${versions.recyclerview}"
+
+    testImplementation "junit:junit:${versions.junit}"
 }
 
 group = publishedGroupId
