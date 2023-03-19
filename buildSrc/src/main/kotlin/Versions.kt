@@ -1,6 +1,9 @@
 object Versions {
     val kotlin = "1.5.31"
+    val androidToolsBuildGradle = "7.0.4"
     val androidMavenGradlePlugin = "2.1"
+    val publishPlugin = "0.13.0"
+    val dokkaPlugin = "1.4.30"
 
     val recyclerView = "1.2.1"
     val espresso = "3.4.0"
@@ -21,18 +24,17 @@ object Versions {
     val cardview = "1.0.0"
     val robolectric = "4.8.1"
     val mockito = "3.9.0"
+    val activityCompose = "1.3.0"
 
-    val junitExt = "1.1.3"
+    val junitExt = "1.1.2"
 }
 
-//'material'          : '1.4.0',
-//'constraintlayout'  : '2.1.4',
-//'cardview'          : '1.0.0',
-//'robolectric'       : '4.8.1',
-//'mockito'           : '3.9.0',
 object Plugins {
+    val androidToolsBuildGradle = "com.android.tools.build:gradle:${Versions.androidToolsBuildGradle}"
     val androidMavenGradle = "com.github.dcendents:android-maven-gradle-plugin:${Versions.androidMavenGradlePlugin}"
     val kotlinGradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+    val publishPlugin = "com.vanniktech:gradle-maven-publish-plugin:${Versions.publishPlugin}"
+    val dokka = "org.jetbrains.dokka:dokka-gradle-plugin:${Versions.dokkaPlugin}"
 }
 
 object Libs {
@@ -66,7 +68,7 @@ object Libs {
     val composeMaterial = "androidx.compose.material:material:${Versions.compose}"
     val composeMaterialIconsCore = "androidx.compose.material:material-icons-core:${Versions.compose}" // Material design icons
     val composeMaterialIconsExtend = "androidx.compose.material:material-icons-extended:${Versions.compose}"
-    val composeActivity = "androidx.activity:activity-compose:${Versions.compose}"
+    val activityCompose = "androidx.activity:activity-compose:${Versions.activityCompose}"
 
     // sample-app test
     val robolectric = "org.robolectric:robolectric:${Versions.robolectric}"
@@ -77,7 +79,7 @@ object Libs {
     val espressoIdlingResource = "androidx.test.espresso:espresso-idling-resource:${Versions.espresso}"
     val espressoIntents = "androidx.test.espresso:espresso-intents:${Versions.espresso}"
     val espressoAccessibility = "androidx.test.espresso:espresso-accessibility:${Versions.espresso}"
-    val espressoConcurrent = "androidx.test.espresso:espresso-concurrent:${Versions.espresso}"
+    val espressoConcurrent = "androidx.test.espresso.idling:idling-concurrent:${Versions.espresso}"
     val androidXRules = "androidx.test:rules:${Versions.androidXTest}"
     val androidXTruth = "androidx.test.ext:truth:${Versions.androidXTest}"
     val androidXJunit = "androidx.test.ext:junit:${Versions.junitExt}"

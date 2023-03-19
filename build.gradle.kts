@@ -1,30 +1,30 @@
-plugins {
-    `kotlin-dsl`
-    kotlin("jvm") version "1.5.31"
-}
-
 buildscript {
+    extra.apply {
+        set("RELEASE_REPOSITORY_URL", "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+        set("SNAPSHOT_REPOSITORY_URL", "https://s01.oss.sonatype.org/content/repositories/snapshots/")
+    }
+
     repositories {
         google()
         mavenCentral()
-        gradlePluginPortal()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.0.4")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
-        classpath("com.vanniktech:gradle-maven-publish-plugin:0.13.0")
-        classpath("org.jetbrains.dokka:dokka-gradle-plugin:1.4.30")
+        classpath(Plugins.kotlinGradle)
+        classpath(Plugins.androidToolsBuildGradle)
+        classpath(Plugins.androidMavenGradle)
+        classpath(Plugins.publishPlugin)
+        classpath(Plugins.dokka)
     }
 }
 
 allprojects {
     repositories {
-//        maven { url = uri("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven") }
-        mavenCentral()
         google()
+        mavenCentral()
+        gradlePluginPortal()
     }
 }
-//
-////task clean(type: Delete) {
-////    delete rootProject.buildDir
-////}
+
+tasks.register("clean", Delete::class) {
+    delete(rootProject.buildDir)
+}
