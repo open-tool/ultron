@@ -3,9 +3,9 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "com.github.dcendents:android-maven-gradle-plugin:$android_maven_gradle_plugin"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+        classpath "com.github.dcendents:android-maven-gradle-plugin:2.1"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+        classpath "org.jetbrains.kotlin:kotlin-reflect:1.5.31"
     }
 }
 
@@ -21,6 +21,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.vanniktech.maven.publish'
 
 ext.versions = [
+//        'kotlin_version'    : '1.5.31',
         'minSdk'            : 16,
         'compileSdk'        : 31,
         'targetSdk'         : 31,
@@ -51,8 +52,8 @@ android {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.31"
 
     api "androidx.test.espresso:espresso-core:${versions.espresso}"
     api "androidx.test.espresso:espresso-contrib:${versions.espresso}"

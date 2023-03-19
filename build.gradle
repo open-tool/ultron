@@ -1,21 +1,23 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
-buildscript {
-    ext.kotlin_version = '1.5.31'
-    ext.android_maven_gradle_plugin = '2.1'
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.13.0'
-        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.4.30'
-    }
-}
-
-
+repositories {
+    google()
+}////// Top-level build file where you can add configuration options common to all sub-projects/modules.
+////
+//buildscript {
+//    ext.kotlin_version = '1.5.31'
+//    ext.android_maven_gradle_plugin = '2.1'
+//    repositories {
+//        google()
+//        mavenCentral()
+//    }
+//    dependencies {
+//        classpath 'com.android.tools.build:gradle:7.0.4'
+//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+//        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.13.0'
+//        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.4.30'
+//    }
+//}
+//
+//
 allprojects {
     repositories {
         maven { url = "https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven" }
@@ -23,7 +25,7 @@ allprojects {
         google()
     }
 }
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
+//
+//task clean(type: Delete) {
+//    delete rootProject.buildDir
+//}
