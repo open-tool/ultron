@@ -4,12 +4,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-//        classpath ("com.github.dcendents:android-maven-gradle-plugin:2.1")
-//        classpath ("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31")
-//        classpath("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
         classpath(Plugins.androidMavenGradle)
         classpath(Plugins.kotlinGradle)
-//        classpath(Libs.kotlinReflect)
     }
 
 }
