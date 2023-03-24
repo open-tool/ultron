@@ -241,6 +241,7 @@ repositories {
 
 dependencies {
     androidTestImplementation 'com.atiurin:ultron:<latest_version>'
+    androidTestImplementation 'com.atiurin:ultron-compose:<latest_version>'
 }
 ```
 
@@ -250,7 +251,5 @@ It is required to use AndroidX libraries. You can get some problems with Android
 
 ## Roadmap
 
-- https://github.com/open-tool/ultron/issues/23 Custom assertion on action result
-- https://github.com/open-tool/ultron/issues/11 Jetpack Compose support improvement
-- https://github.com/open-tool/ultron/issues/21 Add hasTextColor matcher
-
+- https://github.com/open-tool/ultron/issues/32 Allure support
+- https://github.com/open-tool/ultron/issues/33 Screenshot testign ?
