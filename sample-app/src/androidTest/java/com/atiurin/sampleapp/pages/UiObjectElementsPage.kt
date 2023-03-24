@@ -1,13 +1,7 @@
 package com.atiurin.sampleapp.pages
 
-import androidx.test.uiautomator.By
-import androidx.test.uiautomator.UiSelector
 import com.atiurin.sampleapp.R
-import com.atiurin.ultron.core.uiautomator.uiobject.UltronUiObject.Companion.ui
 import com.atiurin.ultron.core.uiautomator.uiobject.UltronUiObject.Companion.uiResId
-import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2.Companion.by
-import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2.Companion.byResId
-import com.atiurin.ultron.utils.getTargetResourceName
 
 class UiObjectElementsPage {
     val notExistedObject = uiResId(R.id.send_button)

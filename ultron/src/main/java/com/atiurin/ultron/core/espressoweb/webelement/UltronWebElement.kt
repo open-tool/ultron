@@ -5,7 +5,6 @@ import androidx.test.espresso.web.assertion.WebAssertion
 import androidx.test.espresso.web.assertion.WebViewAssertions.webContent
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.model.ElementReference
-import androidx.test.espresso.web.model.Evaluation
 import androidx.test.espresso.web.model.WindowReference
 import androidx.test.espresso.web.sugar.Web
 import androidx.test.espresso.web.sugar.Web.onWebView
@@ -13,7 +12,6 @@ import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.ultron.core.common.CommonOperationType
-import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
@@ -23,7 +21,6 @@ import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
 import com.atiurin.ultron.core.espressoweb.operation.*
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperationExecutor
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperationIterationResult
-import com.atiurin.ultron.core.espressoweb.webelement.UltronWebDocument.Companion.executeOperation
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebDocument.Companion.executeOperationVoid
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.listeners.setListenersState

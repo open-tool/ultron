@@ -8,7 +8,6 @@ import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
 import com.atiurin.ultron.core.espressoweb.operation.*
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebDocument.Companion.executeOperation
 import org.hamcrest.Matcher

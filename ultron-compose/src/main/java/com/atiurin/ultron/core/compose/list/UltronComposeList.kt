@@ -2,9 +2,9 @@ package com.atiurin.ultron.core.compose.list
 
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.test.*
+import com.atiurin.ultron.core.compose.UltronComposeConfig
 import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
 import com.atiurin.ultron.core.compose.nodeinteraction.UltronComposeSemanticsNodeInteraction
-import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.utils.AssertUtils
@@ -12,8 +12,8 @@ import com.atiurin.ultron.utils.AssertUtils
 class UltronComposeList(
     val listMatcher: SemanticsMatcher,
     var useUnmergedTree: Boolean = true,
-    private val itemSearchLimit: Int = UltronConfig.Compose.LAZY_COLUMN_ITEM_SEARCH_LIMIT,
-    private var operationTimeoutMs: Long = UltronConfig.Compose.LAZY_COLUMN_OPERATIONS_TIMEOUT
+    private val itemSearchLimit: Int = UltronComposeConfig.LAZY_COLUMN_ITEM_SEARCH_LIMIT,
+    private var operationTimeoutMs: Long = UltronComposeConfig.LAZY_COLUMN_OPERATIONS_TIMEOUT
 ) {
 
     open fun withTimeout(timeoutMs: Long) =

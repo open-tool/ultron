@@ -11,7 +11,6 @@ import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.custom.espresso.matcher.ElementWithAttributeMatcher.Companion.withAttribute
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.`is`
-import org.w3c.dom.Document
 
 class UltronWebElementId(
     override val value: String,

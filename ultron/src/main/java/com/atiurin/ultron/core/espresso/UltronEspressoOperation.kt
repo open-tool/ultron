@@ -1,7 +1,6 @@
 package com.atiurin.ultron.core.espresso
 
 import com.atiurin.ultron.core.common.*
-import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 

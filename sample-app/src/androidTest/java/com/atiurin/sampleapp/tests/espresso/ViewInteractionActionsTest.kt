@@ -20,8 +20,6 @@ import com.atiurin.ultron.custom.espresso.action.getText
 import com.atiurin.ultron.custom.espresso.assertion.hasAnyDrawable
 import com.atiurin.ultron.custom.espresso.assertion.hasDrawable
 import com.atiurin.ultron.extensions.*
-import com.atiurin.ultron.listeners.executeWithoutListeners
-import com.atiurin.ultron.utils.UltronLog
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
 import org.junit.Test

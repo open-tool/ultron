@@ -1,8 +1,6 @@
 package com.atiurin.ultron.extensions
 
 import android.view.View
-import androidx.compose.ui.test.SemanticsNodeInteraction
-import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.Root
 import androidx.test.espresso.ViewInteraction
@@ -72,9 +70,4 @@ internal fun <T> Web.WebInteraction<T>.getViewMatcher(): Matcher<View>? {
 internal fun <T> Web.WebInteraction<T>.getElementReference(): ElementReference? {
     return this.getProperty("element")
 }
-internal fun  SemanticsNodeInteraction.getUseMergedTree(): Boolean? {
-    return this.getProperty("useUnmergedTree")
-}
-internal fun  SemanticsNodeInteractionCollection.getUseMergedTree(): Boolean? {
-    return this.getProperty("useUnmergedTree")
-}
+

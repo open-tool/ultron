@@ -1,7 +1,6 @@
 package com.atiurin.sampleapp.tests.compose
 
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.semantics
@@ -23,7 +22,6 @@ import com.atiurin.ultron.extensions.assertIsDisplayed
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
-import java.lang.AssertionError
 
 class ComposeListTest {
     @get:Rule

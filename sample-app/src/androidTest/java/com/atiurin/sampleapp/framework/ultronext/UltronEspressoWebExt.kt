@@ -1,7 +1,6 @@
 package com.atiurin.sampleapp.framework.ultronext
 
 import androidx.test.espresso.web.webdriver.DriverAtoms
-import com.atiurin.ultron.core.espressoweb.operation.EspressoWebOperationType
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement
 
 // add action on wenView

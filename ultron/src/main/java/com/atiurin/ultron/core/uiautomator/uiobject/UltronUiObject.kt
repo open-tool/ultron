@@ -10,13 +10,10 @@ import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
-import com.atiurin.ultron.core.compose.nodeinteraction.UltronComposeSemanticsNodeInteraction
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.uiautomator.*
 import com.atiurin.ultron.exceptions.UltronAssertionException
 import com.atiurin.ultron.exceptions.UltronException
-import com.atiurin.ultron.exceptions.UltronOperationException
-import com.atiurin.ultron.exceptions.UltronWrapperException
 import com.atiurin.ultron.listeners.setListenersState
 import com.atiurin.ultron.utils.getTargetResourceName
 import org.hamcrest.Matcher

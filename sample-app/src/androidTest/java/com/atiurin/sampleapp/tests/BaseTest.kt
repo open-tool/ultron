@@ -1,11 +1,9 @@
 package com.atiurin.sampleapp.tests
 
-import android.animation.TimeAnimator
 import androidx.test.platform.app.InstrumentationRegistry
 import com.atiurin.ultron.testlifecycle.rulesequence.RuleSequence
 import com.atiurin.sampleapp.data.repositories.CURRENT_USER
 import com.atiurin.sampleapp.framework.Log
-import com.atiurin.sampleapp.idlingresources.resources.ContactsIdlingResource
 import com.atiurin.sampleapp.managers.AccountManager
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.listeners.TimeListener

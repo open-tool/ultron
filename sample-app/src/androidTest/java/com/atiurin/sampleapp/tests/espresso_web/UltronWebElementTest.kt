@@ -5,16 +5,11 @@ import androidx.test.espresso.web.webdriver.DriverAtoms.getText
 import com.atiurin.sampleapp.framework.ultronext.appendText
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.WebViewPage
-import com.atiurin.ultron.core.compose.nodeinteraction.click
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.className
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.id
-import com.atiurin.ultron.extensions.withAssertion
-import com.atiurin.ultron.extensions.withTimeout
-import com.atiurin.ultron.utils.UltronLog
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Test
-import java.util.logging.Logger
 
 class UltronWebElementTest : BaseWebViewTest() {
     @Test

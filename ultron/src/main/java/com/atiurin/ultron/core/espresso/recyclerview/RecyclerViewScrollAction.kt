@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.matcher.ViewMatchers
-import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.exceptions.UltronOperationException
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf

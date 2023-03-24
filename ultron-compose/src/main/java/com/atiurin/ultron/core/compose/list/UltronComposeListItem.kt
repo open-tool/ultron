@@ -11,10 +11,10 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.Dp
 import com.atiurin.ultron.core.common.options.*
-import com.atiurin.ultron.core.compose.nodeinteraction.*
 import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
+import com.atiurin.ultron.core.compose.nodeinteraction.*
 import com.atiurin.ultron.exceptions.UltronException
 
 open class UltronComposeListItem {
@@ -138,7 +138,7 @@ open class UltronComposeListItem {
             ultronComposeList: UltronComposeList,
             itemMatcher: SemanticsMatcher
         ): T {
-            val item = this.createUltronComposeListItemInstance<T>()
+            val item = createUltronComposeListItemInstance<T>()
             item.setExecutor(ultronComposeList, itemMatcher)
             return item
         }
@@ -147,7 +147,7 @@ open class UltronComposeListItem {
             ultronComposeList: UltronComposeList,
             position: Int
         ): T {
-            val item = this.createUltronComposeListItemInstance<T>()
+            val item = createUltronComposeListItemInstance<T>()
             item.setExecutor(ultronComposeList, position)
             return item
         }

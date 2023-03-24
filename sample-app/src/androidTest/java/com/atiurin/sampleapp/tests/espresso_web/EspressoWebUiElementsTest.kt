@@ -13,7 +13,6 @@ import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebDocument
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebDocument.Companion.evalJS
-import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.className
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.id
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.linkText
