@@ -8,6 +8,7 @@ import android.os.Looper
 import androidx.annotation.*
 import androidx.test.platform.app.InstrumentationRegistry
 import com.atiurin.ultron.exceptions.UltronException
+import java.io.File
 import java.util.*
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.FutureTask
@@ -83,4 +84,9 @@ fun <T> runOnUiThread(action: () -> T): T {
     } catch (e: ExecutionException) { // Expose the original exception
         throw e.cause!!
     }
+}
+
+fun createCacheFile(prefix: String = "temp", suffix: String? = null): File {
+    val cacheDir = InstrumentationRegistry.getInstrumentation().targetContext.cacheDir
+    return File.createTempFile(prefix, suffix, cacheDir)
 }

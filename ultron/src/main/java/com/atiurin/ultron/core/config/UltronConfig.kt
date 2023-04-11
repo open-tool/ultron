@@ -24,6 +24,7 @@ import com.atiurin.ultron.core.uiautomator.UltronUiAutomatorLifecycle
 import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
 import com.atiurin.ultron.exceptions.*
 import com.atiurin.ultron.listeners.UltronLifecycleListener
+import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionExecutorWrapper
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionsExecutor
 import com.atiurin.ultron.testlifecycle.setupteardown.DefaultConditionExecutorWrapper
@@ -31,30 +32,64 @@ import com.atiurin.ultron.testlifecycle.setupteardown.DefaultConditionsExecutor
 import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
+import java.text.SimpleDateFormat
 
 object UltronConfig {
     var LOGCAT_TAG = "Ultron"
     val operationsExcludedFromListeners = mutableListOf<UltronOperationType>(EspressoAssertionType.IDENTIFY_RECYCLER_VIEW)
     var isListenersOn = true
+    const val DEFAULT_OPERATION_TIMEOUT_MS = 5_000L
 
-    fun addGlobalListener(lifecycleListener: UltronLifecycleListener){
+    private var params: UltronConfigParams = UltronConfigParams()
+
+    fun addGlobalListener(lifecycleListener: UltronLifecycleListener) {
         UltronEspressoOperationLifecycle.addListener(lifecycleListener)
         UltronWebLifecycle.addListener(lifecycleListener)
         UltronUiAutomatorLifecycle.addListener(lifecycleListener)
     }
 
-    fun removeGlobalListener(listenerId: String){
+    fun removeGlobalListener(listenerId: String) {
         UltronEspressoOperationLifecycle.removeListener(listenerId)
         UltronWebLifecycle.removeListener(listenerId)
         UltronUiAutomatorLifecycle.removeListener(listenerId)
     }
 
-    fun <T: UltronLifecycleListener> removeGlobalListener(clazz: Class<T>){
+    fun <T : UltronLifecycleListener> removeGlobalListener(clazz: Class<T>) {
         UltronEspressoOperationLifecycle.removeListener(clazz)
         UltronWebLifecycle.removeListener(clazz)
         UltronUiAutomatorLifecycle.removeListener(clazz)
     }
 
+    class Log {
+        companion object {
+            var dateFormat = "MM-dd HH:mm:ss.SSS"
+        }
+    }
+
+    fun apply() {
+        Espresso.ACTION_TIMEOUT = params.operationTimeoutMs
+        Espresso.ASSERTION_TIMEOUT = params.operationTimeoutMs
+        UiAutomator.OPERATION_TIMEOUT = params.operationTimeoutMs
+        if (params.logToFile){
+            UltronLog.loggers.add(UltronLog.fileLogger)
+        } else {
+            UltronLog.loggers.remove(UltronLog.fileLogger)
+        }
+        if (params.accelerateUiAutomator) {
+            UiAutomator.speedUp()
+        }
+        UltronLog.info("UltronConfig applied with params $params")
+    }
+
+    fun applyRecommended(){
+        params = UltronConfigParams()
+        apply()
+    }
+
+    fun edit(block: UltronConfigParams.() -> Unit) {
+        params.block()
+        apply()
+    }
 
     class Espresso {
         companion object {
@@ -152,8 +187,7 @@ object UltronConfig {
                 }
             }
 
-            var uiDevice: UiDevice =
-                UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+            var uiDevice: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
             fun setTimeout(timeoutMs: Long) {
                 Configurator.getInstance().apply {
@@ -204,10 +238,14 @@ object UltronConfig {
         }
     }
 
-    class Conditions{
-        companion object{
+    class Conditions {
+        companion object {
             var conditionExecutorWrapper: ConditionExecutorWrapper = DefaultConditionExecutorWrapper()
             var conditionsExecutor: ConditionsExecutor = DefaultConditionsExecutor()
         }
     }
 }
+
+data class ConfigParams(
+    var logToFile: Boolean = false
+)

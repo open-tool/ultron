@@ -9,21 +9,21 @@ class UltronDefaultOperationResultAnalyzer : OperationResultAnalyzer {
             val exceptionToThrow = operationResult.exceptions.lastOrNull()
                 ?: UnknownError(
                     """Unknown exception occurs during operation '${operationResult.operation.name}'. 
-                |Operation result is '${operationResult.success}'.
-                |Operation result description: ${operationResult.description}
+                | ! Operation result is '${operationResult.success}'.
+                | ! Operation result description: ${operationResult.description}
                 |"""".trimMargin()
                 )
-            val delimiter = "========================================================================================"
+            val delimiter = "----------------------------------------------------------------------------------------"
             val assertion = if (!operationResult.operation.assertion.isEmptyAssertion()) "\nwith assertion block '${operationResult.operation.assertion.name}'" else ""
             throw UltronOperationException(
                 message = """Failed '${operationResult.operation.name}' during ${operationResult.executionTimeMs}
-                |$delimiter
-                |Begin of operation '${operationResult.operation.name}'$assertion
-                |$delimiter
-                |${operationResult.description}
-                |$delimiter
-                |End of operation '${operationResult.operation.name}'$assertion      
-                |$delimiter
+                | > $delimiter
+                | ! Begin of operation '${operationResult.operation.name}'$assertion
+                | ! $delimiter
+                | ! ${operationResult.description.lines().joinToString("\n !")}
+                | ! $delimiter
+                | ! End of operation '${operationResult.operation.name}'$assertion      
+                | > $delimiter
                 """.trimMargin(), exceptionToThrow
             )
         }

@@ -3,7 +3,7 @@ package com.atiurin.sampleapp.pages
 import android.view.View
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.atiurin.sampleapp.R
-import com.atiurin.sampleapp.framework.*
+import com.atiurin.ultron.allure.step.step
 import com.atiurin.ultron.page.Page
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
 import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
