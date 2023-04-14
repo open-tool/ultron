@@ -40,7 +40,7 @@ object UltronConfig {
     var isListenersOn = true
     const val DEFAULT_OPERATION_TIMEOUT_MS = 5_000L
 
-    private var params: UltronConfigParams = UltronConfigParams()
+    var params: UltronConfigParams = UltronConfigParams()
 
     fun addGlobalListener(lifecycleListener: UltronLifecycleListener) {
         UltronEspressoOperationLifecycle.addListener(lifecycleListener)
@@ -66,7 +66,7 @@ object UltronConfig {
         }
     }
 
-    fun apply() {
+    private fun apply() {
         Espresso.ACTION_TIMEOUT = params.operationTimeoutMs
         Espresso.ASSERTION_TIMEOUT = params.operationTimeoutMs
         UiAutomator.OPERATION_TIMEOUT = params.operationTimeoutMs

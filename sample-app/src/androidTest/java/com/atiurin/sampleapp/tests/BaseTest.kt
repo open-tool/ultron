@@ -28,12 +28,6 @@ abstract class BaseTest {
         fun config() {
             UltronConfig.applyRecommended()
             UltronAllureConfig.applyRecommended()
-//            InstrumentationRegistry.getInstrumentation().getRunInformer().addListener(object : UltronRunListener {
-//                override fun testFailure(failure: Failure) {
-//                    UltronLog.info("Attach log file '${UltronLog.fileLogger.getLogFile().name}' to allure report")
-//                    AttachUtil.attachFile(UltronLog.fileLogger.getLogFile(), MimeType.PLAIN_TEXT)
-//                }
-//            })
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.atiurin.ultron.runner
 
+import com.atiurin.ultron.extensions.fullTestName
 import com.atiurin.ultron.log.LogLevel
 import com.atiurin.ultron.log.UltronLog
 import org.junit.runner.Description
@@ -56,6 +57,4 @@ class UltronLogRunListener : UltronRunListener {
         UltronLog.log(logLevel, text)
         UltronLog.log(logLevel, delimiter)
     }
-
-    private fun Description.fullTestName() = "'${this.className}.${this.methodName}'"
 }
