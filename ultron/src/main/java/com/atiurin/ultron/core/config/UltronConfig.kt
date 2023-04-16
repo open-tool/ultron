@@ -23,6 +23,7 @@ import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.UltronUiAutomatorLifecycle
 import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
 import com.atiurin.ultron.exceptions.*
+import com.atiurin.ultron.listeners.LogLifecycleListener
 import com.atiurin.ultron.listeners.UltronLifecycleListener
 import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionExecutorWrapper
@@ -32,7 +33,6 @@ import com.atiurin.ultron.testlifecycle.setupteardown.DefaultConditionsExecutor
 import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
-import java.text.SimpleDateFormat
 
 object UltronConfig {
     var LOGCAT_TAG = "Ultron"
@@ -40,21 +40,26 @@ object UltronConfig {
     var isListenersOn = true
     const val DEFAULT_OPERATION_TIMEOUT_MS = 5_000L
 
-    var params: UltronConfigParams = UltronConfigParams()
+    private var params: UltronConfigParams = UltronConfigParams()
+    fun getParams() = params
 
     fun addGlobalListener(lifecycleListener: UltronLifecycleListener) {
+        UltronLog.info("Add Ultron global listener ${lifecycleListener.javaClass.simpleName}. " +
+                "It's applied for Espresso, EspressoWeb and UiAutomator operations.")
         UltronEspressoOperationLifecycle.addListener(lifecycleListener)
         UltronWebLifecycle.addListener(lifecycleListener)
         UltronUiAutomatorLifecycle.addListener(lifecycleListener)
     }
 
     fun removeGlobalListener(listenerId: String) {
+        UltronLog.info("Remove Ultron global listener with id ${listenerId}. ")
         UltronEspressoOperationLifecycle.removeListener(listenerId)
         UltronWebLifecycle.removeListener(listenerId)
         UltronUiAutomatorLifecycle.removeListener(listenerId)
     }
 
     fun <T : UltronLifecycleListener> removeGlobalListener(clazz: Class<T>) {
+        UltronLog.info("Remove Ultron global listener  ${clazz.simpleName}. ")
         UltronEspressoOperationLifecycle.removeListener(clazz)
         UltronWebLifecycle.removeListener(clazz)
         UltronUiAutomatorLifecycle.removeListener(clazz)
@@ -66,14 +71,15 @@ object UltronConfig {
         }
     }
 
-    private fun apply() {
+    private fun modify() {
         Espresso.ACTION_TIMEOUT = params.operationTimeoutMs
         Espresso.ASSERTION_TIMEOUT = params.operationTimeoutMs
         UiAutomator.OPERATION_TIMEOUT = params.operationTimeoutMs
+        addGlobalListener(LogLifecycleListener())
         if (params.logToFile){
-            UltronLog.loggers.add(UltronLog.fileLogger)
+            UltronLog.addLogger(UltronLog.fileLogger)
         } else {
-            UltronLog.loggers.remove(UltronLog.fileLogger)
+            UltronLog.removeLogger(UltronLog.fileLogger)
         }
         if (params.accelerateUiAutomator) {
             UiAutomator.speedUp()
@@ -83,12 +89,12 @@ object UltronConfig {
 
     fun applyRecommended(){
         params = UltronConfigParams()
-        apply()
+        modify()
     }
 
-    fun edit(block: UltronConfigParams.() -> Unit) {
+    fun apply(block: UltronConfigParams.() -> Unit) {
         params.block()
-        apply()
+        modify()
     }
 
     class Espresso {
@@ -245,7 +251,3 @@ object UltronConfig {
         }
     }
 }
-
-data class ConfigParams(
-    var logToFile: Boolean = false
-)

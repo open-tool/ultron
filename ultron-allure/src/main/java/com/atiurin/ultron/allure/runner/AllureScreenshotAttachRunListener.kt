@@ -6,7 +6,7 @@ import com.atiurin.ultron.extensions.fullTestName
 import com.atiurin.ultron.runner.UltronRunListener
 import org.junit.runner.notification.Failure
 
-class AllureScreenshotAttachRunListener(val policies: Set<AllureAttachStrategy>) : UltronRunListener {
+class AllureScreenshotAttachRunListener(val policies: Set<AllureAttachStrategy>) : UltronRunListener() {
 
     val screenshot = AllureScreenshot()
 

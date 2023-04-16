@@ -6,7 +6,7 @@ import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.listeners.UltronLifecycleListener
 
-class ScreenshotAttachListener(val policies: Set<AllureAttachStrategy>) : UltronLifecycleListener() {
+class ScreenshotAttachListener(val policies: Set<AllureAttachStrategy> = setOf(AllureAttachStrategy.OPERATION_FAILURE)) : UltronLifecycleListener() {
     val screenshot = AllureScreenshot()
 
     override fun afterFailure(operationResult: OperationResult<Operation>) {

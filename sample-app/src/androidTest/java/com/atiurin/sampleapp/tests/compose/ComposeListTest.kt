@@ -12,6 +12,7 @@ import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.ComposeListPage
 import com.atiurin.sampleapp.pages.ComposeSecondPage
+import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
 import com.atiurin.ultron.core.common.options.TextContainsOption
 import com.atiurin.ultron.core.compose.createUltronComposeRule
@@ -23,7 +24,7 @@ import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 
-class ComposeListTest {
+class ComposeListTest: BaseTest()  {
     @get:Rule
     val composeRule = createUltronComposeRule<ComposeListActivity>()
     val listWithMergedTree = composeList(hasTestTag(contactsListTestTag), false)

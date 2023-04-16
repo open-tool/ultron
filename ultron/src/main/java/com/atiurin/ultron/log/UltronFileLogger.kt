@@ -2,6 +2,7 @@ package com.atiurin.ultron.log
 
 import android.os.Build
 import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.extensions.clearContent
 import com.atiurin.ultron.utils.createCacheFile
 import java.io.File
 import java.text.SimpleDateFormat
@@ -9,10 +10,12 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class UltronFileLogger: UFileLogger {
+class UltronFileLogger: UFileLogger() {
     private var file: File = createCacheFile("ultron_", ".log")
 
     override fun getLogFile(): File  = file
+    override fun clearFile() = file.clearContent()
+
     override fun info(message: String) = append(LogLevel.I, message)
     override fun info(message: String, throwable: Throwable) = append(LogLevel.I, message)
     override fun debug(message: String) = append(LogLevel.D, message)

@@ -7,7 +7,7 @@ import org.junit.runner.Description
 import org.junit.runner.Result
 import org.junit.runner.notification.Failure
 
-class UltronLogRunListener : UltronRunListener {
+class UltronLogRunListener : UltronRunListener() {
     override fun testRunStarted(description: Description) {
         logBlockText("TEST RUN STARTED")
     }

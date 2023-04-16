@@ -6,6 +6,9 @@ import com.atiurin.sampleapp.data.repositories.CURRENT_USER
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.managers.AccountManager
 import com.atiurin.ultron.allure.config.UltronAllureConfig
+import com.atiurin.ultron.allure.listeners.DetailedOperationAllureListener
+import com.atiurin.ultron.allure.listeners.ScreenshotAttachListener
+import com.atiurin.ultron.core.compose.UltronComposeConfig
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
 import org.junit.BeforeClass
@@ -28,6 +31,9 @@ abstract class BaseTest {
         fun config() {
             UltronConfig.applyRecommended()
             UltronAllureConfig.applyRecommended()
+            UltronComposeConfig.applyRecommended() 
+            UltronComposeConfig.addListener(ScreenshotAttachListener())
+            UltronComposeConfig.addListener(DetailedOperationAllureListener())
         }
     }
 }

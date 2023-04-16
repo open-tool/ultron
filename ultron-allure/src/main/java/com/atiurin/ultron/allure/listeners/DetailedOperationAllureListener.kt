@@ -9,7 +9,7 @@ import io.qameta.allure.kotlin.model.StepResult
 import io.qameta.allure.kotlin.util.ResultsUtils
 import java.util.*
 
-class OperationAllureStepListener : UltronLifecycleListener() {
+class DetailedOperationAllureListener : UltronLifecycleListener() {
     lateinit var stepName: String
     lateinit var uuid: String
     override fun after(operationResult: OperationResult<Operation>) {

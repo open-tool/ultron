@@ -4,7 +4,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.atiurin.ultron.allure.condition.AllureConditionExecutorWrapper
 import com.atiurin.ultron.allure.condition.AllureConditionsExecutor
 import com.atiurin.ultron.allure.getRunInformer
-import com.atiurin.ultron.allure.listeners.OperationAllureStepListener
+import com.atiurin.ultron.allure.listeners.DetailedOperationAllureListener
 import com.atiurin.ultron.allure.listeners.ScreenshotAttachListener
 import com.atiurin.ultron.allure.runner.AllureScreenshotAttachRunListener
 import com.atiurin.ultron.core.config.UltronConfig
@@ -12,7 +12,8 @@ import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.runner.UltronRunListener
 
 object UltronAllureConfig {
-    var params: AllureConfigParams = AllureConfigParams()
+    private var params: AllureConfigParams = AllureConfigParams()
+    fun getParams() = params
 
     fun setAllureConditionExecutor() {
         UltronConfig.Conditions.conditionsExecutor = AllureConditionsExecutor()
@@ -22,9 +23,9 @@ object UltronAllureConfig {
         UltronConfig.Conditions.conditionExecutorWrapper = AllureConditionExecutorWrapper()
     }
 
-    private fun apply() {
+    private fun modify() {
         if (params.detailedAllureReport) {
-            UltronConfig.addGlobalListener(OperationAllureStepListener())
+            UltronConfig.addGlobalListener(DetailedOperationAllureListener())
         }
         if (!params.addScreenshotPolicy.contains(AllureAttachStrategy.NONE)) {
             UltronConfig.addGlobalListener(ScreenshotAttachListener(params.addScreenshotPolicy))
@@ -34,17 +35,17 @@ object UltronAllureConfig {
             setAllureConditionsExecutorWrapper()
             setAllureConditionExecutor()
         }
-        UltronLog.info("UltronComposeConfig applied with params $params")
+        UltronLog.info("UltronAllureConfig applied with params $params")
     }
 
     fun applyRecommended() {
         params = AllureConfigParams()
-        apply()
+        modify()
     }
 
-    fun edit(block: AllureConfigParams.() -> Unit) {
+    fun apply(block: AllureConfigParams.() -> Unit) {
         params.block()
-        apply()
+        modify()
     }
 
     fun addRunListener(listener: UltronRunListener) {
@@ -53,7 +54,10 @@ object UltronAllureConfig {
 }
 
 data class AllureConfigParams(
-    var addScreenshotPolicy: MutableSet<AllureAttachStrategy> = mutableSetOf(AllureAttachStrategy.TEST_FAILURE),
+    var addScreenshotPolicy: MutableSet<AllureAttachStrategy> = mutableSetOf(
+        AllureAttachStrategy.TEST_FAILURE,
+        AllureAttachStrategy.OPERATION_FAILURE
+    ),
     var attachUltronLog: Boolean = true,
     var addConditionsToReport: Boolean = true,
     var detailedAllureReport: Boolean = true

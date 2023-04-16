@@ -7,11 +7,12 @@ import com.atiurin.ultron.file.MimeType
 import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.runner.UltronRunListener
 import org.junit.runner.notification.Failure
+import java.io.PrintWriter
 
-class AllureLogAttachRunListener : UltronRunListener {
+class AllureLogAttachRunListener : UltronRunListener() {
     override fun testFailure(failure: Failure) {
-        if (UltronAllureConfig.params.attachUltronLog ){
-            if (!UltronConfig.params.logToFile){
+        if (UltronAllureConfig.getParams().attachUltronLog ){
+            if (!UltronConfig.getParams().logToFile){
                 UltronLog.error("Ultron doesn't log into file. " +
                         "Change config param UltronConfig.edit { logToFile = true }"
                 )

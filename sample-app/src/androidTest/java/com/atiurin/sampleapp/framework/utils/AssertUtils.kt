@@ -1,6 +1,5 @@
 package com.atiurin.sampleapp.framework.utils
 
-import android.os.SystemClock
 import org.junit.Assert
 
 object AssertUtils {
@@ -9,7 +8,7 @@ object AssertUtils {
         try {
             block()
         } catch (ex: Throwable) {
-            throw ex
+//            throw ex
             exceptionOccurs = true
         }
         Assert.assertEquals(expected, exceptionOccurs)

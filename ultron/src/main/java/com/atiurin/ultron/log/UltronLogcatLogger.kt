@@ -2,7 +2,7 @@ package com.atiurin.ultron.log
 
 import android.util.Log
 
-class UltronLogcatLogger : ULogger{
+class UltronLogcatLogger : ULogger(){
     companion object {
         const val LOG_TAG = "Ultron"
     }

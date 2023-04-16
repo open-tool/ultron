@@ -2,17 +2,15 @@ package com.atiurin.ultron.core.common
 
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.config.UltronConfig.isListenersOn
-import com.atiurin.ultron.listeners.LogLifecycleListener
+import com.atiurin.ultron.listeners.AbstractListenersContainer
 import com.atiurin.ultron.listeners.UltronLifecycleListener
 
-abstract class AbstractOperationLifecycle {
-    private var listeners: MutableList<UltronLifecycleListener> =
-        mutableListOf(LogLifecycleListener())
+abstract class AbstractOperationLifecycle : AbstractListenersContainer<UltronLifecycleListener>() {
 
     //set your own implementation in case you would like to customise the behaviour
-    open var operationProcessor : OperationProcessor = object : OperationProcessor{
+    open var operationProcessor: OperationProcessor = object : OperationProcessor {
         override fun <Op : Operation, OpRes : OperationResult<Op>> process(executor: OperationExecutor<Op, OpRes>): OpRes {
-           return executor.execute()
+            return executor.execute()
         }
     }
 
@@ -29,7 +27,7 @@ abstract class AbstractOperationLifecycle {
         val isListen = executor.operation.type !in UltronConfig.operationsExcludedFromListeners && isListenersOn
         if (isListen) listeners.forEach { it.before(executor.operation) }
         val operationResult = operationProcessor.process(executor)
-        if (isListen){
+        if (isListen) {
             if (operationResult.success) {
                 listeners.forEach { it.afterSuccess(operationResult as OperationResult<Operation>) }
             } else {
@@ -41,31 +39,4 @@ abstract class AbstractOperationLifecycle {
         return operationResult
     }
 
-    fun getListeners(): List<UltronLifecycleListener> {
-        return listeners
-    }
-
-    fun addListener(listener: UltronLifecycleListener) {
-        val exist = listeners.find { it.id == listener.id }
-        exist?.let { listeners.remove(it) }
-        listeners.add(listener)
-    }
-
-    fun clearListeners() {
-        listeners.clear()
-    }
-
-    fun removeListener(listenerId: String) {
-        val exist = listeners.find { it.id == listenerId }
-        if (exist != null) {
-            listeners.remove(exist)
-        }
-    }
-
-    fun <T: UltronLifecycleListener> removeListener(listenerClass: Class<T>) {
-        val exist = listeners.find { it.id == listenerClass.name }
-        if (exist != null) {
-            listeners.remove(exist)
-        }
-    }
 }

@@ -4,7 +4,19 @@ import kotlin.system.measureTimeMillis
 
 object UltronLog {
     val fileLogger by lazy { UltronFileLogger() }
-    val loggers = mutableListOf<ULogger>().apply { add(UltronLogcatLogger()) }
+    private val loggers = mutableSetOf<ULogger>().apply { add(UltronLogcatLogger()) }
+
+    fun addLogger(logger: ULogger) {
+        removeLogger(logger)
+        loggers.add(logger)
+    }
+
+    fun removeLogger(logger: ULogger){
+        val exist = loggers.find { it.id == logger.id }
+        exist?.let { loggers.remove(it) }
+    }
+
+    fun clearLoggers() = loggers.clear()
 
     fun info(message: String) = loggers.forEach { it.info(message) }
     fun info(message: String, throwable: Throwable) = loggers.forEach { it.info(message, throwable) }

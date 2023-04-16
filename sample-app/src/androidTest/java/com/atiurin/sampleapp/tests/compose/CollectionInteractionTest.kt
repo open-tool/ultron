@@ -5,12 +5,13 @@ import com.atiurin.sampleapp.activity.ComposeListActivity
 import com.atiurin.sampleapp.compose.contactNameTestTag
 import com.atiurin.sampleapp.compose.contactsListTestTag
 import com.atiurin.sampleapp.data.repositories.CONTACTS
+import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.core.compose.createUltronComposeRule
 import com.atiurin.ultron.core.compose.operation.UltronComposeCollectionInteraction.Companion.allNodes
 import org.junit.Rule
 import org.junit.Test
 
-class CollectionInteractionTest {
+class CollectionInteractionTest: BaseTest()  {
     @get:Rule
     val composeRule = createUltronComposeRule<ComposeListActivity>()
     val list = hasTestTag(contactsListTestTag)
