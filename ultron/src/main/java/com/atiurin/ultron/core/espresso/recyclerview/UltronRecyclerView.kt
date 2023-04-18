@@ -388,7 +388,10 @@ open class UltronRecyclerView(
         apply { recyclerViewMatcher.withTimeout(getTimeout()).assertMatches(matcher) }
 
     fun scrollToIem(itemMatcher: Matcher<View>, searchLimit: Int = this.itemSearchLimit, offset: Int = 0) = apply {
-        recyclerViewMatcher.withTimeout(getTimeout()).perform(RecyclerViewScrollAction(itemMatcher, searchLimit, offset))
+        recyclerViewMatcher.withTimeout(getTimeout()).perform(
+            viewAction = RecyclerViewScrollAction(itemMatcher, searchLimit, offset),
+            description = "Scroll RecyclerView '$recyclerViewMatcher' to item = '$itemMatcher' with searchLimit = $searchLimit and offset = $offset"
+        )
     }
 
     /** set timeout for operations with RecyclerView.
@@ -418,7 +421,8 @@ open class UltronRecyclerView(
             }
         })
         val finishTime = SystemClock.elapsedRealtime() + loadTimeoutMs
-        while (!isLoaded && (finishTime > SystemClock.elapsedRealtime())) {}
+        while (!isLoaded && (finishTime > SystemClock.elapsedRealtime())) {
+        }
         if (!isLoaded) throw UltronOperationException("RecyclerView matches '$recyclerViewMatcher' doesn't load any item during $loadTimeoutMs ms")
     }
 
@@ -526,7 +530,7 @@ open class UltronRecyclerView(
             var childView: View? = null
 
             override fun describeTo(description: Description) {
-                description.appendText("RecyclerViewItem recyclerViewMatcher: '$recyclerViewMatcher', itemMatcher: '$itemMatcher', childMatcher: '$childMatcher'")
+                description.appendText("RecyclerViewItem of '$recyclerViewMatcher', itemMatcher: '$itemMatcher', childMatcher: '$childMatcher'")
             }
 
             override fun matchesSafely(view: View): Boolean {
@@ -547,7 +551,7 @@ open class UltronRecyclerView(
         return object : TypeSafeMatcher<View>() {
             var childView: View? = null
             override fun describeTo(description: Description) {
-                description.appendText("RecyclerViewItem recyclerViewMatcher: '$recyclerViewMatcher', itemPosition: '$position', childMatcher: '$childMatcher'")
+                description.appendText("RecyclerViewItem of '$recyclerViewMatcher', itemPosition: '$position', childMatcher: '$childMatcher'")
             }
 
             override fun matchesSafely(view: View): Boolean {
@@ -621,14 +625,14 @@ private fun View.findChildView(matcher: Matcher<View>): View? {
 }
 
 private fun <T> UltronEspressoInteraction<T>.identifyRecyclerView(matcher: Matcher<View>) {
-    executeAssertion(
+    this.executeAssertion(
         UltronEspressoOperation(
             operationBlock = getInteractionAssertionBlock(matches(matcher)),
             name = "Identify RecyclerView matches '${getInteractionMatcher()}'",
             type = EspressoAssertionType.IDENTIFY_RECYCLER_VIEW,
             description = "${EspressoAssertionType.IDENTIFY_RECYCLER_VIEW} during $timeoutMs ms",
-            timeoutMs = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
-        ), resultHandler = resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
+            timeoutMs = getAssertionTimeout()
+        )
     )
 }
 

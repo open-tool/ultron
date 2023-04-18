@@ -11,12 +11,4 @@ abstract class UiElementsTest : BaseTest() {
     init {
         ruleSequence.add(activityRule)
     }
-
-    companion object {
-        @BeforeClass
-        @JvmStatic
-        fun speedUpAutomator() {
-            UltronConfig.UiAutomator.speedUp()
-        }
-    }
 }

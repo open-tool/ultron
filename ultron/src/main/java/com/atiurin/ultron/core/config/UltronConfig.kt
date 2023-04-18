@@ -23,7 +23,9 @@ import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.UltronUiAutomatorLifecycle
 import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
 import com.atiurin.ultron.exceptions.*
+import com.atiurin.ultron.listeners.LogLifecycleListener
 import com.atiurin.ultron.listeners.UltronLifecycleListener
+import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionExecutorWrapper
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionsExecutor
 import com.atiurin.ultron.testlifecycle.setupteardown.DefaultConditionExecutorWrapper
@@ -36,25 +38,64 @@ object UltronConfig {
     var LOGCAT_TAG = "Ultron"
     val operationsExcludedFromListeners = mutableListOf<UltronOperationType>(EspressoAssertionType.IDENTIFY_RECYCLER_VIEW)
     var isListenersOn = true
+    const val DEFAULT_OPERATION_TIMEOUT_MS = 5_000L
 
-    fun addGlobalListener(lifecycleListener: UltronLifecycleListener){
+    private var params: UltronConfigParams = UltronConfigParams()
+    fun getParams() = params
+
+    fun addGlobalListener(lifecycleListener: UltronLifecycleListener) {
+        UltronLog.info("Add Ultron global listener ${lifecycleListener.javaClass.simpleName}. " +
+                "It's applied for Espresso, EspressoWeb and UiAutomator operations.")
         UltronEspressoOperationLifecycle.addListener(lifecycleListener)
         UltronWebLifecycle.addListener(lifecycleListener)
         UltronUiAutomatorLifecycle.addListener(lifecycleListener)
     }
 
-    fun removeGlobalListener(listenerId: String){
+    fun removeGlobalListener(listenerId: String) {
+        UltronLog.info("Remove Ultron global listener with id ${listenerId}. ")
         UltronEspressoOperationLifecycle.removeListener(listenerId)
         UltronWebLifecycle.removeListener(listenerId)
         UltronUiAutomatorLifecycle.removeListener(listenerId)
     }
 
-    fun <T: UltronLifecycleListener> removeGlobalListener(clazz: Class<T>){
+    fun <T : UltronLifecycleListener> removeGlobalListener(clazz: Class<T>) {
+        UltronLog.info("Remove Ultron global listener  ${clazz.simpleName}. ")
         UltronEspressoOperationLifecycle.removeListener(clazz)
         UltronWebLifecycle.removeListener(clazz)
         UltronUiAutomatorLifecycle.removeListener(clazz)
     }
 
+    class Log {
+        companion object {
+            var dateFormat = "MM-dd HH:mm:ss.SSS"
+        }
+    }
+
+    private fun modify() {
+        Espresso.ACTION_TIMEOUT = params.operationTimeoutMs
+        Espresso.ASSERTION_TIMEOUT = params.operationTimeoutMs
+        UiAutomator.OPERATION_TIMEOUT = params.operationTimeoutMs
+        addGlobalListener(LogLifecycleListener())
+        if (params.logToFile){
+            UltronLog.addLogger(UltronLog.fileLogger)
+        } else {
+            UltronLog.removeLogger(UltronLog.fileLogger)
+        }
+        if (params.accelerateUiAutomator) {
+            UiAutomator.speedUp()
+        }
+        UltronLog.info("UltronConfig applied with params $params")
+    }
+
+    fun applyRecommended(){
+        params = UltronConfigParams()
+        modify()
+    }
+
+    fun apply(block: UltronConfigParams.() -> Unit) {
+        params.block()
+        modify()
+    }
 
     class Espresso {
         companion object {
@@ -152,8 +193,7 @@ object UltronConfig {
                 }
             }
 
-            var uiDevice: UiDevice =
-                UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+            var uiDevice: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
 
             fun setTimeout(timeoutMs: Long) {
                 Configurator.getInstance().apply {
@@ -204,8 +244,8 @@ object UltronConfig {
         }
     }
 
-    class Conditions{
-        companion object{
+    class Conditions {
+        companion object {
             var conditionExecutorWrapper: ConditionExecutorWrapper = DefaultConditionExecutorWrapper()
             var conditionsExecutor: ConditionsExecutor = DefaultConditionsExecutor()
         }

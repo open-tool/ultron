@@ -6,7 +6,7 @@ import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
 import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.data.entities.Contact
-import com.atiurin.sampleapp.framework.step
+import com.atiurin.ultron.allure.step.step
 import com.atiurin.ultron.custom.espresso.matcher.withSuitableRoot
 import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed

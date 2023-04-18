@@ -1,7 +1,7 @@
 package com.atiurin.sampleapp.tests.testlifecycle
 
 import com.atiurin.sampleapp.framework.Log
-import com.atiurin.sampleapp.framework.step
+import com.atiurin.ultron.allure.step.step
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.testlifecycle.rulesequence.RuleSequence
 import com.atiurin.ultron.testlifecycle.setupteardown.*

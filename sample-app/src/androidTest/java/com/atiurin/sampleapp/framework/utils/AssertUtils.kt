@@ -1,6 +1,5 @@
 package com.atiurin.sampleapp.framework.utils
 
-import android.os.SystemClock
 import org.junit.Assert
 
 object AssertUtils {

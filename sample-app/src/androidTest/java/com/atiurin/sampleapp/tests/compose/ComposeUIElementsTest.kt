@@ -17,6 +17,7 @@ import com.atiurin.sampleapp.framework.ultronext.assertProgress
 import com.atiurin.sampleapp.framework.ultronext.hasProgress
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.ComposeElementsPage
+import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.core.common.options.ClickOption
 import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
 import com.atiurin.ultron.core.common.options.TextContainsOption
@@ -30,7 +31,7 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
-class ComposeUIElementsTest {
+class ComposeUIElementsTest: BaseTest() {
     val page = ComposeElementsPage
 
     @get:Rule

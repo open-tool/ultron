@@ -232,7 +232,7 @@ class UltronEspressoInteraction<T>(
     fun perform(viewAction: ViewAction, description: String = "") = apply {
         executeAction(
             operationBlock = getInteractionActionBlock(viewAction),
-            name = "Custom action '$description' to ${getInteractionMatcher()}",
+            name = description.ifEmpty { "Perform action to ${getInteractionMatcher()}" },
             description = "${interaction.className()} action '$description' of '${viewAction.description}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
@@ -609,6 +609,6 @@ class UltronEspressoInteraction<T>(
         type: UltronOperationType = CommonOperationType.DEFAULT,
         description: String
     ) = executeAssertion(getUltronEspressoAssertionOperation(operationBlock, name, type, description))
-    
+
     internal fun T.className() = this?.let { it::class.java.simpleName }
 }
