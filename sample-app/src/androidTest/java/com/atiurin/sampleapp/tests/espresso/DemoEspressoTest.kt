@@ -38,7 +38,6 @@ class DemoEspressoTest : BaseTest() {
 
     @Test
     fun checkMessagesPositionsInChat() {
-        Log.info("Start test checkMessagesPositionsInChat")
         val firstMessage = "first message"
         val secondMessage = "second message"
         FriendsListPage.openChat("Janice")
