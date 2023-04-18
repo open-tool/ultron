@@ -37,3 +37,31 @@ dependencies {
     api(Libs.allureModel)
     api(Libs.allureJunit4)
 }
+
+tasks {
+    val sourcesJar by creating(Jar::class) {
+        archiveClassifier.set("sources")
+        classifier = "sources"
+        from(tasks)
+    }
+
+    val javadoc by creating(Javadoc::class) {
+        options {
+            this as StandardJavadocDocletOptions
+            addStringOption("Xdoclint:none", "-quiet")
+            addStringOption("Xmaxwarns", "1")
+            addStringOption("charSet", "UTF-8")
+        }
+    }
+
+    val javadocJar by creating(Jar::class){
+        dependsOn(javadoc)
+        classifier = "javadoc"
+        from(javadoc.destinationDir)
+    }
+
+    artifacts {
+        add("archives", sourcesJar)
+        add("archives", javadocJar)
+    }
+}
