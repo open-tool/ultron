@@ -11,8 +11,8 @@ import java.io.PrintWriter
 
 class AllureLogAttachRunListener : UltronRunListener() {
     override fun testFailure(failure: Failure) {
-        if (UltronAllureConfig.getParams().attachUltronLog ){
-            if (!UltronConfig.getParams().logToFile){
+        if (UltronAllureConfig.params.attachUltronLog ){
+            if (!UltronConfig.params.logToFile){
                 UltronLog.error("Ultron doesn't log into file. " +
                         "Change config param UltronConfig.edit { logToFile = true }"
                 )

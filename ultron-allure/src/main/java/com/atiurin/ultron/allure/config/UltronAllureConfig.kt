@@ -12,8 +12,7 @@ import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.runner.UltronRunListener
 
 object UltronAllureConfig {
-    private var params: AllureConfigParams = AllureConfigParams()
-    fun getParams() = params
+    var params: AllureConfigParams = AllureConfigParams()
 
     fun setAllureConditionExecutor() {
         UltronConfig.Conditions.conditionsExecutor = AllureConditionsExecutor()
@@ -51,22 +50,4 @@ object UltronAllureConfig {
     fun addRunListener(listener: UltronRunListener) {
         InstrumentationRegistry.getInstrumentation().getRunInformer().addListener(listener)
     }
-}
-
-data class AllureConfigParams(
-    var addScreenshotPolicy: MutableSet<AllureAttachStrategy> = mutableSetOf(
-        AllureAttachStrategy.TEST_FAILURE,
-        AllureAttachStrategy.OPERATION_FAILURE
-    ),
-    var attachUltronLog: Boolean = true,
-    var addConditionsToReport: Boolean = true,
-    var detailedAllureReport: Boolean = true
-)
-
-enum class AllureAttachStrategy {
-    TEST_FAILURE,
-    OPERATION_FAILURE, // attach artifact for failed operation
-    OPERATION_SUCCESS, // attach artifact for each succeeded operation
-    OPERATION_FINISH, // attach artifact for each operation
-    NONE
 }
