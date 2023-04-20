@@ -26,7 +26,7 @@ class AllureScreenshot(private val quality: Int = 90) {
             file = tempFile,
             mimeType = result.mimeType
         )
-        UltronLog.info("SCREENSHOT file '$fileName' attached to report")
+        UltronLog.info("SCREENSHOT file '$fileName' has attached to Allure report")
         return result.isSuccess
     }
 }

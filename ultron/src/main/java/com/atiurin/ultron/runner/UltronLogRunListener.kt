@@ -13,17 +13,17 @@ class UltronLogRunListener : UltronRunListener() {
     }
 
     override fun testStarted(description: Description) {
-        logTextBlock("Test ${description.fullTestName()} STARTED")
+        logTextBlock("TEST ${description.fullTestName()} STARTED")
     }
 
     override fun testFinished(description: Description) {
-        logTextBlock("Test ${description.fullTestName()} FINISHED")
+        logTextBlock("TEST ${description.fullTestName()} FINISHED")
     }
 
     override fun testFailure(failure: Failure) {
         logTextBlock(
             logLevel = LogLevel.E,
-            text = """ |Test ${failure.description.fullTestName()} failed with exception:
+            text = """ |TEST ${failure.description.fullTestName()} FAILED with exception:
             |Message: ${failure.exception.message},
             |Cause:  ${failure.exception.cause}
             |Stacktrace: ${failure.exception.stackTrace.joinToString("\n")}
@@ -32,17 +32,17 @@ class UltronLogRunListener : UltronRunListener() {
     }
 
     override fun testAssumptionFailure(failure: Failure) {
-        logTextBlock(logLevel = LogLevel.E, text = "Test ${failure.description.fullTestName()} ASSUMPTION FAILURE")
+        logTextBlock(logLevel = LogLevel.E, text = "TEST ${failure.description.fullTestName()} ASSUMPTION FAILURE")
     }
 
     override fun testIgnored(description: Description) {
-        logTextBlock("Test ${description.fullTestName()} IGNORED")
+        logTextBlock("TEST ${description.fullTestName()} IGNORED")
     }
 
     override fun testRunFinished(result: Result) {
         logTextBlock(
             """
-            |Test run finished ${if (result.wasSuccessful()) "SUCCESSFULLY" else "with FAILURE"}
+            |TEST RUN FINISHED ${if (result.wasSuccessful()) "SUCCESSFULLY" else "with FAILURE"}
             |Duration: ${result.runTime} ms
             |Tests count: ${result.runCount}
             |Ignored: ${result.ignoreCount}

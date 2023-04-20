@@ -6,7 +6,7 @@ import com.atiurin.ultron.allure.condition.AllureConditionsExecutor
 import com.atiurin.ultron.allure.getRunInformer
 import com.atiurin.ultron.allure.listeners.DetailedOperationAllureListener
 import com.atiurin.ultron.allure.listeners.ScreenshotAttachListener
-import com.atiurin.ultron.allure.runner.AllureScreenshotAttachRunListener
+import com.atiurin.ultron.allure.runner.ScreenshotAttachRunListener
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.runner.UltronRunListener
@@ -28,7 +28,7 @@ object UltronAllureConfig {
         }
         if (!params.addScreenshotPolicy.contains(AllureAttachStrategy.NONE)) {
             UltronConfig.addGlobalListener(ScreenshotAttachListener(params.addScreenshotPolicy))
-            addRunListener(AllureScreenshotAttachRunListener(params.addScreenshotPolicy))
+            addRunListener(ScreenshotAttachRunListener(params.addScreenshotPolicy))
         }
         if (params.addConditionsToReport) {
             setAllureConditionsExecutorWrapper()
