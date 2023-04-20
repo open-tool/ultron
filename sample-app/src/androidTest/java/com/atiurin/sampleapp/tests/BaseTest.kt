@@ -8,15 +8,15 @@ import com.atiurin.sampleapp.managers.AccountManager
 import com.atiurin.ultron.allure.config.UltronAllureConfig
 import com.atiurin.ultron.allure.listeners.DetailedOperationAllureListener
 import com.atiurin.ultron.allure.listeners.ScreenshotAttachListener
-import com.atiurin.ultron.core.compose.UltronComposeConfig
+import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
 import org.junit.BeforeClass
 import org.junit.Rule
 
 abstract class BaseTest {
-    val setupRule = SetUpRule().add {
-            Log.info("Login valid user")
+    val setupRule = SetUpRule("Login user rule")
+        .add(name = "Login valid user $CURRENT_USER") {
             AccountManager(InstrumentationRegistry.getInstrumentation().targetContext).login(
                 CURRENT_USER.login, CURRENT_USER.password
             )
@@ -31,7 +31,7 @@ abstract class BaseTest {
         fun config() {
             UltronConfig.applyRecommended()
             UltronAllureConfig.applyRecommended()
-            UltronComposeConfig.applyRecommended() 
+            UltronComposeConfig.applyRecommended()
             UltronComposeConfig.addListener(ScreenshotAttachListener())
             UltronComposeConfig.addListener(DetailedOperationAllureListener())
         }

@@ -1,11 +1,9 @@
-package com.atiurin.ultron.core.compose
+package com.atiurin.ultron.core.compose.config
 
 import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
 import com.atiurin.ultron.core.common.*
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationLifecycle
-import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.config.UltronConfigParams
 import com.atiurin.ultron.exceptions.*
 import com.atiurin.ultron.listeners.LogLifecycleListener
 import com.atiurin.ultron.listeners.UltronLifecycleListener
@@ -15,13 +13,16 @@ object UltronComposeConfig {
     const val DEFAULT_LAZY_COLUMN_OPERATIONS_TIMEOUT = 10_000L
     const val DEFAULT_OPERATION_TIMEOUT = 5_000L
 
-    private var params: UltronComposeConfigParams = UltronComposeConfigParams()
-    fun getParams() = params
+    var params: UltronComposeConfigParams = UltronComposeConfigParams()
 
-    var COMPOSE_OPERATION_POLLING_TIMEOUT = 0L //ms
-    var LAZY_COLUMN_OPERATIONS_TIMEOUT = DEFAULT_LAZY_COLUMN_OPERATIONS_TIMEOUT
-    var LAZY_COLUMN_ITEM_SEARCH_LIMIT = -1
-    var OPERATION_TIMEOUT = DEFAULT_OPERATION_TIMEOUT
+    @Deprecated("Use [UltronComposeConfig.params.operationPollingTimeoutMs]")
+    var COMPOSE_OPERATION_POLLING_TIMEOUT = params.operationPollingTimeoutMs
+    @Deprecated("Use [UltronComposeConfig.params.lazyColumnOperationTimeoutMs]")
+    var LAZY_COLUMN_OPERATIONS_TIMEOUT = params.lazyColumnOperationTimeoutMs
+    @Deprecated("Use [UltronComposeConfig.params.lazyColumnItemSearchLimit]")
+    var LAZY_COLUMN_ITEM_SEARCH_LIMIT = params.lazyColumnItemSearchLimit
+    @Deprecated("Use [UltronComposeConfig.params.operationTimeoutMs]")
+    var OPERATION_TIMEOUT = params.operationTimeoutMs
 
     var resultAnalyzer: OperationResultAnalyzer = UltronDefaultOperationResultAnalyzer()
 
@@ -52,7 +53,6 @@ object UltronComposeConfig {
     }
 
     private fun modify() {
-        OPERATION_TIMEOUT = params.operationTimeoutMs
         addListener(LogLifecycleListener())
         UltronLog.info("UltronComposeConfig applied with params $params}")
     }
@@ -67,7 +67,3 @@ object UltronComposeConfig {
         modify()
     }
 }
-
-data class UltronComposeConfigParams(
-    var operationTimeoutMs: Long = UltronConfig.DEFAULT_OPERATION_TIMEOUT_MS
-)

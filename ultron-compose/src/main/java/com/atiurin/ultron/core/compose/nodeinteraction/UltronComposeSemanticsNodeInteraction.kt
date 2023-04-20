@@ -8,13 +8,13 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.Dp
 import com.atiurin.ultron.core.compose.ComposeRuleContainer.getComposeRule
-import com.atiurin.ultron.core.compose.UltronComposeConfig
 import com.atiurin.ultron.core.common.CommonOperationType
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.common.options.*
+import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.core.compose.operation.ComposeOperationExecutor
 import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType.*
@@ -33,14 +33,14 @@ import java.util.concurrent.atomic.AtomicReference
 
 open class UltronComposeSemanticsNodeInteraction constructor(
     val semanticsNodeInteraction: SemanticsNodeInteraction,
-    val timeoutMs: Long = UltronComposeConfig.OPERATION_TIMEOUT,
+    val timeoutMs: Long = UltronComposeConfig.params.operationTimeoutMs,
     val resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeConfig.resultHandler,
     val assertion: OperationAssertion = EmptyOperationAssertion()
 ) {
     constructor(
         matcher: SemanticsMatcher,
         useUnmergedTree: Boolean = false,
-        timeoutMs: Long = UltronComposeConfig.OPERATION_TIMEOUT,
+        timeoutMs: Long = UltronComposeConfig.params.operationTimeoutMs,
         resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeConfig.resultHandler,
         assertion: OperationAssertion = EmptyOperationAssertion()
     ) : this(getComposeRule().onNode(matcher, useUnmergedTree), timeoutMs, resultHandler, assertion)

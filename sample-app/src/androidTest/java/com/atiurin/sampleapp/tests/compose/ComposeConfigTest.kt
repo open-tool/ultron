@@ -3,7 +3,7 @@ package com.atiurin.sampleapp.tests.compose
 import com.atiurin.sampleapp.activity.ComposeElementsActivity
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.ComposeElementsPage
-import com.atiurin.ultron.core.compose.UltronComposeConfig
+import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.core.compose.createUltronComposeRule
 import com.atiurin.ultron.extensions.assertExists
 import com.atiurin.ultron.extensions.isSuccess
@@ -31,8 +31,8 @@ class ComposeConfigTest {
 
     val page = ComposeElementsPage
     val composeRule = createUltronComposeRule<ComposeElementsActivity>()
-    val setUpRule = SetUpRule().add(setCustomTimeout) { UltronComposeConfig.OPERATION_TIMEOUT = customTimeout }
-    val tearDownRule = TearDownRule().add(dropCustomTimeout){ UltronComposeConfig.OPERATION_TIMEOUT = UltronComposeConfig.DEFAULT_OPERATION_TIMEOUT}
+    val setUpRule = SetUpRule().add(setCustomTimeout) { UltronComposeConfig.params.operationTimeoutMs = customTimeout }
+    val tearDownRule = TearDownRule().add(dropCustomTimeout){ UltronComposeConfig.params.operationTimeoutMs = UltronComposeConfig.DEFAULT_OPERATION_TIMEOUT}
 
     @get:Rule
     val ruleSequence = RuleSequence().add(composeRule,setUpRule, tearDownRule)

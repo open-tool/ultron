@@ -9,17 +9,17 @@ import com.atiurin.ultron.runner.UltronRunListener
 import org.junit.runner.notification.Failure
 import java.io.PrintWriter
 
-class AllureLogAttachRunListener : UltronRunListener() {
+class UltronLogAttachRunListener : UltronRunListener() {
     override fun testFailure(failure: Failure) {
-        if (UltronAllureConfig.getParams().attachUltronLog ){
-            if (!UltronConfig.getParams().logToFile){
+        if (UltronAllureConfig.params.attachUltronLog ){
+            if (!UltronConfig.params.logToFile){
                 UltronLog.error("Ultron doesn't log into file. " +
                         "Change config param UltronConfig.edit { logToFile = true }"
                 )
                 return
             }
             val fileName = AttachUtil.attachFile(UltronLog.fileLogger.getLogFile(), MimeType.PLAIN_TEXT)
-            UltronLog.info("Attached Ultron log file '$fileName' to allure report")
+            UltronLog.info("Ultron log file '$fileName' has attached to Allure report")
         }
     }
 }

@@ -40,8 +40,7 @@ object UltronConfig {
     var isListenersOn = true
     const val DEFAULT_OPERATION_TIMEOUT_MS = 5_000L
 
-    private var params: UltronConfigParams = UltronConfigParams()
-    fun getParams() = params
+    var params: UltronConfigParams = UltronConfigParams()
 
     fun addGlobalListener(lifecycleListener: UltronLifecycleListener) {
         UltronLog.info("Add Ultron global listener ${lifecycleListener.javaClass.simpleName}. " +

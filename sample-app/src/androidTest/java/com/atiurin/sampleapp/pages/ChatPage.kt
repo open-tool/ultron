@@ -59,7 +59,9 @@ object ChatPage : Page<ChatPage>() {
     }
 
     fun assertMessageTextAtPosition(position: Int, text: String) = apply {
-        this.getListItemAtPosition(position).text.isDisplayed().hasText(text)
+        step("Assert item at position $position has text '$text'") {
+            this.getListItemAtPosition(position).text.isDisplayed().hasText(text)
+        }
     }
 
     fun assertToolbarTitle(text: String){
