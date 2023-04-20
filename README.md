@@ -234,7 +234,7 @@ In general, it all comes down to the fact that the architecture of your project 
 
 ## Allure report
 
-Ultron can generate artifacts for Allure report. Just apply recommended config. 
+Ultron can generate artifacts for Allure report. Just apply recommended config and set testIntrumentationRunner. 
 
 Read full guide in [wiki](https://github.com/open-tool/ultron/wiki/Allure)
 
@@ -245,7 +245,7 @@ fun setConfig() {
     UltronAllureConfig.applyRecommended()
 }
 ```
-![allure report](https://user-images.githubusercontent.com/12834123/232760384-6a873837-cf4b-47bf-b8f9-c60ed204ac75.png)
+![espresso_steps allure](https://user-images.githubusercontent.com/12834123/233330257-f23dc9af-78c0-4242-81ea-55c65402fcc7.png)
 
 for Compose add 3 lines more
 ```kotlin
@@ -257,7 +257,7 @@ fun setConfig() {
     UltronComposeConfig.addListener(DetailedOperationAllureListener())
 }
 ```
-![compose allure](https://user-images.githubusercontent.com/12834123/232760630-d835e8ce-7190-4de7-8b69-67ae8574af23.png)
+![compose allure](https://user-images.githubusercontent.com/12834123/233330286-b58e0d1e-07bd-427a-9f26-805a455ffcea.png)
 
 
 
@@ -283,5 +283,4 @@ It is required to use AndroidX libraries. You can get some problems with Android
 ## Roadmap
 
 - https://github.com/open-tool/ultron/issues/34 DumpHierarchy to allure report
-- https://github.com/open-tool/ultron/issues/35 Logcat to allure report
 - https://github.com/open-tool/ultron/issues/33 Screenshot testign ?
