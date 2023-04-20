@@ -6,6 +6,7 @@ data class AllureConfigParams(
         AllureAttachStrategy.OPERATION_FAILURE
     ),
     var attachUltronLog: Boolean = true,
+    var attachLogcat: Boolean = true,
     var addConditionsToReport: Boolean = true,
     var detailedAllureReport: Boolean = true
 )
