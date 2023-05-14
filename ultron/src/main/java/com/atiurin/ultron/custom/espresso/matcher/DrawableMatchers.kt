@@ -17,14 +17,14 @@ class ResourceDrawableMatcher(private val expectedId: Int = 0) : TypeSafeMatcher
         if (targetView !is ImageView) {
             return false
         }
-        val imageView: ImageView = targetView as ImageView
+        val imageView: ImageView = targetView
         if (expectedId < 0) {
             return imageView.drawable != null
         }
         val resources: Resources = targetView.context.resources
         val expectedDrawable: Drawable = resources.getDrawable(expectedId)
         resourceName = resources.getResourceEntryName(expectedId)
-        return imageView.drawable.isSameAs(expectedDrawable)
+        return imageView.drawable?.isSameAs(expectedDrawable) == true
     }
 
 
@@ -39,6 +39,21 @@ class ResourceDrawableMatcher(private val expectedId: Int = 0) : TypeSafeMatcher
             description.appendText(resourceName)
             description.appendText("]")
         }
+    }
+}
+
+class InstanceDrawableMatcher(private val drawable: Drawable) : TypeSafeMatcher<View>() {
+
+    override fun matchesSafely(targetView: View): Boolean {
+        if (targetView !is ImageView) {
+            return false
+        }
+        return targetView.drawable?.isSameAs(drawable) == true
+    }
+
+
+    override fun describeTo(description: Description) {
+        description.appendValue("with drawable instance $drawable")
     }
 }
 
@@ -57,4 +72,13 @@ fun withDrawable(resourceId: Int): Matcher<View> {
  */
 fun hasAnyDrawable(): Matcher<View> {
     return ResourceDrawableMatcher(-1)
+}
+
+/**
+ * Matches view bitmap with drawable object
+ * @param drawable the drawable object against which the matcher is evaluated
+ * @return matchesSafely returns `true` if bitmaps are the same, otherwise `false`.
+ */
+fun withDrawableInstance(drawable: Drawable): Matcher<View> {
+    return InstanceDrawableMatcher(drawable)
 }

@@ -2,6 +2,7 @@ package com.atiurin.ultron.core.config
 
 import android.view.View
 import android.webkit.WebView
+import androidx.test.espresso.AmbiguousViewMatcherException
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
@@ -100,12 +101,14 @@ object UltronConfig {
         companion object {
             const val DEFAULT_ACTION_TIMEOUT = 5_000L
             const val DEFAULT_ASSERTION_TIMEOUT = 5_000L
+            const val DEFAULT_VIEW_SEARCH_TIMEOUT = 5_000L
             const val DEFAULT_RECYCLER_VIEW_LOAD_TIMEOUT = 5_000L
             const val DEFAULT_RECYCLER_VIEW_OPERATION_TIMEOUT = 5_000L
 
             var ESPRESSO_OPERATION_POLLING_TIMEOUT = 0L //ms
             var ACTION_TIMEOUT = DEFAULT_ACTION_TIMEOUT
             var ASSERTION_TIMEOUT = DEFAULT_ASSERTION_TIMEOUT
+            var VIEW_SEARCH_TIMEOUT = DEFAULT_VIEW_SEARCH_TIMEOUT
             var RECYCLER_VIEW_LOAD_TIMEOUT = DEFAULT_RECYCLER_VIEW_LOAD_TIMEOUT
             var RECYCLER_VIEW_OPERATIONS_TIMEOUT = DEFAULT_RECYCLER_VIEW_OPERATION_TIMEOUT
             var RECYCLER_VIEW_ITEM_SEARCH_LIMIT = -1
@@ -150,6 +153,22 @@ object UltronConfig {
                     PerformException::class.java,
                     NoMatchingViewException::class.java,
                     AssertionFailedError::class.java
+                )
+                val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
+                    resultAnalyzer.analyze(it)
+                }
+            }
+        }
+
+        class ViewSearchConfig {
+            companion object {
+                var allowedExceptions = mutableListOf<Class<out Throwable>>(
+                    UltronWrapperException::class.java,
+                    UltronException::class.java,
+                    UltronOperationException::class.java,
+                    AmbiguousViewMatcherException::class.java,
+                    NoMatchingViewException::class.java,
+                    NullPointerException::class.java
                 )
                 val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
                     resultAnalyzer.analyze(it)
