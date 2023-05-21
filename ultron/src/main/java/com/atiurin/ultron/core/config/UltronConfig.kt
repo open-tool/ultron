@@ -3,10 +3,14 @@ package com.atiurin.ultron.core.config
 import android.view.View
 import android.webkit.WebView
 import androidx.test.espresso.AmbiguousViewMatcherException
+import androidx.test.espresso.DaggerBaseLayerComponent
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.PerformException
+import androidx.test.espresso.UiController
+import androidx.test.espresso.base.ActiveRootLister
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.internal.platform.os.ControlledLooper
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.Configurator
 import androidx.test.uiautomator.UiDevice
@@ -99,16 +103,19 @@ object UltronConfig {
 
     class Espresso {
         companion object {
+            val baseLayerComponent = DaggerBaseLayerComponent.create()
+            val activeRootLister: ActiveRootLister = baseLayerComponent.activeRootLister()
+            val uiController: UiController = baseLayerComponent.uiController()
+            val controlledLooper: ControlledLooper = baseLayerComponent.controlledLooper()
+
             const val DEFAULT_ACTION_TIMEOUT = 5_000L
             const val DEFAULT_ASSERTION_TIMEOUT = 5_000L
-            const val DEFAULT_VIEW_SEARCH_TIMEOUT = 5_000L
             const val DEFAULT_RECYCLER_VIEW_LOAD_TIMEOUT = 5_000L
             const val DEFAULT_RECYCLER_VIEW_OPERATION_TIMEOUT = 5_000L
 
             var ESPRESSO_OPERATION_POLLING_TIMEOUT = 0L //ms
             var ACTION_TIMEOUT = DEFAULT_ACTION_TIMEOUT
             var ASSERTION_TIMEOUT = DEFAULT_ASSERTION_TIMEOUT
-            var VIEW_SEARCH_TIMEOUT = DEFAULT_VIEW_SEARCH_TIMEOUT
             var RECYCLER_VIEW_LOAD_TIMEOUT = DEFAULT_RECYCLER_VIEW_LOAD_TIMEOUT
             var RECYCLER_VIEW_OPERATIONS_TIMEOUT = DEFAULT_RECYCLER_VIEW_OPERATION_TIMEOUT
             var RECYCLER_VIEW_ITEM_SEARCH_LIMIT = -1
@@ -136,7 +143,8 @@ object UltronConfig {
                     UltronException::class.java,
                     UltronAssertionException::class.java,
                     PerformException::class.java,
-                    NoMatchingViewException::class.java
+                    NoMatchingViewException::class.java,
+                    AmbiguousViewMatcherException::class.java
                 )
                 val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
                     resultAnalyzer.analyze(it)
@@ -152,23 +160,8 @@ object UltronConfig {
                     UltronAssertionException::class.java,
                     PerformException::class.java,
                     NoMatchingViewException::class.java,
-                    AssertionFailedError::class.java
-                )
-                val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
-                    resultAnalyzer.analyze(it)
-                }
-            }
-        }
-
-        class ViewSearchConfig {
-            companion object {
-                var allowedExceptions = mutableListOf<Class<out Throwable>>(
-                    UltronWrapperException::class.java,
-                    UltronException::class.java,
-                    UltronOperationException::class.java,
-                    AmbiguousViewMatcherException::class.java,
-                    NoMatchingViewException::class.java,
-                    NullPointerException::class.java
+                    AssertionFailedError::class.java,
+                    AmbiguousViewMatcherException::class.java
                 )
                 val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
                     resultAnalyzer.analyze(it)

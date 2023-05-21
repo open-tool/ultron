@@ -20,7 +20,6 @@ import com.atiurin.ultron.core.espresso.action.EspressoActionType
 import com.atiurin.ultron.core.espresso.action.UltronCustomClickAction
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionExecutor
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
-import com.atiurin.ultron.core.espresso.viewfinding.EspressoViewFindingExecutor
 import com.atiurin.ultron.custom.espresso.assertion.ExistsEspressoViewAssertion
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.getDataMatcher
@@ -43,11 +42,21 @@ class UltronEspressoInteraction<T>(
         )
     }
 
+    fun inRoot(rootMatcher: Matcher<Root>) = apply {
+        when (interaction) {
+            is ViewInteraction -> {
+                interaction.inRoot(rootMatcher)
+            }
+            is DataInteraction -> {
+                interaction.inRoot(rootMatcher)
+            }
+            else -> throw UltronException("Unknown type of interaction provided!")
+        }
+    }
+
     fun getActionTimeout(): Long = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
 
     fun getAssertionTimeout(): Long = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
-
-    fun getViewSearchingTimeout(): Long = timeoutMs ?: UltronConfig.Espresso.VIEW_SEARCH_TIMEOUT
 
     fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit): UltronEspressoInteraction<T> {
         return UltronEspressoInteraction(this.interaction, this.timeoutMs, resultHandler)
@@ -592,15 +601,8 @@ class UltronEspressoInteraction<T>(
         description: String
     ) = UltronEspressoOperation(operationBlock, name, type, description, getAssertionTimeout(), assertion)
 
-    fun getUltronEspressoViewFinding(
-        operationBlock: () -> Unit, name: String,
-        type: UltronOperationType,
-        description: String
-    ) = UltronEspressoOperation(operationBlock, name, type, description, getViewSearchingTimeout(), assertion)
-
     fun getActionResultHandler() = this.resultHandler ?: UltronConfig.Espresso.ViewActionConfig.resultHandler
     fun getAssertionResultHandler() = this.resultHandler ?: UltronConfig.Espresso.ViewAssertionConfig.resultHandler
-    fun getViewFindingResultHandler() = this.resultHandler ?: UltronConfig.Espresso.ViewSearchConfig.resultHandler
 
     fun executeAction(operation: UltronEspressoOperation) =
         UltronEspressoOperationLifecycle.execute(EspressoActionExecutor(operation), getActionResultHandler())
@@ -619,15 +621,6 @@ class UltronEspressoInteraction<T>(
         type: UltronOperationType = CommonOperationType.DEFAULT,
         description: String
     ) = executeAssertion(getUltronEspressoAssertionOperation(operationBlock, name, type, description))
-
-    fun executeViewFinding(operation: UltronEspressoOperation) =
-        UltronEspressoOperationLifecycle.execute(EspressoViewFindingExecutor(operation), getViewFindingResultHandler())
-
-    fun executeViewFinding(
-        operationBlock: () -> Unit, name: String,
-        type: UltronOperationType = CommonOperationType.DEFAULT,
-        description: String
-    ) = executeViewFinding(getUltronEspressoViewFinding(operationBlock, name, type, description))
 
     internal fun T.className() = this?.let { it::class.java.simpleName }
 }
