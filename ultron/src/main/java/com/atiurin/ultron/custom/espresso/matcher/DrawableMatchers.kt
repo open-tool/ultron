@@ -17,14 +17,14 @@ class ResourceDrawableMatcher(private val expectedId: Int = 0) : TypeSafeMatcher
         if (targetView !is ImageView) {
             return false
         }
-        val imageView: ImageView = targetView as ImageView
+        val imageView: ImageView = targetView
         if (expectedId < 0) {
             return imageView.drawable != null
         }
         val resources: Resources = targetView.context.resources
         val expectedDrawable: Drawable = resources.getDrawable(expectedId)
         resourceName = resources.getResourceEntryName(expectedId)
-        return imageView.drawable.isSameAs(expectedDrawable)
+        return imageView.drawable?.isSameAs(expectedDrawable) == true
     }
 
 

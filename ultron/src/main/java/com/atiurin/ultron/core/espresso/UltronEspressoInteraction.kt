@@ -10,10 +10,10 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import com.atiurin.ultron.core.common.CommonOperationType
-import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
-import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.common.UltronOperationType
+import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
+import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.action.EspressoActionExecutor
 import com.atiurin.ultron.core.espresso.action.EspressoActionType
@@ -40,6 +40,18 @@ class UltronEspressoInteraction<T>(
         if (interaction !is ViewInteraction && interaction !is DataInteraction) throw UltronException(
             "Invalid interaction class provided ${interaction.className()}. Use ViewInteraction or DataInteraction"
         )
+    }
+
+    fun inRoot(rootMatcher: Matcher<Root>) = apply {
+        when (interaction) {
+            is ViewInteraction -> {
+                interaction.inRoot(rootMatcher)
+            }
+            is DataInteraction -> {
+                interaction.inRoot(rootMatcher)
+            }
+            else -> throw UltronException("Unknown type of interaction provided!")
+        }
     }
 
     fun getActionTimeout(): Long = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
