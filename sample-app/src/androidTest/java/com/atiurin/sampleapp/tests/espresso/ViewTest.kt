@@ -6,6 +6,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.CustomClicksActivity
 import com.atiurin.sampleapp.tests.BaseTest
+import com.atiurin.ultron.custom.espresso.action.getView
 import com.atiurin.ultron.custom.espresso.base.findViewForcibly
 import com.atiurin.ultron.extensions.perform
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
@@ -24,7 +25,7 @@ class ViewTest : BaseTest() {
 
     @Test
     fun actionGetView() {
-        val view = withId(R.id.rB_top_left)
+        val view = withId(R.id.rB_top_left).getView()
         Assert.assertNotNull(view)
     }
 
