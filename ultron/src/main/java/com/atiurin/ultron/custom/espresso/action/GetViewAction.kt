@@ -25,9 +25,9 @@ fun <T> UltronEspressoInteraction<T>.getView(): View {
     val viewContainer = AtomicReference<View>()
     executeAction(
         operationBlock = getInteractionActionBlock(GetViewAction(viewContainer)),
-        name = "GetView with '${getInteractionMatcher()}'",
+        name = "Get view with '${getInteractionMatcher()}' in root '${getInteractionRootMatcher()}'",
         type = CustomEspressoActionType.GET_VIEW,
-        description = "${interaction.className()} action '${CustomEspressoActionType.GET_VIEW}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
+        description = "${interaction.className()} get view action '${CustomEspressoActionType.GET_VIEW}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
     )
     return viewContainer.get()
 }
