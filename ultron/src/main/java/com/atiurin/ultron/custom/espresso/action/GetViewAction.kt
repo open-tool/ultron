@@ -31,7 +31,9 @@ fun <T> UltronEspressoInteraction<T>.getView(): View {
     )
     return viewContainer.get()
 }
-
+/**
+ * This method provides view of this matcher according to the common espresso idle state mechanism.
+ */
+fun Matcher<View>.getView() = UltronEspressoInteraction(onView(this)).getView()
 fun ViewInteraction.getView() = UltronEspressoInteraction(this).getView()
 fun DataInteraction.getView() = UltronEspressoInteraction(this).getView()
-fun Matcher<View>.getView() = UltronEspressoInteraction(onView(this)).getView()

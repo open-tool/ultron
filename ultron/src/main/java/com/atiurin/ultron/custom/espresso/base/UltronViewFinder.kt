@@ -44,6 +44,10 @@ fun <T> UltronEspressoInteraction<T>.getViewForcibly(): View {
     return viewContainer.get()
 }
 
+/**
+ * This method provides view of this matcher.
+ * The difference between `getViewForcibly()` and `getView()` is that the first method is not bound to the common espresso idle state mechanism.
+ */
+fun Matcher<View>.getViewForcibly() = UltronEspressoInteraction(onView(this)).getViewForcibly()
 fun ViewInteraction.getViewForcibly() = UltronEspressoInteraction(this).getViewForcibly()
 fun DataInteraction.getViewForcibly() = UltronEspressoInteraction(this).getViewForcibly()
-fun Matcher<View>.getViewForcibly() = UltronEspressoInteraction(onView(this)).getViewForcibly()
