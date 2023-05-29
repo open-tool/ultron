@@ -33,17 +33,21 @@ class UltronViewFinder<T>(val interaction: T) {
 
 }
 
-fun <T> UltronEspressoInteraction<T>.findViewForcibly(): View {
+fun <T> UltronEspressoInteraction<T>.getViewForcibly(): View {
     val viewContainer = AtomicReference<View>()
     executeAction(
         operationBlock = { viewContainer.set(UltronViewFinder(interaction).view) },
-        name = "Find view with '${getInteractionMatcher()}' in root '${getInteractionRootMatcher()}'",
+        name = "Get view forcibly with '${getInteractionMatcher()}' in root '${getInteractionRootMatcher()}'",
         type = GET_VIEW_FORCIBLY,
-        description = "${interaction.className()} find view '$GET_VIEW_FORCIBLY' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
+        description = "${interaction.className()} get view forcibly action '$GET_VIEW_FORCIBLY' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
     )
     return viewContainer.get()
 }
 
-fun ViewInteraction.findViewForcibly() = UltronEspressoInteraction(this).findViewForcibly()
-fun DataInteraction.findViewForcibly() = UltronEspressoInteraction(this).findViewForcibly()
-fun Matcher<View>.findViewForcibly() = UltronEspressoInteraction(onView(this)).findViewForcibly()
+/**
+ * This method provides view of this matcher.
+ * The difference between `getViewForcibly()` and `getView()` is that the first method is not bound to the common espresso idle state mechanism.
+ */
+fun Matcher<View>.getViewForcibly() = UltronEspressoInteraction(onView(this)).getViewForcibly()
+fun ViewInteraction.getViewForcibly() = UltronEspressoInteraction(this).getViewForcibly()
+fun DataInteraction.getViewForcibly() = UltronEspressoInteraction(this).getViewForcibly()
