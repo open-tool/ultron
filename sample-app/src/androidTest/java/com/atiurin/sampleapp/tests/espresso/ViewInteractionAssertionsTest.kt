@@ -9,7 +9,7 @@ import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
-import com.atiurin.ultron.custom.espresso.assertion.doesNotExistInAnyRoot
+import com.atiurin.ultron.custom.espresso.assertion.doesNotExistInAnyVisibleRoot
 import com.atiurin.ultron.custom.espresso.assertion.hasCurrentHintTextColor
 import com.atiurin.ultron.custom.espresso.assertion.hasCurrentTextColor
 import com.atiurin.ultron.custom.espresso.assertion.hasHighlightColor
@@ -60,12 +60,12 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     //doesNotExistAnyRoot
     @Test
     fun doesNotExistAnyRoot_notExisted() {
-        page.notExistElement.doesNotExistInAnyRoot()
+        page.notExistElement.doesNotExistInAnyVisibleRoot()
     }
 
     @Test
     fun doesNotExistAnyRoot_existed() {
-        AssertUtils.assertException { page.button.withTimeout(100).doesNotExistInAnyRoot() }
+        AssertUtils.assertException { page.button.withTimeout(100).doesNotExistInAnyVisibleRoot() }
     }
 
     //exists
