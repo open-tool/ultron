@@ -41,16 +41,19 @@ fun <T> UltronEspressoInteraction<T>.performOnViewForcibly(action: View.() -> Un
 }
 
 /**
- * This method performs [action] on view of this matcher on MainThread.
- * Obtaining a view is based on the common espresso idle state mechanism.
+ * Performs the given [action] on the view matched by this matcher on the MainThread.
+ *
+ * Obtaining of the view is based on the common espresso idle state mechanism.
  */
 fun Matcher<View>.performOnView(action: View.() -> Unit) = UltronEspressoInteraction(onView(this)).performOnView(action)
 fun ViewInteraction.performOnView(action: View.() -> Unit) = UltronEspressoInteraction(this).performOnView(action)
 fun DataInteraction.performOnView(action: View.() -> Unit) = UltronEspressoInteraction(this).performOnView(action)
 
 /**
- * This method performs [action] on view of this matcher on MainThread.
- * The difference between `performOnViewForcibly()` and `performOnView()` is that in the first method, obtaining the view will not be bound to the common espresso idle state mechanism.
+ * Performs the given [action] on the view matched by this matcher on the MainThread.
+ *
+ * The difference between `performOnViewForcibly()` and `performOnView()` is that in the first method,
+ * obtaining of the view is not bound to the common espresso idle state mechanism.
  */
 fun Matcher<View>.performOnViewForcibly(action: View.() -> Unit) = UltronEspressoInteraction(onView(this)).performOnViewForcibly(action)
 fun ViewInteraction.performOnViewForcibly(action: View.() -> Unit) = UltronEspressoInteraction(this).performOnViewForcibly(action)

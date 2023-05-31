@@ -33,6 +33,7 @@ class UltronViewFinder<T>(val interaction: T) {
 
 }
 
+
 fun <T> UltronEspressoInteraction<T>.getViewForcibly(): View {
     val viewContainer = AtomicReference<View>()
     executeAction(
@@ -45,8 +46,15 @@ fun <T> UltronEspressoInteraction<T>.getViewForcibly(): View {
 }
 
 /**
- * This method provides view of this matcher.
- * The difference between `getViewForcibly()` and `getView()` is that the first method is not bound to the common espresso idle state mechanism.
+ * Returns the view associated with this matcher, bypassing the common Espresso idle state mechanism.
+ *
+ * The `getViewForcibly()` extension method allows obtaining the view directly, without waiting for Espresso's internal idle state.
+ * This is useful in scenarios where the idle state mechanism may cause delays or interfere with certain operations.
+ *
+ * Compared to the `getView()` method, which works with Espresso's idle state mechanism, `getViewForcibly()` provides immediate access to the view without considering the idle state.
+ *
+ * @receiver The matcher to obtain the view from.
+ * @return The view associated with the matcher.
  */
 fun Matcher<View>.getViewForcibly() = UltronEspressoInteraction(onView(this)).getViewForcibly()
 fun ViewInteraction.getViewForcibly() = UltronEspressoInteraction(this).getViewForcibly()
