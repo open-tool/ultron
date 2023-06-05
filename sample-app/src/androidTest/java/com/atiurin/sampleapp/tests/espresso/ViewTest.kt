@@ -5,6 +5,7 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.CustomClicksActivity
+import com.atiurin.sampleapp.activity.CustomClicksActivity.Companion.COMPAT_ASYNC_TASK_TIME_EXECUTION
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.custom.espresso.action.getView
 import com.atiurin.ultron.custom.espresso.base.getViewForcibly
@@ -17,8 +18,12 @@ import org.junit.Test
 
 class ViewTest : BaseTest() {
 
+    private lateinit var customClicksActivity: CustomClicksActivity
+
     private val startActivity = SetUpRule().add {
-        ActivityScenario.launch(CustomClicksActivity::class.java)
+        ActivityScenario.launch(CustomClicksActivity::class.java).onActivity { activity ->
+            customClicksActivity = activity
+        }
     }
 
     init {
@@ -33,8 +38,11 @@ class ViewTest : BaseTest() {
 
     @Test
     fun actionGetViewForcibly() {
-        val view = withId(R.id.rB_top_left).getViewForcibly()
+        val startTime = System.currentTimeMillis()
+        customClicksActivity.startCompatAsyncTask()
+        val view = withId(R.id.rB_top_right).getViewForcibly()
         Assert.assertNotNull(view)
+        Assert.assertTrue(System.currentTimeMillis() < COMPAT_ASYNC_TASK_TIME_EXECUTION + startTime)
     }
 
     @Test
@@ -50,12 +58,14 @@ class ViewTest : BaseTest() {
 
     @Test
     fun matcherActionPerformOnViewForcibly() {
+        val startTime = System.currentTimeMillis()
+        customClicksActivity.startCompatAsyncTask()
         withId(R.id.rB_top_left).apply {
             performOnViewForcibly {
                 performClick()
                 Assert.assertTrue((this as RadioButton).isChecked)
             }
-            isChecked()
         }
+        Assert.assertTrue(System.currentTimeMillis() < COMPAT_ASYNC_TASK_TIME_EXECUTION + startTime)
     }
 }
