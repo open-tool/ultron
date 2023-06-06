@@ -121,8 +121,7 @@ class UltronViewFinder<T>(val interaction: T) {
         )
     }
 
-    private class MatcherPredicateAdapter<T>(matcher: Matcher<in T>) :
-        Predicate<T> {
+    private class MatcherPredicateAdapter<T>(matcher: Matcher<in T>) : Predicate<T> {
         private val matcher: Matcher<in T>
 
         init {
