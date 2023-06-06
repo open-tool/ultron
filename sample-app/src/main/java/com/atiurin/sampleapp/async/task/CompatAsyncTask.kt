@@ -7,6 +7,7 @@ class CompatAsyncTask : AsyncTask<Void, Void, Void>() {
 
     companion object {
         const val COMPAT_ASYNC_TASK_TIME_EXECUTION = 5000
+        const val ASYNC = "ASYNC"
     }
 
     @Deprecated("Suppress")
