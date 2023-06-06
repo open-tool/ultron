@@ -22,6 +22,10 @@ fun View.performOnView(action: View.() -> Unit) {
     }
 }
 
+/**
+ * Actual time execution could be timeout*2
+ * as we are getting view and then perform provided action.
+ */
 fun <T> UltronEspressoInteraction<T>.performOnView(action: View.() -> Unit) {
     val view = this.getView()
     executeAction(

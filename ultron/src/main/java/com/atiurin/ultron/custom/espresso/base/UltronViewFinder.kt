@@ -39,7 +39,7 @@ class UltronViewFinder<T>(val interaction: T) {
     }
     private val root: View by lazy {
         getVisibleRootViews().find { it.isReady }?.decorView
-            ?: throw UltronException("There is not a single root in ready and visible state")
+            ?: throw UltronException("There is no root View in ready and visible state")
     }
 
     val view: View by lazy {
