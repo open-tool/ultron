@@ -8,6 +8,7 @@ import org.junit.runners.model.MultipleFailureException
 import org.junit.runners.model.Statement
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.regex.Pattern
 
 /**
  * Class to execute setup and teardown methods before and after @Test
@@ -21,6 +22,7 @@ abstract class ConditionRule(open val name: String) : TestRule {
     companion object {
         private const val COMMON_CONDITION_KEY = "COMMON_CONDITION_KEY"
     }
+
     private val commonConditionCounter = AtomicInteger(0)
     internal val commonConditionKeys = mutableListOf<String>()
     private val conditionCounter = AtomicInteger(0)
@@ -154,4 +156,18 @@ abstract class ConditionRule(open val name: String) : TestRule {
      * Invoked when a test method finishes (whether passing or failing)
      */
     open fun finished(description: Description) {}
+
+    /**
+     * Required due to parametrized test name
+     */
+    internal fun getMethodName(rawName: String): String {
+        val pattern = Pattern.compile("^(.*?)\\[\\d+]?$")
+        val matcher = pattern.matcher(rawName)
+
+        return if (matcher.find()) {
+            matcher.group(1) ?: rawName
+        } else {
+            rawName
+        }
+    }
 }
