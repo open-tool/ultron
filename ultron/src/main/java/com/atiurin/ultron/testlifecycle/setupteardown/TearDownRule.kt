@@ -5,7 +5,7 @@ import org.junit.runner.Description
 open class TearDownRule(override val name: String = "") : ConditionRule(name), RuleSequenceTearDown {
     override fun finished(description: Description) {
         val keys = mutableListOf<String>().apply { this.addAll(commonConditionKeys) }
-        val method = description.testClass.getMethod(description.methodName)
+        val method = description.testClass.getMethod(getMethodName(description.methodName))
         if (method.isAnnotationPresent(TearDown::class.java)) {
             val tearDownAnnotation = method.getAnnotation(TearDown::class.java)
             if (tearDownAnnotation != null) {

@@ -5,7 +5,7 @@ import org.junit.runner.Description
 open class SetUpRule(override val name: String = "") : ConditionRule(name) {
     override fun starting(description: Description) {
         val keys = mutableListOf<String>().apply { this.addAll(commonConditionKeys) }
-        val method = description.testClass.getMethod(description.methodName)
+        val method = description.testClass.getMethod(getMethodName(description.methodName))
         if (method.isAnnotationPresent(SetUp::class.java)) {
             val setUpAnnotation = method.getAnnotation(SetUp::class.java)
             if (setUpAnnotation != null) {
