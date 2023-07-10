@@ -10,7 +10,8 @@ Ultron also gives you a full control under your tests!
 Moreover, you don't need to learn any new classes or special syntax. All magic actions and assertions are provided from crunch.
 Ultron can be easially customised and extended. Wish you only stable tests!
 
-![logo](https://user-images.githubusercontent.com/12834123/112367915-96321580-8ceb-11eb-90f6-ed44b5b53ab0.png)
+<img src="https://user-images.githubusercontent.com/12834123/252489846-db6cb0f8-6b28-4ae4-bceb-8b5907f1d59f.png#gh-light-mode-only" width=500>
+<img src="https://user-images.githubusercontent.com/12834123/252498170-61e5a440-c2b5-42ea-8bfb-91ee12248422.png#gh-dark-mode-only" width=500>
 
 ## What are the benefits of using the framework?
 
@@ -230,13 +231,14 @@ Full code sample [DemoEspressoTest.class](https://github.com/open-tool/ultron/bl
 
 In general, it all comes down to the fact that the architecture of your project will look like this.
 
-![Architecture](https://github.com/alex-tiurin/espresso-page-object/blob/master/wiki/img/architecture.png)
+<img src="https://github.com/open-tool/ultron/assets/12834123/1111961b-a3ea-4757-a8ee-c1af99f27a23" width=700>
 
 ## Allure report
 
 Ultron can generate artifacts for Allure report. Just apply recommended config and set testIntrumentationRunner. 
 
 Read full guide in [wiki](https://github.com/open-tool/ultron/wiki/Allure)
+
 
 ```kotlin
 @BeforeClass @JvmStatic
