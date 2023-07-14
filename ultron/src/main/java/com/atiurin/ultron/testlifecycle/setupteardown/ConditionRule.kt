@@ -8,7 +8,6 @@ import org.junit.runners.model.MultipleFailureException
 import org.junit.runners.model.Statement
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.regex.Pattern
 
 /**
  * Class to execute setup and teardown methods before and after @Test
@@ -41,7 +40,7 @@ abstract class ConditionRule(open val name: String) : TestRule {
         return "${COMMON_CONDITION_KEY}_${commonConditionCounter.getAndIncrement()}"
     }
 
-    override fun apply(base: Statement, description: Description): Statement? {
+    override fun apply(base: Statement, description: Description): Statement {
         return object : Statement() {
             override fun evaluate() {
                 val errors: MutableList<Throwable> = ArrayList()
@@ -161,11 +160,9 @@ abstract class ConditionRule(open val name: String) : TestRule {
      * Required due to parametrized test name
      */
     internal fun getMethodName(rawName: String): String {
-        val pattern = Pattern.compile("^(.*?)\\[\\d+]?$")
-        val matcher = pattern.matcher(rawName)
-
-        return if (matcher.find()) {
-            matcher.group(1) ?: rawName
+        val bracketIndex = rawName.indexOf('[')
+        return if(bracketIndex != -1) {
+            rawName.substring(0, bracketIndex)
         } else {
             rawName
         }

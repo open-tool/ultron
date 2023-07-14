@@ -1,7 +1,6 @@
 package com.atiurin.sampleapp.tests.testlifecycle
 
 import com.atiurin.sampleapp.activity.ComposeElementsActivity
-import com.atiurin.sampleapp.framework.Log
 import com.atiurin.ultron.core.compose.createUltronComposeRule
 import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.testlifecycle.rulesequence.RuleSequence
@@ -17,23 +16,27 @@ import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
 class ParametrizedTest(private val testValue1: String, private val testValue2: String) {
-    var commonSetUpDone = false
-    var singleTestSetUpDone = false
-    var commonTearDownDone = false
-    var singleTestTearDownDone = false
-    val activityRule = createUltronComposeRule<ComposeElementsActivity>()
+    private var commonSetUpDone = false
+    private var singleTestSetUpDone = false
+    private var commonTearDownDone = false
+    private var singleTestTearDownDone = false
+    private val activityRule = createUltronComposeRule<ComposeElementsActivity>()
 
-    val beforeEachRule = SetUpRule("Precondition before each test").add {
-        commonSetUpDone = true
-    }.add(key = "singleTestSetUpDone") {
-        singleTestSetUpDone = true
-    }
-    val afterEachRule = TearDownRule("Post condition after each test").add {
-        commonTearDownDone = true
-    }.add(key = "singleTestTearDownDone") {
-        singleTestTearDownDone = true
-    }
-    val controlTearDown = TearDownRule()
+    private val beforeEachRule = SetUpRule("Precondition before each test")
+        .add {
+            commonSetUpDone = true
+        }
+        .add(key = "singleTestSetUpDone") {
+            singleTestSetUpDone = true
+        }
+    private val afterEachRule = TearDownRule("Post condition after each test")
+        .add {
+            commonTearDownDone = true
+        }
+        .add(key = "singleTestTearDownDone") {
+            singleTestTearDownDone = true
+        }
+    private val controlTearDown = TearDownRule()
         .add {
             Assert.assertTrue(commonSetUpDone)
             Assert.assertTrue(singleTestSetUpDone)
@@ -46,7 +49,7 @@ class ParametrizedTest(private val testValue1: String, private val testValue2: S
 
     companion object {
         @JvmStatic
-        @Parameterized.Parameters
+        @Parameterized.Parameters(name = "[{0}-{1}]")
         fun testData() = listOf(
             arrayOf("param1_1", "param1_2"),
             arrayOf("param2_1", "param2_2"),
@@ -57,6 +60,8 @@ class ParametrizedTest(private val testValue1: String, private val testValue2: S
     @SetUp("singleTestSetUpDone")
     @TearDown("singleTestTearDownDone")
     fun myAwesomeTest() {
+        Assert.assertTrue(singleTestSetUpDone)
+        Assert.assertTrue(commonSetUpDone)
         UltronLog.debug("testValue1 = $testValue1")
         UltronLog.debug("testValue2 = $testValue2")
     }
