@@ -4,6 +4,7 @@ import android.view.View
 import androidx.test.espresso.*
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.extensions.simpleClassName
 import org.hamcrest.Matcher
 import java.util.concurrent.atomic.AtomicReference
 
@@ -23,7 +24,7 @@ fun <T> UltronEspressoInteraction<T>.getContentDescription(): String? {
         operationBlock = getInteractionActionBlock(GetContentDescriptionAction(textContainer)),
         name = "GetContentDescription from view with '${getInteractionMatcher()}'",
         type = CustomEspressoActionType.GET_CONTENT_DESCRIPTION,
-        description = "${interaction.className()} action '${CustomEspressoActionType.GET_CONTENT_DESCRIPTION}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
+        description = "${interaction.simpleClassName()} action '${CustomEspressoActionType.GET_CONTENT_DESCRIPTION}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
     )
     return textContainer.get()
 }

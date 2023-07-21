@@ -9,6 +9,7 @@ import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
 import com.atiurin.ultron.custom.espresso.base.getVisibleRootViews
+import com.atiurin.ultron.extensions.simpleClassName
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.Matcher
 
@@ -20,7 +21,7 @@ fun <T> UltronEspressoInteraction<T>.doesNotExistInAnyVisibleRoot() : UltronEspr
             operationBlock = getInteractionAssertionBlock(ViewAssertions.doesNotExist()),
             name = "DoesNotExist of '${getInteractionMatcher()}'",
             type = EspressoAssertionType.DOES_NOT_EXIST,
-            description = "${interaction.className()} assertion '${EspressoAssertionType.DOES_NOT_EXIST}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
+            description = "${interaction.simpleClassName()} assertion '${EspressoAssertionType.DOES_NOT_EXIST}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
     return defaultUltronEspressoInteraction

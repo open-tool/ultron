@@ -7,6 +7,7 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.ViewInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.custom.espresso.matcher.withDrawable
+import com.atiurin.ultron.extensions.simpleClassName
 import com.atiurin.ultron.utils.getTargetResourceName
 import org.hamcrest.Matcher
 
@@ -16,7 +17,7 @@ fun <T> UltronEspressoInteraction<T>.hasDrawable(@DrawableRes resourceId: Int) =
         operationBlock = getInteractionAssertionBlock(withDrawable(resourceId)),
         name = "HasDrawable with target resource $resName in '${getInteractionMatcher()}'",
         type = CustomEspressoAssertionType.HAS_DRAWABLE,
-        description = "${interaction.className()} assertion '${CustomEspressoAssertionType.HAS_DRAWABLE}' with drawable resource '$resName' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
+        description = "${interaction.simpleClassName()} assertion '${CustomEspressoAssertionType.HAS_DRAWABLE}' with drawable resource '$resName' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
     )
 }
 
@@ -28,7 +29,7 @@ fun <T> UltronEspressoInteraction<T>.hasAnyDrawable() = apply {
         operationBlock = getInteractionAssertionBlock(com.atiurin.ultron.custom.espresso.matcher.hasAnyDrawable()),
         name = "HasAnyDrawable in '${getInteractionMatcher()}'",
         type = CustomEspressoAssertionType.HAS_ANY_DRAWABLE,
-        description = "${interaction.className()} assertion '${CustomEspressoAssertionType.HAS_ANY_DRAWABLE}' with any drawable in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
+        description = "${interaction.simpleClassName()} assertion '${CustomEspressoAssertionType.HAS_ANY_DRAWABLE}' with any drawable in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
     )
 }
 

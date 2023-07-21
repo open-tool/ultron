@@ -38,4 +38,6 @@ enum class MimeType(val extension: String, val value: String) {
 
     /** YAML */
     YAML(".yaml", "text/yaml"),
+
+    XML(".xml", "text/xml")
 }
