@@ -10,8 +10,10 @@ Ultron also gives you a full control under your tests!
 Moreover, you don't need to learn any new classes or special syntax. All magic actions and assertions are provided from crunch.
 Ultron can be easially customised and extended. Wish you only stable tests!
 
-<img src="https://user-images.githubusercontent.com/12834123/252489846-db6cb0f8-6b28-4ae4-bceb-8b5907f1d59f.png#gh-light-mode-only" width=500>
-<img src="https://user-images.githubusercontent.com/12834123/252498170-61e5a440-c2b5-42ea-8bfb-91ee12248422.png#gh-dark-mode-only" width=500>
+<p align="center">
+<img src="https://user-images.githubusercontent.com/12834123/252489846-db6cb0f8-6b28-4ae4-bceb-8b5907f1d59f.png#gh-light-mode-only" width=600>
+<img src="https://user-images.githubusercontent.com/12834123/252498170-61e5a440-c2b5-42ea-8bfb-91ee12248422.png#gh-dark-mode-only" width=600>
+</p>
 
 ## What are the benefits of using the framework?
 
