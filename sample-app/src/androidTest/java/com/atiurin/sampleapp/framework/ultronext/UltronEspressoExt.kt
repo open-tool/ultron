@@ -12,6 +12,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerView
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
+import com.atiurin.ultron.extensions.simpleClassName
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 
@@ -20,7 +21,7 @@ fun <T> UltronEspressoInteraction<T>.appendText(text: String) = apply {
     executeAction(
         operationBlock = getInteractionActionBlock(AppendTextAction(text)),
         name = "Append text '$text' to ${getInteractionMatcher()}",
-        description = "${interaction!!::class.simpleName} APPEND_TEXT to ${getInteractionMatcher()} during $timeoutMs ms",
+        description = "${interaction.simpleClassName()} APPEND_TEXT to ${getInteractionMatcher()} during $timeoutMs ms",
     )
 }
 

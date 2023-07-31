@@ -8,6 +8,7 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.extensions.simpleClassName
 import org.hamcrest.Matcher
 import java.util.concurrent.atomic.AtomicReference
 
@@ -27,7 +28,7 @@ fun <T> UltronEspressoInteraction<T>.getView(): View {
         operationBlock = getInteractionActionBlock(GetViewAction(viewContainer)),
         name = "Get view with '${getInteractionMatcher()}' in root '${getInteractionRootMatcher()}'",
         type = CustomEspressoActionType.GET_VIEW,
-        description = "${interaction.className()} get view action '${CustomEspressoActionType.GET_VIEW}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
+        description = "${interaction.simpleClassName()} get view action '${CustomEspressoActionType.GET_VIEW}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
     )
     return viewContainer.get()
 }

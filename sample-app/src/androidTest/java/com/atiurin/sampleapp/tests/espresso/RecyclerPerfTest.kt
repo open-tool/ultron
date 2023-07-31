@@ -30,10 +30,6 @@ class RecyclerPerfTest : BaseTest() {
             onView(withId(R.id.recycler_friends))
                 .perform(
                     RecyclerViewActions
-                        .scrollTo<RecyclerView.ViewHolder>(hasDescendant(withText(ContactRepositoty.getLast().name)))
-                )
-                .perform(
-                    RecyclerViewActions
                         .actionOnItem<RecyclerView.ViewHolder>(
                             hasDescendant(withText(ContactRepositoty.getLast().name)),
                             click()

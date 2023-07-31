@@ -11,6 +11,7 @@ import org.hamcrest.Matcher
 import com.atiurin.ultron.custom.espresso.matcher.textViewHasCurrentTextColor
 import com.atiurin.ultron.custom.espresso.matcher.textViewHasHighlightColor
 import com.atiurin.ultron.custom.espresso.matcher.textViewHasShadowColor
+import com.atiurin.ultron.extensions.simpleClassName
 import com.atiurin.ultron.utils.getColorHex
 import com.atiurin.ultron.utils.getTargetColor
 
@@ -23,7 +24,7 @@ fun <T> UltronEspressoInteraction<T>.hasCurrentTextColor(@ColorRes colorResId: I
         operationBlock = getInteractionAssertionBlock(textViewHasCurrentTextColor(colorResId)),
         name = "Has current text color $hexColor in '${getInteractionMatcher()}'",
         type = CustomEspressoAssertionType.HAS_CURRENT_TEXT_COLOR,
-        description = "${interaction.className()} assertion '${CustomEspressoAssertionType.HAS_CURRENT_TEXT_COLOR}' with color resource = '$hexColor' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
+        description = "${interaction.simpleClassName()} assertion '${CustomEspressoAssertionType.HAS_CURRENT_TEXT_COLOR}' with color resource = '$hexColor' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
     )
 }
 
@@ -40,7 +41,7 @@ fun <T> UltronEspressoInteraction<T>.hasCurrentHintTextColor(@ColorRes colorResI
         operationBlock = getInteractionAssertionBlock(textViewHasCurrentHintTextColor(colorResId)),
         name = "Has current hint text color $hexColor in '${getInteractionMatcher()}'",
         type = CustomEspressoAssertionType.HAS_CURRENT_HINT_TEXT_COLOR,
-        description = "${interaction.className()} assertion '${CustomEspressoAssertionType.HAS_CURRENT_HINT_TEXT_COLOR}' with color resource = '$hexColor' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
+        description = "${interaction.simpleClassName()} assertion '${CustomEspressoAssertionType.HAS_CURRENT_HINT_TEXT_COLOR}' with color resource = '$hexColor' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
     )
 }
 
@@ -57,7 +58,7 @@ fun <T> UltronEspressoInteraction<T>.hasHighlightColor(@ColorRes colorResId: Int
         operationBlock = getInteractionAssertionBlock(textViewHasHighlightColor(colorResId)),
         name = "Has highlight color $hexColor in '${getInteractionMatcher()}'",
         type = CustomEspressoAssertionType.HAS_HIGHLIGHT_COLOR,
-        description = "${interaction.className()} assertion '${CustomEspressoAssertionType.HAS_HIGHLIGHT_COLOR}' with color resource = '$hexColor' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
+        description = "${interaction.simpleClassName()} assertion '${CustomEspressoAssertionType.HAS_HIGHLIGHT_COLOR}' with color resource = '$hexColor' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
     )
 }
 
@@ -75,7 +76,7 @@ fun <T> UltronEspressoInteraction<T>.hasShadowColor(@ColorRes colorResId: Int) =
         operationBlock = getInteractionAssertionBlock(textViewHasShadowColor(colorResId)),
         name = "Has shadow color $hexColor in '${getInteractionMatcher()}'",
         type = CustomEspressoAssertionType.HAS_SHADOW_COLOR,
-        description = "${interaction.className()} assertion '${CustomEspressoAssertionType.HAS_SHADOW_COLOR}' with color resource = '$hexColor' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
+        description = "${interaction.simpleClassName()} assertion '${CustomEspressoAssertionType.HAS_SHADOW_COLOR}' with color resource = '$hexColor' in '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms",
     )
 }
 

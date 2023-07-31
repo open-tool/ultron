@@ -6,6 +6,7 @@ import android.widget.ImageView
 import androidx.test.espresso.*
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.extensions.simpleClassName
 import org.hamcrest.Matcher
 import java.util.concurrent.atomic.AtomicReference
 
@@ -26,7 +27,7 @@ fun <T> UltronEspressoInteraction<T>.getDrawable(): Drawable? {
         operationBlock = getInteractionActionBlock(GetDrawableAction(drawableContainer)),
         name = "GetDrawable from TextView with '${getInteractionMatcher()}'",
         type = CustomEspressoActionType.GET_DRAWABLE,
-        description = "${interaction.className()} action '${CustomEspressoActionType.GET_DRAWABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
+        description = "${interaction.simpleClassName()} action '${CustomEspressoActionType.GET_DRAWABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
     )
     return drawableContainer.get()
 }

@@ -22,7 +22,7 @@ class AllureScreenshot(private val quality: Int = 90) {
             if (!result.isSuccess) UltronLog.error("Failed to take the screenshot ")
         }
         val fileName = AttachUtil.attachFile(
-            name = name,
+            name = "$name${result.mimeType.extension}",
             file = tempFile,
             mimeType = result.mimeType
         )

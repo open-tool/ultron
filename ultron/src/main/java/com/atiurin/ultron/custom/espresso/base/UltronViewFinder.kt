@@ -23,6 +23,7 @@ import com.atiurin.ultron.custom.espresso.action.CustomEspressoActionType.GET_VI
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.getTargetMatcher
 import com.atiurin.ultron.extensions.getViewMatcher
+import com.atiurin.ultron.extensions.simpleClassName
 import com.atiurin.ultron.utils.runOnUiThread
 import org.hamcrest.Matcher
 import java.util.Locale
@@ -141,7 +142,7 @@ fun <T> UltronEspressoInteraction<T>.getViewForcibly(): View {
         operationBlock = { viewContainer.set(UltronViewFinder(interaction).view) },
         name = "Get view forcibly with '${getInteractionMatcher()}' in root '${getInteractionRootMatcher()}'",
         type = GET_VIEW_FORCIBLY,
-        description = "${interaction.className()} get view forcibly action '$GET_VIEW_FORCIBLY' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
+        description = "${interaction.simpleClassName()} get view forcibly action '$GET_VIEW_FORCIBLY' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
     )
     return viewContainer.get()
 }
