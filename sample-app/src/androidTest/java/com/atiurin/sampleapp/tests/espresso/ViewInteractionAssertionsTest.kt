@@ -5,6 +5,7 @@ import com.atiurin.ultron.custom.espresso.matcher.hasAnyDrawable
 import com.atiurin.ultron.custom.espresso.matcher.withDrawable
 import com.atiurin.ultron.extensions.*
 import com.atiurin.sampleapp.R
+import com.atiurin.sampleapp.framework.ultronext.assertChecked
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
@@ -463,5 +464,20 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun appCompatTextViewTextColor_invalidColor() {
         AssertUtils.assertException { page.appCompatTextView.withTimeout(100).hasCurrentTextColor(R.color.invalid) }
+    }
+
+    @Test
+    fun customAssertTest () {
+        page.checkBoxEnabled.assertChecked(true)
+    }
+
+    @Test
+    fun customAssertTest_invalidValue () {
+        AssertUtils.assertException { page.checkBoxEnabled.withTimeout(100).assertChecked(false) }
+    }
+
+    @Test
+    fun notExist_customAssertion(){
+        AssertUtils.assertException { withText("not exist").withTimeout(100).assertChecked(true) }
     }
 }

@@ -4,29 +4,21 @@ import android.view.View
 import androidx.test.espresso.*
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.extensions.simpleClassName
 import org.hamcrest.Matcher
 import java.util.concurrent.atomic.AtomicReference
 
-class GetContentDescriptionAction(private val textContainer: AtomicReference<String?>) : ViewAction {
-    override fun getConstraints(): Matcher<View> = isAssignableFrom(View::class.java)
-
-    override fun getDescription(): String = "getting content description from view"
-
-    override fun perform(uiController: UiController, view: View) {
-        textContainer.set(view.contentDescription?.toString())
-    }
-}
-
-fun <T> UltronEspressoInteraction<T>.getContentDescription(): String? {
-    val textContainer = AtomicReference<String?>()
-    executeAction(
-        operationBlock = getInteractionActionBlock(GetContentDescriptionAction(textContainer)),
-        name = "GetContentDescription from view with '${getInteractionMatcher()}'",
-        type = CustomEspressoActionType.GET_CONTENT_DESCRIPTION,
-        description = "${interaction.simpleClassName()} action '${CustomEspressoActionType.GET_CONTENT_DESCRIPTION}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
+fun <T> UltronEspressoInteraction<T>.getContentDescription(): String? = execute(
+    UltronEspressoActionParams(
+        operationName = "GetContentDescription from view with '${getInteractionMatcher()}'",
+        operationDescription ="${interaction.simpleClassName()} action '${CustomEspressoActionType.GET_CONTENT_DESCRIPTION}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
+        operationType = CustomEspressoActionType.GET_CONTENT_DESCRIPTION,
+        viewActionConstraints = isAssignableFrom(View::class.java),
+        viewActionDescription = "getting content description from view"
     )
-    return textContainer.get()
+) { _, view ->
+    view.contentDescription?.toString()
 }
 
 fun ViewInteraction.getContentDescription() = UltronEspressoInteraction(this).getContentDescription()

@@ -200,28 +200,33 @@ class UltronUiObjectActionsTest: UiElementsTest() {
     @Test
     fun swipeUpTest(){
         page.eventStatus.hasText(getTargetString(R.string.button_text))
-        page.swipableImageView.exists().isEnabled().swipeUp(40)
-        page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_UP.name)
+        page.swipableImageView.withAssertion {
+            page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_UP.name)
+        }.swipeUp(40)
+
     }
 
     @Test
     fun swipeDownTest(){
         page.eventStatus.hasText(getTargetString(R.string.button_text))
-        page.swipableImageView.exists().isEnabled().swipeDown(40)
-        page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_DOWN.name)
+        page.swipableImageView.withAssertion {
+            page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_DOWN.name)
+        }.swipeDown(40)
     }
 
     @Test
     fun swipeRightTest(){
         page.eventStatus.hasText(getTargetString(R.string.button_text))
-        page.swipableImageView.exists().swipeRight(40)
-        page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
+        page.swipableImageView.withAssertion {
+            page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
+        }.swipeRight(40)
     }
 
     @Test
     fun swipeLeftTest(){
         page.eventStatus.hasText(getTargetString(R.string.button_text))
-        page.swipableImageView.exists().swipeLeft(40)
-        page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_LEFT.name)
+        page.swipableImageView.withAssertion {
+            page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_LEFT.name)
+        }.swipeLeft(40)
     }
 }

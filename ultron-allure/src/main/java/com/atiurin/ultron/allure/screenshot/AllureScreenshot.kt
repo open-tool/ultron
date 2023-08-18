@@ -6,9 +6,6 @@ import com.atiurin.ultron.screenshot.Screenshoter
 import com.atiurin.ultron.screenshot.UiAutomationScreenshoter
 import com.atiurin.ultron.screenshot.ViewScreenshoter
 import com.atiurin.ultron.utils.createCacheFile
-import io.qameta.allure.kotlin.Allure
-import io.qameta.allure.kotlin.AllureLifecycle
-import java.io.InputStream
 
 class AllureScreenshot(private val quality: Int = 90) {
     private val mainScreenshoter: Screenshoter = UiAutomationScreenshoter(quality)

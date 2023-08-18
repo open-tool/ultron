@@ -1,5 +1,6 @@
 package com.atiurin.ultron.core.compose.nodeinteraction
 
+import android.annotation.SuppressLint
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.semantics.*
@@ -20,6 +21,7 @@ import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType.*
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationLifecycle
+import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
 import com.atiurin.ultron.extensions.getDefaultDoubleClickDelay
 import com.atiurin.ultron.extensions.getDefaultLongClickDuration
@@ -436,6 +438,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     }
 
 
+    @SuppressLint("NewApi")
     fun captureToImage(): ImageBitmap {
         val image = AtomicReference<ImageBitmap>()
         executeOperation(
@@ -447,19 +450,82 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         return image.get()
     }
 
+    /**
+     * @deprecated Use the method 'perform' with 'UltronComposeOperationParams' instead.
+     *
+     * This method has been deprecated in favor of the more generalized 'perform' method that
+     * allows you to perform a custom Compose operation using 'UltronComposeOperationParams'.
+     * The new method provides improved flexibility and consistency in handling operation parameters.
+     *
+     * @param option The deprecated option parameter.
+     * @param block The deprecated block parameter.
+     * @return The result of the deprecated operation.
+     */
+    @Deprecated("Use the method 'perform' with 'UltronComposeOperationParams' instead")
     fun <T> perform(
-        option: PerformCustomBlockOption? = null,
+        option: PerformCustomBlockOption,
         block: (SemanticsNodeInteraction) -> T
     ): T {
-        val _option = option ?: PerformCustomBlockOption(CUSTOM)
         val result = AtomicReference<T>()
         executeOperation(
             operationBlock = { result.set(block(semanticsNodeInteraction)) },
-            name = "Perform '${_option.description}''${semanticsNodeInteraction.getDescription()}'",
-            type = _option.operationType,
-            description = "Compose operation '${_option.operationType}' to '${semanticsNodeInteraction.getDescription()}' with option '$_option' during $timeoutMs ms",
+            name = "Perform '${option.description}''${semanticsNodeInteraction.getDescription()}'",
+            type = option.operationType,
+            description = "Compose operation '${option.operationType}' to '${semanticsNodeInteraction.getDescription()}' with option '$option' during $timeoutMs ms",
         )
         return result.get()
+    }
+
+
+    @Deprecated("")
+    fun <T> perform(params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> T): T {
+        val _params = params ?: getDefaultOperationParams()
+        val container = AtomicReference<T>()
+        executeOperation(
+            operationBlock = { container.set(block(semanticsNodeInteraction)) },
+            name = _params.operationName,
+            description = _params.operationDescription,
+            type = _params.operationType,
+        )
+        return container.get()
+    }
+
+    fun <T> execute(params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> T): T {
+        val _params = params ?: getDefaultOperationParams()
+        val container = AtomicReference<T>()
+        executeOperation(
+            operationBlock = { container.set(block(semanticsNodeInteraction)) },
+            name = _params.operationName,
+            description = _params.operationDescription,
+            type = _params.operationType,
+        )
+        return container.get()
+    }
+
+
+
+    /**
+     * Executes a custom compose operation using the provided parameters and operation block.
+     *
+     * This method allows you to execute a custom Compose operation by providing the parameters
+     * for the operation and a block of code that defines the operation's behavior. The operation
+     * block receives a SemanticsNodeInteraction as a parameter and is responsible for performing
+     * the desired interaction with the semantics node.
+     *
+     * @param params The optional parameters for the Compose operation. If null, default operation
+     *               parameters are used.
+     * @param block The block of code that defines the behavior of the custom operation. The block
+     *              receives a SemanticsNodeInteraction as a parameter.
+     * @return An updated instance of the class.
+     */
+    fun perform(params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> Unit) = apply {
+        val _params = params ?: getDefaultOperationParams()
+        executeOperation(
+            operationBlock = { block(semanticsNodeInteraction) },
+            name = _params.operationName,
+            description = _params.operationDescription,
+            type = _params.operationType,
+        )
     }
 
     fun assertIsDisplayed() = apply {
@@ -729,4 +795,9 @@ open class UltronComposeSemanticsNodeInteraction constructor(
             timeoutMs = timeoutMs,
             assertion = assertion
         )
+
+    private fun getDefaultOperationParams() = UltronComposeOperationParams(
+        operationName = "Anonymous Compose operation on '${semanticsNodeInteraction.getDescription()}'",
+        operationDescription = "Anonymous Compose operation on '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+    )
 }

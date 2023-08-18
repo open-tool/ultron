@@ -328,8 +328,10 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
     fun swipeUpTest(){
         page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.editTextContentDesc.replaceText("some text")
-        page.swipableImageView.isEnabled().isDisplayed().swipeUp(speed = 2000)
-        page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_UP.name)
+        page.swipableImageView.withAssertion {
+            page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_UP.name)
+        }.swipeUp(speed = 2000)
+
     }
 
     @FlakyTest
@@ -338,8 +340,9 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
 //        Thread.sleep(2000)
         page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.editTextContentDesc.replaceText("some text")
-        page.swipableImageView.isEnabled().isDisplayed().swipeDown(speed = 2000)
-        page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_DOWN.name)
+        page.swipableImageView.withAssertion {
+            page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_DOWN.name)
+        }.swipeDown(speed = 2000)
     }
 
     @Test
@@ -347,8 +350,9 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
     fun swipeRightTest(){
         page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.editTextContentDesc.replaceText("some text")
-        page.swipableImageView.isEnabled().isDisplayed().swipeRight(speed = 2000)
-        page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
+        page.swipableImageView.withAssertion {
+            page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
+        }.swipeRight(speed = 2000)
     }
 
     @Test
@@ -356,8 +360,9 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
     fun swipeLeftTest(){
         page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.editTextContentDesc.replaceText("some text")
-        page.swipableImageView.isEnabled().isDisplayed().swipeLeft(speed = 2000)
-        page.eventStatus.textContains(UiElementsActivity.Event.SWIPE_LEFT.name)
+        page.swipableImageView.withAssertion {
+            page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_LEFT.name)
+        }.swipeLeft(speed = 2000)
     }
 
     @Test
@@ -369,6 +374,4 @@ class UltronUiObject2ActionsTest: UiElementsTest() {
             .appendText(textToAdd)
             .hasText(startText + textToAdd)
     }
-
-
 }

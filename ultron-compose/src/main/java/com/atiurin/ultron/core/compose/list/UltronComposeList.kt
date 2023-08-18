@@ -27,7 +27,7 @@ class UltronComposeList(
     fun item(matcher: SemanticsMatcher) = UltronComposeListItem(this, matcher)
     fun visibleItem(index: Int) = UltronComposeListItem(this, index)
     fun firstVisibleItem() = visibleItem(0)
-    fun lastVisibleItem() = visibleItem(getMatcher().perform { it.fetchSemanticsNode().children.lastIndex })
+    fun lastVisibleItem() = visibleItem(getMatcher().perform<Int> { it.fetchSemanticsNode().children.lastIndex })
 
     /** @return [UltronRecyclerViewItem] subclass instance matches [matcher]
      *
@@ -58,13 +58,13 @@ class UltronComposeList(
     }
 
     inline fun <reified T : UltronComposeListItem> getFirstVisibleItem(): T = getVisibleItem(0)
-    inline fun <reified T : UltronComposeListItem> getLastVisibleItem(): T = getVisibleItem(getMatcher().perform { it.fetchSemanticsNode().children.lastIndex })
+    inline fun <reified T : UltronComposeListItem> getLastVisibleItem(): T = getVisibleItem(getMatcher().execute { it.fetchSemanticsNode().children.lastIndex })
     /**
      * Provide a scope with references to list SemanticsNode and SemanticsNodeInteraction.
      * It is possible to evaluate any action or assertion on this node.
      */
     fun <T> performOnList(block: (SemanticsNode, SemanticsNodeInteraction) -> T): T =
-        UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree).perform { listSemanticsNodeInteraction ->
+        UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree).execute { listSemanticsNodeInteraction ->
             val listSemanticsNode = listSemanticsNodeInteraction.fetchSemanticsNode()
             block(listSemanticsNode, listSemanticsNodeInteraction)
         }
@@ -73,14 +73,14 @@ class UltronComposeList(
      * @return SemanticsNodeInteraction for list item
      */
     fun onItem(matcher: SemanticsMatcher) = UltronComposeSemanticsNodeInteraction(
-        getMatcher().perform { listInteraction ->
+        getMatcher().execute { listInteraction ->
             listInteraction.performScrollToNode(matcher).onChildren().filterToOne(matcher)
         }
     )
 
     fun onItemChild(itemMatcher: SemanticsMatcher, childMatcher: SemanticsMatcher): UltronComposeSemanticsNodeInteraction =
         UltronComposeSemanticsNodeInteraction(UltronComposeSemanticsNodeInteraction(listMatcher, true)
-            .perform { listInteraction ->
+            .execute { listInteraction ->
                 listInteraction.performScrollToNode(itemMatcher)
                     .onChildren().filterToOne(itemMatcher)
                     .onChildren().filterToOne(childMatcher)
@@ -88,19 +88,19 @@ class UltronComposeList(
         )
 
     fun visibleChild(childMatcher: SemanticsMatcher) = UltronComposeSemanticsNodeInteraction(
-        getMatcher().perform { listInteraction ->
+        getMatcher().execute { listInteraction ->
             listInteraction.onChildren().filterToOne(childMatcher)
         }
     )
 
     fun onVisibleItemChild(index: Int, childMatcher: SemanticsMatcher) = UltronComposeSemanticsNodeInteraction(
-        getMatcher().perform { listInteraction ->
+        getMatcher().execute { listInteraction ->
             listInteraction.onChildAt(index).onChildren().filterToOne(childMatcher)
         }
     )
 
     fun onVisibleItem(index: Int) = UltronComposeSemanticsNodeInteraction(
-        getMatcher().perform { listInteraction ->
+        getMatcher().execute { listInteraction ->
             val visibleItemsList = listInteraction.fetchSemanticsNode().children
             if (index > visibleItemsList.size) {
                 throw UltronException(
@@ -155,7 +155,7 @@ class UltronComposeList(
         )
     }
 
-    fun getVisibleItemsCount(): Int = getMatcher().perform { it.fetchSemanticsNode().children.size }
+    fun getVisibleItemsCount(): Int = getMatcher().execute { it.fetchSemanticsNode().children.size }
     fun getMatcher() = UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree)
 }
 

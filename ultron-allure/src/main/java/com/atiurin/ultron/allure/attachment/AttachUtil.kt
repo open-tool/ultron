@@ -1,7 +1,6 @@
 package com.atiurin.ultron.allure.attachment
 
 import com.atiurin.ultron.file.MimeType
-import com.atiurin.ultron.log.UltronLog
 import io.qameta.allure.kotlin.Allure
 import io.qameta.allure.kotlin.AllureLifecycle
 import java.io.File

@@ -188,6 +188,11 @@ class ViewInteractionActionsTest : UiElementsTest() {
     }
 
     @Test
+    fun notExist_customAction() {
+        AssertUtils.assertException { withText("not existed").withTimeout(19).appendText("asd") }
+    }
+
+    @Test
     fun getTextActionTest_textExist() {
         val text = page.appCompatTextView.getText()
         Assert.assertEquals(getTargetString(R.string.app_compat_text), text)

@@ -19,6 +19,7 @@ import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
 import com.atiurin.ultron.core.compose.nodeinteraction.*
+import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 
 fun SemanticsMatcher.isSuccess(action: SemanticsMatcher.() -> Unit) = UltronComposeSemanticsNodeInteraction(
     this).isSuccess { action() }
@@ -173,8 +174,15 @@ fun SemanticsMatcher.performMouseInput(block: MouseInjectionScope.() -> Unit) = 
 fun SemanticsMatcher.performSemanticsAction(key: SemanticsPropertyKey<AccessibilityAction<() -> Boolean>>) =
     UltronComposeSemanticsNodeInteraction(this).performSemanticsAction(key)
 
-fun <T> SemanticsMatcher.perform(block: (SemanticsNodeInteraction) -> T, option: PerformCustomBlockOption? = null) =
+@Deprecated("Use perform(params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> T) instead")
+fun <T> SemanticsMatcher.perform(block: (SemanticsNodeInteraction) -> T, option: PerformCustomBlockOption) =
     UltronComposeSemanticsNodeInteraction(this).perform(option, block)
+
+fun SemanticsMatcher.perform(params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> Unit) =
+    UltronComposeSemanticsNodeInteraction(this).perform(params, block)
+
+fun <T> SemanticsMatcher.execute(params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> T) =
+    UltronComposeSemanticsNodeInteraction(this).execute(params, block)
 
 //asserts
 fun SemanticsMatcher.assertIsDisplayed() = UltronComposeSemanticsNodeInteraction(this).assertIsDisplayed()

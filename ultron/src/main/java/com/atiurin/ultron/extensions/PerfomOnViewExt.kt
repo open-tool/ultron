@@ -5,6 +5,7 @@ import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.custom.espresso.action.CustomEspressoActionType.PERFORM_ON_VIEW
 import com.atiurin.ultron.custom.espresso.action.CustomEspressoActionType.PERFORM_ON_VIEW_FORCIBLY
 import com.atiurin.ultron.custom.espresso.action.getView
@@ -23,17 +24,17 @@ fun View.performOnView(action: View.() -> Unit) {
 }
 
 /**
- * Actual time execution could be timeout*2
- * as we are getting view and then perform provided action.
+ * Perform action on view in ui thread with Espresso Idling Mechanism
  */
-fun <T> UltronEspressoInteraction<T>.performOnView(action: View.() -> Unit) {
-    val view = this.getView()
-    executeAction(
-        operationBlock = { view.performOnView(action) },
-        name = "Perform on view with '${getInteractionMatcher()}' in root '${getInteractionRootMatcher()}'",
-        type = PERFORM_ON_VIEW,
-        description = "${interaction.simpleClassName()} perform $action on view '$PERFORM_ON_VIEW' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
+@Deprecated("Use perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit)", ReplaceWith("perform(params, block"))
+fun <T> UltronEspressoInteraction<T>.performOnView(action: View.() -> Unit) = perform(
+    UltronEspressoActionParams(
+        operationName ="Perform on view with '${getInteractionMatcher()}' in root '${getInteractionRootMatcher()}'",
+        operationDescription ="${interaction.simpleClassName()} perform $action on view '$PERFORM_ON_VIEW' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
+        operationType = PERFORM_ON_VIEW
     )
+) { _, view ->
+    view.performOnView(action)
 }
 
 fun <T> UltronEspressoInteraction<T>.performOnViewForcibly(action: View.() -> Unit) {
@@ -50,8 +51,13 @@ fun <T> UltronEspressoInteraction<T>.performOnViewForcibly(action: View.() -> Un
  *
  * Obtaining of the view is based on the common espresso idle state mechanism.
  */
+@Deprecated("Use perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit)", ReplaceWith("perform(params, block"))
 fun Matcher<View>.performOnView(action: View.() -> Unit) = UltronEspressoInteraction(onView(this)).performOnView(action)
+
+@Deprecated("Use perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit)", ReplaceWith("perform(params, block"))
 fun ViewInteraction.performOnView(action: View.() -> Unit) = UltronEspressoInteraction(this).performOnView(action)
+
+@Deprecated("Use perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit)", ReplaceWith("perform(params, block"))
 fun DataInteraction.performOnView(action: View.() -> Unit) = UltronEspressoInteraction(this).performOnView(action)
 
 /**
