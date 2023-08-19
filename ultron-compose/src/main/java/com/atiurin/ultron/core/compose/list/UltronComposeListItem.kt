@@ -105,6 +105,14 @@ open class UltronComposeListItem {
         option: PerformCustomBlockOption, block: (SemanticsNodeInteraction) -> T
     ) = getItemUltronComposeInteraction().perform(option, block)
 
+    @Deprecated(
+        "Use the execute(params: UltronComposeOperationParams?, block: (SemanticsNodeInteraction) -> T) method instead.",
+        ReplaceWith("execute(params, block)")
+    )
+    fun <T> perform(
+        block: (SemanticsNodeInteraction) -> T
+    ) : T = getItemUltronComposeInteraction().execute(null, block)
+
     fun <T> execute(
         params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> T
     ) = getItemUltronComposeInteraction().execute(params, block)
