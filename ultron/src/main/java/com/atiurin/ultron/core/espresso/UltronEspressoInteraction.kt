@@ -636,8 +636,6 @@ class UltronEspressoInteraction<T>(
      * block receives a View as a parameter and is responsible for evaluating whether the condition
      * is met for the given view.
      *
-     * The method returns an updated instance of the class.
-     *
      * @param params The optional parameters for the Espresso assertion. If null, default assertion
      *               parameters are used.
      * @param block The block of code that defines the condition for the custom assertion. The block
