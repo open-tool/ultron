@@ -292,6 +292,18 @@ class ComposeUIElementsTest : BaseTest() {
     }
 
     @Test
+    fun getNode_exits(){
+        val node = page.status.getNode()
+        Assert.assertEquals(ComposeElementsActivity.Constants.statusText, node.config[SemanticsProperties.TestTag])
+    }
+
+    @Test
+    fun getNodeConfigProperty_exist(){
+        val testTag = page.status.getNodeConfigProperty(SemanticsProperties.TestTag)
+        Assert.assertEquals(ComposeElementsActivity.Constants.statusText, testTag)
+    }
+
+    @Test
     fun assertIsDisplayed() {
         page.status.assertIsDisplayed()
     }

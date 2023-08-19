@@ -256,7 +256,16 @@ class UltronEspressoInteraction<T>(
         )
     }
 
-
+    /**
+     * This method allows you to perform a ViewAction on the interaction's view by providing
+     * the ViewAction and an optional description. The ViewAction represents a specific
+     * interaction with the view, such as clicking or scrolling. The description provides
+     * additional context for the action being performed.
+     *
+     * @param viewAction The ViewAction to perform on the interaction's view.
+     * @param description An optional description for the action being performed.
+     * @return An updated instance of the class.
+     */
     fun perform(viewAction: ViewAction, description: String = "") = apply {
         executeAction(
             operationBlock = getInteractionActionBlock(viewAction),
@@ -265,6 +274,19 @@ class UltronEspressoInteraction<T>(
         )
     }
 
+    /**
+     * This method allows you to perform a custom Espresso action by providing the parameters
+     * for the action and a block of code that defines the action's behavior. The action block
+     * receives a UiController and a View as parameters and is responsible for performing the
+     * desired interaction on the view. After executing the action block, the main thread is
+     * looped until idle.
+     *
+     * @param params The optional parameters for the Espresso action. If null, default action
+     *               parameters are used.
+     * @param block The block of code that defines the behavior of the custom action. The block
+     *              receives a UiController and a View as parameters.
+     * @return An updated instance of the class.
+     */
     fun perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit) = apply {
         val actionParams = params ?: getDefaultActionParams()
         val viewAction = object : AnonymousViewAction(actionParams) {
@@ -281,6 +303,22 @@ class UltronEspressoInteraction<T>(
         )
     }
 
+    /**
+     * Executes a custom Espresso action using the provided parameters and action block.
+     *
+     * This method allows you to execute a custom Espresso action by providing the parameters
+     * for the action and a block of code that defines the action's behavior. The action block
+     * receives a UiController and a View as parameters and is responsible for performing the
+     * desired interaction on the view. After executing the action block, the main thread is
+     * looped until idle.
+     *
+     * @param <T> The type of the result returned by the action block.
+     * @param params The optional parameters for the Espresso action. If null, default action
+     *               parameters are used.
+     * @param block The block of code that defines the behavior of the custom action. The block
+     *              receives a UiController and a View as parameters and returns a value of type T.
+     * @return The result of the action block.
+     */
     fun <T> execute(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> T): T {
         val actionParams = params ?: getDefaultActionParams()
         val container = AtomicReference<T>()
@@ -298,8 +336,6 @@ class UltronEspressoInteraction<T>(
         )
         return container.get()
     }
-
-
 
     //assertion
     fun isDisplayed() = apply {

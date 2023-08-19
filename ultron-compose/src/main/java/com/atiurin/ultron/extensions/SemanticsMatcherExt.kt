@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.semantics.AccessibilityAction
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.MouseInjectionScope
@@ -183,6 +184,9 @@ fun SemanticsMatcher.perform(params: UltronComposeOperationParams? = null, block
 
 fun <T> SemanticsMatcher.execute(params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> T) =
     UltronComposeSemanticsNodeInteraction(this).execute(params, block)
+
+fun SemanticsMatcher.getNode(): SemanticsNode = UltronComposeSemanticsNodeInteraction(this).getNode()
+fun <T> SemanticsMatcher.getNodeConfigProperty(key: SemanticsPropertyKey<T>): T = UltronComposeSemanticsNodeInteraction(this).getNodeConfigProperty(key)
 
 //asserts
 fun SemanticsMatcher.assertIsDisplayed() = UltronComposeSemanticsNodeInteraction(this).assertIsDisplayed()
