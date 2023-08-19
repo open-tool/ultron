@@ -2,6 +2,7 @@ package com.atiurin.ultron.extensions
 
 import android.view.View
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.EspressoKey
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
@@ -9,6 +10,7 @@ import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
+import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.listeners.setListenersState
 import org.hamcrest.Matcher
 
@@ -47,6 +49,11 @@ fun Matcher<View>.swipeUp() = UltronEspressoInteraction(onView(this)).swipeUp()
 fun Matcher<View>.swipeDown() = UltronEspressoInteraction(onView(this)).swipeDown()
 fun Matcher<View>.scrollTo() = UltronEspressoInteraction(onView(this)).scrollTo()
 fun Matcher<View>.perform(viewAction: ViewAction, description: String = "") = UltronEspressoInteraction(onView(this)).perform(viewAction, description)
+fun Matcher<View>.perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit) =
+    UltronEspressoInteraction(onView(this)).perform(params, block)
+
+fun <T> Matcher<View>.execute(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> T) : T =
+    UltronEspressoInteraction(onView(this)).execute(params, block)
 
 //assertions
 fun Matcher<View>.isDisplayed() = UltronEspressoInteraction(onView(this)).isDisplayed()

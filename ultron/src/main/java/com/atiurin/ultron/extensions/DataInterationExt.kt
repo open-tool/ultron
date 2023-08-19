@@ -2,13 +2,16 @@ package com.atiurin.ultron.extensions
 
 import android.view.View
 import androidx.test.espresso.DataInteraction
+import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.EspressoKey
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.listeners.setListenersState
 import org.hamcrest.Matcher
 
@@ -44,7 +47,14 @@ fun DataInteraction.swipeRight() = UltronEspressoInteraction(this).swipeRight()
 fun DataInteraction.swipeUp() = UltronEspressoInteraction(this).swipeUp()
 fun DataInteraction.swipeDown() = UltronEspressoInteraction(this).swipeDown()
 fun DataInteraction.scrollTo() = UltronEspressoInteraction(this).scrollTo()
-fun DataInteraction.perform(viewAction: ViewAction) = UltronEspressoInteraction(this).perform(viewAction)
+fun DataInteraction.perform(viewAction: ViewAction, description: String = "") =
+    UltronEspressoInteraction(this).perform(viewAction, description)
+
+fun DataInteraction.perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit) =
+    UltronEspressoInteraction(this).perform(params, block)
+
+fun <T> DataInteraction.execute(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> T) : T =
+    UltronEspressoInteraction(this).execute(params, block)
 
 //assertions
 fun DataInteraction.isDisplayed() = UltronEspressoInteraction(this).isDisplayed()

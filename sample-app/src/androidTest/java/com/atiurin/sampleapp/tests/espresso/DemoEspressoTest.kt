@@ -2,7 +2,6 @@ package com.atiurin.sampleapp.tests.espresso
 
 import androidx.test.rule.ActivityTestRule
 import com.atiurin.sampleapp.activity.MainActivity
-import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.pages.ChatPage
 import com.atiurin.sampleapp.pages.FriendsListPage
 import com.atiurin.sampleapp.tests.BaseTest

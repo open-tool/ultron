@@ -1,9 +1,14 @@
 package com.atiurin.sampleapp.tests.compose
 
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.dp
 import com.atiurin.sampleapp.activity.ActionsStatus
@@ -18,20 +23,29 @@ import com.atiurin.sampleapp.framework.ultronext.hasProgress
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.ComposeElementsPage
 import com.atiurin.sampleapp.tests.BaseTest
+import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.options.ClickOption
 import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
+import com.atiurin.ultron.core.common.options.PerformCustomBlockOption
 import com.atiurin.ultron.core.common.options.TextContainsOption
 import com.atiurin.ultron.core.common.options.TextEqualsOption
 import com.atiurin.ultron.core.compose.createUltronComposeRule
+import com.atiurin.ultron.core.compose.nodeinteraction.UltronComposeSemanticsNodeInteraction
 import com.atiurin.ultron.core.compose.nodeinteraction.click
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType
+import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
+import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
+import com.atiurin.ultron.exceptions.UltronAssertionException
+import com.atiurin.ultron.exceptions.UltronException
+import com.atiurin.ultron.exceptions.UltronOperationException
 import com.atiurin.ultron.extensions.*
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
-class ComposeUIElementsTest: BaseTest() {
+class ComposeUIElementsTest : BaseTest() {
     val page = ComposeElementsPage
 
     @get:Rule
@@ -187,7 +201,6 @@ class ComposeUIElementsTest: BaseTest() {
     }
 
 
-
     @Test
     fun typeText() {
         val text = "some text"
@@ -208,6 +221,7 @@ class ComposeUIElementsTest: BaseTest() {
         val image = page.longAndDoubleClickButton.captureToImage()
         Assert.assertNotNull(image)
     }
+
     @Test
     fun setProgress() {
         page.progressBar.setProgress(0.7f)
@@ -216,21 +230,77 @@ class ComposeUIElementsTest: BaseTest() {
     }
 
     @Test
-    fun performCustomSemanticsAction(){
+    fun performCustomSemanticsAction() {
         val progress = 0.7f
         page.progressBar.setProgress(progress).assertMatches(hasProgress(progress))
     }
 
     @Test
-    fun performExtendedAssertion(){
+    fun performExtendedAssertion() {
         val progress = 0.7f
         page.progressBar.setProgress(progress).assertProgress(progress)
     }
 
     @Test
-    fun performMouseInput(){
+    fun performWithLambda() {
+        val progress = 0.7f
+        val result = page.progressBar.perform {
+            it.performSemanticsAction(SemanticsActions.SetProgress) {
+                it.invoke(progress)
+            }
+        }
+        Assert.assertTrue(result is UltronComposeSemanticsNodeInteraction)
+        page.progressBar.assertProgress(progress)
+    }
+
+    @Test
+    fun semanticsMatcher_performDeprecated() {
+        val text = page.status.perform<String>( {
+            it.fetchSemanticsNode().config[SemanticsProperties.Text].first().text
+        }, option = PerformCustomBlockOption(ComposeOperationType.CUSTOM, ""))
+        Assert.assertTrue(text.isNotBlank())
+    }
+
+    @Test
+    fun ultronComposeSemanticsNodeInteraction_performDeprecated() {
+        val text = page.status.assertExists().perform( option = PerformCustomBlockOption(ComposeOperationType.CUSTOM, "")) {
+            it.fetchSemanticsNode().config[SemanticsProperties.Text].first().text
+        }
+        Assert.assertTrue(text.isNotBlank())
+    }
+
+    @Test
+    fun ultronComposeSemanticsNodeInteraction_execute() {
+        val text = page.status.assertExists().execute {
+            it.fetchSemanticsNode().config[SemanticsProperties.Text].first().text
+        }
+        Assert.assertTrue(text.isNotBlank())
+    }
+
+    @Test
+    fun semanticsMatcher_execute() {
+        val text = page.status.execute {
+            it.fetchSemanticsNode().config[SemanticsProperties.Text].first().text
+        }
+        Assert.assertTrue(text.isNotBlank())
+    }
+
+    @Test
+    fun performMouseInput() {
         page.swipeableNode.performMouseInput { swipeUp() }
         page.status.assertTextEquals(ActionsStatus.SwipeUp.name)
+    }
+
+    @Test
+    fun getNode_exits(){
+        val node = page.status.getNode()
+        Assert.assertEquals(ComposeElementsActivity.Constants.statusText, node.config[SemanticsProperties.TestTag])
+    }
+
+    @Test
+    fun getNodeConfigProperty_exist(){
+        val testTag = page.status.getNodeConfigProperty(SemanticsProperties.TestTag)
+        Assert.assertEquals(ComposeElementsActivity.Constants.statusText, testTag)
     }
 
     @Test
@@ -322,22 +392,22 @@ class ComposeUIElementsTest: BaseTest() {
     }
 
     @Test
-    fun assertIsSelectable(){
+    fun assertIsSelectable() {
         page.femaleRadioButton.assertIsSelectable()
     }
 
     @Test
-    fun assertIsSelectable_notSelectable(){
+    fun assertIsSelectable_notSelectable() {
         AssertUtils.assertException { page.status.withTimeout(100).assertIsSelectable() }
     }
 
     @Test
-    fun assertIsToggleable(){
+    fun assertIsToggleable() {
         page.simpleCheckbox.assertIsToggleable()
     }
 
     @Test
-    fun assertIsToggleable_notToggleable(){
+    fun assertIsToggleable_notToggleable() {
         AssertUtils.assertException { page.editableText.withTimeout(100).assertIsToggleable() }
     }
 
@@ -572,7 +642,6 @@ class ComposeUIElementsTest: BaseTest() {
     }
 
 
-
     @Test
     fun assertRangeInfoEquals() {
         page.progressBar.setProgress(0.7f)
@@ -639,5 +708,20 @@ class ComposeUIElementsTest: BaseTest() {
         AssertUtils.assertException { page.editableText.replaceText("some text").withTimeout(100).assertMatches(hasText("invalid text")) }
     }
 
-
+    @Test
+    fun customPerformParamsMapping(){
+        val params = UltronComposeOperationParams(
+            operationName = "operationName",
+            operationDescription = "operationDescription",
+            operationType = ComposeOperationType.ASSERT_MATCHES
+        )
+        page.status.withTimeout(100).withResultHandler {
+            val op = it.operation
+            Assert.assertEquals(params.operationName, op.name)
+            Assert.assertEquals(params.operationDescription, op.description)
+            Assert.assertEquals(params.operationType, op.type)
+        }.perform(params){
+            it.assertTextContains("Some invalid text")
+        }
+    }
 }

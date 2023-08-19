@@ -6,30 +6,21 @@ import android.widget.ImageView
 import androidx.test.espresso.*
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.extensions.simpleClassName
 import org.hamcrest.Matcher
 import java.util.concurrent.atomic.AtomicReference
 
-class GetDrawableAction(private val drawableContainer: AtomicReference<Drawable>) : ViewAction {
-    override fun getConstraints(): Matcher<View> =
-        isAssignableFrom(ImageView::class.java)
-
-    override fun getDescription(): String = "getting text from TextView"
-
-    override fun perform(uiController: UiController, view: View) {
-        drawableContainer.set((view as ImageView).drawable)
-    }
-}
-
-fun <T> UltronEspressoInteraction<T>.getDrawable(): Drawable? {
-    val drawableContainer = AtomicReference<Drawable>()
-    executeAction(
-        operationBlock = getInteractionActionBlock(GetDrawableAction(drawableContainer)),
-        name = "GetDrawable from TextView with '${getInteractionMatcher()}'",
-        type = CustomEspressoActionType.GET_DRAWABLE,
-        description = "${interaction.simpleClassName()} action '${CustomEspressoActionType.GET_DRAWABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
+fun <T> UltronEspressoInteraction<T>.getDrawable(): Drawable? = execute(
+    UltronEspressoActionParams(
+        operationName = "GetDrawable from TextView with '${getInteractionMatcher()}'",
+        operationDescription = "${interaction.simpleClassName()} action '${CustomEspressoActionType.GET_DRAWABLE}' of '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms",
+        operationType = CustomEspressoActionType.GET_DRAWABLE,
+        viewActionConstraints = isAssignableFrom(ImageView::class.java),
+        viewActionDescription = "getting Drawable from ImageView"
     )
-    return drawableContainer.get()
+){ _, view ->
+    (view as ImageView).drawable
 }
 
 fun ViewInteraction.getDrawable() = UltronEspressoInteraction(this).getDrawable()

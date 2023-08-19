@@ -1,7 +1,13 @@
 package com.atiurin.ultron.core.espresso
 
 import android.view.View
-import androidx.test.espresso.*
+import androidx.test.espresso.DataInteraction
+import androidx.test.espresso.NoMatchingViewException
+import androidx.test.espresso.Root
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
+import androidx.test.espresso.ViewAssertion
+import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.EspressoKey
 import androidx.test.espresso.action.GeneralLocation
 import androidx.test.espresso.action.Tap
@@ -17,9 +23,12 @@ import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.action.EspressoActionExecutor
 import com.atiurin.ultron.core.espresso.action.EspressoActionType
+import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.core.espresso.action.UltronCustomClickAction
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionExecutor
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
+import com.atiurin.ultron.core.espresso.assertion.UltronEspressoAssertionParams
+import com.atiurin.ultron.custom.espresso.action.AnonymousViewAction
 import com.atiurin.ultron.custom.espresso.assertion.ExistsEspressoViewAssertion
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.getDataMatcher
@@ -27,8 +36,11 @@ import com.atiurin.ultron.extensions.getRootMatcher
 import com.atiurin.ultron.extensions.getViewMatcher
 import com.atiurin.ultron.extensions.simpleClassName
 import com.atiurin.ultron.listeners.setListenersState
+import org.hamcrest.BaseMatcher
+import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers
+import java.util.concurrent.atomic.AtomicReference
 
 @Suppress("MemberVisibilityCanBePrivate")
 class UltronEspressoInteraction<T>(
@@ -48,9 +60,11 @@ class UltronEspressoInteraction<T>(
             is ViewInteraction -> {
                 interaction.inRoot(rootMatcher)
             }
+
             is DataInteraction -> {
                 interaction.inRoot(rootMatcher)
             }
+
             else -> throw UltronException("Unknown type of interaction provided!")
         }
     }
@@ -242,12 +256,85 @@ class UltronEspressoInteraction<T>(
         )
     }
 
+    /**
+     * This method allows you to perform a ViewAction on the interaction's view by providing
+     * the ViewAction and an optional description. The ViewAction represents a specific
+     * interaction with the view, such as clicking or scrolling. The description provides
+     * additional context for the action being performed.
+     *
+     * @param viewAction The ViewAction to perform on the interaction's view.
+     * @param description An optional description for the action being performed.
+     * @return An updated instance of the class.
+     */
     fun perform(viewAction: ViewAction, description: String = "") = apply {
         executeAction(
             operationBlock = getInteractionActionBlock(viewAction),
             name = description.ifEmpty { "Perform action to ${getInteractionMatcher()}" },
             description = "${interaction.simpleClassName()} action '$description' of '${viewAction.description}' to '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
+    }
+
+    /**
+     * This method allows you to perform a custom Espresso action by providing the parameters
+     * for the action and a block of code that defines the action's behavior. The action block
+     * receives a UiController and a View as parameters and is responsible for performing the
+     * desired interaction on the view. After executing the action block, the main thread is
+     * looped until idle.
+     *
+     * @param params The optional parameters for the Espresso action. If null, default action
+     *               parameters are used.
+     * @param block The block of code that defines the behavior of the custom action. The block
+     *              receives a UiController and a View as parameters.
+     * @return An updated instance of the class.
+     */
+    fun perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit) = apply {
+        val actionParams = params ?: getDefaultActionParams()
+        val viewAction = object : AnonymousViewAction(actionParams) {
+            override fun perform(uiController: UiController, view: View) {
+                block(uiController, view)
+                uiController.loopMainThreadUntilIdle()
+            }
+        }
+        executeAction(
+            operationBlock = getInteractionActionBlock(viewAction),
+            name = actionParams.operationName,
+            description = actionParams.operationDescription,
+            type = actionParams.operationType
+        )
+    }
+
+    /**
+     * Executes a custom Espresso action using the provided parameters and action block.
+     *
+     * This method allows you to execute a custom Espresso action by providing the parameters
+     * for the action and a block of code that defines the action's behavior. The action block
+     * receives a UiController and a View as parameters and is responsible for performing the
+     * desired interaction on the view. After executing the action block, the main thread is
+     * looped until idle.
+     *
+     * @param <T> The type of the result returned by the action block.
+     * @param params The optional parameters for the Espresso action. If null, default action
+     *               parameters are used.
+     * @param block The block of code that defines the behavior of the custom action. The block
+     *              receives a UiController and a View as parameters and returns a value of type T.
+     * @return The result of the action block.
+     */
+    fun <T> execute(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> T): T {
+        val actionParams = params ?: getDefaultActionParams()
+        val container = AtomicReference<T>()
+        val viewAction = object : AnonymousViewAction(actionParams) {
+            override fun perform(uiController: UiController, view: View) {
+                container.set(block(uiController, view))
+                uiController.loopMainThreadUntilIdle()
+            }
+        }
+        executeAction(
+            operationBlock = getInteractionActionBlock(viewAction),
+            name = actionParams.operationName,
+            description = actionParams.operationDescription,
+            type = actionParams.operationType
+        )
+        return container.get()
     }
 
     //assertion
@@ -521,6 +608,16 @@ class UltronEspressoInteraction<T>(
         )
     }
 
+    /**
+     * Asserts that the provided condition matches for the interaction's view using a custom Espresso assertion.
+     *
+     * This method allows you to perform a custom Espresso assertion using a Matcher condition. The
+     * provided condition is evaluated against the interaction's view to determine whether the assertion
+     * passes. If the condition matches, the assertion is considered successful.
+     *
+     * @param condition The Matcher condition to evaluate against the interaction's view.
+     * @return An updated instance of the class.
+     */
     fun assertMatches(condition: Matcher<View>) = apply {
         executeAssertion(
             operationBlock = getInteractionAssertionBlock(condition),
@@ -530,14 +627,49 @@ class UltronEspressoInteraction<T>(
         )
     }
 
+    /**
+     * Asserts that a custom Espresso assertion matches the given condition using the provided
+     * parameters and assertion block.
+     *
+     * This method allows you to perform a custom Espresso assertion by providing the parameters
+     * for the assertion and a block of code that defines the assertion's condition. The assertion
+     * block receives a View as a parameter and is responsible for evaluating whether the condition
+     * is met for the given view.
+     *
+     * @param params The optional parameters for the Espresso assertion. If null, default assertion
+     *               parameters are used.
+     * @param block The block of code that defines the condition for the custom assertion. The block
+     *              receives a View as a parameter and returns a boolean value indicating whether
+     *              the condition is met.
+     * @return An updated instance of the class.
+     */
+    fun assertMatches(params: UltronEspressoAssertionParams? = null, block: (view: View) -> Boolean) = apply {
+        val assertionParams = params ?: getDefaultAssertionParams()
+        val matcher = object : BaseMatcher<View>() {
+            override fun describeTo(description: Description) {
+                description.appendText(assertionParams.descriptionToAppend)
+            }
+
+            override fun matches(actual: Any): Boolean = block(actual as View)
+        }
+        executeAssertion(
+            operationBlock = getInteractionAssertionBlock(matcher),
+            name = assertionParams.operationName,
+            description = assertionParams.operationDescription,
+            type = assertionParams.operationType
+        )
+    }
+
     fun getInteractionActionBlock(viewAction: ViewAction): () -> Unit {
         return when (interaction) {
             is ViewInteraction -> {
                 { interaction.perform(viewAction) }
             }
+
             is DataInteraction -> {
                 { interaction.perform(viewAction) }
             }
+
             else -> throw UltronException("Unknown type of interaction provided!")
         }
     }
@@ -547,9 +679,11 @@ class UltronEspressoInteraction<T>(
             is ViewInteraction -> {
                 { interaction.check(matches(matcher)) }
             }
+
             is DataInteraction -> {
                 { interaction.check(matches(matcher)) }
             }
+
             else -> throw UltronException("Unknown type of interaction provided!")
         }
     }
@@ -559,9 +693,11 @@ class UltronEspressoInteraction<T>(
             is ViewInteraction -> {
                 { interaction.check(assertion) }
             }
+
             is DataInteraction -> {
                 { interaction.check(assertion) }
             }
+
             else -> throw UltronException("Unknown type of interaction provided!")
         }
     }
@@ -571,9 +707,11 @@ class UltronEspressoInteraction<T>(
             is ViewInteraction -> {
                 interaction.getViewMatcher()
             }
+
             is DataInteraction -> {
                 interaction.getDataMatcher()
             }
+
             else -> throw UltronException("Unknown type of interaction provided!")
         }
     }
@@ -583,9 +721,11 @@ class UltronEspressoInteraction<T>(
             is ViewInteraction -> {
                 interaction.getRootMatcher()
             }
+
             is DataInteraction -> {
                 interaction.getRootMatcher()
             }
+
             else -> throw UltronException("Unknown type of interaction provided!")
         }
     }
@@ -622,4 +762,14 @@ class UltronEspressoInteraction<T>(
         type: UltronOperationType = CommonOperationType.DEFAULT,
         description: String
     ) = executeAssertion(getUltronEspressoAssertionOperation(operationBlock, name, type, description))
+
+    private fun getDefaultActionParams() = UltronEspressoActionParams(
+        operationName = "Anonymous action to '${getInteractionMatcher()}'",
+        operationDescription = "Anonymous action ${interaction.simpleClassName()} on '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
+    )
+
+    private fun getDefaultAssertionParams() = UltronEspressoAssertionParams(
+        operationName = "Anonymous assertion on '${getInteractionMatcher()}'",
+        operationDescription = "Anonymous assertion on '${getInteractionMatcher()}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
+    )
 }

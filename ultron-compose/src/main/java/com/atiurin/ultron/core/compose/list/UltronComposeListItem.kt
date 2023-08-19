@@ -15,6 +15,7 @@ import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
 import com.atiurin.ultron.core.compose.nodeinteraction.*
+import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 import com.atiurin.ultron.exceptions.UltronException
 
 open class UltronComposeListItem {
@@ -23,6 +24,7 @@ open class UltronComposeListItem {
     constructor(ultronComposeList: UltronComposeList, itemMatcher: SemanticsMatcher) {
         setExecutor(ultronComposeList, itemMatcher)
     }
+
     constructor(ultronComposeList: UltronComposeList, index: Int) {
         setExecutor(ultronComposeList, index)
     }
@@ -36,9 +38,11 @@ open class UltronComposeListItem {
     fun setExecutor(ultronComposeList: UltronComposeList, itemMatcher: SemanticsMatcher) {
         this.executor = MatcherComposeItemExecutor(ultronComposeList, itemMatcher)
     }
+
     fun setExecutor(ultronComposeList: UltronComposeList, index: Int) {
         this.executor = IndexComposeItemExecutor(ultronComposeList, index)
     }
+
     fun withTimeout(timeoutMs: Long) = getItemUltronComposeInteraction().withTimeout(timeoutMs)
     fun withResultHandler(resultHandler: (ComposeOperationResult<UltronComposeOperation>) -> Unit) =
         getItemUltronComposeInteraction().withResultHandler(resultHandler)
@@ -81,22 +85,38 @@ open class UltronComposeListItem {
     fun swipeLeft(option: ComposeSwipeOption? = null) = apply { getItemUltronComposeInteraction().swipeLeft(option) }
     fun swipeRight(option: ComposeSwipeOption? = null) = apply { getItemUltronComposeInteraction().swipeRight(option) }
 
-    fun imeAction() =  apply { getItemUltronComposeInteraction().imeAction() }
-    fun pressKey(keyEvent: KeyEvent) =  apply { getItemUltronComposeInteraction().pressKey(keyEvent) }
+    fun imeAction() = apply { getItemUltronComposeInteraction().imeAction() }
+    fun pressKey(keyEvent: KeyEvent) = apply { getItemUltronComposeInteraction().pressKey(keyEvent) }
     fun getText(): String? = getItemUltronComposeInteraction().getText()
-    fun inputText(text: String) =  apply { getItemUltronComposeInteraction().inputText(text) }
-    fun inputTextSelection(selection: TextRange) =  apply {  getItemUltronComposeInteraction().inputTextSelection(selection) }
-    fun clearText() =  apply { getItemUltronComposeInteraction().clearText() }
-    fun replaceText(text: String) =  apply { getItemUltronComposeInteraction().replaceText(text) }
+    fun inputText(text: String) = apply { getItemUltronComposeInteraction().inputText(text) }
+    fun inputTextSelection(selection: TextRange) = apply { getItemUltronComposeInteraction().inputTextSelection(selection) }
+    fun clearText() = apply { getItemUltronComposeInteraction().clearText() }
+    fun replaceText(text: String) = apply { getItemUltronComposeInteraction().replaceText(text) }
 
     @OptIn(ExperimentalTestApi::class)
     fun performMouseInput(block: MouseInjectionScope.() -> Unit) = apply { getItemUltronComposeInteraction().performMouseInput(block) }
     fun performSemanticsAction(key: SemanticsPropertyKey<AccessibilityAction<() -> Boolean>>) = apply { getItemUltronComposeInteraction().performSemanticsAction(key) }
+
+    @Deprecated(
+        "Use the execute(params: UltronComposeOperationParams?, block: (SemanticsNodeInteraction) -> T) method instead.",
+        ReplaceWith("execute(params, block)")
+    )
     fun <T> perform(
-        option: PerformCustomBlockOption? = null,
-        block: (SemanticsNodeInteraction) -> T
+        option: PerformCustomBlockOption, block: (SemanticsNodeInteraction) -> T
     ) = getItemUltronComposeInteraction().perform(option, block)
-    
+
+    @Deprecated(
+        "Use the execute(params: UltronComposeOperationParams?, block: (SemanticsNodeInteraction) -> T) method instead.",
+        ReplaceWith("execute(params, block)")
+    )
+    fun <T> perform(
+        block: (SemanticsNodeInteraction) -> T
+    ) : T = getItemUltronComposeInteraction().execute(null, block)
+
+    fun <T> execute(
+        params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> T
+    ) = getItemUltronComposeInteraction().execute(params, block)
+
     fun assertIsDisplayed() = apply { getItemUltronComposeInteraction().assertIsDisplayed() }
     fun assertIsNotDisplayed() = apply { getItemUltronComposeInteraction().assertIsNotDisplayed() }
     fun assertExists() = apply { getItemUltronComposeInteraction().assertExists() }
@@ -132,7 +152,6 @@ open class UltronComposeListItem {
     fun assertTextContains(expected: String) = apply { getItemUltronComposeInteraction().assertTextContains(expected) }
 
 
-
     companion object {
         inline fun <reified T : UltronComposeListItem> getInstance(
             ultronComposeList: UltronComposeList,
@@ -160,9 +179,11 @@ open class UltronComposeListItem {
                     T::class.isInner -> {
                         "${T::class.simpleName} is an inner class so you have to delete inner modifier (It is often when kotlin throws 'has no zero argument constructor' but real reason is an inner modifier)"
                     }
+
                     T::class.constructors.find { it.parameters.isEmpty() } == null -> {
                         "${T::class.simpleName} doesn't have a constructor without params (create an empty constructor)"
                     }
+
                     else -> ex.message
                 }
                 throw UltronException(

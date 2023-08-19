@@ -1,6 +1,8 @@
 package com.atiurin.ultron.extensions
 
 import android.view.View
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.EspressoKey
@@ -10,6 +12,7 @@ import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.custom.espresso.base.createRootViewPicker
 import com.atiurin.ultron.listeners.setListenersState
 import com.atiurin.ultron.utils.runOnUiThread
@@ -60,7 +63,14 @@ fun ViewInteraction.swipeRight() = UltronEspressoInteraction(this).swipeRight()
 fun ViewInteraction.swipeUp() = UltronEspressoInteraction(this).swipeUp()
 fun ViewInteraction.swipeDown() = UltronEspressoInteraction(this).swipeDown()
 fun ViewInteraction.scrollTo() = UltronEspressoInteraction(this).scrollTo()
-fun ViewInteraction.perform(viewAction: ViewAction) = UltronEspressoInteraction(this).perform(viewAction)
+fun ViewInteraction.perform(viewAction: ViewAction, description: String = "") =
+    UltronEspressoInteraction(this).perform(viewAction, description)
+
+fun ViewInteraction.perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit) =
+    UltronEspressoInteraction(this).perform(params, block)
+
+fun <T> ViewInteraction.execute(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> T) : T =
+    UltronEspressoInteraction(this).execute(params, block)
 
 //assertions
 fun ViewInteraction.isDisplayed() = UltronEspressoInteraction(this).isDisplayed()

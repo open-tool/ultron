@@ -52,9 +52,9 @@ class UltronUiObject2 internal constructor(
             type = UiAutomatorActionType.GET_PARENT,
             description = "UiObject2 action '${UiAutomatorActionType.GET_PARENT}' of $selectorDesc during $timeoutMs ms"
         )
-        return if (uiobject2 != null) UltronUiObject2(
-            { uiobject2 }, "Parent of $selectorDesc."
-        ) else null
+        return uiobject2?.let { UltronUiObject2(
+            { it }, "Parent of $selectorDesc."
+        ) }
     }
 
     /**
@@ -96,11 +96,11 @@ class UltronUiObject2 internal constructor(
             type = UiAutomatorActionType.FIND_OBJECT,
             description = "UiObject2 action '${UiAutomatorActionType.FIND_OBJECT}' of $selectorDesc using $bySelector during $timeoutMs ms"
         )
-        return if (uiobject2 != null) {
+        return uiobject2?.let {
             UltronUiObject2(
-                { uiobject2 }, "First child of $selectorDesc with bySelector $bySelector."
+                { it }, "First child of $selectorDesc with bySelector $bySelector."
             )
-        } else null
+        } ?: null
     }
 
     /** Searches all elements under this object and returns all objects that match the criteria. */

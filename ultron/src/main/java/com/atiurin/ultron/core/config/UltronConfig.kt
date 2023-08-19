@@ -21,6 +21,7 @@ import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.UltronEspressoOperationLifecycle
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
 import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
+import com.atiurin.ultron.core.espressoweb.operation.EspressoWebOperationType
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
 import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
@@ -78,7 +79,6 @@ object UltronConfig {
     private fun modify() {
         Espresso.ACTION_TIMEOUT = params.operationTimeoutMs
         Espresso.ASSERTION_TIMEOUT = params.operationTimeoutMs
-        UiAutomator.OPERATION_TIMEOUT = params.operationTimeoutMs
         addGlobalListener(LogLifecycleListener())
         if (params.logToFile){
             UltronLog.addLogger(UltronLog.fileLogger)

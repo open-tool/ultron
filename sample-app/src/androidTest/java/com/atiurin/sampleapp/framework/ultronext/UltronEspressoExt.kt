@@ -1,32 +1,32 @@
 package com.atiurin.sampleapp.framework.ultronext
 
 import android.view.View
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
-import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerView
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
+import com.atiurin.ultron.custom.espresso.action.CustomEspressoActionType
 import com.atiurin.ultron.extensions.simpleClassName
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.allOf
 
-//add new action for Ultron framework
-fun <T> UltronEspressoInteraction<T>.appendText(text: String) = apply {
-    executeAction(
-        operationBlock = getInteractionActionBlock(AppendTextAction(text)),
-        name = "Append text '$text' to ${getInteractionMatcher()}",
-        description = "${interaction.simpleClassName()} APPEND_TEXT to ${getInteractionMatcher()} during $timeoutMs ms",
+fun <T> UltronEspressoInteraction<T>.appendText(value: String) = perform(
+    params = UltronEspressoActionParams(
+        operationName = "Append text '$value' to ${getInteractionMatcher()}",
+        operationDescription = "Awesome description"
     )
+) { _, view ->
+    val textView = (view as TextView)
+    textView.text = "${textView.text}$value"
 }
 
 //support action for all Matcher<View>
-fun Matcher<View>.appendText(text: String) = UltronEspressoInteraction(onView(this)).appendText(text)
+fun Matcher<View>.appendText(value: String) = UltronEspressoInteraction(onView(this)).appendText(value)
 
 //support action for all ViewInteractions
 fun ViewInteraction.appendText(text: String) = UltronEspressoInteraction(this).appendText(text)
@@ -41,17 +41,15 @@ fun UltronRecyclerView.appendText(text: String) = apply { recyclerViewMatcher.ap
 //support action for RecyclerView item
 fun UltronRecyclerViewItem.appendText(text: String) = apply { getMatcher().appendText(text) }
 
-class AppendTextAction(private val value: String) : ViewAction {
-    override fun getConstraints() = allOf(isDisplayed(), isAssignableFrom(TextView::class.java))!!
-
-    override fun perform(uiController: UiController, view: View) {
-        (view as TextView).apply {
-            this.text = "$text$value"
-        }
-        uiController.loopMainThreadUntilIdle()
-    }
-
-    override fun getDescription(): String {
-        return "append text $value"
-    }
+// assertion example
+fun <T> UltronEspressoInteraction<T>.assertChecked(expectedState: Boolean) = assertMatches { view ->
+    (view as CheckBox).isChecked == expectedState
 }
+fun Matcher<View>.assertChecked(expectedState: Boolean) = UltronEspressoInteraction(onView(this)).assertChecked(expectedState)
+fun ViewInteraction.assertChecked(expectedState: Boolean) = UltronEspressoInteraction(this).assertChecked(expectedState)
+fun DataInteraction.assertChecked(expectedState: Boolean) = UltronEspressoInteraction(this).assertChecked(expectedState)
+
+fun <T> UltronEspressoInteraction<T>.getViewSimple(): View = execute { _, view ->
+    view
+}
+fun Matcher<View>.getViewSimple() = UltronEspressoInteraction(onView(this)).getViewSimple()
