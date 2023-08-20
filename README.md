@@ -29,6 +29,9 @@ Ultron can be easially customised and extended. Wish you exclusively stable test
 - [Custom operation assertions](https://github.com/open-tool/ultron/wiki/Custom-operation-assertions)
 
 ***
+### Wiki
+The framework offers an excellent [wiki](https://github.com/open-tool/ultron/wiki) that addresses the majority of significant usage scenarios.
+
 ### A few words about syntax
 
 The standard syntax provided by Google is intricate and not intuitive. This is especially evident when dealing with RecyclerView interactions.
@@ -276,6 +279,7 @@ dependencies {
     androidTestImplementation 'com.atiurin:ultron-compose:<latest_version>'
 }
 ```
+Please, read [gradle dependencies management](https://github.com/open-tool/ultron/wiki/Gradle-Dependencies-Management) wiki page.
 
 ## AndroidX
 
