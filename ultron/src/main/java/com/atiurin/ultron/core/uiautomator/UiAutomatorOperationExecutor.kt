@@ -6,11 +6,10 @@ import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.ResultDescriptor
 import com.atiurin.ultron.core.config.UltronConfig.UiAutomator.Companion.UIAUTOMATOR_OPERATION_POLLING_TIMEOUT
 import com.atiurin.ultron.exceptions.UltronWrapperException
-import java.lang.NullPointerException
 
 abstract class UiAutomatorOperationExecutor<T : Operation>(
-        override val operation: T
-): OperationExecutor<T, UiAutomatorOperationResult<T>> {
+    override val operation: T
+) : OperationExecutor<T, UiAutomatorOperationResult<T>> {
     override val descriptor: ResultDescriptor
         get() = ResultDescriptor()
     override val pollingTimeout: Long
@@ -34,12 +33,14 @@ abstract class UiAutomatorOperationExecutor<T : Operation>(
     }
 
     override fun getWrapperException(originalException: Throwable): Throwable {
-        return if (originalException is NullPointerException){
-             UltronWrapperException("""
+        return if (originalException is NullPointerException) {
+            UltronWrapperException(
+                """
                 |Looks like UI element not found for execution of [${operation.description}]. 
                 |Original error NullPointerException[${originalException.message}] 
                 |Usually it happens while searching for an object 
-             """.trimMargin())
+             """.trimMargin()
+            )
         } else originalException
     }
 }

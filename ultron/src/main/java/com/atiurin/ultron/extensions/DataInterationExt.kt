@@ -4,37 +4,71 @@ import android.view.View
 import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.EspressoKey
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
-import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.listeners.setListenersState
 import org.hamcrest.Matcher
 
-fun DataInteraction.isSuccess(action: DataInteraction.() -> Unit): Boolean = runCatching { action() }.isSuccess
-fun DataInteraction.withTimeout(timeoutMs: Long) = UltronEspressoInteraction(this).withTimeout(timeoutMs)
-fun DataInteraction.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) = UltronEspressoInteraction(this).withResultHandler(resultHandler)
-fun DataInteraction.withAssertion(assertion: OperationAssertion) = UltronEspressoInteraction(this).withAssertion(assertion)
-fun DataInteraction.withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
-    UltronEspressoInteraction(this).withAssertion(DefaultOperationAssertion(name, block.setListenersState(isListened)))
+fun DataInteraction.isSuccess(action: DataInteraction.() -> Unit): Boolean =
+    runCatching { action() }.isSuccess
+
+fun DataInteraction.withTimeout(timeoutMs: Long) =
+    UltronEspressoInteraction(this).withTimeout(timeoutMs)
+
+fun DataInteraction.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
+    UltronEspressoInteraction(this).withResultHandler(resultHandler)
+
+fun DataInteraction.withAssertion(assertion: OperationAssertion) =
+    UltronEspressoInteraction(this).withAssertion(assertion)
+
+fun DataInteraction.withAssertion(
+    name: String = "",
+    isListened: Boolean = false,
+    block: () -> Unit
+) =
+    UltronEspressoInteraction(this).withAssertion(
+        DefaultOperationAssertion(
+            name,
+            block.setListenersState(isListened)
+        )
+    )
+
+fun DataInteraction.withName(name: String) = UltronEspressoInteraction(this).withName(name)
+fun DataInteraction.withMetaInfo(meta: Any) = UltronEspressoInteraction(this).withMetaInfo(meta)
 
 //actions
 fun DataInteraction.click() = UltronEspressoInteraction(this).click()
 fun DataInteraction.doubleClick() = UltronEspressoInteraction(this).doubleClick()
 fun DataInteraction.longClick() = UltronEspressoInteraction(this).longClick()
 
-fun DataInteraction.clickTopLeft(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(this).clickTopLeft(offsetX, offsetY)
-fun DataInteraction.clickTopCenter(offsetY: Int) = UltronEspressoInteraction(this).clickTopCenter(offsetY)
-fun DataInteraction.clickTopRight(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(this).clickTopRight(offsetX, offsetY)
-fun DataInteraction.clickCenterRight(offsetX: Int = 0) = UltronEspressoInteraction(this).clickCenterRight(offsetX)
-fun DataInteraction.clickBottomRight(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(this).clickBottomRight(offsetX, offsetY)
-fun DataInteraction.clickBottomCenter(offsetY: Int = 0) = UltronEspressoInteraction(this).clickBottomCenter(offsetY)
-fun DataInteraction.clickBottomLeft(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(this).clickBottomLeft(offsetX, offsetY)
-fun DataInteraction.clickCenterLeft(offsetX: Int = 0) = UltronEspressoInteraction(this).clickCenterLeft(offsetX)
+fun DataInteraction.clickTopLeft(offsetX: Int = 0, offsetY: Int = 0) =
+    UltronEspressoInteraction(this).clickTopLeft(offsetX, offsetY)
+
+fun DataInteraction.clickTopCenter(offsetY: Int) =
+    UltronEspressoInteraction(this).clickTopCenter(offsetY)
+
+fun DataInteraction.clickTopRight(offsetX: Int = 0, offsetY: Int = 0) =
+    UltronEspressoInteraction(this).clickTopRight(offsetX, offsetY)
+
+fun DataInteraction.clickCenterRight(offsetX: Int = 0) =
+    UltronEspressoInteraction(this).clickCenterRight(offsetX)
+
+fun DataInteraction.clickBottomRight(offsetX: Int = 0, offsetY: Int = 0) =
+    UltronEspressoInteraction(this).clickBottomRight(offsetX, offsetY)
+
+fun DataInteraction.clickBottomCenter(offsetY: Int = 0) =
+    UltronEspressoInteraction(this).clickBottomCenter(offsetY)
+
+fun DataInteraction.clickBottomLeft(offsetX: Int = 0, offsetY: Int = 0) =
+    UltronEspressoInteraction(this).clickBottomLeft(offsetX, offsetY)
+
+fun DataInteraction.clickCenterLeft(offsetX: Int = 0) =
+    UltronEspressoInteraction(this).clickCenterLeft(offsetX)
 
 fun DataInteraction.typeText(text: String) = UltronEspressoInteraction(this).typeText(text)
 fun DataInteraction.replaceText(text: String) = UltronEspressoInteraction(this).replaceText(text)
@@ -50,10 +84,16 @@ fun DataInteraction.scrollTo() = UltronEspressoInteraction(this).scrollTo()
 fun DataInteraction.perform(viewAction: ViewAction, description: String = "") =
     UltronEspressoInteraction(this).perform(viewAction, description)
 
-fun DataInteraction.perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit) =
+fun DataInteraction.perform(
+    params: UltronEspressoActionParams? = null,
+    block: (uiController: UiController, view: View) -> Unit
+) =
     UltronEspressoInteraction(this).perform(params, block)
 
-fun <T> DataInteraction.execute(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> T) : T =
+fun <T> DataInteraction.execute(
+    params: UltronEspressoActionParams? = null,
+    block: (uiController: UiController, view: View) -> T
+): T =
     UltronEspressoInteraction(this).execute(params, block)
 
 //assertions
@@ -61,7 +101,9 @@ fun DataInteraction.isDisplayed() = UltronEspressoInteraction(this).isDisplayed(
 fun DataInteraction.isNotDisplayed() = UltronEspressoInteraction(this).isNotDisplayed()
 fun DataInteraction.exists() = UltronEspressoInteraction(this).exists()
 fun DataInteraction.doesNotExist() = UltronEspressoInteraction(this).doesNotExist()
-fun DataInteraction.isCompletelyDisplayed() = UltronEspressoInteraction(this).isCompletelyDisplayed()
+fun DataInteraction.isCompletelyDisplayed() =
+    UltronEspressoInteraction(this).isCompletelyDisplayed()
+
 fun DataInteraction.isDisplayingAtLeast(percentage: Int) =
     UltronEspressoInteraction(this).isDisplayingAtLeast(percentage)
 

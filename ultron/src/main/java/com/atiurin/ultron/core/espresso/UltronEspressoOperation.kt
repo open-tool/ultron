@@ -1,6 +1,11 @@
 package com.atiurin.ultron.core.espresso
 
-import com.atiurin.ultron.core.common.*
+import com.atiurin.ultron.core.common.DefaultOperationIterationResult
+import com.atiurin.ultron.core.common.ElementInfo
+import com.atiurin.ultron.core.common.EmptyElementInfo
+import com.atiurin.ultron.core.common.Operation
+import com.atiurin.ultron.core.common.OperationIterationResult
+import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 
@@ -18,10 +23,28 @@ class UltronEspressoOperation(
     override val type: UltronOperationType,
     override val description: String,
     override val timeoutMs: Long,
-    override val assertion: OperationAssertion = EmptyOperationAssertion()
+    override val assertion: OperationAssertion = EmptyOperationAssertion(),
+    override val elementInfo: ElementInfo = EmptyElementInfo()
 ) : Operation {
-    fun withTimeout(timeoutMs: Long) = UltronEspressoOperation(operationBlock, name, type, description, timeoutMs, assertion)
-    fun withAssertion(assertion: OperationAssertion) = UltronEspressoOperation(operationBlock, name, type, description, timeoutMs, assertion)
+    fun withTimeout(timeoutMs: Long) = UltronEspressoOperation(
+        operationBlock,
+        name,
+        type,
+        description,
+        timeoutMs,
+        assertion,
+        elementInfo
+    )
+
+    fun withAssertion(assertion: OperationAssertion) = UltronEspressoOperation(
+        operationBlock,
+        name,
+        type,
+        description,
+        timeoutMs,
+        assertion,
+        elementInfo
+    )
 
     override fun execute(): OperationIterationResult {
         var success = true

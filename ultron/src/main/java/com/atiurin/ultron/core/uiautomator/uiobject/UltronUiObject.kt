@@ -29,10 +29,30 @@ class UltronUiObject internal constructor(
     fun isSuccess(action: UltronUiObject.() -> Unit): Boolean = runCatching { action() }.isSuccess
 
     fun withResultHandler(resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit): UltronUiObject =
-        UltronUiObject(this.uiObjectProviderBlock, this.selectorDesc, resultHandler, this.timeoutMs, assertion)
+        UltronUiObject(
+            this.uiObjectProviderBlock,
+            this.selectorDesc,
+            resultHandler,
+            this.timeoutMs,
+            assertion
+        )
 
-    fun withTimeout(timeoutMs: Long): UltronUiObject = UltronUiObject(this.uiObjectProviderBlock, this.selectorDesc, this.resultHandler, timeoutMs, this.assertion)
-    fun withAssertion(assertion: OperationAssertion) = UltronUiObject(this.uiObjectProviderBlock, this.selectorDesc, this.resultHandler, this.timeoutMs, assertion)
+    fun withTimeout(timeoutMs: Long): UltronUiObject = UltronUiObject(
+        this.uiObjectProviderBlock,
+        this.selectorDesc,
+        this.resultHandler,
+        timeoutMs,
+        this.assertion
+    )
+
+    fun withAssertion(assertion: OperationAssertion) = UltronUiObject(
+        this.uiObjectProviderBlock,
+        this.selectorDesc,
+        this.resultHandler,
+        this.timeoutMs,
+        assertion
+    )
+
     fun withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
         UltronUiObject(
             this.uiObjectProviderBlock, this.selectorDesc, this.resultHandler, this.timeoutMs,
@@ -569,7 +589,8 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun textContains(textSubstring: String) = apply { hasText(Matchers.containsString(textSubstring)) }
+    fun textContains(textSubstring: String) =
+        apply { hasText(Matchers.containsString(textSubstring)) }
 
     fun textIsNullOrEmpty() = apply {
         hasText(Matchers.isEmptyOrNullString())
@@ -598,9 +619,14 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun contentDescriptionContains(contentDescSubstring: String) = apply { hasContentDescription(Matchers.containsString(contentDescSubstring)) }
-    fun contentDescriptionIsNullOrEmpty() = apply { hasContentDescription(Matchers.isEmptyOrNullString()) }
-    fun contentDescriptionIsNotNullOrEmpty() = apply { hasContentDescription(Matchers.not(Matchers.isEmptyOrNullString())) }
+    fun contentDescriptionContains(contentDescSubstring: String) =
+        apply { hasContentDescription(Matchers.containsString(contentDescSubstring)) }
+
+    fun contentDescriptionIsNullOrEmpty() =
+        apply { hasContentDescription(Matchers.isEmptyOrNullString()) }
+
+    fun contentDescriptionIsNotNullOrEmpty() =
+        apply { hasContentDescription(Matchers.not(Matchers.isEmptyOrNullString())) }
 
     fun assertThat(assertBlock: UiObject.() -> Boolean, assertionDescription: String) = apply {
         executeOperation(
@@ -611,7 +637,12 @@ class UltronUiObject internal constructor(
         )
     }
 
-    fun executeOperation(operationBlock: () -> Boolean, name: String = "empty name", description: String = "empty name", type: UltronOperationType = CommonOperationType.DEFAULT) {
+    fun executeOperation(
+        operationBlock: () -> Boolean,
+        name: String = "empty name",
+        description: String = "empty name",
+        type: UltronOperationType = CommonOperationType.DEFAULT
+    ) {
         UltronUiAutomatorLifecycle.execute(
             UiAutomatorUiSelectorOperationExecutor(
                 UiAutomatorUiSelectorOperation(

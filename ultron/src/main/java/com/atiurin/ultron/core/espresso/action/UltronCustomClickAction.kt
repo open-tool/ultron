@@ -8,11 +8,15 @@ import android.webkit.WebView
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.*
+import androidx.test.espresso.action.CoordinatesProvider
+import androidx.test.espresso.action.PrecisionDescriber
+import androidx.test.espresso.action.Press
+import androidx.test.espresso.action.Tap
+import androidx.test.espresso.action.Tapper
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast
 import androidx.test.espresso.util.HumanReadables
 import org.hamcrest.Matcher
-import java.util.*
+import java.util.Locale
 
 
 class UltronCustomClickAction(

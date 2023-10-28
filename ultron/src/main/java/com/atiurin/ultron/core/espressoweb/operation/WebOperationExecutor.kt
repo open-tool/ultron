@@ -31,9 +31,11 @@ internal abstract class WebOperationExecutor<T : Operation>(
 
     override fun getWrapperException(originalException: Throwable): Throwable {
         var modifiedException: Throwable? = null
-        val isMessageContains = originalException.message?.contains("Atom evaluation returned null!")
-        if (isMessageContains != null && isMessageContains){
-            modifiedException = UltronWrapperException("Element not found in WebView!", originalException)
+        val isMessageContains =
+            originalException.message?.contains("Atom evaluation returned null!")
+        if (isMessageContains != null && isMessageContains) {
+            modifiedException =
+                UltronWrapperException("Element not found in WebView!", originalException)
         }
         return modifiedException ?: originalException
     }

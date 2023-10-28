@@ -8,7 +8,9 @@ import androidx.test.espresso.web.sugar.Web.onWebView
 import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.espressoweb.operation.*
+import com.atiurin.ultron.core.espressoweb.operation.EspressoWebOperationType
+import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
+import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebDocument.Companion.executeOperation
 import org.hamcrest.Matcher
 
@@ -32,11 +34,25 @@ class UltronWebElements(
         }
 
     fun withTimeout(timeoutMs: Long): UltronWebElements {
-        return UltronWebElements(this.locator, this.value, this.webViewMatcher, this.windowReference, timeoutMs, this.resultHandler)
+        return UltronWebElements(
+            this.locator,
+            this.value,
+            this.webViewMatcher,
+            this.windowReference,
+            timeoutMs,
+            this.resultHandler
+        )
     }
 
     fun withResultHandler(resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit): UltronWebElements {
-        return UltronWebElements(this.locator, this.value, this.webViewMatcher, this.windowReference, this.timeoutMs, resultHandler)
+        return UltronWebElements(
+            this.locator,
+            this.value,
+            this.webViewMatcher,
+            this.windowReference,
+            this.timeoutMs,
+            resultHandler
+        )
     }
 
     /**
@@ -60,7 +76,8 @@ class UltronWebElements(
     ): List<ElementReference> {
         return executeOperation(
             webInteractionBlock = {
-                webViewInteraction.withNoTimeout().perform(DriverAtoms.findMultipleElements(locator, matcher))
+                webViewInteraction.withNoTimeout()
+                    .perform(DriverAtoms.findMultipleElements(locator, matcher))
             },
             name = "WebElementsList(${locator.type} = '$matcher') findMultipleElements",
             type = EspressoWebOperationType.WEB_FIND_MULTIPLE_ELEMENTS,
@@ -72,49 +89,70 @@ class UltronWebElements(
 
     companion object {
         fun classNames(
-            value: String, webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher, windowReference: WindowReference? = null
+            value: String,
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): UltronWebElements {
             return UltronWebElements(Locator.CLASS_NAME, value, webViewMatcher, windowReference)
         }
 
         fun cssSelectors(
-            value: String, webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher, windowReference: WindowReference? = null
+            value: String,
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): UltronWebElements {
             return UltronWebElements(Locator.CSS_SELECTOR, value, webViewMatcher, windowReference)
         }
 
         fun ids(
-            value: String, webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher, windowReference: WindowReference? = null
+            value: String,
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): UltronWebElements {
             return UltronWebElements(Locator.ID, value, webViewMatcher, windowReference)
         }
 
         fun linkTexts(
-            value: String, webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher, windowReference: WindowReference? = null
+            value: String,
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): UltronWebElements {
             return UltronWebElements(Locator.LINK_TEXT, value, webViewMatcher, windowReference)
         }
 
         fun names(
-            value: String, webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher, windowReference: WindowReference? = null
+            value: String,
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): UltronWebElements {
             return UltronWebElements(Locator.NAME, value, webViewMatcher, windowReference)
         }
 
         fun partialLinkTexts(
-            value: String, webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher, windowReference: WindowReference? = null
+            value: String,
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): UltronWebElements {
-            return UltronWebElements(Locator.PARTIAL_LINK_TEXT, value, webViewMatcher, windowReference)
+            return UltronWebElements(
+                Locator.PARTIAL_LINK_TEXT,
+                value,
+                webViewMatcher,
+                windowReference
+            )
         }
 
         fun tagNames(
-            value: String, webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher, windowReference: WindowReference? = null
+            value: String,
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): UltronWebElements {
             return UltronWebElements(Locator.TAG_NAME, value, webViewMatcher, windowReference)
         }
 
         fun xpaths(
-            value: String, webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher, windowReference: WindowReference? = null
+            value: String,
+            webViewMatcher: Matcher<View> = UltronConfig.Espresso.webViewMatcher,
+            windowReference: WindowReference? = null
         ): UltronWebElements {
             return UltronWebElements(Locator.XPATH, value, webViewMatcher, windowReference)
         }

@@ -5,7 +5,10 @@ import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 import org.w3c.dom.Element
 
-open class ElementWithAttributeMatcher (val attributeName: String, val attributeValueMatcher: Matcher<String>) :
+open class ElementWithAttributeMatcher(
+    val attributeName: String,
+    val attributeValueMatcher: Matcher<String>
+) :
     TypeSafeMatcher<Element>() {
     override fun matchesSafely(element: Element): Boolean {
         return attributeValueMatcher.matches(element.getAttribute(attributeName))
@@ -17,8 +20,8 @@ open class ElementWithAttributeMatcher (val attributeName: String, val attribute
     }
 
     companion object {
-        fun withAttribute(attributeName: String, attributeValueMatcher: Matcher<String>)
-                = ElementWithAttributeMatcher(attributeName, attributeValueMatcher)
+        fun withAttribute(attributeName: String, attributeValueMatcher: Matcher<String>) =
+            ElementWithAttributeMatcher(attributeName, attributeValueMatcher)
     }
 }
 

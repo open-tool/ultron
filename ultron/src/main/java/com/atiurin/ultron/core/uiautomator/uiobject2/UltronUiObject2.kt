@@ -13,12 +13,19 @@ import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.config.UltronConfig
-import com.atiurin.ultron.core.uiautomator.*
+import com.atiurin.ultron.core.uiautomator.UiAutomatorActionType
+import com.atiurin.ultron.core.uiautomator.UiAutomatorAssertionType
+import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
+import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
+import com.atiurin.ultron.core.uiautomator.UltronUiAutomatorLifecycle
 import com.atiurin.ultron.exceptions.UltronAssertionException
 import com.atiurin.ultron.listeners.setListenersState
 import com.atiurin.ultron.utils.getTargetResourceName
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.*
+import org.hamcrest.Matchers.containsString
+import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.isEmptyOrNullString
+import org.hamcrest.Matchers.not
 
 
 class UltronUiObject2 internal constructor(
@@ -31,11 +38,31 @@ class UltronUiObject2 internal constructor(
     fun isSuccess(action: UltronUiObject2.() -> Unit): Boolean = runCatching { action() }.isSuccess
 
     fun withResultHandler(resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit): UltronUiObject2 {
-        return UltronUiObject2(this.uiObject2ProviderBlock, this.selectorDesc, resultHandler, this.timeoutMs, this.assertion)
+        return UltronUiObject2(
+            this.uiObject2ProviderBlock,
+            this.selectorDesc,
+            resultHandler,
+            this.timeoutMs,
+            this.assertion
+        )
     }
 
-    fun withTimeout(timeoutMs: Long): UltronUiObject2 = UltronUiObject2(this.uiObject2ProviderBlock, this.selectorDesc, this.resultHandler, timeoutMs, this.assertion)
-    fun withAssertion(assertion: OperationAssertion) = UltronUiObject2(this.uiObject2ProviderBlock, this.selectorDesc, this.resultHandler, this.timeoutMs, assertion)
+    fun withTimeout(timeoutMs: Long): UltronUiObject2 = UltronUiObject2(
+        this.uiObject2ProviderBlock,
+        this.selectorDesc,
+        this.resultHandler,
+        timeoutMs,
+        this.assertion
+    )
+
+    fun withAssertion(assertion: OperationAssertion) = UltronUiObject2(
+        this.uiObject2ProviderBlock,
+        this.selectorDesc,
+        this.resultHandler,
+        this.timeoutMs,
+        assertion
+    )
+
     fun withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
         UltronUiObject2(
             this.uiObject2ProviderBlock, this.selectorDesc, this.resultHandler, this.timeoutMs,
@@ -52,9 +79,11 @@ class UltronUiObject2 internal constructor(
             type = UiAutomatorActionType.GET_PARENT,
             description = "UiObject2 action '${UiAutomatorActionType.GET_PARENT}' of $selectorDesc during $timeoutMs ms"
         )
-        return uiobject2?.let { UltronUiObject2(
-            { it }, "Parent of $selectorDesc."
-        ) }
+        return uiobject2?.let {
+            UltronUiObject2(
+                { it }, "Parent of $selectorDesc."
+            )
+        }
     }
 
     /**
@@ -331,14 +360,15 @@ class UltronUiObject2 internal constructor(
      * @param percent The length of the swipe as a percentage of this object's size.
      * @param speed The speed at which to perform this gesture in pixels per second.
      */
-    private fun swipe(direction: Direction, percent: Float, speed: Int = DEFAULT_SWIPE_SPEED) = apply {
-        executeAction(
-            actionBlock = { uiObject2ProviderBlock()!!.swipe(direction, percent, speed) },
-            name = "Swipe of $selectorDesc to direction = '${direction.name}' with $percent% and $speed speed",
-            type = UiAutomatorActionType.SWIPE,
-            description = "UiObject2 action '${UiAutomatorActionType.SWIPE}' of $selectorDesc with direction = '${direction.name}' with $percent% and $speed speed during $timeoutMs ms"
-        )
-    }
+    private fun swipe(direction: Direction, percent: Float, speed: Int = DEFAULT_SWIPE_SPEED) =
+        apply {
+            executeAction(
+                actionBlock = { uiObject2ProviderBlock()!!.swipe(direction, percent, speed) },
+                name = "Swipe of $selectorDesc to direction = '${direction.name}' with $percent% and $speed speed",
+                type = UiAutomatorActionType.SWIPE,
+                description = "UiObject2 action '${UiAutomatorActionType.SWIPE}' of $selectorDesc with direction = '${direction.name}' with $percent% and $speed speed during $timeoutMs ms"
+            )
+        }
 
     /**
      * Performs a swipe up gesture on this object.
@@ -388,7 +418,11 @@ class UltronUiObject2 internal constructor(
      * @param speed The speed at which to perform this gesture in pixels per second.
      * @return Whether the object can still scroll in the given direction.
      */
-    private fun scroll(direction: Direction, percent: Float, speed: Int = DEFAULT_SCROLL_SPEED): Boolean {
+    private fun scroll(
+        direction: Direction,
+        percent: Float,
+        speed: Int = DEFAULT_SCROLL_SPEED
+    ): Boolean {
         var result = false
         executeAction(
             actionBlock = {
@@ -512,10 +546,15 @@ class UltronUiObject2 internal constructor(
         )
     }
 
-    fun hasContentDescription(contentDesc: String) = apply { hasContentDescription(equalTo(contentDesc)) }
-    fun contentDescriptionContains(contentDescSubstring: String) = apply { hasContentDescription(containsString(contentDescSubstring)) }
+    fun hasContentDescription(contentDesc: String) =
+        apply { hasContentDescription(equalTo(contentDesc)) }
+
+    fun contentDescriptionContains(contentDescSubstring: String) =
+        apply { hasContentDescription(containsString(contentDescSubstring)) }
+
     fun contentDescriptionIsNullOrEmpty() = apply { hasContentDescription(isEmptyOrNullString()) }
-    fun contentDescriptionIsNotNullOrEmpty() = apply { hasContentDescription(not(isEmptyOrNullString())) }
+    fun contentDescriptionIsNotNullOrEmpty() =
+        apply { hasContentDescription(not(isEmptyOrNullString())) }
 
     fun isCheckable() = apply {
         executeAssertion(
@@ -723,7 +762,12 @@ class UltronUiObject2 internal constructor(
         UltronUiAutomatorLifecycle.execute(
             UiAutomatorBySelectorActionExecutor(
                 UiAutomatorBySelectorAction(
-                    actionBlock = actionBlock, name = name, type = type, description = description, timeoutMs = timeoutMs, assertion = assertion
+                    actionBlock = actionBlock,
+                    name = name,
+                    type = type,
+                    description = description,
+                    timeoutMs = timeoutMs,
+                    assertion = assertion
                 )
             ), resultHandler
         )
@@ -741,7 +785,12 @@ class UltronUiObject2 internal constructor(
         UltronUiAutomatorLifecycle.execute(
             UiAutomatorBySelectorAssertionExecutor(
                 UiAutomatorBySelectorAssertion(
-                    assertionBlock = assertionBlock, name = name, type = type, description = description, timeoutMs = timeoutMs, assertion = assertion
+                    assertionBlock = assertionBlock,
+                    name = name,
+                    type = type,
+                    description = description,
+                    timeoutMs = timeoutMs,
+                    assertion = assertion
                 )
             ), resultHandler
         )

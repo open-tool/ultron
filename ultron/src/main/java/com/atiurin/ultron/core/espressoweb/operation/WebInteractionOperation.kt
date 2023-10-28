@@ -1,7 +1,11 @@
 package com.atiurin.ultron.core.espressoweb.operation
 
 import androidx.test.espresso.web.sugar.Web
-import com.atiurin.ultron.core.common.*
+import com.atiurin.ultron.core.common.ElementInfo
+import com.atiurin.ultron.core.common.EmptyElementInfo
+import com.atiurin.ultron.core.common.Operation
+import com.atiurin.ultron.core.common.OperationIterationResult
+import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 
@@ -11,7 +15,8 @@ class WebInteractionOperation<T>(
     override val type: UltronOperationType,
     override val description: String,
     override val timeoutMs: Long,
-    override val assertion: OperationAssertion = DefaultOperationAssertion("") {}
+    override val assertion: OperationAssertion = DefaultOperationAssertion("") {},
+    override val elementInfo: ElementInfo = EmptyElementInfo()
 ) : Operation {
     override fun execute(): OperationIterationResult {
         var success = true

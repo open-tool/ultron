@@ -34,8 +34,10 @@ abstract class EspressoOperationExecutor<T : Operation>(
     }
 
     override fun getWrapperException(originalException: Throwable): Throwable {
-        return if (originalException is NoMatchingViewException){
-            NoMatchingViewException.Builder().from(originalException).includeViewHierarchy(UltronConfig.Espresso.INCLUDE_VIEW_HIERARCHY_TO_EXCEPTION).build()
+        return if (originalException is NoMatchingViewException) {
+            NoMatchingViewException.Builder().from(originalException)
+                .includeViewHierarchy(UltronConfig.Espresso.INCLUDE_VIEW_HIERARCHY_TO_EXCEPTION)
+                .build()
         } else originalException
     }
 }

@@ -19,13 +19,35 @@ class UltronWebElementId(
     private val windowReference: WindowReference? = null,
     override val timeoutMs: Long? = null,
     override val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler
-) : UltronWebElement(Locator.ID, value, webViewMatcher, elementReference, windowReference, timeoutMs, resultHandler) {
-    override fun withTimeout(timeoutMs: Long): UltronWebElementId{
-        return UltronWebElementId(this.value, this.webViewMatcher, this.elementReference, this.windowReference, timeoutMs, this.resultHandler)
+) : UltronWebElement(
+    Locator.ID,
+    value,
+    webViewMatcher,
+    elementReference,
+    windowReference,
+    timeoutMs,
+    resultHandler
+) {
+    override fun withTimeout(timeoutMs: Long): UltronWebElementId {
+        return UltronWebElementId(
+            this.value,
+            this.webViewMatcher,
+            this.elementReference,
+            this.windowReference,
+            timeoutMs,
+            this.resultHandler
+        )
     }
 
-    override fun withResultHandler(resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit): UltronWebElementId{
-        return UltronWebElementId(this.value, this.webViewMatcher, this.elementReference, this.windowReference, this.timeoutMs, resultHandler)
+    override fun withResultHandler(resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit): UltronWebElementId {
+        return UltronWebElementId(
+            this.value,
+            this.webViewMatcher,
+            this.elementReference,
+            this.windowReference,
+            this.timeoutMs,
+            resultHandler
+        )
     }
 
     fun hasAttribute(

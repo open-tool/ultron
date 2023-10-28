@@ -3,13 +3,14 @@ package com.atiurin.ultron.custom.espresso.action
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
-import androidx.test.espresso.*
+import androidx.test.espresso.DataInteraction
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.extensions.simpleClassName
 import org.hamcrest.Matcher
-import java.util.concurrent.atomic.AtomicReference
 
 fun <T> UltronEspressoInteraction<T>.getDrawable(): Drawable? = execute(
     UltronEspressoActionParams(
@@ -19,7 +20,7 @@ fun <T> UltronEspressoInteraction<T>.getDrawable(): Drawable? = execute(
         viewActionConstraints = isAssignableFrom(ImageView::class.java),
         viewActionDescription = "getting Drawable from ImageView"
     )
-){ _, view ->
+) { _, view ->
     (view as ImageView).drawable
 }
 

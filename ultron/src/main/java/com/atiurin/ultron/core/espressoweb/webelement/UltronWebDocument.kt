@@ -13,7 +13,11 @@ import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
-import com.atiurin.ultron.core.espressoweb.operation.*
+import com.atiurin.ultron.core.espressoweb.operation.EspressoWebOperationType
+import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
+import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperationExecutor
+import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperationIterationResult
+import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.exceptions.UltronException
 import org.hamcrest.Matcher
 
@@ -62,8 +66,9 @@ class UltronWebDocument {
             timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
             resultHandler: (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<Evaluation>>) -> Unit
         ) {
-            val webViewInteraction = if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
-            else Web.onWebView(webViewMatcher)
+            val webViewInteraction =
+                if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
+                else Web.onWebView(webViewMatcher)
             executeOperation(
                 webInteractionBlock = { webViewInteraction.perform(Atoms.script(script)) },
                 name = "WebView Evaluate JS script on $webViewMatcher",
@@ -84,8 +89,9 @@ class UltronWebDocument {
             timeoutMs: Long = UltronConfig.Espresso.ASSERTION_TIMEOUT,
             resultHandler: (WebOperationResult<WebInteractionOperation<T>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<T>>) -> Unit
         ) {
-            val webViewInteraction = if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
-            else Web.onWebView(webViewMatcher)
+            val webViewInteraction =
+                if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
+                else Web.onWebView(webViewMatcher)
             executeOperation(
                 webInteractionBlock = { webViewInteraction.check(webAssertion) },
                 name = "WebView custom AssertThat",
@@ -105,8 +111,9 @@ class UltronWebDocument {
             timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
             resultHandler: (WebOperationResult<WebInteractionOperation<ElementReference>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<ElementReference>>) -> Unit
         ): ElementReference {
-            val webViewInteraction = if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
-            else Web.onWebView(webViewMatcher)
+            val webViewInteraction =
+                if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
+                else Web.onWebView(webViewMatcher)
             return executeOperation(
                 webInteractionBlock = { webViewInteraction.perform(DriverAtoms.selectActiveElement()) },
                 name = "WebView selectActiveElement",
@@ -127,10 +134,17 @@ class UltronWebDocument {
             timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
             resultHandler: (WebOperationResult<WebInteractionOperation<WindowReference>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<WindowReference>>) -> Unit
         ): WindowReference {
-            val webViewInteraction = if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
-            else Web.onWebView(webViewMatcher)
+            val webViewInteraction =
+                if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
+                else Web.onWebView(webViewMatcher)
             return executeOperation(
-                webInteractionBlock = { webViewInteraction.perform(DriverAtoms.selectFrameByIndex(index)) },
+                webInteractionBlock = {
+                    webViewInteraction.perform(
+                        DriverAtoms.selectFrameByIndex(
+                            index
+                        )
+                    )
+                },
                 name = "WebView selectFrameByIndex '$index'",
                 type = EspressoWebOperationType.WEB_SELECT_FRAME_BY_INDEX,
                 description = "WebView selectFrameByIndex '$index' on $webViewMatcher during $timeoutMs ms",
@@ -150,10 +164,18 @@ class UltronWebDocument {
             timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
             resultHandler: (WebOperationResult<WebInteractionOperation<WindowReference>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<WindowReference>>) -> Unit
         ): WindowReference {
-            val webViewInteraction = if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
-            else Web.onWebView(webViewMatcher)
+            val webViewInteraction =
+                if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
+                else Web.onWebView(webViewMatcher)
             return executeOperation(
-                webInteractionBlock = { webViewInteraction.perform(DriverAtoms.selectFrameByIndex(index, root)) },
+                webInteractionBlock = {
+                    webViewInteraction.perform(
+                        DriverAtoms.selectFrameByIndex(
+                            index,
+                            root
+                        )
+                    )
+                },
                 name = "WebView selectFrameByIndex '$index' with root",
                 type = EspressoWebOperationType.WEB_SELECT_FRAME_BY_INDEX,
                 description = "WebView selectFrameByIndex '$index' with root '$root' on $webViewMatcher during  $timeoutMs ms",
@@ -172,10 +194,17 @@ class UltronWebDocument {
             timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
             resultHandler: (WebOperationResult<WebInteractionOperation<WindowReference>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<WindowReference>>) -> Unit
         ): WindowReference {
-            val webViewInteraction = if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
-            else Web.onWebView(webViewMatcher)
+            val webViewInteraction =
+                if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
+                else Web.onWebView(webViewMatcher)
             return executeOperation(
-                webInteractionBlock = { webViewInteraction.perform(DriverAtoms.selectFrameByIdOrName(idOrName)) },
+                webInteractionBlock = {
+                    webViewInteraction.perform(
+                        DriverAtoms.selectFrameByIdOrName(
+                            idOrName
+                        )
+                    )
+                },
                 name = "WebView selectFrameByIdOrName '$idOrName'",
                 type = EspressoWebOperationType.WEB_SELECT_FRAME_BY_ID_OR_NAME,
                 description = "WebView selectFrameByIdOrName '$idOrName' on $webViewMatcher during $timeoutMs ms",
@@ -195,10 +224,18 @@ class UltronWebDocument {
             timeoutMs: Long = UltronConfig.Espresso.ACTION_TIMEOUT,
             resultHandler: (WebOperationResult<WebInteractionOperation<WindowReference>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler as (WebOperationResult<WebInteractionOperation<WindowReference>>) -> Unit
         ): WindowReference {
-            val webViewInteraction = if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
-            else Web.onWebView(webViewMatcher)
+            val webViewInteraction =
+                if (windowReference != null) Web.onWebView(webViewMatcher).inWindow(windowReference)
+                else Web.onWebView(webViewMatcher)
             return executeOperation(
-                webInteractionBlock = { webViewInteraction.perform(DriverAtoms.selectFrameByIdOrName(idOrName, root)) },
+                webInteractionBlock = {
+                    webViewInteraction.perform(
+                        DriverAtoms.selectFrameByIdOrName(
+                            idOrName,
+                            root
+                        )
+                    )
+                },
                 name = "WebView selectFrameByIdOrName '$idOrName' with root",
                 type = EspressoWebOperationType.WEB_SELECT_FRAME_BY_ID_OR_NAME,
                 description = "WebView selectFrameByIdOrName '$idOrName' with root '$root' on $webViewMatcher during $timeoutMs ms",
@@ -219,7 +256,12 @@ class UltronWebDocument {
             val result = UltronWebLifecycle.execute(
                 WebInteractionOperationExecutor(
                     WebInteractionOperation(
-                        webInteractionBlock = webInteractionBlock, name = name, type = type, description = description, timeoutMs = timeoutMs, assertion = assertion
+                        webInteractionBlock = webInteractionBlock,
+                        name = name,
+                        type = type,
+                        description = description,
+                        timeoutMs = timeoutMs,
+                        assertion = assertion
                     )
                 ), resultHandler
             )
@@ -235,11 +277,16 @@ class UltronWebDocument {
             timeoutMs: Long,
             resultHandler: (WebOperationResult<WebInteractionOperation<Void>>) -> Unit,
             assertion: OperationAssertion = DefaultOperationAssertion("") {}
-        ){
+        ) {
             UltronWebLifecycle.execute(
                 WebInteractionOperationExecutor(
                     WebInteractionOperation(
-                        webInteractionBlock = webInteractionBlock, name = name, type = type, description = description, timeoutMs = timeoutMs, assertion = assertion
+                        webInteractionBlock = webInteractionBlock,
+                        name = name,
+                        type = type,
+                        description = description,
+                        timeoutMs = timeoutMs,
+                        assertion = assertion
                     )
                 ), resultHandler
             )

@@ -27,7 +27,9 @@ class RecyclerViewItemPositionalExecutor(
             else -> 0
         }
         ultronRecyclerView.recyclerViewMatcher.perform(
-            viewAction = RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(finalPositionToScroll),
+            viewAction = RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                finalPositionToScroll
+            ),
             description = "RecyclerViewActions scrollToPosition $position with offset = $offset"
         )
     }

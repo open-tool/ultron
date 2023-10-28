@@ -1,6 +1,8 @@
 package com.atiurin.ultron.core.uiautomator.uiobject2
 
 import com.atiurin.ultron.core.common.DefaultOperationIterationResult
+import com.atiurin.ultron.core.common.ElementInfo
+import com.atiurin.ultron.core.common.EmptyElementInfo
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
@@ -14,7 +16,8 @@ class UiAutomatorBySelectorAssertion(
     override val description: String,
     override val type: UltronOperationType,
     override val timeoutMs: Long,
-    override val assertion: OperationAssertion = DefaultOperationAssertion("") {}
+    override val assertion: OperationAssertion = DefaultOperationAssertion("") {},
+    override val elementInfo: ElementInfo = EmptyElementInfo()
 ) : UiAutomatorOperation {
     override fun execute(): OperationIterationResult {
         var success = true

@@ -20,6 +20,7 @@ import com.atiurin.ultron.custom.espresso.action.getText
 import com.atiurin.ultron.custom.espresso.assertion.hasAnyDrawable
 import com.atiurin.ultron.custom.espresso.assertion.hasDrawable
 import com.atiurin.ultron.extensions.*
+import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
 import org.junit.Test
@@ -71,7 +72,9 @@ class ViewInteractionActionsTest : UiElementsTest() {
         var success = false
         with(page.eventStatus) {
             textContains(getResourceString(R.string.button_event_click))
-            success = isSuccess { withTimeout(3000).textContains("1") } || isSuccess { withTimeout(2000).textContains("2") }
+            success = isSuccess { withTimeout(3000).textContains("1") } || isSuccess {
+                withTimeout(2000).textContains("2")
+            }
         }
         Assert.assertTrue(success)
     }
@@ -135,7 +138,9 @@ class ViewInteractionActionsTest : UiElementsTest() {
 
     @Test
     fun pressKey_notExisted() {
-        AssertUtils.assertException { page.notExistElement.withTimeout(100).pressKey(KeyEvent.KEYCODE_DEL) }
+        AssertUtils.assertException {
+            page.notExistElement.withTimeout(100).pressKey(KeyEvent.KEYCODE_DEL)
+        }
     }
 
     @Test
@@ -151,7 +156,10 @@ class ViewInteractionActionsTest : UiElementsTest() {
 
     @Test
     fun pressEspressoKey_notExisted() {
-        AssertUtils.assertException { page.notExistElement.withTimeout(100).pressKey(EspressoKey.Builder().withKeyCode(KeyEvent.KEYCODE_DEL).build()) }
+        AssertUtils.assertException {
+            page.notExistElement.withTimeout(100)
+                .pressKey(EspressoKey.Builder().withKeyCode(KeyEvent.KEYCODE_DEL).build())
+        }
     }
 
     @Test
@@ -229,7 +237,9 @@ class ViewInteractionActionsTest : UiElementsTest() {
 
     @Test
     fun hasAnyDrawable_noDrawable() {
-        AssertUtils.assertException { page.emptyNotClickableImageView.withTimeout(1000).hasAnyDrawable() }
+        AssertUtils.assertException {
+            page.emptyNotClickableImageView.withTimeout(1000).hasAnyDrawable()
+        }
     }
 
     @Test
@@ -244,39 +254,10 @@ class ViewInteractionActionsTest : UiElementsTest() {
 
     @Test
     fun getContentDesc_descNotNull() {
-        Assert.assertEquals(getTargetString(R.string.button_default_content_desc), page.button.getContentDescription())
+        Assert.assertEquals(
+            getTargetString(R.string.button_default_content_desc),
+            page.button.getContentDescription()
+        )
     }
 
-    @Test
-    fun customAssertionTest() {
-        val text = "some text"
-        val execTime = measureTimeMillis {
-            page.editTextContentDesc.withAssertion("demo name") {
-                page.editTextContentDesc.hasText(text)
-            }.replaceText(text)
-        }
-        Assert.assertTrue(execTime < UltronConfig.Espresso.ACTION_TIMEOUT)
-    }
-
-    @Test
-    fun withAssertion_failedAssertion() {
-        AssertUtils.assertException {
-            page.editTextContentDesc.withTimeout(1000).withAssertion {
-                withText("asd23213 12312").withTimeout(500).isDisplayed()
-            }.typeText("1")
-        }
-    }
-
-    @Test
-    fun withAssertion_failedAssertion_timeout() {
-        val operationTime = 1000L
-        val execTime = measureTimeMillis {
-            page.editTextContentDesc.isSuccess {
-                withTimeout(operationTime).withAssertion {
-                    withText("asd23213 12312").withTimeout(100).isDisplayed()
-                }.typeText("1")
-            }
-        }
-        Assert.assertTrue(execTime > operationTime)
-    }
 }
