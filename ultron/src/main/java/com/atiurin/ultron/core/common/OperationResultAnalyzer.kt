@@ -1,6 +1,6 @@
 package com.atiurin.ultron.core.common
 
-interface OperationResultAnalyzer{
+interface OperationResultAnalyzer {
     /**
      * @return success status of operation execution
      */

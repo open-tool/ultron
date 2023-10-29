@@ -21,8 +21,7 @@ fun Matcher<View>.first(): Matcher<View> {
             return if (!isFirstMatchedItemFound) {
                 isFirstMatchedItemFound = initialMatcher.matches(item)
                 isFirstMatchedItemFound
-            }
-            else false
+            } else false
         }
     }
 }

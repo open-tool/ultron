@@ -8,7 +8,6 @@ import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiT
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
-import java.util.ArrayList
 
 internal fun <T : VH, VH : RecyclerView.ViewHolder> itemsMatching(
     recyclerView: RecyclerView,

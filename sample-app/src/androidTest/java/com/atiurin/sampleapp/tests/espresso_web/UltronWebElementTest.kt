@@ -2,11 +2,15 @@ package com.atiurin.sampleapp.tests.espresso_web
 
 import androidx.test.espresso.web.assertion.WebViewAssertions.webMatches
 import androidx.test.espresso.web.webdriver.DriverAtoms.getText
+import com.atiurin.sampleapp.framework.DummyMetaObject
 import com.atiurin.sampleapp.framework.ultronext.appendText
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.WebViewPage
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.className
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.id
+import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.xpath
+import com.atiurin.ultron.extensions.withName
+import com.atiurin.ultron.extensions.withTimeout
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Test
@@ -20,7 +24,7 @@ class UltronWebElementTest : BaseWebViewTest() {
 
     @Test
     fun webClick_onNotExistedElement() {
-        AssertUtils.assertException { id("notExistId").withTimeout(100).webClick() }
+        AssertUtils.assertException { xpath("notExistId").withTimeout(100).withName("Custome name").webClick() }
     }
 
     @Test
@@ -221,5 +225,40 @@ class UltronWebElementTest : BaseWebViewTest() {
                 page.title.withTimeout(500).hasText(text + "adas")
             }.webClick()
         }
+    }
+
+
+    @Test
+    fun withName_inOperationProps_ultronInteraction() {
+        val name = "ElementName"
+        page.notExistedElement.withTimeout(100).withName(name).withResultHandler { result ->
+            Assert.assertEquals(name, result.operation.elementInfo.name)
+        }.exists()
+    }
+
+    @Test
+    fun withName_inOperationProps_matcherExt() {
+        val name = "ElementName"
+        page.notExistedElement.withName(name).withTimeout(100).withResultHandler { result ->
+            Assert.assertEquals(name, result.operation.elementInfo.name)
+        }.exists()
+    }
+
+    @Test
+    fun withName_inExceptionMessage() {
+        val name = "ElementNameToBeInException"
+        runCatching {
+            page.notExistedElement.withTimeout(100).withName(name).exists()
+        }.onFailure { exception ->
+            Assert.assertTrue(exception.message!!.contains(name))
+        }
+    }
+
+    @Test
+    fun withMeta() {
+        val meta = DummyMetaObject("ElementMetaInfo")
+        page.notExistedElement.withTimeout(100).withMetaInfo(meta).withResultHandler { result ->
+            Assert.assertEquals(meta, result.operation.elementInfo.meta)
+        }.exists()
     }
 }

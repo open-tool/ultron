@@ -7,6 +7,7 @@ import com.atiurin.ultron.log.UltronLog
 class LogLifecycleListener : UltronLifecycleListener() {
     override fun before(operation: Operation) {
         UltronLog.info("Start execution of ${operation.name}")
+        UltronLog.info("Element info: ${operation.elementInfo}")
     }
 
     override fun afterSuccess(operationResult: OperationResult<Operation>) {
@@ -14,7 +15,7 @@ class LogLifecycleListener : UltronLifecycleListener() {
     }
 
     override fun afterFailure(operationResult: OperationResult<Operation>) {
-        UltronLog.error("Failed ${operationResult.operation.name} with description: \n" +
+        UltronLog.error("Failed ${operationResult.operation.name}.  with description: \n" +
                 "${operationResult.description} ")
     }
 }

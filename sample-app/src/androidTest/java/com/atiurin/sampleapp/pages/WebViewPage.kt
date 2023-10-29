@@ -20,4 +20,5 @@ class WebViewPage : Page<WebViewPage>() {
     val titleWithCss = className("css_title")
     val appleLink = id("apple_link")
     val buttons = classNames("button")
+    val notExistedElement = id("Not existed element")
 }

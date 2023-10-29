@@ -1,6 +1,7 @@
 package com.atiurin.sampleapp.tests.compose
 
 import com.atiurin.sampleapp.activity.ComposeElementsActivity
+import com.atiurin.sampleapp.framework.DummyMetaObject
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.ComposeElementsPage
 import com.atiurin.ultron.core.compose.config.UltronComposeConfig
@@ -73,5 +74,40 @@ class ComposeConfigTest {
     @Test
     fun isSuccess_true() {
         Assert.assertTrue(page.editableText.isSuccess { assertExists() })
+    }
+
+
+    @Test
+    fun withName_inOperationProps_ultronInteraction() {
+        val name = "ElementName"
+        page.notExistedElement.withTimeout(100).withName(name).withResultHandler { result ->
+            Assert.assertEquals(name, result.operation.elementInfo.name)
+        }.assertIsDisplayed()
+    }
+
+    @Test
+    fun withName_inOperationProps_matcherExt() {
+        val name = "ElementName"
+        page.notExistedElement.withName(name).withTimeout(100).withResultHandler { result ->
+            Assert.assertEquals(name, result.operation.elementInfo.name)
+        }.assertIsDisplayed()
+    }
+
+    @Test
+    fun withName_inExceptionMessage() {
+        val name = "ElementNameToBeInException"
+        runCatching {
+            page.notExistedElement.withTimeout(100).withName(name).assertIsDisplayed()
+        }.onFailure { exception ->
+            Assert.assertTrue(exception.message!!.contains(name))
+        }
+    }
+
+    @Test
+    fun withMeta() {
+        val meta = DummyMetaObject("ElementMetaInfo")
+        page.notExistedElement.withTimeout(100).withMetaInfo(meta).withResultHandler { result ->
+            Assert.assertEquals(meta, result.operation.elementInfo.meta)
+        }.assertIsDisplayed()
     }
 }

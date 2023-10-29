@@ -1,7 +1,6 @@
 package com.atiurin.ultron.extensions
 
 import android.view.View
-import androidx.test.espresso.Espresso
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
 import androidx.test.espresso.ViewInteraction
@@ -10,8 +9,8 @@ import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
-import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
+import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.custom.espresso.base.createRootViewPicker
 import com.atiurin.ultron.listeners.setListenersState
@@ -19,13 +18,32 @@ import com.atiurin.ultron.utils.runOnUiThread
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.Matcher
 
-fun ViewInteraction.isSuccess(action: ViewInteraction.() -> Unit): Boolean = runCatching { action() }.isSuccess
+fun ViewInteraction.isSuccess(action: ViewInteraction.() -> Unit): Boolean =
+    runCatching { action() }.isSuccess
 
-fun ViewInteraction.withTimeout(timeoutMs: Long) = UltronEspressoInteraction(this).withTimeout(timeoutMs)
-fun ViewInteraction.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) = UltronEspressoInteraction(this).withResultHandler(resultHandler)
-fun ViewInteraction.withAssertion(assertion: OperationAssertion) = UltronEspressoInteraction(this).withAssertion(assertion)
-fun ViewInteraction.withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
-    UltronEspressoInteraction(this).withAssertion(DefaultOperationAssertion(name, block.setListenersState(isListened)))
+fun ViewInteraction.withTimeout(timeoutMs: Long) =
+    UltronEspressoInteraction(this).withTimeout(timeoutMs)
+
+fun ViewInteraction.withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
+    UltronEspressoInteraction(this).withResultHandler(resultHandler)
+
+fun ViewInteraction.withAssertion(assertion: OperationAssertion) =
+    UltronEspressoInteraction(this).withAssertion(assertion)
+
+fun ViewInteraction.withAssertion(
+    name: String = "",
+    isListened: Boolean = false,
+    block: () -> Unit
+) =
+    UltronEspressoInteraction(this).withAssertion(
+        DefaultOperationAssertion(
+            name,
+            block.setListenersState(isListened)
+        )
+    )
+
+fun ViewInteraction.withName(name: String) = UltronEspressoInteraction(this).withName(name)
+fun ViewInteraction.withMetaInfo(meta: Any) = UltronEspressoInteraction(this).withMetaInfo(meta)
 
 //root view searching
 fun ViewInteraction.withSuitableRoot(): ViewInteraction {
@@ -33,8 +51,13 @@ fun ViewInteraction.withSuitableRoot(): ViewInteraction {
     var decorView: View? = null
     runOnUiThread { decorView = viewMatcher?.let { createRootViewPicker(it).get() } }
     return when {
-        decorView != null -> { this.inRoot(withDecorView(`is`(decorView))) }
-        else -> { this }
+        decorView != null -> {
+            this.inRoot(withDecorView(`is`(decorView)))
+        }
+
+        else -> {
+            this
+        }
     }
 }
 
@@ -43,14 +66,29 @@ fun ViewInteraction.click() = UltronEspressoInteraction(this).click()
 fun ViewInteraction.doubleClick() = UltronEspressoInteraction(this).doubleClick()
 fun ViewInteraction.longClick() = UltronEspressoInteraction(this).longClick()
 
-fun ViewInteraction.clickTopLeft(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(this).clickTopLeft(offsetX, offsetY)
-fun ViewInteraction.clickTopCenter(offsetY: Int) = UltronEspressoInteraction(this).clickTopCenter(offsetY)
-fun ViewInteraction.clickTopRight(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(this).clickTopRight(offsetX, offsetY)
-fun ViewInteraction.clickCenterRight(offsetX: Int = 0) = UltronEspressoInteraction(this).clickCenterRight(offsetX)
-fun ViewInteraction.clickBottomRight(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(this).clickBottomRight(offsetX, offsetY)
-fun ViewInteraction.clickBottomCenter(offsetY: Int = 0) = UltronEspressoInteraction(this).clickBottomCenter(offsetY)
-fun ViewInteraction.clickBottomLeft(offsetX: Int = 0, offsetY: Int = 0) = UltronEspressoInteraction(this).clickBottomLeft(offsetX, offsetY)
-fun ViewInteraction.clickCenterLeft(offsetX: Int = 0) = UltronEspressoInteraction(this).clickCenterLeft(offsetX)
+fun ViewInteraction.clickTopLeft(offsetX: Int = 0, offsetY: Int = 0) =
+    UltronEspressoInteraction(this).clickTopLeft(offsetX, offsetY)
+
+fun ViewInteraction.clickTopCenter(offsetY: Int) =
+    UltronEspressoInteraction(this).clickTopCenter(offsetY)
+
+fun ViewInteraction.clickTopRight(offsetX: Int = 0, offsetY: Int = 0) =
+    UltronEspressoInteraction(this).clickTopRight(offsetX, offsetY)
+
+fun ViewInteraction.clickCenterRight(offsetX: Int = 0) =
+    UltronEspressoInteraction(this).clickCenterRight(offsetX)
+
+fun ViewInteraction.clickBottomRight(offsetX: Int = 0, offsetY: Int = 0) =
+    UltronEspressoInteraction(this).clickBottomRight(offsetX, offsetY)
+
+fun ViewInteraction.clickBottomCenter(offsetY: Int = 0) =
+    UltronEspressoInteraction(this).clickBottomCenter(offsetY)
+
+fun ViewInteraction.clickBottomLeft(offsetX: Int = 0, offsetY: Int = 0) =
+    UltronEspressoInteraction(this).clickBottomLeft(offsetX, offsetY)
+
+fun ViewInteraction.clickCenterLeft(offsetX: Int = 0) =
+    UltronEspressoInteraction(this).clickCenterLeft(offsetX)
 
 fun ViewInteraction.typeText(text: String) = UltronEspressoInteraction(this).typeText(text)
 fun ViewInteraction.replaceText(text: String) = UltronEspressoInteraction(this).replaceText(text)
@@ -66,10 +104,16 @@ fun ViewInteraction.scrollTo() = UltronEspressoInteraction(this).scrollTo()
 fun ViewInteraction.perform(viewAction: ViewAction, description: String = "") =
     UltronEspressoInteraction(this).perform(viewAction, description)
 
-fun ViewInteraction.perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit) =
+fun ViewInteraction.perform(
+    params: UltronEspressoActionParams? = null,
+    block: (uiController: UiController, view: View) -> Unit
+) =
     UltronEspressoInteraction(this).perform(params, block)
 
-fun <T> ViewInteraction.execute(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> T) : T =
+fun <T> ViewInteraction.execute(
+    params: UltronEspressoActionParams? = null,
+    block: (uiController: UiController, view: View) -> T
+): T =
     UltronEspressoInteraction(this).execute(params, block)
 
 //assertions
@@ -77,7 +121,9 @@ fun ViewInteraction.isDisplayed() = UltronEspressoInteraction(this).isDisplayed(
 fun ViewInteraction.isNotDisplayed() = UltronEspressoInteraction(this).isNotDisplayed()
 fun ViewInteraction.exists() = UltronEspressoInteraction(this).exists()
 fun ViewInteraction.doesNotExist() = UltronEspressoInteraction(this).doesNotExist()
-fun ViewInteraction.isCompletelyDisplayed() = UltronEspressoInteraction(this).isCompletelyDisplayed()
+fun ViewInteraction.isCompletelyDisplayed() =
+    UltronEspressoInteraction(this).isCompletelyDisplayed()
+
 fun ViewInteraction.isDisplayingAtLeast(percentage: Int) =
     UltronEspressoInteraction(this).isDisplayingAtLeast(percentage)
 

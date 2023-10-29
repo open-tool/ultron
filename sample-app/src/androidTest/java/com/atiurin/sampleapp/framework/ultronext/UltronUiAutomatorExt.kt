@@ -9,8 +9,8 @@ import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2
 fun UltronUiObject2.appendText(appendText: String) = apply {
     executeAction(
         actionBlock = { uiObject2ProviderBlock()!!.text += appendText },
-        name = "AppendText '$appendText' to $selectorDesc",
-        description = "UiObject2 action '${UiAutomatorActionType.ADD_TEXT}' $selectorDesc appendText '$appendText' during $timeoutMs ms"
+        name = "AppendText '$appendText' to ${elementInfo.name}",
+        description = "UiObject2 action '${UiAutomatorActionType.ADD_TEXT}' ${elementInfo.name} appendText '$appendText' during $timeoutMs ms"
     )
 }
 
@@ -21,8 +21,8 @@ enum class CustomUltronOperations : UltronOperationType {
 fun UltronUiObject2.assertHasAnyChild() = apply {
     executeAssertion(
         assertionBlock = { uiObject2ProviderBlock()!!.childCount > 0 },
-        name = "Assert $selectorDesc has any child",
+        name = "Assert ${elementInfo.name} has any child",
         type = CustomUltronOperations.ASSERT_HAS_ANY_CHILD,
-        description = "UiObject2 assertion '${CustomUltronOperations.ASSERT_HAS_ANY_CHILD}' of $selectorDesc during $timeoutMs ms"
+        description = "UiObject2 assertion '${CustomUltronOperations.ASSERT_HAS_ANY_CHILD}' of ${elementInfo.name} during $timeoutMs ms"
     )
 }

@@ -18,7 +18,12 @@ class ResultDescriptor {
         nestingLevel -= 1
     }
 
-    fun describeResult(descBuilder: StringBuilder, isSuccess: Boolean, execTimeMs: Long, exceptions: List<Throwable>) = apply {
+    fun describeResult(
+        descBuilder: StringBuilder,
+        isSuccess: Boolean,
+        execTimeMs: Long,
+        exceptions: List<Throwable>
+    ) = apply {
         if (!isSuccess && exceptions.isNotEmpty()) {
             descBuilder
                 .prefixAllLinesWithTab(nestingLevel, "Result = FAILED (${execTimeMs} ms) ")

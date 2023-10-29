@@ -1,5 +1,7 @@
 package com.atiurin.sampleapp.tests.espresso
 
+import androidx.test.espresso.matcher.ViewMatchers
+import com.atiurin.sampleapp.framework.DummyMetaObject
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.UiElementsPage
@@ -10,7 +12,11 @@ import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.click
+import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
+import com.atiurin.ultron.extensions.isSuccess
+import com.atiurin.ultron.extensions.withAssertion
+import com.atiurin.ultron.extensions.withName
 import com.atiurin.ultron.extensions.withResultHandler
 import com.atiurin.ultron.extensions.withTimeout
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
@@ -19,6 +25,7 @@ import com.atiurin.ultron.testlifecycle.setupteardown.TearDown
 import com.atiurin.ultron.testlifecycle.setupteardown.TearDownRule
 import org.junit.Assert
 import org.junit.Test
+import kotlin.system.measureTimeMillis
 
 class UltronEspressoConfigTest : UiElementsTest() {
     val page = UiElementsPage
@@ -170,5 +177,73 @@ class UltronEspressoConfigTest : UiElementsTest() {
         Assert.assertFalse(result!!.operation.name.isNullOrEmpty())
         Assert.assertFalse(result!!.operation.description.isNullOrEmpty())
         Assert.assertEquals(100, result!!.operation.timeoutMs)
+    }
+
+
+    @Test
+    fun customAssertionTest() {
+        val text = "some text"
+        val execTime = measureTimeMillis {
+            page.editTextContentDesc.withAssertion("demo name") {
+                page.editTextContentDesc.hasText(text)
+            }.replaceText(text)
+        }
+        Assert.assertTrue(execTime < UltronConfig.Espresso.ACTION_TIMEOUT)
+    }
+
+    @Test
+    fun withAssertion_failedAssertion() {
+        AssertUtils.assertException {
+            page.editTextContentDesc.withTimeout(1000).withAssertion {
+                ViewMatchers.withText("asd23213 12312").withTimeout(500).isDisplayed()
+            }.typeText("1")
+        }
+    }
+
+    @Test
+    fun withAssertion_failedAssertion_timeout() {
+        val operationTime = 1000L
+        val execTime = measureTimeMillis {
+            page.editTextContentDesc.isSuccess {
+                withTimeout(operationTime).withAssertion {
+                    ViewMatchers.withText("asd23213 12312").withTimeout(100).isDisplayed()
+                }.typeText("1")
+            }
+        }
+        Assert.assertTrue(execTime > operationTime)
+    }
+
+    @Test
+    fun withName_inOperationProps_ultronInteraction() {
+        val name = "ElementName"
+        page.notExistElement.withTimeout(100).withName(name).withResultHandler { result ->
+            Assert.assertEquals(name, result.operation.elementInfo.name)
+        }.isDisplayed()
+    }
+
+    @Test
+    fun withName_inOperationProps_matcherExt() {
+        val name = "ElementName"
+        page.notExistElement.withName(name).withTimeout(100).withResultHandler { result ->
+            Assert.assertEquals(name, result.operation.elementInfo.name)
+        }.isDisplayed()
+    }
+
+    @Test
+    fun withName_inExceptionMessage() {
+        val name = "ElementNameToBeInException"
+        runCatching {
+            page.notExistElement.withTimeout(100).withName(name).isDisplayed()
+        }.onFailure { exception ->
+            Assert.assertTrue(exception.message!!.contains(name))
+        }
+    }
+
+    @Test
+    fun withMeta() {
+        val meta = DummyMetaObject("ElementMetaInfo")
+        page.notExistElement.withTimeout(100).withMetaInfo(meta).withResultHandler { result ->
+            Assert.assertEquals(meta, result.operation.elementInfo.meta)
+        }.isDisplayed()
     }
 }

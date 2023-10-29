@@ -8,5 +8,6 @@ interface Operation {
     val type: UltronOperationType
     val timeoutMs: Long
     val assertion: OperationAssertion
-    fun execute() : OperationIterationResult
+    val elementInfo: ElementInfo
+    fun execute(): OperationIterationResult
 }

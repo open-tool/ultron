@@ -2,7 +2,7 @@ package com.atiurin.ultron.extensions
 
 import android.graphics.Bitmap
 import java.nio.ByteBuffer
-import java.util.*
+import java.util.Arrays
 
 fun Bitmap.isSameAs(expected: Bitmap): Boolean {
     val buffer1 = ByteBuffer.allocate(this.height * this.rowBytes);

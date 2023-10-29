@@ -10,8 +10,8 @@ fun UltronWebElement.appendText(text: String) = apply {
             webInteractionBlock = {
                 webInteractionBlock().perform(DriverAtoms.webKeys(text))
             },
-            name = "WebElement(${locator.type} = '$value') appendText '$text'",
-            description = "WebElement(${locator.type} = '$value') appendText '$text' during $timeoutMs ms"
+            name = "${elementInfo.name} appendText '$text'",
+            description = "${elementInfo.name} appendText '$text' during $timeoutMs ms"
         )
     )
 }
