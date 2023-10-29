@@ -22,4 +22,5 @@ object ComposeElementsPage : Page<ComposeElementsPage>() {
     val progressBar = hasTestTag(ComposeElementsActivity.progressBar)
     val maleRadioButton = hasTestTag(radioButtonMaleTestTag)
     val femaleRadioButton = hasTestTag(radioButtonFemaleTestTag)
+    val notExistedElement = hasTestTag("NotExistedTestTag")
 }

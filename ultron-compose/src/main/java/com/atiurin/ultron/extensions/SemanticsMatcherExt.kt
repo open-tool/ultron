@@ -36,6 +36,9 @@ fun SemanticsMatcher.withAssertion(assertion: OperationAssertion) = UltronCompos
 fun SemanticsMatcher.withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
     UltronComposeSemanticsNodeInteraction(this).withAssertion(name, isListened, block)
 
+fun SemanticsMatcher.withName(name: String) = UltronComposeSemanticsNodeInteraction(this).withName(name)
+fun SemanticsMatcher.withMetaInfo(meta: Any) = UltronComposeSemanticsNodeInteraction(this).withMetaInfo(meta)
+
 fun SemanticsMatcher.getText() = UltronComposeSemanticsNodeInteraction(this).getText()
 fun SemanticsMatcher.click(option: ClickOption? = null) = UltronComposeSemanticsNodeInteraction(this).click(option)
 fun SemanticsMatcher.clickCenterLeft(option: ClickOption? = null) = UltronComposeSemanticsNodeInteraction(this).clickCenterLeft(option)

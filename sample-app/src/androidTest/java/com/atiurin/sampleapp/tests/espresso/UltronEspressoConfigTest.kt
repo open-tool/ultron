@@ -1,6 +1,7 @@
 package com.atiurin.sampleapp.tests.espresso
 
 import androidx.test.espresso.matcher.ViewMatchers
+import com.atiurin.sampleapp.framework.DummyMetaObject
 import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.UiElementsPage
@@ -245,6 +246,4 @@ class UltronEspressoConfigTest : UiElementsTest() {
             Assert.assertEquals(meta, result.operation.elementInfo.meta)
         }.isDisplayed()
     }
-
-    data class DummyMetaObject(val value: String)
 }

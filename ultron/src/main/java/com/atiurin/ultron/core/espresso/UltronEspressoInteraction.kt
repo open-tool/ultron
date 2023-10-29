@@ -17,7 +17,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import com.atiurin.ultron.core.common.CommonOperationType
 import com.atiurin.ultron.core.common.ElementInfo
-import com.atiurin.ultron.core.common.EmptyElementInfo
+import com.atiurin.ultron.core.common.DefaultElementInfo
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
@@ -50,7 +50,7 @@ class UltronEspressoInteraction<T>(
     val timeoutMs: Long? = null,
     val resultHandler: ((EspressoOperationResult<UltronEspressoOperation>) -> Unit)? = null,
     val assertion: OperationAssertion = EmptyOperationAssertion(),
-    val elementInfo: ElementInfo = EmptyElementInfo()
+    val elementInfo: ElementInfo = DefaultElementInfo()
 ) {
     init {
         if (interaction !is ViewInteraction && interaction !is DataInteraction) throw UltronException(

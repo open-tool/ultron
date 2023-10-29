@@ -8,27 +8,23 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.Dp
-import com.atiurin.ultron.core.compose.ComposeRuleContainer.getComposeRule
 import com.atiurin.ultron.core.common.CommonOperationType
+import com.atiurin.ultron.core.common.ElementInfo
+import com.atiurin.ultron.core.common.DefaultElementInfo
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.common.options.*
+import com.atiurin.ultron.core.compose.ComposeRuleContainer.getComposeRule
 import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.core.compose.operation.ComposeOperationExecutor
 import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
-import com.atiurin.ultron.core.compose.operation.ComposeOperationType
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType.*
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationLifecycle
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
-import com.atiurin.ultron.extensions.getDefaultDoubleClickDelay
-import com.atiurin.ultron.extensions.getDefaultLongClickDuration
-import com.atiurin.ultron.extensions.getUltronComposeOffset
-import com.atiurin.ultron.extensions.provideSwipeDownPosition
-
 import com.atiurin.ultron.extensions.*
 import com.atiurin.ultron.listeners.setListenersState
 import com.atiurin.ultron.utils.runOnUiThread
@@ -38,61 +34,41 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     val semanticsNodeInteraction: SemanticsNodeInteraction,
     val timeoutMs: Long = UltronComposeConfig.params.operationTimeoutMs,
     val resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeConfig.resultHandler,
-    val assertion: OperationAssertion = EmptyOperationAssertion()
+    val assertion: OperationAssertion = EmptyOperationAssertion(),
+    val elementInfo: ElementInfo = DefaultElementInfo()
 ) {
     constructor(
         matcher: SemanticsMatcher,
         useUnmergedTree: Boolean = false,
         timeoutMs: Long = UltronComposeConfig.params.operationTimeoutMs,
         resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeConfig.resultHandler,
-        assertion: OperationAssertion = EmptyOperationAssertion()
-    ) : this(getComposeRule().onNode(matcher, useUnmergedTree), timeoutMs, resultHandler, assertion)
+        assertion: OperationAssertion = EmptyOperationAssertion(),
+        elementInfo: ElementInfo = DefaultElementInfo()
+    ) : this(getComposeRule().onNode(matcher, useUnmergedTree), timeoutMs, resultHandler, assertion, elementInfo)
 
-    companion object {
-        /**
-         * Executes any compose action inside Ultron lifecycle
-         */
-        @Deprecated(
-            "It doesn't support custom assertion call provided by [withAssertion]", ReplaceWith(
-                "this.executeOperation(operation: UltronComposeOperation)"
-            )
-        )
-        fun executeOperation(
-            operation: UltronComposeOperation,
-            resultHandler: (ComposeOperationResult<UltronComposeOperation>) -> Unit = UltronComposeConfig.resultHandler
-        ) {
-            UltronComposeOperationLifecycle.execute(
-                ComposeOperationExecutor(operation),
-                resultHandler
-            )
-        }
-
-        private const val CONFIG_TEXT_FIELD_NAME = "Text"
-        private const val CONFIG_EDITABLE_TEXT_FIELD_NAME = "EditableText"
-        val CONFIG_TEXT_FIELDS_LIST =
-            listOf(CONFIG_TEXT_FIELD_NAME, CONFIG_EDITABLE_TEXT_FIELD_NAME)
-        internal const val DEFAULT_SWIPE_DURATION = 200L
+    init {
+        if (elementInfo.name.isEmpty()) elementInfo.name = semanticsNodeInteraction.getDescription().toString()
     }
 
     fun <T> isSuccess(action: UltronComposeSemanticsNodeInteraction.() -> T): Boolean = runCatching { action() }.isSuccess
 
-    fun withResultHandler(resultHandler: (ComposeOperationResult<UltronComposeOperation>) -> Unit) =
-        UltronComposeSemanticsNodeInteraction(
-            semanticsNodeInteraction,
-            this.timeoutMs,
-            resultHandler
-        )
-
-    fun withTimeout(timeoutMs: Long) = UltronComposeSemanticsNodeInteraction(
-        semanticsNodeInteraction,
-        timeoutMs,
-        this.resultHandler
+    fun withResultHandler(resultHandler: (ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeSemanticsNodeInteraction(
+        semanticsNodeInteraction, this.timeoutMs, resultHandler, this.assertion, this.elementInfo
     )
 
-    fun withAssertion(assertion: OperationAssertion) = UltronComposeSemanticsNodeInteraction(semanticsNodeInteraction, timeoutMs, resultHandler, assertion)
-    fun withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
-        UltronComposeSemanticsNodeInteraction(semanticsNodeInteraction, timeoutMs, resultHandler, DefaultOperationAssertion(name, block.setListenersState(isListened)))
+    fun withTimeout(timeoutMs: Long) = UltronComposeSemanticsNodeInteraction(
+        semanticsNodeInteraction, timeoutMs, this.resultHandler, this.assertion, this.elementInfo
+    )
 
+
+    fun withAssertion(assertion: OperationAssertion) = UltronComposeSemanticsNodeInteraction(semanticsNodeInteraction, timeoutMs, resultHandler, assertion, this.elementInfo)
+    fun withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
+        UltronComposeSemanticsNodeInteraction(semanticsNodeInteraction, timeoutMs, resultHandler, DefaultOperationAssertion(name, block.setListenersState(isListened)), this.elementInfo)
+
+    fun withName(name: String) = apply { elementInfo.name = name }
+    
+    fun withMetaInfo(meta: Any) = apply { elementInfo.meta = meta }
+    
     internal fun click(position: UltronComposeOffsets, option: ClickOption? = null) = apply {
         val _option = option ?: ClickOption(0, 0)
         executeOperation(
@@ -102,9 +78,9 @@ open class UltronComposeSemanticsNodeInteraction constructor(
                     this.click(offset)
                 }
             },
-            name = "Click on '${semanticsNodeInteraction.getDescription()}' ${position.name}",
+            name = "Click on '${elementInfo.name}' ${position.name}",
             type = CLICK,
-            description = "Compose click on '${semanticsNodeInteraction.getDescription()}' ${position.name} with option = '$_option' during $timeoutMs ms",
+            description = "Compose click on '${elementInfo.name}' ${position.name} with option = '$_option' during $timeoutMs ms",
         )
     }
 
@@ -114,14 +90,13 @@ open class UltronComposeSemanticsNodeInteraction constructor(
             operationBlock = {
                 semanticsNodeInteraction.performTouchInput {
                     _option = _option ?: LongClickOption(0, 0, getDefaultLongClickDuration())
-                    val offset = getUltronComposeOffset(position)
-                        .let { it.copy(x = it.x + (_option?.xOffset ?: 0L), y = it.y + (_option?.yOffset ?: 0)) }
+                    val offset = getUltronComposeOffset(position).let { it.copy(x = it.x + (_option?.xOffset ?: 0L), y = it.y + (_option?.yOffset ?: 0)) }
                     this.longClick(offset, _option?.durationMs ?: getDefaultLongClickDuration())
                 }
             },
-            name = "LongClick on '${semanticsNodeInteraction.getDescription()}' ${position.name}",
+            name = "LongClick on '${elementInfo.name}' ${position.name}",
             type = LONG_CLICK,
-            description = "Compose longClick on '${semanticsNodeInteraction.getDescription()}' ${position.name} with option = '$_option' during $timeoutMs ms",
+            description = "Compose longClick on '${elementInfo.name}' ${position.name} with option = '$_option' during $timeoutMs ms",
         )
     }
 
@@ -131,14 +106,13 @@ open class UltronComposeSemanticsNodeInteraction constructor(
             operationBlock = {
                 semanticsNodeInteraction.performTouchInput {
                     _option = _option ?: DoubleClickOption(0, 0, getDefaultDoubleClickDelay())
-                    val offset = getUltronComposeOffset(position)
-                        .let { it.copy(x = it.x + (_option?.xOffset ?: 0L), y = it.y + (_option?.yOffset ?: 0)) }
+                    val offset = getUltronComposeOffset(position).let { it.copy(x = it.x + (_option?.xOffset ?: 0L), y = it.y + (_option?.yOffset ?: 0)) }
                     this.doubleClick(offset, delayMillis = _option?.delayMs ?: getDefaultDoubleClickDelay())
                 }
             },
-            name = "DoubleClick on '${semanticsNodeInteraction.getDescription()}' ${position.name}",
+            name = "DoubleClick on '${elementInfo.name}' ${position.name}",
             type = DOUBLE_CLICK,
-            description = "Compose doubleClick on '${semanticsNodeInteraction.getDescription()}' ${position.name} with option = '$_option' during $timeoutMs ms",
+            description = "Compose doubleClick on '${elementInfo.name}' ${position.name} with option = '$_option' during $timeoutMs ms",
         )
     }
 
@@ -151,9 +125,9 @@ open class UltronComposeSemanticsNodeInteraction constructor(
                     swipe(position.start, position.end, _option.durationMs)
                 }
             },
-            name = "SwipeDown '${semanticsNodeInteraction.getDescription()}'",
+            name = "SwipeDown '${elementInfo.name}'",
             type = SWIPE_DOWN,
-            description = "Compose swipeDown '${semanticsNodeInteraction.getDescription()}' with option = '$_option' during $timeoutMs ms ",
+            description = "Compose swipeDown '${elementInfo.name}' with option = '$_option' during $timeoutMs ms ",
         )
     }
 
@@ -166,9 +140,9 @@ open class UltronComposeSemanticsNodeInteraction constructor(
                     swipe(position.start, position.end, _option.durationMs)
                 }
             },
-            name = "SwipeUp '${semanticsNodeInteraction.getDescription()}'",
+            name = "SwipeUp '${elementInfo.name}'",
             type = SWIPE_UP,
-            description = "Compose swipeUp '${semanticsNodeInteraction.getDescription()}' with option = '$_option' during $timeoutMs ms ",
+            description = "Compose swipeUp '${elementInfo.name}' with option = '$_option' during $timeoutMs ms ",
         )
     }
 
@@ -181,9 +155,9 @@ open class UltronComposeSemanticsNodeInteraction constructor(
                     this.swipe(position.start, position.end, _option.durationMs)
                 }
             },
-            name = "SwipeLeft to '${semanticsNodeInteraction.getDescription()}'",
+            name = "SwipeLeft to '${elementInfo.name}'",
             type = SWIPE_LEFT,
-            description = "Compose swipeLeft '${semanticsNodeInteraction.getDescription()}' with option = '$_option' during $timeoutMs ms ",
+            description = "Compose swipeLeft '${elementInfo.name}' with option = '$_option' during $timeoutMs ms ",
         )
     }
 
@@ -196,54 +170,54 @@ open class UltronComposeSemanticsNodeInteraction constructor(
                     this.swipe(position.start, position.end, _option.durationMs)
                 }
             },
-            name = "SwipeRight to '${semanticsNodeInteraction.getDescription()}'",
+            name = "SwipeRight to '${elementInfo.name}'",
             type = SWIPE_RIGHT,
-            description = "Compose swipeRight '${semanticsNodeInteraction.getDescription()}' with option = '$_option' during $timeoutMs ms ",
+            description = "Compose swipeRight '${elementInfo.name}' with option = '$_option' during $timeoutMs ms ",
         )
     }
 
     fun scrollTo() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performScrollTo() },
-            name = "ScrollTo on '${semanticsNodeInteraction.getDescription()}'",
+            name = "ScrollTo on '${elementInfo.name}'",
             type = SCROLL_TO,
-            description = "Compose scrollTo on '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose scrollTo on '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun scrollToIndex(index: Int) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performScrollToIndex(index) },
-            name = "ScrollToIndex on '${semanticsNodeInteraction.getDescription()}'",
+            name = "ScrollToIndex on '${elementInfo.name}'",
             type = SCROLL_TO_INDEX,
-            description = "Compose scrollToIndex $index on '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose scrollToIndex $index on '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun scrollToKey(key: String) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performScrollToKey(key) },
-            name = "ScrollToIndex on '${semanticsNodeInteraction.getDescription()}'",
+            name = "ScrollToIndex on '${elementInfo.name}'",
             type = SCROLL_TO_KEY,
-            description = "Compose scrollToKey '$key' on '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose scrollToKey '$key' on '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun scrollToNode(matcher: SemanticsMatcher) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performScrollToNode(matcher) },
-            name = "ScrollToNode on '${semanticsNodeInteraction.getDescription()}'",
+            name = "ScrollToNode on '${elementInfo.name}'",
             type = SCROLL_TO_NODE,
-            description = "Compose scrollToNode with matcher '${matcher.description}' on '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose scrollToNode with matcher '${matcher.description}' on '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun inputText(text: String) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performTextInput(text) },
-            name = "InputText '$text' to '${semanticsNodeInteraction.getDescription()}'",
+            name = "InputText '$text' to '${elementInfo.name}'",
             type = TEXT_INPUT,
-            description = "Compose inputText '$text' to '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose inputText '$text' to '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
@@ -253,9 +227,9 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun inputTextSelection(range: TextRange) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performTextInputSelection(range) },
-            name = "TextInputSelection '$range' to '${semanticsNodeInteraction.getDescription()}'",
+            name = "TextInputSelection '$range' to '${elementInfo.name}'",
             type = TEXT_INPUT_SELECTION,
-            description = "Compose inputTextSelection range '$range' to '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose inputTextSelection range '$range' to '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
@@ -269,9 +243,9 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun setSelection(startIndex: Int = 0, endIndex: Int = 0, traversalMode: Boolean) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performSemanticsAction(SemanticsActions.SetSelection) { it.invoke(startIndex, endIndex, traversalMode) } },
-            name = "SetSelection from $startIndex to $endIndex for '${semanticsNodeInteraction.getDescription()}'",
+            name = "SetSelection from $startIndex to $endIndex for '${elementInfo.name}'",
             type = SET_SELECTION,
-            description = "Compose setSelection from $startIndex to $endIndex for  '${semanticsNodeInteraction.getDescription()} with traversalMode = $traversalMode during $timeoutMs ms",
+            description = "Compose setSelection from $startIndex to $endIndex for  '${elementInfo.name} with traversalMode = $traversalMode during $timeoutMs ms",
         )
     }
 
@@ -279,18 +253,18 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun imeAction() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performImeAction() },
-            name = "PerformImeAction to '${semanticsNodeInteraction.getDescription()}'",
+            name = "PerformImeAction to '${elementInfo.name}'",
             type = IME_ACTION,
-            description = "Compose performImeAction to '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose performImeAction to '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun pressKey(key: KeyEvent) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performKeyPress(key) },
-            name = "PressKey '$key' to '${semanticsNodeInteraction.getDescription()}'",
+            name = "PressKey '$key' to '${elementInfo.name}'",
             type = PRESS_KEY,
-            description = "Compose pressKey event '$key' to '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose pressKey event '$key' to '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
@@ -298,13 +272,12 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         val text = AtomicReference<String>()
         executeOperation(
             operationBlock = {
-                val textValues =
-                    semanticsNodeInteraction.getOneOfConfigFields(CONFIG_TEXT_FIELDS_LIST)
+                val textValues = semanticsNodeInteraction.getOneOfConfigFields(CONFIG_TEXT_FIELDS_LIST)
                 text.set((textValues as Collection<AnnotatedString>).firstOrNull().toString())
             },
-            name = "Get text from '${semanticsNodeInteraction.getDescription()}'",
+            name = "Get text from '${elementInfo.name}'",
             type = GET_TEXT,
-            description = "Compose getText from '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose getText from '${elementInfo.name}' during $timeoutMs ms",
         )
         return text.get()
     }
@@ -312,18 +285,18 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun clearText() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performTextClearance() },
-            name = "ClearText in '${semanticsNodeInteraction.getDescription()}'",
+            name = "ClearText in '${elementInfo.name}'",
             type = CLEAR_TEXT,
-            description = "Compose clearText in '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose clearText in '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun replaceText(text: String) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performTextReplacement(text) },
-            name = "ReplaceText to '$text' in '${semanticsNodeInteraction.getDescription()}'",
+            name = "ReplaceText to '$text' in '${elementInfo.name}'",
             type = REPLACE_TEXT,
-            description = "Compose replaceText to '$text' in '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose replaceText to '$text' in '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
@@ -333,36 +306,36 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun copyText() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performSemanticsAction(SemanticsActions.CopyText) },
-            name = "CopyText to clipboard from '${semanticsNodeInteraction.getDescription()}'",
+            name = "CopyText to clipboard from '${elementInfo.name}'",
             type = COPY_TEXT,
-            description = "Compose copyText to clipboard from '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose copyText to clipboard from '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun pasteText() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performSemanticsAction(SemanticsActions.PasteText) },
-            name = "PasteText from clipboard to '${semanticsNodeInteraction.getDescription()}'",
+            name = "PasteText from clipboard to '${elementInfo.name}'",
             type = PASTE_TEXT,
-            description = "Compose pasteText from clipboard to '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose pasteText from clipboard to '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun cutText() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performSemanticsAction(SemanticsActions.CutText) },
-            name = "CutText to clipboard from '${semanticsNodeInteraction.getDescription()}'",
+            name = "CutText to clipboard from '${elementInfo.name}'",
             type = CUT_TEXT,
-            description = "Compose cutText to clipboard from '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose cutText to clipboard from '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun setText(text: AnnotatedString) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performSemanticsAction(SemanticsActions.SetText) { it.invoke(text) } },
-            name = "SetText '${text.text}' to '${semanticsNodeInteraction.getDescription()}'",
+            name = "SetText '${text.text}' to '${elementInfo.name}'",
             type = SET_TEXT,
-            description = "Compose setText '${text.text}' to '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose setText '${text.text}' to '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
@@ -371,36 +344,36 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun collapse() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performSemanticsAction(SemanticsActions.Collapse) },
-            name = "Collapse '${semanticsNodeInteraction.getDescription()}'",
+            name = "Collapse '${elementInfo.name}'",
             type = COLLAPSE,
-            description = "Compose collapse '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose collapse '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun expand() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performSemanticsAction(SemanticsActions.Expand) },
-            name = "Expand '${semanticsNodeInteraction.getDescription()}'",
+            name = "Expand '${elementInfo.name}'",
             type = EXPAND,
-            description = "Compose expand '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose expand '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun dismiss() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performSemanticsAction(SemanticsActions.Dismiss) },
-            name = "Dismiss '${semanticsNodeInteraction.getDescription()}'",
+            name = "Dismiss '${elementInfo.name}'",
             type = DISMISS,
-            description = "Compose dismiss '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose dismiss '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun setProgress(value: Float) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performSemanticsAction(SemanticsActions.SetProgress) { it.invoke(value) } },
-            name = "SetProgress $value to '${semanticsNodeInteraction.getDescription()}'",
+            name = "SetProgress $value to '${elementInfo.name}'",
             type = SET_PROGRESS,
-            description = "Compose setProgress $value to '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose setProgress $value to '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
@@ -408,9 +381,9 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun performMouseInput(block: MouseInjectionScope.() -> Unit) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performMouseInput(block) },
-            name = "MouseInput to '${semanticsNodeInteraction.getDescription()}'",
+            name = "MouseInput to '${elementInfo.name}'",
             type = MOUSE_INPUT,
-            description = "Compose performMouseInput to '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose performMouseInput to '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
@@ -419,15 +392,14 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun <T : Function<Boolean>> performSemanticsAction(key: SemanticsPropertyKey<AccessibilityAction<T>>, invocation: (T) -> Unit) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performSemanticsAction(key, invocation) },
-            name = "SemanticAction '${key.name}' to '${semanticsNodeInteraction.getDescription()}'",
+            name = "SemanticAction '${key.name}' to '${elementInfo.name}'",
             type = SEMANTIC_ACTION,
-            description = "Compose semanticAction '${key.name}' to '${semanticsNodeInteraction.getDescription()} during $timeoutMs ms",
+            description = "Compose semanticAction '${key.name}' to '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
     fun <T : Function<Boolean>, R> SemanticsNodeInteraction.performSemanticsActionWithResult(
-        key: SemanticsPropertyKey<AccessibilityAction<T>>,
-        invocation: (T) -> R?
+        key: SemanticsPropertyKey<AccessibilityAction<T>>, invocation: (T) -> R?
     ): R? {
         val node = fetchSemanticsNode("Failed to perform ${key.name} action.")
         requireSemantics(node, key) {
@@ -444,9 +416,9 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         val image = AtomicReference<ImageBitmap>()
         executeOperation(
             operationBlock = { image.set(semanticsNodeInteraction.captureToImage()) },
-            name = "CaptureImage for '${semanticsNodeInteraction.getDescription()}'",
+            name = "CaptureImage for '${elementInfo.name}'",
             type = CAPTURE_IMAGE,
-            description = "Compose captureToImage for '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose captureToImage for '${elementInfo.name}' during $timeoutMs ms",
         )
         return image.get()
     }
@@ -464,15 +436,14 @@ open class UltronComposeSemanticsNodeInteraction constructor(
      */
     @Deprecated("Use the method 'execute' instead", ReplaceWith("execute(params, block)"))
     fun <T> perform(
-        option: PerformCustomBlockOption,
-        block: (SemanticsNodeInteraction) -> T
+        option: PerformCustomBlockOption, block: (SemanticsNodeInteraction) -> T
     ): T {
         val result = AtomicReference<T>()
         executeOperation(
             operationBlock = { result.set(block(semanticsNodeInteraction)) },
-            name = "Perform '${option.description}''${semanticsNodeInteraction.getDescription()}'",
+            name = "Perform '${option.description}''${elementInfo.name}'",
             type = option.operationType,
-            description = "Compose operation '${option.operationType}' to '${semanticsNodeInteraction.getDescription()}' with option '$option' during $timeoutMs ms",
+            description = "Compose operation '${option.operationType}' to '${elementInfo.name}' with option '$option' during $timeoutMs ms",
         )
         return result.get()
     }
@@ -542,8 +513,8 @@ open class UltronComposeSemanticsNodeInteraction constructor(
 
     fun getNode(): SemanticsNode = execute(
         UltronComposeOperationParams(
-            operationName = "Get SemanticsNode of '${semanticsNodeInteraction.getDescription()}'",
-            operationDescription = "Compose get SemanticsNode of '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            operationName = "Get SemanticsNode of '${elementInfo.name}'",
+            operationDescription = "Compose get SemanticsNode of '${elementInfo.name}' during $timeoutMs ms",
             operationType = GET_SEMANTICS_NODE
         )
     ) {
@@ -552,8 +523,8 @@ open class UltronComposeSemanticsNodeInteraction constructor(
 
     fun <T> getNodeConfigProperty(key: SemanticsPropertyKey<T>): T = execute(
         UltronComposeOperationParams(
-            operationName = "Get SemanticsNode config property '${key.name}' of '${semanticsNodeInteraction.getDescription()}'",
-            operationDescription = "Compose get SemanticsNode config property '${key.name}' of '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            operationName = "Get SemanticsNode config property '${key.name}' of '${elementInfo.name}'",
+            operationDescription = "Compose get SemanticsNode config property '${key.name}' of '${elementInfo.name}' during $timeoutMs ms",
             operationType = GET_SEMANTICS_NODE
         )
     ) {
@@ -564,27 +535,27 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun assertIsDisplayed() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsDisplayed() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' is displayed",
+            name = "Assert '${elementInfo.name}' is displayed",
             type = IS_DISPLAYED,
-            description = "Compose assertIsDisplayed '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertIsDisplayed '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertIsNotDisplayed() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsNotDisplayed() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' is not displayed",
+            name = "Assert '${elementInfo.name}' is not displayed",
             type = IS_NOT_DISPLAYED,
-            description = "Compose assertIsNotDisplayed '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertIsNotDisplayed '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertExists() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertExists() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' exists",
+            name = "Assert '${elementInfo.name}' exists",
             type = EXISTS,
-            description = "Compose assertExists '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertExists '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
@@ -594,126 +565,126 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun assertDoesNotExist() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertDoesNotExist() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' doesn't exist",
+            name = "Assert '${elementInfo.name}' doesn't exist",
             type = DOES_NOT_EXIST,
-            description = "Compose assertDoesNotExist '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertDoesNotExist '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertIsEnabled() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsEnabled() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' is enabled",
+            name = "Assert '${elementInfo.name}' is enabled",
             type = IS_ENABLED,
-            description = "Compose assertIsEnabled '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertIsEnabled '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertIsNotEnabled() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsNotEnabled() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' is not enabled",
+            name = "Assert '${elementInfo.name}' is not enabled",
             type = IS_NOT_ENABLED,
-            description = "Compose assertIsNotEnabled '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertIsNotEnabled '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertIsFocused() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsFocused() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' is focused",
+            name = "Assert '${elementInfo.name}' is focused",
             type = IS_FOCUSED,
-            description = "Compose assertIsFocused '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertIsFocused '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertIsNotFocused() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsNotFocused() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' is not focused",
+            name = "Assert '${elementInfo.name}' is not focused",
             type = IS_NOT_FOCUSED,
-            description = "Compose assertIsNotFocused'${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertIsNotFocused'${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertIsSelected() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsSelected() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' is selected",
+            name = "Assert '${elementInfo.name}' is selected",
             type = IS_SELECTED,
-            description = "Compose assertIsSelected to '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertIsSelected to '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertIsNotSelected() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsNotSelected() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}'",
+            name = "Assert '${elementInfo.name}'",
             type = IS_NOT_SELECTED,
-            description = "Compose assertIsNotSelected to '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertIsNotSelected to '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertIsSelectable() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsSelectable() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' is selectable",
+            name = "Assert '${elementInfo.name}' is selectable",
             type = IS_SELECTABLE,
-            description = "Compose assertIsSelectable '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertIsSelectable '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertIsOn() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsOn() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' is on",
+            name = "Assert '${elementInfo.name}' is on",
             type = IS_ON,
-            description = "Compose assertIsOn '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertIsOn '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertIsOff() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsOff() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' is off",
+            name = "Assert '${elementInfo.name}' is off",
             type = IS_OFF,
-            description = "Compose assertIsOff '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertIsOff '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertIsToggleable() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsToggleable() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' Is Toggleable",
+            name = "Assert '${elementInfo.name}' Is Toggleable",
             type = IS_TOGGLEABLE,
-            description = "Compose assertIsToggleable '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertIsToggleable '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertHasClickAction() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertHasClickAction() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' has click action",
+            name = "Assert '${elementInfo.name}' has click action",
             type = HAS_CLICK_ACTION,
-            description = "Compose assertHasClickAction '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertHasClickAction '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertHasNoClickAction() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertHasNoClickAction() },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' has no click action",
+            name = "Assert '${elementInfo.name}' has no click action",
             type = HAS_NO_CLICK_ACTION,
-            description = "Compose assertHasNoClickAction '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertHasNoClickAction '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertTextEquals(vararg expected: String, option: TextEqualsOption? = null) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertTextEquals(*expected, includeEditableText = option?.includeEditableText ?: true) },
-            name = "AssertTextEquals '${expected.toList()}' in '${semanticsNodeInteraction.getDescription()}'",
+            name = "AssertTextEquals '${expected.toList()}' in '${elementInfo.name}'",
             type = TEXT_EQUALS,
-            description = "Compose assertTextEquals '${expected.toList()}' with option = '$option' in '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertTextEquals '${expected.toList()}' with option = '$option' in '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
@@ -721,18 +692,18 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         val _option = option ?: TextContainsOption()
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertTextContains(expected, _option.substring, _option.ignoreCase) },
-            name = "AssertTextContains '$expected' in '${semanticsNodeInteraction.getDescription()}'",
+            name = "AssertTextContains '$expected' in '${elementInfo.name}'",
             type = CONTAINS_TEXT,
-            description = "Compose assertTextContains '$expected' with option = '$_option' in '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertTextContains '$expected' with option = '$_option' in '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertContentDescriptionEquals(vararg expected: String) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertContentDescriptionEquals(*expected) },
-            name = "Assert ContentDescription equals '${expected.toList()}' in '${semanticsNodeInteraction.getDescription()}'",
+            name = "Assert ContentDescription equals '${expected.toList()}' in '${elementInfo.name}'",
             type = HAS_CONTENT_DESCRIPTION,
-            description = "Compose assertContentDescriptionEquals '${expected.toList()}' in '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertContentDescriptionEquals '${expected.toList()}' in '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
@@ -740,72 +711,72 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         val _option = option ?: ContentDescriptionContainsOption()
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertContentDescriptionContains(expected, _option.substring, _option.ignoreCase) },
-            name = "Assert ContentDescription contains '$expected' in '${semanticsNodeInteraction.getDescription()}'",
+            name = "Assert ContentDescription contains '$expected' in '${elementInfo.name}'",
             type = CONTENT_DESCRIPTION_CONTAINS_TEXT,
-            description = "Compose assertContentDescriptionContains '$expected' with option = '$_option' in '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertContentDescriptionContains '$expected' with option = '$_option' in '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertValueEquals(expected: String) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertValueEquals(expected) },
-            name = "AssertValueEquals '$expected' in '${semanticsNodeInteraction.getDescription()}'",
+            name = "AssertValueEquals '$expected' in '${elementInfo.name}'",
             type = VALUE_EQUALS,
-            description = "Compose assertValueEquals '$expected' in '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertValueEquals '$expected' in '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertRangeInfoEquals(range: ProgressBarRangeInfo) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertRangeInfoEquals(range) },
-            name = "AssertRangeInfoEquals '$range' in '${semanticsNodeInteraction.getDescription()}'",
+            name = "AssertRangeInfoEquals '$range' in '${elementInfo.name}'",
             type = PROGRESS_BAR_RANGE_EQUALS,
-            description = "Compose assertRangeInfoEquals '$range' in '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertRangeInfoEquals '$range' in '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertHeightIsAtLeast(minHeight: Dp) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertHeightIsAtLeast(minHeight) },
-            name = "AssertHeightIsAtLeast '$minHeight' of '${semanticsNodeInteraction.getDescription()}'",
+            name = "AssertHeightIsAtLeast '$minHeight' of '${elementInfo.name}'",
             type = HEIGHT_IS_AT_LEAST,
-            description = "Compose operation '$HEIGHT_IS_AT_LEAST' '$minHeight' of '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose operation '$HEIGHT_IS_AT_LEAST' '$minHeight' of '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertHeightIsEqualTo(expectedHeight: Dp) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertHeightIsEqualTo(expectedHeight) },
-            name = "AssertHeightIsEqualTo '$expectedHeight' of '${semanticsNodeInteraction.getDescription()}'",
+            name = "AssertHeightIsEqualTo '$expectedHeight' of '${elementInfo.name}'",
             type = HEIGHT_IS_EQUAL_TO,
-            description = "Compose assertHeightIsEqualTo '$expectedHeight' of '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertHeightIsEqualTo '$expectedHeight' of '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertWidthIsAtLeast(minWidth: Dp) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertWidthIsAtLeast(minWidth) },
-            name = "AssertWidthIsAtLeast '$minWidth' of '${semanticsNodeInteraction.getDescription()}'",
+            name = "AssertWidthIsAtLeast '$minWidth' of '${elementInfo.name}'",
             type = WIDTH_IS_AT_LEAST,
-            description = "Compose assertWidthIsAtLeast '$minWidth' of '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertWidthIsAtLeast '$minWidth' of '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertWidthIsEqualTo(expectedWidth: Dp) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertWidthIsEqualTo(expectedWidth) },
-            name = "AssertWidthIsEqualTo '$expectedWidth' of '${semanticsNodeInteraction.getDescription()}'",
+            name = "AssertWidthIsEqualTo '$expectedWidth' of '${elementInfo.name}'",
             type = WIDTH_IS_EQUAL_TO,
-            description = "Compose assertWidthIsEqualTo '$expectedWidth' of '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertWidthIsEqualTo '$expectedWidth' of '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
     fun assertMatches(matcher: SemanticsMatcher, messagePrefixOnError: (() -> String)? = null) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assert(matcher, messagePrefixOnError) },
-            name = "Assert '${semanticsNodeInteraction.getDescription()}' matches '${matcher.description}'",
+            name = "Assert '${elementInfo.name}' matches '${matcher.description}'",
             type = ASSERT_MATCHES,
-            description = "Compose assertMatches '${matcher.description}' to '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+            description = "Compose assertMatches '${matcher.description}' to '${elementInfo.name}' during $timeoutMs ms",
         )
     }
 
@@ -814,24 +785,38 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     )
 
     fun executeOperation(
-        operationBlock: () -> Unit,
-        name: String = "empty name",
-        type: UltronOperationType = CommonOperationType.DEFAULT,
-        description: String = "empty description"
+        operationBlock: () -> Unit, name: String = "empty name", type: UltronOperationType = CommonOperationType.DEFAULT, description: String = "empty description"
     ) = UltronComposeOperationLifecycle.execute(ComposeOperationExecutor(getComposeOperation(operationBlock, name, type, description)), resultHandler)
 
-    fun getComposeOperation(operationBlock: () -> Unit, name: String, type: UltronOperationType, description: String) =
-        UltronComposeOperation(
-            operationBlock = operationBlock,
-            name = name,
-            type = type,
-            description = description,
-            timeoutMs = timeoutMs,
-            assertion = assertion
-        )
+    fun getComposeOperation(operationBlock: () -> Unit, name: String, type: UltronOperationType, description: String) = UltronComposeOperation(
+        operationBlock = operationBlock, name = name, type = type, description = description, timeoutMs = timeoutMs, assertion = assertion, elementInfo = elementInfo
+    )
 
     private fun getDefaultOperationParams() = UltronComposeOperationParams(
-        operationName = "Anonymous Compose operation on '${semanticsNodeInteraction.getDescription()}'",
-        operationDescription = "Anonymous Compose operation on '${semanticsNodeInteraction.getDescription()}' during $timeoutMs ms",
+        operationName = "Anonymous Compose operation on '${elementInfo.name}'",
+        operationDescription = "Anonymous Compose operation on '${elementInfo.name}' during $timeoutMs ms",
     )
+
+    companion object {
+        /**
+         * Executes any compose action inside Ultron lifecycle
+         */
+        @Deprecated(
+            "It doesn't support custom assertion call provided by [withAssertion]", ReplaceWith(
+                "this.executeOperation(operation: UltronComposeOperation)"
+            )
+        )
+        fun executeOperation(
+            operation: UltronComposeOperation, resultHandler: (ComposeOperationResult<UltronComposeOperation>) -> Unit = UltronComposeConfig.resultHandler
+        ) {
+            UltronComposeOperationLifecycle.execute(
+                ComposeOperationExecutor(operation), resultHandler
+            )
+        }
+
+        private const val CONFIG_TEXT_FIELD_NAME = "Text"
+        private const val CONFIG_EDITABLE_TEXT_FIELD_NAME = "EditableText"
+        val CONFIG_TEXT_FIELDS_LIST = listOf(CONFIG_TEXT_FIELD_NAME, CONFIG_EDITABLE_TEXT_FIELD_NAME)
+        internal const val DEFAULT_SWIPE_DURATION = 200L
+    }
 }

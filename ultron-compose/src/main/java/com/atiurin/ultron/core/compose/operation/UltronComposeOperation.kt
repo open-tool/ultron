@@ -11,7 +11,7 @@ class UltronComposeOperation(
     override val description: String,
     override val timeoutMs: Long,
     override val assertion: OperationAssertion = DefaultOperationAssertion(""){},
-    override val elementInfo: ElementInfo = EmptyElementInfo()
+    override val elementInfo: ElementInfo = DefaultElementInfo()
 ) : Operation {
     override fun execute(): OperationIterationResult {
         var success = true
