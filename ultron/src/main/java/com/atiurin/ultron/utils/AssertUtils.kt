@@ -5,12 +5,15 @@ import com.atiurin.ultron.exceptions.UltronAssertionException
 import java.util.concurrent.atomic.AtomicReference
 
 object AssertUtils {
-    fun assertTrue(block: () -> Boolean, timeoutMs: Long = 5_000, desc: String = "") {
+    fun assertTrue(block: () -> Boolean, timeoutMs: Long = 5_000, desc: String = "" ) =
+        assertTrue(block, timeoutMs) { desc }
+
+    fun assertTrue(block: () -> Boolean, timeoutMs: Long = 5_000, desc: () -> String = { "" }) {
         val startTime = SystemClock.elapsedRealtime()
         while (SystemClock.elapsedRealtime() < startTime + timeoutMs){
             if (block()) return
         }
-        throw UltronAssertionException("Assertion '$desc' failed during $timeoutMs ms")
+        throw UltronAssertionException("Assertion '${desc.invoke()}' failed during $timeoutMs ms")
     }
     fun <R> assertTrueAndReturn(resultContainer: R, block: (R) -> Boolean, timeoutMs: Long = 5_000, desc: String = ""): R {
         val finishTime = SystemClock.elapsedRealtime() + timeoutMs

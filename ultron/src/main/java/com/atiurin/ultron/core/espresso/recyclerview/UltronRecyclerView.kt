@@ -10,12 +10,10 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.util.TreeIterables
-import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_ITEM_SEARCH_LIMIT
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_LOAD_TIMEOUT
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_OPERATIONS_TIMEOUT
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
-import com.atiurin.ultron.core.espresso.UltronEspresso.executeAssertion
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
@@ -299,7 +297,7 @@ open class UltronRecyclerView(
     fun assertEmpty() {
         AssertUtils.assertTrue(
             { getSize() == 0 }, operationTimeoutMs,
-            "RecyclerView($recyclerViewMatcher) has no items (actual size = ${getSize()})"
+            { "RecyclerView($recyclerViewMatcher) has no items (actual size = ${getSize()})" }
         )
     }
 
@@ -309,7 +307,7 @@ open class UltronRecyclerView(
     fun assertNotEmpty() {
         AssertUtils.assertTrue(
             { getSize() > 0 }, operationTimeoutMs,
-            "RecyclerView($recyclerViewMatcher) is NOT empty"
+            { "RecyclerView($recyclerViewMatcher) is NOT empty" }
         )
     }
 
@@ -319,7 +317,7 @@ open class UltronRecyclerView(
     open fun assertSize(expected: Int) {
         AssertUtils.assertTrue(
             { getSize() == expected }, operationTimeoutMs,
-            "RecyclerView($recyclerViewMatcher) size is $expected (actual size = ${getSize()})"
+            { "RecyclerView($recyclerViewMatcher) size is $expected (actual size = ${getSize()})" }
         )
     }
 
@@ -329,7 +327,7 @@ open class UltronRecyclerView(
     open fun assertHasItemAtPosition(position: Int) {
         AssertUtils.assertTrue(
             { getSize() >= position }, operationTimeoutMs,
-            "Wait RecyclerView($recyclerViewMatcher) size >= $position (actual size = ${getSize()})"
+            { "Wait RecyclerView($recyclerViewMatcher) size >= $position (actual size = ${getSize()})" }
         )
     }
 
@@ -343,7 +341,7 @@ open class UltronRecyclerView(
         AssertUtils.assertTrue(
             { !isItemExist(matcher) },
             timeoutMs,
-            "RecyclerView($recyclerViewMatcher) has no item matched '$matcher'"
+            { "RecyclerView($recyclerViewMatcher) has no item matched '$matcher'" }
         )
     }
 
