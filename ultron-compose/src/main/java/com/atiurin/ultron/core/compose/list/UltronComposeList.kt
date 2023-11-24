@@ -1,7 +1,14 @@
 package com.atiurin.ultron.core.compose.list
 
-import androidx.compose.ui.semantics.*
-import androidx.compose.ui.test.*
+import androidx.compose.ui.semantics.SemanticsNode
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.filterToOne
+import androidx.compose.ui.test.onChildAt
+import androidx.compose.ui.test.onChildren
+import androidx.compose.ui.test.performScrollToIndex
+import androidx.compose.ui.test.performScrollToKey
+import androidx.compose.ui.test.performScrollToNode
 import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
 import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.core.compose.nodeinteraction.UltronComposeSemanticsNodeInteraction
@@ -59,6 +66,7 @@ class UltronComposeList(
 
     inline fun <reified T : UltronComposeListItem> getFirstVisibleItem(): T = getVisibleItem(0)
     inline fun <reified T : UltronComposeListItem> getLastVisibleItem(): T = getVisibleItem(getMatcher().execute { it.fetchSemanticsNode().children.lastIndex })
+
     /**
      * Provide a scope with references to list SemanticsNode and SemanticsNodeInteraction.
      * It is possible to evaluate any action or assertion on this node.
@@ -124,6 +132,7 @@ class UltronComposeList(
             listInteraction.performScrollToNode(itemMatcher)
         }
     }
+
     fun scrollToIndex(index: Int) = apply { getMatcher().perform { it.performScrollToIndex(index) } }
     fun scrollToKey(key: Any) = apply { getMatcher().perform { it.performScrollToKey(key) } }
     fun assertIsDisplayed() = apply { getMatcher().withTimeout(getOperationTimeout()).assertIsDisplayed() }
@@ -137,21 +146,21 @@ class UltronComposeList(
     fun assertNotEmpty() = apply {
         AssertUtils.assertTrue(
             { getVisibleItemsCount() > 0 }, getOperationTimeout(),
-            "Compose list (${listMatcher.description}) is NOT empty"
+            { "Compose list (${listMatcher.description}) is NOT empty" }
         )
     }
 
     fun assertEmpty() = apply {
         AssertUtils.assertTrue(
             { getVisibleItemsCount() == 0 }, getOperationTimeout(),
-            "Compose list (${listMatcher.description}) has no items (visible items count = ${getVisibleItemsCount()})"
+            { "Compose list (${listMatcher.description}) has no items (visible items count = ${getVisibleItemsCount()})" }
         )
     }
 
     fun assertVisibleItemsCount(expected: Int) = apply {
         AssertUtils.assertTrue(
             { getVisibleItemsCount() == expected }, getOperationTimeout(),
-            "Compose list (${listMatcher.description}) has visible items count = $expected (actual visible items count = ${getVisibleItemsCount()})"
+            { "Compose list (${listMatcher.description}) has visible items count = $expected (actual visible items count = ${getVisibleItemsCount()})" }
         )
     }
 
