@@ -1,6 +1,6 @@
 package com.atiurin.ultron.exceptions
 
-class UltronWrapperException : RuntimeException {
+class UltronWrapperException : AssertionError {
     constructor(message: String) : super(message)
     constructor(message: String, cause: Throwable)
             : super(

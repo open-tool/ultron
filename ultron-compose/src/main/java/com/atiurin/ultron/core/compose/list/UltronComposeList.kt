@@ -1,20 +1,22 @@
 package com.atiurin.ultron.core.compose.list
 
 import androidx.compose.ui.semantics.SemanticsNode
+import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.onChildAt
 import androidx.compose.ui.test.onChildren
-import androidx.compose.ui.test.performScrollToIndex
-import androidx.compose.ui.test.performScrollToKey
 import androidx.compose.ui.test.performScrollToNode
 import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
 import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.core.compose.nodeinteraction.UltronComposeSemanticsNodeInteraction
-import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType
+import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
+import com.atiurin.ultron.exceptions.UltronAssertionException
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.utils.AssertUtils
+import org.junit.Assert
 
 class UltronComposeList(
     val listMatcher: SemanticsMatcher,
@@ -32,40 +34,51 @@ class UltronComposeList(
     fun getOperationTimeout() = operationTimeoutMs
 
     fun item(matcher: SemanticsMatcher) = UltronComposeListItem(this, matcher)
-    fun visibleItem(index: Int) = UltronComposeListItem(this, index)
-    fun firstVisibleItem() = visibleItem(0)
-    fun lastVisibleItem() = visibleItem(getMatcher().perform<Int> { it.fetchSemanticsNode().children.lastIndex })
 
-    /** @return [UltronRecyclerViewItem] subclass instance matches [matcher]
-     *
-     * Note: never add inner modifier to [T] class
-     *
-     * Note: [T] class should have a constructor without parameters, eg
-     *
-     *    class SomeRecyclerViewItem : UltronRecyclerViewItem(){...}
-     * */
+    /**
+     * This method works properly before any scroll of target list
+     * After scroll the positions of children inside the list are changed.
+     */
+    fun visibleItem(index: Int) = UltronComposeListItem(this, index)
+    /**
+     * This method works properly before any scroll of target list
+     * After scroll the positions of children inside the list are changed.
+     */
+    fun firstVisibleItem() = visibleItem(0)
+    /**
+     * This method works properly before any scroll of target list
+     * After scroll the positions of children inside the list are changed.
+     */
+    fun lastVisibleItem() = visibleItem(getInteraction().execute { it.fetchSemanticsNode().children.lastIndex })
+
+
     inline fun <reified T : UltronComposeListItem> getItem(
         matcher: SemanticsMatcher
     ): T {
         return UltronComposeListItem.getInstance(this, matcher)
     }
 
-    /** @return [UltronRecyclerViewItem] subclass instance at position [index]
-     *
-     * Note: never add inner modifier to [T] class
-     *
-     * Note: [T] class should have a constructor without parameters, eg
-     *
-     *    class SomeRecyclerViewItem : UltronRecyclerViewItem(){...}
-     * */
+    /**
+     * This method works properly before any scroll of target list
+     * After scroll the positions of children inside the list are changed.
+     */
     inline fun <reified T : UltronComposeListItem> getVisibleItem(
         index: Int
     ): T {
         return UltronComposeListItem.getInstance(this, index)
     }
 
+    /**
+     * This method works properly before any scroll of target list
+     * After scroll the positions of children inside the list are changed.
+     * */
     inline fun <reified T : UltronComposeListItem> getFirstVisibleItem(): T = getVisibleItem(0)
-    inline fun <reified T : UltronComposeListItem> getLastVisibleItem(): T = getVisibleItem(getMatcher().execute { it.fetchSemanticsNode().children.lastIndex })
+
+    /**
+     * This method works properly before any scroll of target list
+     * After scroll the positions of children inside the list are changed.
+     * */
+    inline fun <reified T : UltronComposeListItem> getLastVisibleItem(): T = getVisibleItem(getInteraction().execute { it.fetchSemanticsNode().children.lastIndex })
 
     /**
      * Provide a scope with references to list SemanticsNode and SemanticsNodeInteraction.
@@ -81,34 +94,65 @@ class UltronComposeList(
      * @return SemanticsNodeInteraction for list item
      */
     fun onItem(matcher: SemanticsMatcher) = UltronComposeSemanticsNodeInteraction(
-        getMatcher().execute { listInteraction ->
+        getInteraction().execute(
+            UltronComposeOperationParams(
+                operationName = "Get item '${matcher.description}' in list '${getInteraction().elementInfo.name}'",
+                operationDescription = "Get Compose list item with matcher '${matcher.description}' in list '${getInteraction().elementInfo.name}'",
+                operationType = ComposeOperationType.GET_LIST_ITEM
+            )
+        ) { listInteraction ->
             listInteraction.performScrollToNode(matcher).onChildren().filterToOne(matcher)
         }
     )
 
     fun onItemChild(itemMatcher: SemanticsMatcher, childMatcher: SemanticsMatcher): UltronComposeSemanticsNodeInteraction =
-        UltronComposeSemanticsNodeInteraction(UltronComposeSemanticsNodeInteraction(listMatcher, true)
-            .execute { listInteraction ->
-                listInteraction.performScrollToNode(itemMatcher)
-                    .onChildren().filterToOne(itemMatcher)
-                    .onChildren().filterToOne(childMatcher)
-            }
+        UltronComposeSemanticsNodeInteraction(
+            UltronComposeSemanticsNodeInteraction(listMatcher, true)
+                .execute(
+                    UltronComposeOperationParams(
+                        operationName = "Get item '${itemMatcher.description}' child '${childMatcher.description}' in list '${getInteraction().elementInfo.name}'",
+                        operationDescription = "Get Compose list item '${itemMatcher.description}' child '${childMatcher.description}' in list '${getInteraction().elementInfo.name}'",
+                        operationType = ComposeOperationType.GET_LIST_ITEM_CHILD
+                    )
+                ) { listInteraction ->
+                    listInteraction.performScrollToNode(itemMatcher)
+                        .onChildren().filterToOne(itemMatcher)
+                        .onChildren().filterToOne(childMatcher)
+                }
         )
 
     fun visibleChild(childMatcher: SemanticsMatcher) = UltronComposeSemanticsNodeInteraction(
-        getMatcher().execute { listInteraction ->
+        getInteraction().execute(
+            UltronComposeOperationParams(
+                operationName = "Get child '${childMatcher.description}' of list '${getInteraction().elementInfo.name}'",
+                operationDescription = "Get Compose list child '${childMatcher.description}' of list '${getInteraction().elementInfo.name}'",
+                operationType = ComposeOperationType.GET_LIST_ITEM
+            )
+        ) { listInteraction ->
             listInteraction.onChildren().filterToOne(childMatcher)
         }
     )
 
     fun onVisibleItemChild(index: Int, childMatcher: SemanticsMatcher) = UltronComposeSemanticsNodeInteraction(
-        getMatcher().execute { listInteraction ->
+        getInteraction().execute(
+            UltronComposeOperationParams(
+                operationName = "Get child '${childMatcher.description}' of visible item at index $index in list '${getInteraction().elementInfo.name}'",
+                operationDescription = "Get Compose list child '${childMatcher.description}' of visible item at index $index in list '${getInteraction().elementInfo.name}'",
+                operationType = ComposeOperationType.GET_LIST_ITEM_CHILD
+            )
+        ) { listInteraction ->
             listInteraction.onChildAt(index).onChildren().filterToOne(childMatcher)
         }
     )
 
     fun onVisibleItem(index: Int) = UltronComposeSemanticsNodeInteraction(
-        getMatcher().execute { listInteraction ->
+        getInteraction().execute(
+            UltronComposeOperationParams(
+                operationName = "Get visible item at index $index in list '${getInteraction().elementInfo.name}'",
+                operationDescription = "Get Compose list visible item at index $index in list '${getInteraction().elementInfo.name}'",
+                operationType = ComposeOperationType.GET_LIST_ITEM
+            )
+        ) { listInteraction ->
             val visibleItemsList = listInteraction.fetchSemanticsNode().children
             if (index > visibleItemsList.size) {
                 throw UltronException(
@@ -127,21 +171,16 @@ class UltronComposeList(
         }
     )
 
-    fun scrollToNode(itemMatcher: SemanticsMatcher) = apply {
-        getMatcher().perform { listInteraction ->
-            listInteraction.performScrollToNode(itemMatcher)
-        }
-    }
-
-    fun scrollToIndex(index: Int) = apply { getMatcher().perform { it.performScrollToIndex(index) } }
-    fun scrollToKey(key: Any) = apply { getMatcher().perform { it.performScrollToKey(key) } }
-    fun assertIsDisplayed() = apply { getMatcher().withTimeout(getOperationTimeout()).assertIsDisplayed() }
-    fun assertIsNotDisplayed() = apply { getMatcher().withTimeout(getOperationTimeout()).assertIsNotDisplayed() }
-    fun assertExists() = apply { getMatcher().withTimeout(getOperationTimeout()).assertExists() }
-    fun assertDoesNotExist() = apply { getMatcher().withTimeout(getOperationTimeout()).assertDoesNotExist() }
-    fun assertContentDescriptionEquals(vararg expected: String) = apply { getMatcher().withTimeout(getOperationTimeout()).assertContentDescriptionEquals(*expected) }
+    fun scrollToNode(itemMatcher: SemanticsMatcher) = apply { getInteraction().scrollToNode(itemMatcher) }
+    fun scrollToIndex(index: Int) = apply { getInteraction().scrollToIndex(index) }
+    fun scrollToKey(key: Any) = apply { getInteraction().scrollToKey(key) }
+    fun assertIsDisplayed() = apply { getInteraction().withTimeout(getOperationTimeout()).assertIsDisplayed() }
+    fun assertIsNotDisplayed() = apply { getInteraction().withTimeout(getOperationTimeout()).assertIsNotDisplayed() }
+    fun assertExists() = apply { getInteraction().withTimeout(getOperationTimeout()).assertExists() }
+    fun assertDoesNotExist() = apply { getInteraction().withTimeout(getOperationTimeout()).assertDoesNotExist() }
+    fun assertContentDescriptionEquals(vararg expected: String) = apply { getInteraction().withTimeout(getOperationTimeout()).assertContentDescriptionEquals(*expected) }
     fun assertContentDescriptionContains(expected: String, option: ContentDescriptionContainsOption? = null) =
-        apply { getMatcher().withTimeout(getOperationTimeout()).assertContentDescriptionContains(expected, option) }
+        apply { getInteraction().withTimeout(getOperationTimeout()).assertContentDescriptionContains(expected, option) }
 
     fun assertNotEmpty() = apply {
         AssertUtils.assertTrue(
@@ -164,8 +203,27 @@ class UltronComposeList(
         )
     }
 
-    fun getVisibleItemsCount(): Int = getMatcher().execute { it.fetchSemanticsNode().children.size }
-    fun getMatcher() = UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree)
+    fun assertItemDoesNotExistWithSearch(matcher: SemanticsMatcher) {
+        getInteraction().perform {
+            runCatching { it.performScrollToNode(matcher) }
+                .onSuccess { throw UltronAssertionException("Item '${matcher.description}' exist in list '${listMatcher.description}'") }
+                .onFailure { e -> e.message?.let { message -> Assert.assertTrue(message.contains("No node found that matches")) } }
+        }
+    }
+
+    fun assertVisibleItemDoesNotExistImmediately(matcher: SemanticsMatcher) {
+        getInteraction().perform {
+            it.onChildren().filterToOne(matcher).assertDoesNotExist()
+        }
+    }
+
+    fun getVisibleItemsCount(): Int = getInteraction().execute { it.fetchSemanticsNode().children.size }
+    fun getInteraction() = UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree)
+
+    @Deprecated("Use getInteraction() instead", ReplaceWith("getInteraction()"))
+    fun getMatcher() = getInteraction()
+
+
 }
 
 fun composeList(listMatcher: SemanticsMatcher, useUnmergedTree: Boolean = true) = UltronComposeList(listMatcher, useUnmergedTree)
