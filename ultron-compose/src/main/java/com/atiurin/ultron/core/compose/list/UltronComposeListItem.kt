@@ -10,12 +10,45 @@ import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.Dp
-import com.atiurin.ultron.core.common.options.*
+import com.atiurin.ultron.core.common.options.ClickOption
+import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
+import com.atiurin.ultron.core.common.options.DoubleClickOption
+import com.atiurin.ultron.core.common.options.LongClickOption
+import com.atiurin.ultron.core.common.options.PerformCustomBlockOption
+import com.atiurin.ultron.core.common.options.TextContainsOption
+import com.atiurin.ultron.core.common.options.TextEqualsOption
+import com.atiurin.ultron.core.compose.nodeinteraction.UltronComposeSemanticsNodeInteraction
+import com.atiurin.ultron.core.compose.nodeinteraction.click
+import com.atiurin.ultron.core.compose.nodeinteraction.clickBottomCenter
+import com.atiurin.ultron.core.compose.nodeinteraction.clickBottomLeft
+import com.atiurin.ultron.core.compose.nodeinteraction.clickBottomRight
+import com.atiurin.ultron.core.compose.nodeinteraction.clickCenterLeft
+import com.atiurin.ultron.core.compose.nodeinteraction.clickCenterRight
+import com.atiurin.ultron.core.compose.nodeinteraction.clickTopCenter
+import com.atiurin.ultron.core.compose.nodeinteraction.clickTopLeft
+import com.atiurin.ultron.core.compose.nodeinteraction.clickTopRight
+import com.atiurin.ultron.core.compose.nodeinteraction.doubleClick
+import com.atiurin.ultron.core.compose.nodeinteraction.doubleClickBottomCenter
+import com.atiurin.ultron.core.compose.nodeinteraction.doubleClickBottomLeft
+import com.atiurin.ultron.core.compose.nodeinteraction.doubleClickBottomRight
+import com.atiurin.ultron.core.compose.nodeinteraction.doubleClickCenterLeft
+import com.atiurin.ultron.core.compose.nodeinteraction.doubleClickCenterRight
+import com.atiurin.ultron.core.compose.nodeinteraction.doubleClickTopCenter
+import com.atiurin.ultron.core.compose.nodeinteraction.doubleClickTopLeft
+import com.atiurin.ultron.core.compose.nodeinteraction.doubleClickTopRight
+import com.atiurin.ultron.core.compose.nodeinteraction.longClick
+import com.atiurin.ultron.core.compose.nodeinteraction.longClickBottomCenter
+import com.atiurin.ultron.core.compose.nodeinteraction.longClickBottomLeft
+import com.atiurin.ultron.core.compose.nodeinteraction.longClickBottomRight
+import com.atiurin.ultron.core.compose.nodeinteraction.longClickCenterLeft
+import com.atiurin.ultron.core.compose.nodeinteraction.longClickCenterRight
+import com.atiurin.ultron.core.compose.nodeinteraction.longClickTopCenter
+import com.atiurin.ultron.core.compose.nodeinteraction.longClickTopLeft
+import com.atiurin.ultron.core.compose.nodeinteraction.longClickTopRight
 import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
-import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
-import com.atiurin.ultron.core.compose.nodeinteraction.*
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
+import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
 import com.atiurin.ultron.exceptions.UltronException
 
 open class UltronComposeListItem {
@@ -25,8 +58,8 @@ open class UltronComposeListItem {
         setExecutor(ultronComposeList, itemMatcher)
     }
 
-    constructor(ultronComposeList: UltronComposeList, index: Int) {
-        setExecutor(ultronComposeList, index)
+    constructor(ultronComposeList: UltronComposeList, index: Int, isPositionPropertyConfigured: Boolean = false) {
+        setExecutor(ultronComposeList, index, isPositionPropertyConfigured)
     }
 
     /**
@@ -39,8 +72,12 @@ open class UltronComposeListItem {
         this.executor = MatcherComposeItemExecutor(ultronComposeList, itemMatcher)
     }
 
-    fun setExecutor(ultronComposeList: UltronComposeList, index: Int) {
-        this.executor = IndexComposeItemExecutor(ultronComposeList, index)
+    fun setExecutor(ultronComposeList: UltronComposeList, index: Int, isPositionPropertyConfigured: Boolean = false) {
+        if (isPositionPropertyConfigured) {
+            this.executor = PositionComposeItemExecutor(ultronComposeList, index)
+        } else {
+            this.executor = IndexComposeItemExecutor(ultronComposeList, index)
+        }
     }
 
     fun withTimeout(timeoutMs: Long) = getItemUltronComposeInteraction().withTimeout(timeoutMs)
@@ -111,7 +148,7 @@ open class UltronComposeListItem {
     )
     fun <T> perform(
         block: (SemanticsNodeInteraction) -> T
-    ) : T = getItemUltronComposeInteraction().execute(null, block)
+    ): T = getItemUltronComposeInteraction().execute(null, block)
 
     fun <T> execute(
         params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> T
@@ -164,10 +201,11 @@ open class UltronComposeListItem {
 
         inline fun <reified T : UltronComposeListItem> getInstance(
             ultronComposeList: UltronComposeList,
-            position: Int
+            position: Int,
+            isPositionPropertyConfigured: Boolean = false
         ): T {
             val item = createUltronComposeListItemInstance<T>()
-            item.setExecutor(ultronComposeList, position)
+            item.setExecutor(ultronComposeList, position, isPositionPropertyConfigured)
             return item
         }
 

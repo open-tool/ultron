@@ -254,6 +254,25 @@ class ComposeListTest: BaseTest()  {
         AssertUtils.assertException { listWithMergedTree.withTimeout(1000).assertVisibleItemsCount(100) }
     }
 
+    @Test
+    fun itemByPosition_propertyConfiguredTest(){
+        val index = 20
+        val contact = CONTACTS[index]
+        val item = listPage.lazyList.item(20).assertIsDisplayed()
+        item.assertMatches(hasTestTag(getContactItemTestTagById(contact)))
+    }
+
+    @Test
+    fun getItemByPosition_propertyConfiguredTest(){
+        val index = 20
+        val contact = CONTACTS[index]
+        listPage.getItemByPosition(index).apply {
+            name.assertTextEquals(contact.name)
+            status.assertTextEquals(contact.status)
+            assertIsDisplayed()
+        }
+    }
+
     private fun setEmptyListContent() {
         composeRule.setContent {
             LazyColumn(

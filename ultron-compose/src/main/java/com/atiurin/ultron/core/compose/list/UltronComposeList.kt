@@ -21,12 +21,18 @@ import org.junit.Assert
 class UltronComposeList(
     val listMatcher: SemanticsMatcher,
     var useUnmergedTree: Boolean = true,
+    var positionPropertyKey: SemanticsPropertyKey<Int>? = null,
     private val itemSearchLimit: Int = UltronComposeConfig.params.lazyColumnItemSearchLimit,
     private var operationTimeoutMs: Long = UltronComposeConfig.params.lazyColumnOperationTimeoutMs
 ) {
-
     open fun withTimeout(timeoutMs: Long) =
-        UltronComposeList(listMatcher, useUnmergedTree, this.itemSearchLimit, operationTimeoutMs = timeoutMs)
+        UltronComposeList(
+            listMatcher = listMatcher,
+            useUnmergedTree = useUnmergedTree,
+            positionPropertyKey = positionPropertyKey,
+            itemSearchLimit = itemSearchLimit,
+            operationTimeoutMs = timeoutMs
+        )
 
     /**
      * @return current [UltronComposeList] operations timeout
@@ -34,17 +40,30 @@ class UltronComposeList(
     fun getOperationTimeout() = operationTimeoutMs
 
     fun item(matcher: SemanticsMatcher) = UltronComposeListItem(this, matcher)
+    fun item(position: Int): UltronComposeListItem {
+        if (positionPropertyKey == null) {
+            throw UltronException(
+                """
+                    |[positionPropertyKey] parameter is not specified for Compose List 
+                    |Configure it by using [composeList(.., positionPropertyKey = ListItemPositionPropertyKey)]
+                """.trimMargin()
+            )
+        }
+        return UltronComposeListItem(this, position, true)
+    }
 
     /**
      * This method works properly before any scroll of target list
      * After scroll the positions of children inside the list are changed.
      */
     fun visibleItem(index: Int) = UltronComposeListItem(this, index)
+
     /**
      * This method works properly before any scroll of target list
      * After scroll the positions of children inside the list are changed.
      */
     fun firstVisibleItem() = visibleItem(0)
+
     /**
      * This method works properly before any scroll of target list
      * After scroll the positions of children inside the list are changed.
@@ -52,19 +71,27 @@ class UltronComposeList(
     fun lastVisibleItem() = visibleItem(getInteraction().execute { it.fetchSemanticsNode().children.lastIndex })
 
 
-    inline fun <reified T : UltronComposeListItem> getItem(
-        matcher: SemanticsMatcher
-    ): T {
+    inline fun <reified T : UltronComposeListItem> getItem(matcher: SemanticsMatcher): T {
         return UltronComposeListItem.getInstance(this, matcher)
+    }
+
+    inline fun <reified T : UltronComposeListItem> getItem(position: Int): T {
+        if (positionPropertyKey == null) {
+            throw UltronException(
+                """
+                    |[positionPropertyKey] parameter is not specified for Compose List 
+                    |Configure it by using [composeList(.., positionPropertyKey = ListItemPositionPropertyKey)]
+                """.trimMargin()
+            )
+        }
+        return UltronComposeListItem.getInstance(this, position, true)
     }
 
     /**
      * This method works properly before any scroll of target list
      * After scroll the positions of children inside the list are changed.
      */
-    inline fun <reified T : UltronComposeListItem> getVisibleItem(
-        index: Int
-    ): T {
+    inline fun <reified T : UltronComposeListItem> getVisibleItem(index: Int): T {
         return UltronComposeListItem.getInstance(this, index)
     }
 
@@ -158,12 +185,17 @@ class UltronComposeList(
                 throw UltronException(
                     """
                 |Item index ($index) is out of visible items (${visibleItemsList.size}). 
-                |It's impossible to get the reference to item by index after scroll. You have 2 variants:
+                |It's impossible to get the reference to item by index after scroll. You have 3 variants:
                 |1. [Preferred one] Use another method to receive list item with matcher UltronComposeList.item(matcher: SemanticsMatcher) 
                 |   In case you still wanna scroll to item by position in list:
                 |   - Add testTag for items in LazyColumn definition like 'itemsIndexed(items){ index, index -> .. Modifier.testTag("position=`$`index") }'
                 |   - Use matcher in test to get item 'list.item(hasTestTag("position=`$`index"))'
-                |2. Scroll to index by using UltronComposeList.scrollToIndex(index: Int) and use SemanticsMatcher to find item. 
+                |2. [A good way also] Use another method to receive list item with position UltronComposeList.item(position: Int) 
+                |   To use this method you have to:
+                |   - Configure custom Position SemanticsProperty for compose list items in application code
+                |   - Setup [positionPropertyKey] parameter for composeList(..) in test code
+                |   - Read documentation for details.  
+                |3. Scroll to index by using UltronComposeList.scrollToIndex(index: Int) and use SemanticsMatcher to find item. 
             """.trimMargin()
                 )
             }
@@ -182,6 +214,7 @@ class UltronComposeList(
     fun assertContentDescriptionContains(expected: String, option: ContentDescriptionContainsOption? = null) =
         apply { getInteraction().withTimeout(getOperationTimeout()).assertContentDescriptionContains(expected, option) }
 
+    fun assertMatches(matcher: SemanticsMatcher) = apply { getInteraction().withTimeout(getOperationTimeout()).assertMatches(matcher) }
     fun assertNotEmpty() = apply {
         AssertUtils.assertTrue(
             { getVisibleItemsCount() > 0 }, getOperationTimeout(),
@@ -203,17 +236,17 @@ class UltronComposeList(
         )
     }
 
-    fun assertItemDoesNotExistWithSearch(matcher: SemanticsMatcher) {
+    fun assertItemDoesNotExistWithSearch(itemMatcher: SemanticsMatcher) {
         getInteraction().perform {
-            runCatching { it.performScrollToNode(matcher) }
-                .onSuccess { throw UltronAssertionException("Item '${matcher.description}' exist in list '${listMatcher.description}'") }
+            runCatching { it.performScrollToNode(itemMatcher) }
+                .onSuccess { throw UltronAssertionException("Item '${itemMatcher.description}' exist in list '${listMatcher.description}'") }
                 .onFailure { e -> e.message?.let { message -> Assert.assertTrue(message.contains("No node found that matches")) } }
         }
     }
 
-    fun assertVisibleItemDoesNotExistImmediately(matcher: SemanticsMatcher) {
+    fun assertVisibleItemDoesNotExistImmediately(itemMatcher: SemanticsMatcher) {
         getInteraction().perform {
-            it.onChildren().filterToOne(matcher).assertDoesNotExist()
+            it.onChildren().filterToOne(itemMatcher).assertDoesNotExist()
         }
     }
 
@@ -222,8 +255,10 @@ class UltronComposeList(
 
     @Deprecated("Use getInteraction() instead", ReplaceWith("getInteraction()"))
     fun getMatcher() = getInteraction()
-
-
 }
 
-fun composeList(listMatcher: SemanticsMatcher, useUnmergedTree: Boolean = true) = UltronComposeList(listMatcher, useUnmergedTree)
+fun composeList(
+    listMatcher: SemanticsMatcher,
+    useUnmergedTree: Boolean = true,
+    positionPropertyKey: SemanticsPropertyKey<Int>? = null
+) = UltronComposeList(listMatcher, useUnmergedTree, positionPropertyKey)
