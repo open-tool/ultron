@@ -157,7 +157,6 @@ open class UltronComposeListItem {
     fun assertIsDisplayed() = apply { getItemUltronComposeInteraction().assertIsDisplayed() }
     fun assertIsNotDisplayed() = apply { getItemUltronComposeInteraction().assertIsNotDisplayed() }
     fun assertExists() = apply { getItemUltronComposeInteraction().assertExists() }
-    fun assertDoesNotExist() = apply { getItemUltronComposeInteraction().assertDoesNotExist() }
     fun assertIsEnabled() = apply { getItemUltronComposeInteraction().assertIsEnabled() }
     fun assertIsNotEnabled() = apply { getItemUltronComposeInteraction().assertIsNotEnabled() }
     fun assertIsFocused() = apply { getItemUltronComposeInteraction().assertIsFocused() }

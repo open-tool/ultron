@@ -9,6 +9,7 @@ import androidx.compose.ui.test.*
 import com.atiurin.sampleapp.activity.ComposeListActivity
 import com.atiurin.sampleapp.compose.*
 import com.atiurin.sampleapp.data.repositories.CONTACTS
+import com.atiurin.sampleapp.data.repositories.ContactRepositoty
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.ComposeListPage
 import com.atiurin.sampleapp.pages.ComposeSecondPage
@@ -27,10 +28,11 @@ import org.junit.Test
 class ComposeListTest: BaseTest()  {
     @get:Rule
     val composeRule = createUltronComposeRule<ComposeListActivity>()
-    val listWithMergedTree = composeList(hasTestTag(contactsListTestTag), false)
-    val listPage = ComposeListPage
-    val notExistedList = composeList(hasTestTag("askjhsalk jdhas dlqk "))
-    val emptyListTestTag = "emptyList"
+
+    private val listWithMergedTree = composeList(hasTestTag(contactsListTestTag), false)
+    private val listPage = ComposeListPage
+    private val notExistedList = composeList(hasTestTag("askjhsalk jdhas dlqk "))
+    private val emptyListTestTag = "emptyList"
 
     @Test
     fun item_existItem() {
@@ -270,6 +272,19 @@ class ComposeListTest: BaseTest()  {
             name.assertTextEquals(contact.name)
             status.assertTextEquals(contact.status)
             assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun assertItemDoesNotExistWithSearch_NotExistedItem(){
+        listWithMergedTree.assertItemDoesNotExist(hasText("NOT EXISTED TeXT"))
+    }
+
+    @Test
+    fun assertItemDoesNotExistWithSearch_ExistedItem(){
+        val contact = ContactRepositoty.getLast()
+        AssertUtils.assertException {
+            listWithMergedTree.withTimeout(2000).assertItemDoesNotExist(hasText(contact.name))
         }
     }
 

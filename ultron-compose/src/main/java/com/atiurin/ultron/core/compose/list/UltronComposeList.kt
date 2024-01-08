@@ -236,17 +236,23 @@ class UltronComposeList(
         )
     }
 
-    fun assertItemDoesNotExistWithSearch(itemMatcher: SemanticsMatcher) {
-        getInteraction().perform {
+    /**
+     * Asserts whether an item exists in the list or not.
+     * If the item doesn't exist, the operation is considered successful immediately.
+     * If the item exists, the operation waits for a specified timeout ([operationTimeoutMs]) for the item to disappear.
+     * Otherwise, an exception will be thrown.
+     */
+    fun assertItemDoesNotExist(itemMatcher: SemanticsMatcher) {
+        getInteraction().withTimeout(getOperationTimeout()).perform(
+            params = UltronComposeOperationParams(
+                operationName = "Assert item ${itemMatcher.description} doesn't exist in list ${getInteraction().elementInfo.name}",
+                operationDescription = "Assert item ${itemMatcher.description} doesn't exist in list ${getInteraction().elementInfo.name} during ${getOperationTimeout()}",
+                operationType = ComposeOperationType.ASSERT_LIST_ITEM_DOES_NOT_EXIST
+            )
+        ) {
             runCatching { it.performScrollToNode(itemMatcher) }
-                .onSuccess { throw UltronAssertionException("Item '${itemMatcher.description}' exist in list '${listMatcher.description}'") }
+                .onSuccess { throw UltronAssertionException("Item '${itemMatcher.description}' exists in list '${listMatcher.description}'") }
                 .onFailure { e -> e.message?.let { message -> Assert.assertTrue(message.contains("No node found that matches")) } }
-        }
-    }
-
-    fun assertVisibleItemDoesNotExistImmediately(itemMatcher: SemanticsMatcher) {
-        getInteraction().perform {
-            it.onChildren().filterToOne(itemMatcher).assertDoesNotExist()
         }
     }
 

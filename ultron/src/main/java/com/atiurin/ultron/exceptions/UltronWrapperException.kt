@@ -6,7 +6,7 @@ class UltronWrapperException : AssertionError {
             : super(
         "$message${
             if (cause is UltronWrapperException || cause is UltronOperationException) ""
-            else "\nOriginal error ${cause::class.qualifiedName}: ${cause.message}"
+            else "\nOriginal error - ${cause::class.qualifiedName}: ${cause.message}"
         }"
     )
 }
