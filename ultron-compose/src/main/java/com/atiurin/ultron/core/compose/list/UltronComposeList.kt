@@ -51,6 +51,7 @@ class UltronComposeList(
         }
         return UltronComposeListItem(this, position, true)
     }
+    fun firstItem(): UltronComposeListItem = item(0)
 
     /**
      * This method works properly before any scroll of target list
@@ -86,6 +87,8 @@ class UltronComposeList(
         }
         return UltronComposeListItem.getInstance(this, position, true)
     }
+
+    inline fun <reified T : UltronComposeListItem> getFirstItem(): T = getItem(0)
 
     /**
      * This method works properly before any scroll of target list
