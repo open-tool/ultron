@@ -133,7 +133,17 @@ class ComposeListTest: BaseTest()  {
     fun getItem_ByTestTag_assertNameAndStatusOfContact() {
         val index = 20
         val contact = CONTACTS[index]
-        listPage.getContactItemById(contact).apply {
+        listPage.getContactItemByTestTag(contact).apply {
+            name.assertTextEquals(contact.name)
+            status.assertTextContains(contact.status)
+        }
+    }
+
+    @Test
+    fun getItem_ByMatcher_assertNameAndStatusOfContact() {
+        val index = 20
+        val contact = CONTACTS[index]
+        listPage.getContactItemByName(contact).apply {
             name.assertTextEquals(contact.name)
             status.assertTextContains(contact.status)
         }

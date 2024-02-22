@@ -309,8 +309,9 @@ class UltronUiObjectAssertionsTest: UiElementsTest() {
     //isNotFocusable
     @Test
     fun isNotFocusable_ofNotFocusable(){
-        page.checkBoxFocusable.click()
-        page.button.isNotFocusable()
+        page.checkBoxFocusable.withAssertion {
+            page.button.isNotFocusable()
+        }.click()
     }
 
     @Test

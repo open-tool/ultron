@@ -21,7 +21,7 @@ object ComposeListPage : Page<ComposeListPage>() {
     )
 
     fun assertContactStatus(contact: Contact) = apply {
-        getContactItemById(contact).status.assertTextEquals(contact.status)
+        getContactItemByTestTag(contact).status.assertTextEquals(contact.status)
     }
     fun getItemByPosition(position: Int): ComposeFriendListItem {
         return lazyList.getItem(position)
@@ -29,7 +29,7 @@ object ComposeListPage : Page<ComposeListPage>() {
 
     fun getFirstVisibleItem(): ComposeFriendListItem = lazyList.getFirstVisibleItem()
     fun getItemByIndex(index: Int): ComposeFriendListItem = lazyList.getVisibleItem(index)
-    fun getContactItemById(contact: Contact): ComposeFriendListItem = lazyList.getItem(hasTestTag(getContactItemTestTagById(contact)))
+    fun getContactItemByTestTag(contact: Contact): ComposeFriendListItem = lazyList.getItem(hasTestTag(getContactItemTestTagById(contact)))
     fun getContactItemByName(contact: Contact): ComposeFriendListItem = lazyList.getItem(hasAnyDescendant(hasText(contact.name) and hasTestTag(contactNameTestTag)))
     class ComposeFriendListItem : UltronComposeListItem() {
         val name by lazy { getChild(hasTestTag(contactNameTestTag)) }

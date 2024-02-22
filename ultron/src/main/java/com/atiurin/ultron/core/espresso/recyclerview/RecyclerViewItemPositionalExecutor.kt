@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.contrib.RecyclerViewActions
 import com.atiurin.ultron.exceptions.UltronOperationException
 import com.atiurin.ultron.extensions.perform
+import com.atiurin.ultron.extensions.withTimeout
 import org.hamcrest.Matcher
 
 class RecyclerViewItemPositionalExecutor(
@@ -18,20 +19,7 @@ class RecyclerViewItemPositionalExecutor(
     }
 
     override fun scrollToItem(offset: Int) {
-        ultronRecyclerView.assertHasItemAtPosition(position)
-        val itemCount = ultronRecyclerView.getSize()
-        val positionToScroll = position + offset
-        val finalPositionToScroll = when {
-            positionToScroll in 1 until itemCount -> positionToScroll
-            positionToScroll >= itemCount -> itemCount - 1
-            else -> 0
-        }
-        ultronRecyclerView.recyclerViewMatcher.perform(
-            viewAction = RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                finalPositionToScroll
-            ),
-            description = "RecyclerViewActions scrollToPosition $position with offset = $offset"
-        )
+        ultronRecyclerView.scrollToItem(position, offset)
     }
 
     override fun getItemMatcher(): Matcher<View> {

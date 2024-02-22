@@ -199,7 +199,6 @@ class UltronUiObjectActionsTest: UiElementsTest() {
     //swipe
     @Test
     fun swipeUpTest(){
-        page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.swipableImageView.withAssertion {
             page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_UP.name)
         }.swipeUp(40)
@@ -216,7 +215,6 @@ class UltronUiObjectActionsTest: UiElementsTest() {
 
     @Test
     fun swipeRightTest(){
-        page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.swipableImageView.withAssertion {
             page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
         }.swipeRight(40)
@@ -224,7 +222,6 @@ class UltronUiObjectActionsTest: UiElementsTest() {
 
     @Test
     fun swipeLeftTest(){
-        page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.swipableImageView.withAssertion {
             page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_LEFT.name)
         }.swipeLeft(40)

@@ -7,6 +7,7 @@ import androidx.annotation.IntegerRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.util.TreeIterables
@@ -385,10 +386,31 @@ open class UltronRecyclerView(
     open fun assertMatches(matcher: Matcher<View>) =
         apply { recyclerViewMatcher.withTimeout(getTimeout()).assertMatches(matcher) }
 
-    fun scrollToIem(itemMatcher: Matcher<View>, searchLimit: Int = this.itemSearchLimit, offset: Int = 0) = apply {
+
+    fun scrollToItem(itemMatcher: Matcher<View>, searchLimit: Int = this.itemSearchLimit, offset: Int = 0) = apply {
         recyclerViewMatcher.withTimeout(getTimeout()).perform(
             viewAction = RecyclerViewScrollAction(itemMatcher, searchLimit, offset),
             description = "Scroll RecyclerView '$recyclerViewMatcher' to item = '$itemMatcher' with searchLimit = $searchLimit and offset = $offset"
+        )
+    }
+
+    @Deprecated("Use scrollToItem(itemMatcher, searchLimit, offset)")
+    fun scrollToIem(itemMatcher: Matcher<View>, searchLimit: Int = this.itemSearchLimit, offset: Int = 0) = scrollToItem(itemMatcher, searchLimit, offset)
+
+    fun scrollToItem(position: Int, offset: Int = 0){
+        assertHasItemAtPosition(position)
+        val itemCount = getSize()
+        val positionToScroll = position + offset
+        val finalPositionToScroll = when {
+            positionToScroll in 1 until itemCount -> positionToScroll
+            positionToScroll >= itemCount -> itemCount - 1
+            else -> 0
+        }
+        recyclerViewMatcher.withTimeout(getTimeout()).perform(
+            viewAction = RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
+                finalPositionToScroll
+            ),
+            description = "RecyclerViewActions scrollToPosition $position with offset = $offset"
         )
     }
 
