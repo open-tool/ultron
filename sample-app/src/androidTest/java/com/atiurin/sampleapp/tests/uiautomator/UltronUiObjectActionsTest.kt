@@ -144,8 +144,9 @@ class UltronUiObjectActionsTest: UiElementsTest() {
     //longClick
     @Test
     fun longClick_onLongClickable() {
-        page.button.exists().longClick()
-        page.eventStatus.textContains(getTargetString(R.string.button_event_long_click))
+        page.button.exists().withAssertion {
+            page.eventStatus.textContains(getTargetString(R.string.button_event_long_click))
+        }.longClick()
     }
 
     @Test
