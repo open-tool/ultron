@@ -188,16 +188,16 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun scrollToIndex(index: Int) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performScrollToIndex(index) },
-            name = "ScrollToIndex on '${elementInfo.name}'",
+            name = "ScrollToIndex '$index' on '${elementInfo.name}'",
             type = SCROLL_TO_INDEX,
             description = "Compose scrollToIndex $index on '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
-    fun scrollToKey(key: String) = apply {
+    fun scrollToKey(key: Any) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performScrollToKey(key) },
-            name = "ScrollToIndex on '${elementInfo.name}'",
+            name = "ScrollToKey '$key' on '${elementInfo.name}'",
             type = SCROLL_TO_KEY,
             description = "Compose scrollToKey '$key' on '${elementInfo.name} during $timeoutMs ms",
         )
@@ -206,7 +206,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun scrollToNode(matcher: SemanticsMatcher) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performScrollToNode(matcher) },
-            name = "ScrollToNode on '${elementInfo.name}'",
+            name = "ScrollToNode '${matcher.description}' on '${elementInfo.name}'",
             type = SCROLL_TO_NODE,
             description = "Compose scrollToNode with matcher '${matcher.description}' on '${elementInfo.name} during $timeoutMs ms",
         )

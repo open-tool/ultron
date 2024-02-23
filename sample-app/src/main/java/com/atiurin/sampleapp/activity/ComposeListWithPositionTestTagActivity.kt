@@ -18,7 +18,9 @@ import com.atiurin.sampleapp.async.GetContacts
 import com.atiurin.sampleapp.async.UseCase
 import com.atiurin.sampleapp.compose.ContactsList
 import com.atiurin.sampleapp.compose.LoadingAnimation
+import com.atiurin.sampleapp.compose.getContactItemTestTagById
 import com.atiurin.sampleapp.compose.getContactItemTestTagByPosition
+import com.atiurin.sampleapp.compose.listItemPosition
 import com.atiurin.sampleapp.data.entities.Contact
 import com.atiurin.sampleapp.data.repositories.ContactRepositoty
 import com.atiurin.sampleapp.data.viewmodel.ContactsViewModel
@@ -46,14 +48,18 @@ class ComposeListWithPositionTestTagActivity: ComponentActivity() {
             setContent {
                 Column {
                     ContactsList(
-                        contacts = ContactRepositoty.all(), this@ComposeListWithPositionTestTagActivity, false
-                    ) { _, position -> getContactItemTestTagByPosition(position) }
+                        contacts = ContactRepositoty.all(),
+                        context = this@ComposeListWithPositionTestTagActivity,
+                        addStickyHeader = false,
+                        testTagProvider = { _, position -> getContactItemTestTagByPosition(position) },
+                        modifierProvider = { _ -> Modifier }
+                    )
                 }
             }
         }
         model.contacts.observe(this, contactsObserver)
         GlobalScope.async {
-            GetContacts()(
+            GetContacts(0)(
                 UseCase.None,
                 onSuccess = { model.contacts.value = it },
                 onFailure = { Toast.makeText(this@ComposeListWithPositionTestTagActivity, "Failed to load contacts", Toast.LENGTH_LONG).show() }

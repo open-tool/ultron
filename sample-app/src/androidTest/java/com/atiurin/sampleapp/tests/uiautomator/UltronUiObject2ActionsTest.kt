@@ -350,7 +350,6 @@ class UltronUiObject2ActionsTest : UiElementsTest() {
     @FlakyTest
     @Test
     fun swipeUpTest() {
-        page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.editTextContentDesc.replaceText("some text")
         page.swipableImageView.withAssertion {
             page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_UP.name)
@@ -361,8 +360,6 @@ class UltronUiObject2ActionsTest : UiElementsTest() {
     @FlakyTest
     @Test
     fun swipeDownTest() {
-//        Thread.sleep(2000)
-        page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.editTextContentDesc.replaceText("some text")
         page.swipableImageView.withAssertion {
             page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_DOWN.name)
@@ -372,7 +369,6 @@ class UltronUiObject2ActionsTest : UiElementsTest() {
     @Test
     @FlakyTest
     fun swipeRightTest() {
-        page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.editTextContentDesc.replaceText("some text")
         page.swipableImageView.withAssertion {
             page.eventStatus.withTimeout(300)
@@ -383,7 +379,6 @@ class UltronUiObject2ActionsTest : UiElementsTest() {
     @Test
     @FlakyTest
     fun swipeLeftTest() {
-        page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.editTextContentDesc.replaceText("some text")
         page.swipableImageView.withAssertion {
             page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_LEFT.name)

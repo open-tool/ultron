@@ -1,6 +1,9 @@
 package com.atiurin.ultron.exceptions
 
-class UltronOperationException : RuntimeException {
+import android.annotation.SuppressLint
+
+class UltronOperationException : AssertionError {
     constructor(message: String) : super(message)
+    @SuppressLint("NewApi")
     constructor(message: String, cause: Throwable) : super(message, cause)
 }
