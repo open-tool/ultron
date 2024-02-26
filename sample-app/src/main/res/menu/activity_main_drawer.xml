@@ -6,7 +6,7 @@
     <group android:checkableBehavior="single">
         <item
                 android:id="@+id/nav_settings"
-                android:icon="@drawable/ic_messages"
+                android:icon="@drawable/ic_settings"
                 android:title="@string/menu_settings"/>
         <item
                 android:id="@+id/nav_saved_messages"
@@ -23,25 +23,24 @@
 
         <item
                 android:id="@+id/ui_elements"
-                android:icon="@drawable/ic_exit"
+                android:icon="@android:drawable/btn_radio"
                 android:title="@string/menu_ui_elements"/>
 
         <item
             android:id="@+id/web_view_nav_item"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_web"
             android:title="@string/menu_web_view" />
         <item
             android:id="@+id/custom_clicks_nav_item"
             android:icon="@android:drawable/ic_dialog_dialer"
             android:title="@string/menu_custom_clicks" />
-            android:title="@string/menu_web_view"/>
         <item
             android:id="@+id/compose_elements"
-            android:icon="@android:drawable/ic_menu_preferences"
+            android:icon="@drawable/ic_compose"
             android:title="@string/menu_compose_ui_elements"/>
         <item
             android:id="@+id/compose_list"
-            android:icon="@android:drawable/ic_menu_gallery"
+            android:icon="@drawable/ic_compose_list"
             android:title="@string/menu_compose_list"/>
     </group>
 

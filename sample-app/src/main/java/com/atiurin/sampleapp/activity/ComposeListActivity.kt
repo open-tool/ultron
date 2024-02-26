@@ -19,9 +19,8 @@ import com.atiurin.sampleapp.async.UseCase
 import com.atiurin.sampleapp.compose.ContactsList
 import com.atiurin.sampleapp.compose.LoadingAnimation
 import com.atiurin.sampleapp.compose.getContactItemTestTagById
-import com.atiurin.sampleapp.compose.listItemPosition
 import com.atiurin.sampleapp.data.entities.Contact
-import com.atiurin.sampleapp.data.repositories.ContactRepositoty
+import com.atiurin.sampleapp.data.repositories.ContactRepository
 import com.atiurin.sampleapp.data.viewmodel.ContactsViewModel
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -47,10 +46,9 @@ class ComposeListActivity : ComponentActivity() {
             setContent {
                 Column {
                     ContactsList(
-                        contacts = ContactRepositoty.all(),
+                        contacts = ContactRepository.all(),
                         context = this@ComposeListActivity,
-                        testTagProvider = { contact, _ -> getContactItemTestTagById(contact) },
-                        modifierProvider = { position -> Modifier.listItemPosition(position) }
+                        testTagProvider = { contact, _ -> getContactItemTestTagById(contact) }
                     )
                 }
             }

@@ -1,47 +1,43 @@
 package com.atiurin.sampleapp.activity
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.View.*
+import android.view.animation.LinearInterpolator
 import android.webkit.WebView
 import android.widget.*
-import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Column
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.async.AsyncDataLoading
-import com.atiurin.sampleapp.async.GetContacts
 import com.atiurin.sampleapp.async.UseCase
-import com.atiurin.sampleapp.compose.ContactsList
-import com.atiurin.sampleapp.compose.getContactItemTestTagById
-import com.atiurin.sampleapp.data.entities.Contact
-import com.atiurin.sampleapp.data.repositories.ContactRepositoty
-import com.atiurin.sampleapp.data.viewmodel.ContactsViewModel
 import com.atiurin.sampleapp.data.viewmodel.DataViewModel
+import com.atiurin.sampleapp.idlingresources.DemoIdlingResource
 import com.atiurin.sampleapp.view.listeners.OnSwipeTouchListener
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 
 class UiElementsActivity : AppCompatActivity() {
     var lastEventDescription: TextView? = null
     var clickedInRow = 0
     var lastEvent = Event.NO_EVENT
     val model: DataViewModel by viewModels()
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_uielements)
         val simpleButton: Button = findViewById(R.id.button1)
-        simpleButton.visibility = GONE
+//        simpleButton.visibility = GONE
+        simpleButton.isEnabled = false
         lastEventDescription = findViewById(R.id.last_event_status)
         val enableCheckBox: CheckBox = findViewById(R.id.checkbox_enable)
         val clickableCheckBox: CheckBox = findViewById(R.id.checkbox_clickable)
@@ -51,7 +47,7 @@ class UiElementsActivity : AppCompatActivity() {
         val etContentDescription: EditText = findViewById(R.id.et_contentDesc)
         val webView: WebView = findViewById(R.id.webview)
         val jsCheckBox: CheckBox = findViewById(R.id.checkbox_js_enabled)
-        val imageView : ImageView = findViewById(R.id.image_view)
+        val imageView: ImageView = findViewById(R.id.image_view)
         webView.settings.javaScriptEnabled = true
         val customHtml = applicationContext.assets.open("webview_small.html").reader().readText()
         webView.loadData(customHtml, "text/html", "UTF-8")
@@ -103,6 +99,7 @@ class UiElementsActivity : AppCompatActivity() {
                 setLastEvent(Event.FOCUSABLE, checked.toString())
             }
         }
+
         val addTextChangedListener =
             etContentDescription.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(text: Editable?) {
@@ -145,11 +142,14 @@ class UiElementsActivity : AppCompatActivity() {
         })
         val observer = Observer<String> {
             simpleButton.visibility = VISIBLE
-            setLastEvent(Event.DATA_LOADED)
+            simpleButton.isEnabled = true
+//            setLastEvent(Event.DATA_LOADED)
+            DemoIdlingResource.counting.decrement()
         }
         model.data.observe(this, observer)
         GlobalScope.async {
-            AsyncDataLoading(1600)(
+            DemoIdlingResource.counting.increment()
+            AsyncDataLoading(LOAD_BUTTON_TIMEOUT)(
                 UseCase.None,
                 onSuccess = { model.data.value = it },
                 onFailure = { Toast.makeText(this@UiElementsActivity, "Failed to load data", Toast.LENGTH_LONG).show() }
@@ -179,6 +179,10 @@ class UiElementsActivity : AppCompatActivity() {
 
     enum class Event {
         NO_EVENT, CLICK, LONG_CLICK, CLICKABLE, ENABLED, SELECTED, FOCUSABLE, DISPLAYED, JS_ENABLED, CONTENT_DESC,
-        SWIPE_LEFT, SWIPE_RIGHT, SWIPE_UP, SWIPE_DOWN, DATA_LOADED
+        SWIPE_LEFT, SWIPE_RIGHT, SWIPE_UP, SWIPE_DOWN, DATA_LOADED, PROGRESS_BAR_CLICKED
+    }
+
+    companion object {
+        var LOAD_BUTTON_TIMEOUT = 1500L
     }
 }

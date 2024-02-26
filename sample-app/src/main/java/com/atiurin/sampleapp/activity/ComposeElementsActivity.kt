@@ -105,31 +105,6 @@ fun CheckBox(title: String, testTagValue: String, statusState: MutableState<Stri
 
 }
 
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-fun ButtonWithCount() {
-    var count = remember {
-        mutableStateOf(0)
-    }
-    Button(onClick = { count.value++ }, modifier = Modifier
-        .semantics {
-            testTag = likesCounterButton
-            contentDescription = likesCounterContentDesc
-        }) {
-        Icon(
-            imageVector = Icons.Filled.Favorite,
-            contentDescription = null
-        )
-        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-        Text("Like count = ${count.value}",
-            modifier = Modifier.semantics {
-                testTag = likesCounterTextContainer
-                contentDescription = likesCounterTextContainerContentDesc
-            }
-        )
-    }
-}
-
 @Composable
 fun ClickListener(statusState: MutableState<String>) {
     CustomButton(

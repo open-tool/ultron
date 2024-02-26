@@ -1,6 +1,7 @@
 package com.atiurin.sampleapp.async
 
 import com.atiurin.sampleapp.MyApplication.CONTACTS_LOADING_TIMEOUT_MS
+import com.atiurin.sampleapp.idlingresources.DemoIdlingResource
 import kotlinx.coroutines.delay
 
 class AsyncDataLoading(val delayMs: Long = CONTACTS_LOADING_TIMEOUT_MS) : UseCase<String, UseCase.None>() {

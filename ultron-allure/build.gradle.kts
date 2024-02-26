@@ -9,11 +9,12 @@ version =  project.findProperty("VERSION_NAME")!!
 
 
 android {
-    compileSdk = 31
+    namespace = "com.atiurin.ultron.allure"
+    compileSdk = 33
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 31
+        targetSdk = 33
     }
 
     sourceSets {
@@ -25,8 +26,8 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility = JavaVersion.VERSION_1_8
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
     }
 }
 dependencies {
@@ -41,7 +42,6 @@ dependencies {
 tasks {
     val sourcesJar by creating(Jar::class) {
         archiveClassifier.set("sources")
-        classifier = "sources"
         from(tasks)
     }
 
@@ -56,7 +56,7 @@ tasks {
 
     val javadocJar by creating(Jar::class){
         dependsOn(javadoc)
-        classifier = "javadoc"
+        archiveClassifier.set("javadoc")
         from(javadoc.destinationDir)
     }
 

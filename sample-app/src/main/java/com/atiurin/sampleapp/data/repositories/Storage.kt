@@ -7,7 +7,7 @@ import com.atiurin.sampleapp.data.entities.User
 
 val CURRENT_USER = User(1, "Joey Tribbiani", Avatars.JOEY.drawable, "joey", "1234")
 
-val CONTACTS = arrayListOf(
+val CONTACTS = mutableListOf(
     Contact(2, "Chandler Bing", "Joey doesn't share food!", Avatars.CHANDLER.drawable),
     Contact(3, "Ross Geller", "UNAGI", Avatars.ROSS.drawable),
     Contact(4, "Rachel Green", "I got off the plane!", Avatars.RACHEL.drawable),

@@ -1,6 +1,7 @@
 object Versions {
-    val kotlin = "1.5.31"
-    val androidToolsBuildGradle = "7.0.4"
+    val kotlin = "1.9.0"
+    val kotlinGradlePlugin = "1.9.10"
+    val androidToolsBuildGradle = "8.1.2"
     val androidMavenGradlePlugin = "2.1"
     val publishPlugin = "0.13.0"
     val dokkaPlugin = "1.4.30"
@@ -10,10 +11,11 @@ object Versions {
     val uiautomator = "2.2.0"
     val accessibility = "4.0.0"
     val hamcrestCore = "2.2"
-    val compose = "1.1.1"
-    val androidXTest = "1.4.0"
+    val androidXTest = "1.5.0"
     val junit = "4.13.2"
     val allure = "2.4.0"
+    val compose = "1.5.4"
+    val composeUi = "1.5.4"
     //sample-app
 
     val coroutines = "1.4.2"
@@ -33,7 +35,7 @@ object Versions {
 object Plugins {
     val androidToolsBuildGradle = "com.android.tools.build:gradle:${Versions.androidToolsBuildGradle}"
     val androidMavenGradle = "com.github.dcendents:android-maven-gradle-plugin:${Versions.androidMavenGradlePlugin}"
-    val kotlinGradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
+    val kotlinGradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlinGradlePlugin}"
     val publishPlugin = "com.vanniktech:gradle-maven-publish-plugin:${Versions.publishPlugin}"
     val dokka = "org.jetbrains.dokka:dokka-gradle-plugin:${Versions.dokkaPlugin}"
 }
@@ -86,6 +88,7 @@ object Libs {
     val espressoIntents = "androidx.test.espresso:espresso-intents:${Versions.espresso}"
     val espressoAccessibility = "androidx.test.espresso:espresso-accessibility:${Versions.espresso}"
     val espressoConcurrent = "androidx.test.espresso.idling:idling-concurrent:${Versions.espresso}"
+    val androidXcore = "androidx.test:core:${Versions.androidXTest}"
     val androidXRules = "androidx.test:rules:${Versions.androidXTest}"
     val androidXTruth = "androidx.test.ext:truth:${Versions.androidXTest}"
     val androidXJunit = "androidx.test.ext:junit:${Versions.junitExt}"

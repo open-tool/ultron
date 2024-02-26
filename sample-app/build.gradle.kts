@@ -1,32 +1,32 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("kotlin-android-extensions")
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 34
     defaultConfig {
-        applicationId = "com.atiurin.sampleapp"
+        namespace = "com.atiurin.sampleapp"
         minSdk = 21
-        targetSdk = 31
+        targetSdk = 33
         multiDexEnabled = true
         testInstrumentationRunner = "com.atiurin.ultron.allure.UltronAllureTestRunner"
+//        testInstrumentationRunner = "com.kaspersky.kaspresso.runner.KaspressoRunner"
     }
 
     compileOptions {
-        targetCompatibility = JavaVersion.VERSION_1_8
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.5"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
 
     packagingOptions {
@@ -76,8 +76,12 @@ dependencies {
     androidTestImplementation(Libs.androidXRules)
     androidTestImplementation(Libs.androidXTruth)
     androidTestImplementation(Libs.androidXJunit)
+    androidTestImplementation(Libs.androidXcore)
     // Espresso dependencies
     androidTestImplementation(Libs.espressoIntents)
     androidTestImplementation(Libs.espressoAccessibility)
     androidTestImplementation(Libs.espressoConcurrent)
+    androidTestImplementation("com.kaspersky.android-components:kaspresso:1.5.4")
+    androidTestImplementation("com.kaspersky.android-components:kaspresso-compose-support:1.5.4")
+    androidTestImplementation("com.kaspersky.android-components:kaspresso-allure-support:1.5.4")
 }

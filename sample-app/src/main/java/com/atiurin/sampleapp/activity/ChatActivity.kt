@@ -17,7 +17,7 @@ import com.atiurin.sampleapp.adapters.MessageAdapter
 import com.atiurin.sampleapp.data.entities.Contact
 import com.atiurin.sampleapp.data.entities.Message
 import com.atiurin.sampleapp.data.repositories.CURRENT_USER
-import com.atiurin.sampleapp.data.repositories.ContactRepositoty
+import com.atiurin.sampleapp.data.repositories.ContactRepository
 import com.atiurin.sampleapp.data.repositories.MessageRepository
 
 const val INTENT_CONTACT_ID_EXTRA_NAME = "contactId"
@@ -46,7 +46,7 @@ class ChatActivity : AppCompatActivity(){
         if (contactId < 0){
             Log.d("EspressoGuide", "Something goes wrong!")
         }
-        contact = ContactRepositoty.getContact(contactId)
+        contact = ContactRepository.getContact(contactId)
         title.text = contact.name
         val avatar = findViewById<CircleImageView>(R.id.toolbar_avatar)
         avatar.setImageDrawable(getDrawable(contact.avatar))
@@ -76,9 +76,8 @@ class ChatActivity : AppCompatActivity(){
                         Toast.makeText(context, "Type message text", Toast.LENGTH_LONG).show()
                     }else{
                         val mes = Message(CURRENT_USER.id, contactId, messageInput.text.toString())
-                        val curMessages = MessageRepository.messages
-                        curMessages.add(mes)
-                        updateAdapter(curMessages)
+                        MessageRepository.addMessage(mes)
+                        updateAdapter(MessageRepository.getChatMessages(contactId))
                         messageInput.setText("")
                         recyclerView.smoothScrollToPosition(viewAdapter.itemCount - 1)
                     }
@@ -113,7 +112,6 @@ class ChatActivity : AppCompatActivity(){
     }
 
     private fun updateAdapter(list: ArrayList<Message>){
-        MessageRepository.messages = list
         viewAdapter.updateData(list)
         viewAdapter.notifyDataSetChanged()
     }

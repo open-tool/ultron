@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun onContactsLoaded(contacts: ArrayList<Contact>) {
+    override fun onContactsLoaded(contacts: List<Contact>) {
         viewAdapter.updateData(contacts)
         viewAdapter.notifyDataSetChanged()
         IdlingHelper.ifAllowed { ContactsIdlingResource.getInstanceFromApp()?.setIdleState(true) }

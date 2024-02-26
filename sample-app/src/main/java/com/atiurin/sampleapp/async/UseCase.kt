@@ -1,5 +1,6 @@
 package com.atiurin.sampleapp.async
 
+import com.atiurin.sampleapp.data.entities.Contact
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch

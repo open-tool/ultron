@@ -33,6 +33,6 @@ class PresenterCoroutineScope(context: CoroutineContext) : CoroutineScope {
 }
 
 interface ContactsProvider {
-    fun onContactsLoaded(contacts: ArrayList<Contact>)
+    fun onContactsLoaded(contacts: List<Contact>)
     fun onFailedToLoadContacts(message: String?)
 }

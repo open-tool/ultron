@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.atiurin.sampleapp.activity.ComposeSecondActivity
+import com.atiurin.sampleapp.activity.ComposeChatActivity
 import com.atiurin.sampleapp.data.entities.Contact
 
 const val contactsListHeaderTag = "headerTestTag"
@@ -56,7 +56,6 @@ fun ContactsList(
     context: Context,
     addStickyHeader: Boolean = true,
     testTagProvider: (Contact, Int) -> String,
-    modifierProvider: (Int) -> Modifier,
 ) {
     var selectedItem = remember {
         mutableStateOf("")
@@ -77,15 +76,17 @@ fun ContactsList(
         }
         itemsIndexed(contacts, key = { _, c -> c.name }) { index, contact ->
             Column(
-                modifier = modifierProvider.invoke(index)
+                modifier = Modifier
                     .then(Modifier.clickable {
                         selectedItem.value = contact.name
-                        val intent = Intent(context, ComposeSecondActivity::class.java)
-                        intent.putExtra(ComposeSecondActivity.INTENT_CONTACT_ID, contact.id)
+                        val intent = Intent(context, ComposeChatActivity::class.java)
+                        intent.putExtra(ComposeChatActivity.INTENT_CONTACT_ID, contact.id)
                         ContextCompat.startActivity(context, intent, null)
                     })
+                    // make it testable
                     .then(Modifier.semantics {
-                        testTag = testTagProvider.invoke(contact, index)
+                        testTag = getContactItemTestTagById(contact)
+                        listItemPosition = index
                     })
             ) {
                 Row {
@@ -118,8 +119,5 @@ fun getContactItemTestTagById(contact: Contact) = "contactId=${contact.id}"
 fun getContactItemTestTagByPosition(position: Int) = "position=$position"
 
 // configure position matching for lazy list
-val ListItemPositionPropertyKey = SemanticsPropertyKey<Int>("ListItemPosition")
-var SemanticsPropertyReceiver.listItemPosition by ListItemPositionPropertyKey
-fun Modifier.listItemPosition(position: Int): Modifier {
-    return semantics { listItemPosition = position }
-}
+val LazyListItemPosition = SemanticsPropertyKey<Int>("ListItemPosition")
+var SemanticsPropertyReceiver.listItemPosition by LazyListItemPosition
