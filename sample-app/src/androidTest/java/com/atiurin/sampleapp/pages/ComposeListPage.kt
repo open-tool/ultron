@@ -34,5 +34,6 @@ object ComposeListPage : Page<ComposeListPage>() {
     class ComposeFriendListItem : UltronComposeListItem() {
         val name by lazy { getChild(hasTestTag(contactNameTestTag)) }
         val status by lazy { getChild(hasTestTag(contactStatusTestTag)) }
+        val notExisted by lazy { getChild(hasTestTag("NotExistedChild")) }
     }
 }

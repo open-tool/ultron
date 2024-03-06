@@ -2,12 +2,18 @@ package com.atiurin.sampleapp.tests.compose
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.hasAnyDescendant
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performScrollToIndex
 import com.atiurin.sampleapp.activity.ComposeListActivity
-import com.atiurin.sampleapp.compose.*
+import com.atiurin.sampleapp.compose.contactStatusTestTag
+import com.atiurin.sampleapp.compose.contactsListContentDesc
+import com.atiurin.sampleapp.compose.contactsListHeaderTag
+import com.atiurin.sampleapp.compose.contactsListTestTag
+import com.atiurin.sampleapp.compose.getContactItemTestTagById
 import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.data.repositories.ContactRepositoty
 import com.atiurin.sampleapp.framework.utils.AssertUtils
@@ -18,14 +24,15 @@ import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
 import com.atiurin.ultron.core.common.options.TextContainsOption
 import com.atiurin.ultron.core.compose.createUltronComposeRule
 import com.atiurin.ultron.core.compose.list.composeList
+import com.atiurin.ultron.extensions.assertIsDisplayed
 import com.atiurin.ultron.extensions.assertTextEquals
 import com.atiurin.ultron.extensions.click
-import com.atiurin.ultron.extensions.assertIsDisplayed
+import com.atiurin.ultron.extensions.findNodeInTree
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
 
-class ComposeListTest: BaseTest()  {
+class ComposeListTest : BaseTest() {
     @get:Rule
     val composeRule = createUltronComposeRule<ComposeListActivity>()
 
@@ -38,22 +45,25 @@ class ComposeListTest: BaseTest()  {
     fun item_existItem() {
         val index = 20
         val contact = CONTACTS[index]
-        listWithMergedTree.item(hasText(contact.name))
+        listWithMergedTree.item(hasAnyDescendant(hasText(contact.name)))
             .assertIsDisplayed()
-            .assertTextContains(contact.name)
+            .assertMatches(hasAnyDescendant(hasText(contact.name)))
     }
 
     @Test
     fun item_notExistItem() {
-        AssertUtils.assertException { listWithMergedTree.item(hasText("123gakshgdasl kgas")).assertIsDisplayed() }
+        AssertUtils.assertException {
+            listWithMergedTree.item(hasText("123gakshgdasl kgas")).assertIsDisplayed()
+        }
     }
 
     @Test
     fun visibleItem_indexInScope() {
         val index = 2
         val contact = CONTACTS[index]
-        listWithMergedTree.visibleItem(index)
-            .assertTextContains(contact.name)
+        listWithMergedTree.visibleItem(index).printToLog("ULTRON")
+            .assertMatches(hasAnyDescendant(hasText(contact.name)))
+
     }
 
     @Test
@@ -68,8 +78,8 @@ class ComposeListTest: BaseTest()  {
         val contact = CONTACTS[0]
         listWithMergedTree.firstVisibleItem()
             .assertIsDisplayed()
-            .assertTextContains(contact.name)
-            .assertTextContains(contact.status)
+            .assertMatches(hasAnyDescendant(hasText(contact.name)))
+            .assertMatches(hasAnyDescendant(hasText(contact.status)))
     }
 
     @Test
@@ -117,7 +127,7 @@ class ComposeListTest: BaseTest()  {
         }
         hasText(contact.name).assertIsDisplayed()
         Assert.assertTrue(children.size > 10)
-        val child = children.find { child -> child.config[SemanticsProperties.Text].any { it.text == contact.name } }
+        val child = children.findNodeInTree(hasText(contact.name))
         Assert.assertNotNull(child)
     }
 
@@ -256,18 +266,18 @@ class ComposeListTest: BaseTest()  {
     }
 
     @Test
-    fun assertVisibleItemsCount_properCountProvided(){
+    fun assertVisibleItemsCount_properCountProvided() {
         val count = listWithMergedTree.getVisibleItemsCount()
         listWithMergedTree.assertVisibleItemsCount(count)
     }
 
     @Test
-    fun assertVisibleItemsCount_invalidCountProvided(){
+    fun assertVisibleItemsCount_invalidCountProvided() {
         AssertUtils.assertException { listWithMergedTree.withTimeout(1000).assertVisibleItemsCount(100) }
     }
 
     @Test
-    fun itemByPosition_propertyConfiguredTest(){
+    fun itemByPosition_propertyConfiguredTest() {
         val index = 20
         val contact = CONTACTS[index]
         val item = listPage.lazyList.item(20).assertIsDisplayed()
@@ -275,7 +285,7 @@ class ComposeListTest: BaseTest()  {
     }
 
     @Test
-    fun getItemByPosition_propertyConfiguredTest(){
+    fun getItemByPosition_propertyConfiguredTest() {
         val index = 20
         val contact = CONTACTS[index]
         listPage.getItemByPosition(index).apply {
@@ -286,15 +296,24 @@ class ComposeListTest: BaseTest()  {
     }
 
     @Test
-    fun assertItemDoesNotExistWithSearch_NotExistedItem(){
+    fun assertItemDoesNotExistWithSearch_NotExistedItem() {
         listWithMergedTree.assertItemDoesNotExist(hasText("NOT EXISTED TeXT"))
     }
 
     @Test
-    fun assertItemDoesNotExistWithSearch_ExistedItem(){
+    fun assertItemDoesNotExistWithSearch_ExistedItem() {
         val contact = ContactRepositoty.getLast()
         AssertUtils.assertException {
             listWithMergedTree.withTimeout(2000).assertItemDoesNotExist(hasText(contact.name))
+        }
+    }
+
+    @Test
+    fun getItem_NotExistedItemChild() {
+        val index = 20
+        val contact = CONTACTS[index]
+        listPage.getContactItemByName(contact).apply {
+            AssertUtils.assertException { notExisted.withTimeout(1000).assertIsDisplayed() }
         }
     }
 

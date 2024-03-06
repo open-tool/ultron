@@ -531,6 +531,16 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         it.fetchSemanticsNode().config[key]
     }
 
+
+    fun printToLog(tag: String, maxDepth: Int = Int.MAX_VALUE) = apply {
+        executeOperation(
+            operationBlock = { semanticsNodeInteraction.printToLog(tag, maxDepth) },
+            name = "Print Semantics info to log for '${elementInfo.name}'",
+            type = PRINT_TO_LOG,
+            description = "Compose printToLog for '${elementInfo.name}' during $timeoutMs ms",
+        )
+    }
+
     //assertions
     fun assertIsDisplayed() = apply {
         executeOperation(
@@ -796,6 +806,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         operationName = "Anonymous Compose operation on '${elementInfo.name}'",
         operationDescription = "Anonymous Compose operation on '${elementInfo.name}' during $timeoutMs ms",
     )
+
 
     companion object {
         /**
