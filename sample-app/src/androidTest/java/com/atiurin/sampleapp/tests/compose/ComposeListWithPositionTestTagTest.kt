@@ -1,7 +1,9 @@
 package com.atiurin.sampleapp.tests.compose
 
+import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import com.atiurin.sampleapp.activity.ComposeListWithPositionTestTagActivity
 import com.atiurin.sampleapp.compose.ListItemPositionPropertyKey
 import com.atiurin.sampleapp.compose.contactsListContentDesc
@@ -26,7 +28,7 @@ class ComposeListWithPositionTestTagTest {
         val contact = CONTACTS[index]
         list.item(hasTestTag(getContactItemTestTagByPosition(index)))
             .assertIsDisplayed()
-            .assertTextContains(contact.name)
+            .assertMatches(hasAnyDescendant(hasText(contact.name)))
     }
 
     @Test
@@ -35,30 +37,31 @@ class ComposeListWithPositionTestTagTest {
         val contact = CONTACTS[count]
         list.lastVisibleItem()
             .assertIsDisplayed()
-            .assertTextContains(contact.name)
-            .assertTextContains(contact.status)
+            .assertMatches(hasAnyDescendant(hasText(contact.name)))
+            .assertMatches(hasAnyDescendant(hasText(contact.status)))
     }
+
     @Test
-    fun itemByPosition_propertyNOTConfiguredInTest(){
+    fun itemByPosition_propertyNOTConfiguredInTest() {
         AssertUtils.assertException {
             list.item(20).assertIsDisplayed()
         }
     }
 
     @Test
-    fun itemByPosition_propertyNOTConfiguredInApplication(){
+    fun itemByPosition_propertyNOTConfiguredInApplication() {
         AssertUtils.assertException {
             composeListWithProperty.withTimeout(1000).item(20).assertIsDisplayed()
         }
     }
 
     @Test
-    fun getItemByPosition_propertyNOTConfiguredInTest(){
+    fun getItemByPosition_propertyNOTConfiguredInTest() {
         AssertUtils.assertException { list.getItem<ComposeListPage.ComposeFriendListItem>(20).assertIsDisplayed() }
     }
 
     @Test
-    fun getItemByPosition_propertyNOTConfiguredInApplication(){
+    fun getItemByPosition_propertyNOTConfiguredInApplication() {
         AssertUtils.assertException {
             composeListWithProperty.withTimeout(1000).getItem<ComposeListPage.ComposeFriendListItem>(20).assertIsDisplayed()
         }

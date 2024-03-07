@@ -30,7 +30,7 @@ object FriendsListPage : Page<FriendsListPage>() {
     }
 
     class FriendRecyclerItem : UltronRecyclerViewItem() {
-        val name by lazy { getChild(withId(R.id.tv_name)) }
+        val name by child { withId(R.id.tv_name) }
         val status by lazy { getChild(withId(R.id.tv_status)) }
         val avatar by lazy { getChild(withId(R.id.avatar)) }
     }

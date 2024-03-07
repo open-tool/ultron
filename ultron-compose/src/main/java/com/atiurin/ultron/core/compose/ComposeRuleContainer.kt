@@ -1,6 +1,9 @@
 package com.atiurin.ultron.core.compose
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.SemanticsNodeInteractionCollection
+import androidx.compose.ui.test.SemanticsSelector
 import androidx.compose.ui.test.TestContext
 import androidx.compose.ui.test.junit4.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -79,5 +82,4 @@ fun createEmptyUltronComposeRule(): ComposeTestRule {
 }
 
 fun ComposeTestRule.getTestContext() = this.getProperty<TestContext>("testContext")
-
 

@@ -68,6 +68,10 @@ open class UltronComposeListItem {
      */
     protected constructor()
 
+    fun child(block: () -> SemanticsMatcher): Lazy<UltronComposeSemanticsNodeInteraction> = lazy {
+        getChild(block())
+    }
+
     fun setExecutor(ultronComposeList: UltronComposeList, itemMatcher: SemanticsMatcher) {
         this.executor = MatcherComposeItemExecutor(ultronComposeList, itemMatcher)
     }
@@ -129,6 +133,7 @@ open class UltronComposeListItem {
     fun inputTextSelection(selection: TextRange) = apply { getItemUltronComposeInteraction().inputTextSelection(selection) }
     fun clearText() = apply { getItemUltronComposeInteraction().clearText() }
     fun replaceText(text: String) = apply { getItemUltronComposeInteraction().replaceText(text) }
+    fun printToLog(tag: String, maxDepth: Int = Int.MAX_VALUE) = apply { getItemUltronComposeInteraction().printToLog(tag, maxDepth) }
 
     @OptIn(ExperimentalTestApi::class)
     fun performMouseInput(block: MouseInjectionScope.() -> Unit) = apply { getItemUltronComposeInteraction().performMouseInput(block) }
