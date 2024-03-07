@@ -68,6 +68,10 @@ open class UltronComposeListItem {
      */
     protected constructor()
 
+    fun child(block: () -> SemanticsMatcher): Lazy<UltronComposeSemanticsNodeInteraction> = lazy {
+        getChild(block())
+    }
+
     fun setExecutor(ultronComposeList: UltronComposeList, itemMatcher: SemanticsMatcher) {
         this.executor = MatcherComposeItemExecutor(ultronComposeList, itemMatcher)
     }

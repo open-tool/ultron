@@ -26,6 +26,10 @@ open class UltronRecyclerViewItem {
      */
     protected constructor()
 
+    fun child(block: () -> Matcher<View>): Lazy<Matcher<View>> = lazy {
+        getChild(block())
+    }
+
     constructor(
         ultronRecyclerView: UltronRecyclerView,
         itemViewMatcher: Matcher<View>,
