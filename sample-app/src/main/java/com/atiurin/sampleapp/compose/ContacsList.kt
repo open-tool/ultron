@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -58,9 +59,7 @@ fun ContactsList(
     testTagProvider: (Contact, Int) -> String,
     modifierProvider: (Int) -> Modifier,
 ) {
-    var selectedItem = remember {
-        mutableStateOf("")
-    }
+    val selectedItem = remember { mutableStateOf("") }
     Text(text = "Selected item = ${selectedItem.value}")
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -76,39 +75,43 @@ fun ContactsList(
             }
         }
         itemsIndexed(contacts, key = { _, c -> c.name }) { index, contact ->
-            Column(
-                modifier = modifierProvider.invoke(index)
-                    .then(Modifier.clickable {
-                        selectedItem.value = contact.name
-                        val intent = Intent(context, ComposeSecondActivity::class.java)
-                        intent.putExtra(ComposeSecondActivity.INTENT_CONTACT_ID, contact.id)
-                        ContextCompat.startActivity(context, intent, null)
-                    })
-                    .then(Modifier.semantics {
-                        testTag = testTagProvider.invoke(contact, index)
-                    })
-            ) {
-                Row {
-                    Image(
-                        painter = painterResource(contact.avatar),
-                        contentDescription = "avatar",
-                        contentScale = ContentScale.Crop,            // crop the image if it's not a square
-                        modifier = Modifier
-                            .size(80.dp)
-                            .clip(CircleShape)                       // clip to the circle shape
-                            .border(2.dp, Color.Transparent, CircleShape)   // add a border (optional)
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Column {
-                        Text(contact.name, Modifier.semantics { testTag = contactNameTestTag }, fontSize = TextUnit(20f, TextUnitType.Sp))
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(text = contact.status, Modifier.semantics { testTag = contactStatusTestTag }, fontSize = TextUnit(16f, TextUnitType.Sp))
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
-
+            Box(modifier = modifierProvider
+                .invoke(index)
+                .semantics {
+                    testTag = testTagProvider.invoke(contact, index)
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-                Divider(color = Color.Black)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .then(Modifier.clickable {
+                            selectedItem.value = contact.name
+                            val intent = Intent(context, ComposeSecondActivity::class.java)
+                            intent.putExtra(ComposeSecondActivity.INTENT_CONTACT_ID, contact.id)
+                            ContextCompat.startActivity(context, intent, null)
+                        })
+                ) {
+                    Row {
+                        Image(
+                            painter = painterResource(contact.avatar),
+                            contentDescription = "avatar",
+                            contentScale = ContentScale.Crop,            // crop the image if it's not a square
+                            modifier = Modifier
+                                .size(80.dp)
+                                .clip(CircleShape)                       // clip to the circle shape
+                                .border(2.dp, Color.Transparent, CircleShape)   // add a border (optional)
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Column {
+                            Text(contact.name, Modifier.semantics { testTag = contactNameTestTag }, fontSize = TextUnit(20f, TextUnitType.Sp))
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(text = contact.status, Modifier.semantics { testTag = contactStatusTestTag }, fontSize = TextUnit(16f, TextUnitType.Sp))
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Divider(color = Color.Black)
+                }
             }
         }
     }

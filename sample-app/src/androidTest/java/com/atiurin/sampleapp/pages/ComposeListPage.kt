@@ -32,7 +32,10 @@ object ComposeListPage : Page<ComposeListPage>() {
     fun getContactItemByTestTag(contact: Contact): ComposeFriendListItem = lazyList.getItem(hasTestTag(getContactItemTestTagById(contact)))
     fun getContactItemByName(contact: Contact): ComposeFriendListItem = lazyList.getItem(hasAnyDescendant(hasText(contact.name) and hasTestTag(contactNameTestTag)))
     class ComposeFriendListItem : UltronComposeListItem() {
-        val name by lazy { getChild(hasTestTag(contactNameTestTag)) }
+        val name by child { hasTestTag(contactNameTestTag) }
         val status by lazy { getChild(hasTestTag(contactStatusTestTag)) }
+        val notExisted by child { hasTestTag("NotExistedChild") }
     }
 }
+
+

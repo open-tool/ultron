@@ -15,6 +15,7 @@ import com.atiurin.ultron.core.compose.operation.ComposeOperationType
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 import com.atiurin.ultron.exceptions.UltronAssertionException
 import com.atiurin.ultron.exceptions.UltronException
+import com.atiurin.ultron.extensions.findNodeInTree
 import com.atiurin.ultron.utils.AssertUtils
 import org.junit.Assert
 
@@ -51,6 +52,7 @@ class UltronComposeList(
         }
         return UltronComposeListItem(this, position, true)
     }
+
     fun firstItem(): UltronComposeListItem = item(0)
 
     /**
@@ -147,7 +149,7 @@ class UltronComposeList(
                 ) { listInteraction ->
                     listInteraction.performScrollToNode(itemMatcher)
                         .onChildren().filterToOne(itemMatcher)
-                        .onChildren().filterToOne(childMatcher)
+                        .findNodeInTree(childMatcher, useUnmergedTree)
                 }
         )
 
@@ -171,7 +173,7 @@ class UltronComposeList(
                 operationType = ComposeOperationType.GET_LIST_ITEM_CHILD
             )
         ) { listInteraction ->
-            listInteraction.onChildAt(index).onChildren().filterToOne(childMatcher)
+            listInteraction.onChildAt(index).findNodeInTree(childMatcher, useUnmergedTree)
         }
     )
 
