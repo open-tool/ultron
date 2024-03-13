@@ -1,5 +1,6 @@
 package com.atiurin.sampleapp.tests
 
+import android.os.Environment
 import androidx.test.platform.app.InstrumentationRegistry
 import com.atiurin.ultron.testlifecycle.rulesequence.RuleSequence
 import com.atiurin.sampleapp.data.repositories.CURRENT_USER
@@ -37,6 +38,7 @@ abstract class BaseTest {
             UltronConfig.applyRecommended()
             UltronAllureConfig.applyRecommended()
             UltronComposeConfig.applyRecommended()
+            UltronAllureConfig.setAllureResultsDirectory()
             UltronComposeConfig.addListener(ScreenshotAttachListener())
             UltronComposeConfig.addListener(WindowHierarchyAttachListener())
             UltronComposeConfig.addListener(DetailedOperationAllureListener())
