@@ -144,7 +144,8 @@ object UltronConfig {
                     UltronAssertionException::class.java,
                     PerformException::class.java,
                     NoMatchingViewException::class.java,
-                    AmbiguousViewMatcherException::class.java
+                    AmbiguousViewMatcherException::class.java,
+                    UltronOperationException::class.java
                 )
                 val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
                     resultAnalyzer.analyze(it)
@@ -158,10 +159,11 @@ object UltronConfig {
                     UltronWrapperException::class.java,
                     UltronException::class.java,
                     UltronAssertionException::class.java,
+                    UltronOperationException::class.java,
                     PerformException::class.java,
                     NoMatchingViewException::class.java,
                     AssertionFailedError::class.java,
-                    AmbiguousViewMatcherException::class.java
+                    AmbiguousViewMatcherException::class.java,
                 )
                 val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
                     resultAnalyzer.analyze(it)

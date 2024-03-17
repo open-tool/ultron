@@ -126,6 +126,16 @@ class RecyclerViewTest : BaseTest() {
     }
 
     @Test
+    fun item_notExist_executionTime() {
+        val timeout = 5_000L
+        AssertUtils.assertExecTimeMoreThen(timeout){
+            AssertUtils.assertException {
+                runCatching { page.recycler.withTimeout(timeout).item(withText("Not existed item")).isDisplayed() }
+            }
+        }
+    }
+
+    @Test
     @SetUp(CUSTOM_TIMEOUT)
     @TearDown(CUSTOM_TIMEOUT)
     fun defaultTimeoutOnItemWaiting() {
