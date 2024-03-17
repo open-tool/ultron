@@ -32,7 +32,7 @@ object AssertUtils {
         Assert.assertTrue(System.currentTimeMillis() - startTime <= time)
     }
 
-    fun assertExecTimeBetween(minTime: Long, maxTime: Long,block: () -> Unit){
+    fun assertExecTimeBetween(minTime: Long, maxTime: Long, block: () -> Unit) {
         val startTime = System.currentTimeMillis()
         try {
             block()
