@@ -55,10 +55,10 @@ class ContactAdapter(
     override fun getItemCount() = mDataset.size
 
     //    GestureDetector.OnGestureListener
-    override fun onDown(p0: MotionEvent?): Boolean = true
-    override fun onShowPress(p0: MotionEvent?) = Unit
-    override fun onSingleTapUp(p0: MotionEvent?): Boolean = true
-    override fun onScroll(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean = true
-    override fun onLongPress(p0: MotionEvent?) = Unit
-    override fun onFling(p0: MotionEvent?, p1: MotionEvent?, p2: Float, p3: Float): Boolean = true
+    override fun onDown(p0: MotionEvent): Boolean = true
+    override fun onShowPress(p0: MotionEvent) = Unit
+    override fun onSingleTapUp(p0: MotionEvent): Boolean = true
+    override fun onScroll(p0: MotionEvent?, p1: MotionEvent, p2: Float, p3: Float): Boolean = true
+    override fun onLongPress(p0: MotionEvent) = Unit
+    override fun onFling(p0: MotionEvent?, p1: MotionEvent, p2: Float, p3: Float): Boolean = true
 }

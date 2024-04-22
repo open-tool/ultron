@@ -20,15 +20,16 @@ group = project.findProperty("GROUP")!!
 version =  project.findProperty("VERSION_NAME")!!
 
 android {
-    compileSdk = 31
+    namespace = "com.atiurin.ultron"
+    compileSdk = 34
     defaultConfig {
         minSdk = 16
-        targetSdk = 31
+        targetSdk = 34
         multiDexEnabled = true
     }
     compileOptions {
-        targetCompatibility = JavaVersion.VERSION_1_8
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
     }
     sourceSets {
         named("main").configure {
@@ -61,7 +62,6 @@ dependencies {
 tasks {
     val sourcesJar by creating(Jar::class) {
         archiveClassifier.set("sources")
-        classifier = "sources"
         from(tasks)
     }
 
@@ -76,7 +76,6 @@ tasks {
 
     val javadocJar by creating(Jar::class){
         dependsOn(javadoc)
-        classifier = "javadoc"
         from(javadoc.destinationDir)
     }
 

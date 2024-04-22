@@ -1,32 +1,32 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    id("kotlin-android-extensions")
 }
 
 android {
-    compileSdk = 31
+    namespace = "com.atiurin.sampleapp"
+    compileSdk = 34
     defaultConfig {
         applicationId = "com.atiurin.sampleapp"
         minSdk = 21
-        targetSdk = 31
+        targetSdk = 34
         multiDexEnabled = true
         testInstrumentationRunner = "com.atiurin.ultron.allure.UltronAllureTestRunner"
     }
 
     compileOptions {
-        targetCompatibility = JavaVersion.VERSION_1_8
-        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.0.5"
+        kotlinCompilerExtensionVersion = "1.4.0"
     }
 
     packagingOptions {

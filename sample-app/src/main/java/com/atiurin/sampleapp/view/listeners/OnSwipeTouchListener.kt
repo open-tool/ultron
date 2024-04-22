@@ -10,7 +10,7 @@ import android.view.View.OnTouchListener
 
 open class OnSwipeTouchListener(ctx: Context?) : OnTouchListener {
     private val gestureDetector: GestureDetector
-    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+    override fun onTouch(v: View?, event: MotionEvent): Boolean {
         return gestureDetector.onTouchEvent(event)
     }
 
@@ -19,15 +19,10 @@ open class OnSwipeTouchListener(ctx: Context?) : OnTouchListener {
             return true
         }
 
-        override fun onFling(
-            e1: MotionEvent,
-            e2: MotionEvent,
-            velocityX: Float,
-            velocityY: Float
-        ): Boolean {
+        override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
             var result = false
             try {
-                val diffY = e2.y - e1.y
+                val diffY = e2.y - e1!!.y
                 val diffX = e2.x - e1.x
                 if (Math.abs(diffX) > Math.abs(diffY)) {
                     if (Math.abs(diffX) > Companion.SWIPE_THRESHOLD && Math.abs(velocityX) > Companion.SWIPE_VELOCITY_THRESHOLD) {
