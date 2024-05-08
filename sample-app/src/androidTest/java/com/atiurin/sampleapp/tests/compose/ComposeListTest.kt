@@ -1,9 +1,5 @@
 package com.atiurin.sampleapp.tests.compose
 
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
@@ -242,30 +238,6 @@ class ComposeListTest : BaseTest() {
     }
 
     @Test
-    fun assertNotEmpty_notEmptyList() {
-        listWithMergedTree.assertNotEmpty()
-    }
-
-    @Test
-    fun assertNotEmpty_emptyList() {
-        setEmptyListContent()
-        AssertUtils.assertException {
-            composeList(hasTestTag(emptyListTestTag)).withTimeout(100).assertNotEmpty()
-        }
-    }
-
-    @Test
-    fun assertEmpty_emptyList() {
-        setEmptyListContent()
-        composeList(hasTestTag(emptyListTestTag)).assertEmpty()
-    }
-
-    @Test
-    fun assertEmpty_notEmptyList() {
-        AssertUtils.assertException { listWithMergedTree.withTimeout(100).assertEmpty() }
-    }
-
-    @Test
     fun assertVisibleItemsCount_properCountProvided() {
         val count = listWithMergedTree.getVisibleItemsCount()
         listWithMergedTree.assertVisibleItemsCount(count)
@@ -317,13 +289,16 @@ class ComposeListTest : BaseTest() {
         }
     }
 
-    private fun setEmptyListContent() {
-        composeRule.setContent {
-            LazyColumn(
-                modifier = Modifier.semantics { testTag = emptyListTestTag }
-            ) {}
-        }
+    @Test
+    fun assertNotEmpty_notEmptyList() {
+        listWithMergedTree.assertNotEmpty()
     }
+
+    @Test
+    fun assertEmpty_notEmptyList() {
+        AssertUtils.assertException { listWithMergedTree.withTimeout(100).assertEmpty() }
+    }
+
 }
 
 

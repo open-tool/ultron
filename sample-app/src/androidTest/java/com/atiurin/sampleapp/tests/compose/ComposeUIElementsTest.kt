@@ -4,11 +4,14 @@ import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performSemanticsAction
+import androidx.compose.ui.test.printToLog
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.dp
 import com.atiurin.sampleapp.activity.ActionsStatus
@@ -45,6 +48,7 @@ import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalTestApi::class)
 class ComposeUIElementsTest : BaseTest() {
     val page = ComposeElementsPage
 
