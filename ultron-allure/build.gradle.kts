@@ -13,7 +13,6 @@ android {
     namespace = "com.atiurin.ultron.allure"
     defaultConfig {
         minSdk = 21
-        targetSdk = 34
     }
 
     sourceSets {
@@ -30,12 +29,13 @@ android {
     }
 }
 dependencies {
-    implementation(project(":ultron"))
     implementation(Libs.kotlinStdlib)
+    api(project(":ultron-common"))
     api(Libs.allureAndroid)
     api(Libs.allureCommon)
     api(Libs.allureModel)
     api(Libs.allureJunit4)
+    api(Libs.espressoCore)
 }
 
 tasks {

@@ -20,11 +20,9 @@ import com.atiurin.ultron.custom.espresso.action.getText
 import com.atiurin.ultron.custom.espresso.assertion.hasAnyDrawable
 import com.atiurin.ultron.custom.espresso.assertion.hasDrawable
 import com.atiurin.ultron.extensions.*
-import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
 import org.junit.Test
-import kotlin.system.measureTimeMillis
 
 class ViewInteractionActionsTest : UiElementsTest() {
     val page = UiElementsPage

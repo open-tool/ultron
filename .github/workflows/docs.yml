@@ -1,0 +1,25 @@
+name: Build and deploy docs
+
+on:
+  push:
+    branches:
+      - kmp
+
+jobs:
+  github-pages:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install
+        working-directory: ./docs
+      - run: npm run build
+        working-directory: ./docs
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/build

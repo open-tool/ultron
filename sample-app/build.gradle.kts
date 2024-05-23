@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -25,10 +26,6 @@ android {
         jvmTarget = "17"
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
-    }
-
     packagingOptions {
         resources.excludes.add("META-INF/DEPENDENCIES")
         resources.excludes.add("META-INF/LICENSE")
@@ -44,7 +41,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":ultron"))
+    implementation(project(":ultron-android"))
     implementation(project(":ultron-compose"))
     implementation(project(":ultron-allure"))
     implementation(Libs.kotlinStdlib)

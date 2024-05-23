@@ -3,7 +3,6 @@ package com.atiurin.ultron.allure.config
 import android.os.Environment
 import androidx.test.platform.app.InstrumentationRegistry
 import com.atiurin.ultron.allure.attachment.AllureDirectoryUtil
-import com.atiurin.ultron.allure.attachment.AttachUtil
 import com.atiurin.ultron.allure.condition.AllureConditionExecutorWrapper
 import com.atiurin.ultron.allure.condition.AllureConditionsExecutor
 import com.atiurin.ultron.allure.getRunInformer
@@ -16,7 +15,8 @@ import com.atiurin.ultron.allure.runner.UltronAllureResultsTransferListener
 import com.atiurin.ultron.allure.runner.UltronLogAttachRunListener
 import com.atiurin.ultron.allure.runner.UltronLogCleanerRunListener
 import com.atiurin.ultron.allure.runner.WindowHierarchyAttachRunListener
-import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.core.config.UltronAndroidCommonConfig
+import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.extensions.simpleClassName
 import com.atiurin.ultron.listeners.AbstractListener
 import com.atiurin.ultron.log.UltronLog
@@ -27,11 +27,11 @@ object UltronAllureConfig {
     var params: AllureConfigParams = AllureConfigParams()
 
     fun setAllureConditionExecutor() {
-        UltronConfig.Conditions.conditionsExecutor = AllureConditionsExecutor()
+        UltronAndroidCommonConfig.Conditions.conditionsExecutor = AllureConditionsExecutor()
     }
 
     fun setAllureConditionsExecutorWrapper() {
-        UltronConfig.Conditions.conditionExecutorWrapper = AllureConditionExecutorWrapper()
+        UltronAndroidCommonConfig.Conditions.conditionExecutorWrapper = AllureConditionExecutorWrapper()
     }
 
     /**
@@ -71,14 +71,14 @@ object UltronAllureConfig {
 
     private fun modify() {
         if (params.detailedAllureReport) {
-            UltronConfig.addGlobalListener(DetailedOperationAllureListener())
+            UltronCommonConfig.addListener(DetailedOperationAllureListener())
         }
         if (!params.addScreenshotPolicy.contains(AllureAttachStrategy.NONE)) {
-            UltronConfig.addGlobalListener(ScreenshotAttachListener(params.addScreenshotPolicy))
+            UltronCommonConfig.addListener(ScreenshotAttachListener(params.addScreenshotPolicy))
             addRunListener(ScreenshotAttachRunListener(params.addScreenshotPolicy))
         }
         if (!params.addHierarchyPolicy.contains(AllureAttachStrategy.NONE)) {
-            UltronConfig.addGlobalListener(WindowHierarchyAttachListener(params.addHierarchyPolicy))
+            UltronCommonConfig.addListener(WindowHierarchyAttachListener(params.addHierarchyPolicy))
             addRunListener(WindowHierarchyAttachRunListener(params.addHierarchyPolicy))
         }
         if (params.addConditionsToReport) {
@@ -111,6 +111,6 @@ object UltronAllureConfig {
 
     fun <T : AbstractListener> removeRunListener(listenerClass: Class<T>) {
         UltronLog.info("Remove ${listenerClass.simpleClassName()} run listener")
-        InstrumentationRegistry.getInstrumentation().getRunInformer().removeListener(listenerClass)
+        InstrumentationRegistry.getInstrumentation().getRunInformer().removeListener(listenerClass.kotlin)
     }
 }

@@ -1,5 +1,5 @@
 object Versions {
-    const val kotlin = "1.8.0"
+    const val kotlin = "2.0.0"
     const val androidToolsBuildGradle = "8.3.1"
     const val androidMavenGradlePlugin = "2.1"
     const val publishPlugin = "0.13.0"

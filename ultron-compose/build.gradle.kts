@@ -1,27 +1,73 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
     id("com.vanniktech.maven.publish")
 }
 
-group = project.findProperty("GROUP")!!
-version =  project.findProperty("VERSION_NAME")!!
+kotlin {
+    jvm()
+    wasmJs()
+    js(IR) {}
+    androidTarget {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+        }
+    }
 
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = "shared"
+            isStatic = true
+        }
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            api(project(":ultron-common"))
+            implementation(kotlin("reflect"))
+            implementation(libs.kotlin.test)
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+            implementation(libs.atomicfu)
+        }
+        val androidMain by getting {
+            dependencies {
+                api(project(":ultron-common"))
+                implementation(Libs.androidXRunner)
+                api(Libs.composeUiTest)
+            }
+        }
+        val jvmMain by getting {
+            dependencies {
+                implementation(kotlin("stdlib-jdk8"))
+            }
+        }
+        val jsMain by getting {
+            dependencies {
+                implementation(kotlin("stdlib-js"))
+            }
+        }
+        val wasmJsMain by getting {
+            dependencies {
+                implementation(kotlin("stdlib"))
+            }
+        }
+    }
+}
 android {
     compileSdk = 34
     namespace = "com.atiurin.ultron.compose"
     defaultConfig {
         minSdk = 16
-        targetSdk = 34
         multiDexEnabled = true
-    }
-    sourceSets {
-        named("main").configure {
-            java.srcDir("src/main/java")
-        }
-        named("test").configure {
-            java.srcDir("src/test/java")
-        }
     }
     compileOptions {
         targetCompatibility = JavaVersion.VERSION_17
@@ -29,19 +75,7 @@ android {
     }
 }
 
-dependencies {
-    implementation(project(":ultron"))
-    implementation(Libs.kotlinStdlib)
-    implementation(Libs.androidXRunner)
-    api(Libs.composeUiTest)
-}
-
 tasks {
-    val sourcesJar by creating(Jar::class) {
-        archiveClassifier.set("sources")
-        from(tasks)
-    }
-
     val javadoc by creating(Javadoc::class) {
         options {
             this as StandardJavadocDocletOptions
@@ -51,13 +85,8 @@ tasks {
         }
     }
 
-    val javadocJar by creating(Jar::class){
+    val javadocJar by creating(Jar::class) {
         dependsOn(javadoc)
         from(javadoc.destinationDir)
-    }
-
-    artifacts {
-        add("archives", sourcesJar)
-        add("archives", javadocJar)
     }
 }
