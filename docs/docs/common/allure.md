@@ -161,4 +161,4 @@ You can attach artifact using 2 types of Ultron listeners:
 
 - [UltronRunListener](https://github.com/open-tool/ultron/blob/master/ultron/src/main/java/com/atiurin/ultron/runner/UltronRunListener.kt) which is inherited from [RunListener](https://github.com/open-tool/ultron/blob/master/ultron/src/main/java/com/atiurin/ultron/runner/RunListener.kt). This type can be used to add artifact in different test lifecycle state. Sample - [WindowHierarchyAttachRunListener.kt](https://github.com/open-tool/ultron/blob/master/ultron-allure/src/main/java/com/atiurin/ultron/allure/runner/WindowHierarchyAttachRunListener.kt)
 
-Refer to the [Listeners wiki page](../common/listeners.md) for details.
+Refer to the [Listeners doc page](../common/listeners.md) for details.

@@ -14,17 +14,17 @@ You don't need to learn any new classes or special syntax. All magic actions and
 
 ## What are the benefits of using the framework?
 
-- Exceptional support for [**Compose**](https://github.com/open-tool/ultron/wiki/Compose)
-- Out-of-the-box generation of [**Allure report**](https://github.com/open-tool/ultron/wiki/Allure) (Now, for Android UI tests only)
+- Exceptional support for [**Compose**](./compose/index.md)
+- Out-of-the-box generation of [**Allure report**](./common/allure.md) (Now, for Android UI tests only)
 - A straightforward and expressive syntax
 - Ensured **Stability** for all actions and assertions
 - Complete control over every action and assertion
-- Incredible interaction with [**RecyclerView**](https://github.com/open-tool/ultron/wiki/RecyclerView) and [**Compose lists**](https://github.com/open-tool/ultron/wiki/Compose#ultron-compose-lazycolumnlazyrow).
+- Incredible interaction with [**RecyclerView**](./android/recyclerview.md) and [**Compose lists**](./compose/lazylist.md).
 - An **Architectural** approach to developing UI tests
 - An incredible mechanism for setups and teardowns (You can even set up preconditions for a single test within a test class, without affecting the others)
-- [The ability to effortlessly extend the framework with your own operations](https://github.com/open-tool/ultron/wiki/Ultron-Extension)
+- [The ability to effortlessly extend the framework with your own operations](./common/extension.md)
 - Accelerated UI Automator operations
-- Ability to monitor each stage of operation execution with [Listeners](https://github.com/open-tool/ultron/wiki/Listeners)
+- Ability to monitor each stage of operation execution with [Listeners](./common/listeners.md)
 - [Custom operation assertions](https://github.com/open-tool/ultron/wiki/Custom-operation-assertions)
 
 ***
@@ -35,7 +35,7 @@ The standard syntax provided by Google is intricate and not intuitive. This is e
 
 Let's explore some examples:
 
-#### 1. Simple compose operation (refer to the wiki [here](https://github.com/open-tool/ultron/wiki/Compose#ultron-compose))
+#### 1. Simple compose operation (refer to the doc [here](./compose/index.md))
 
 _Compose framework_
 
@@ -50,7 +50,7 @@ hasTestTag("Continue").click()
 hasText("Welcome").assertIsDisplayed()
 ```
 
-#### 2. Compose list operation (refer to the wiki [here](https://github.com/open-tool/ultron/wiki/Compose#ultron-compose-lazycolumnlazyrow))
+#### 2. Compose list operation (refer to the [doc](./compose/lazylist.md))
 
 _Compose framework_
 
@@ -85,7 +85,7 @@ withId(R.id.send_button).isDisplayed().click()
 ```
 This presents a cleaner approach. Ultron's operation names mirror Espresso's, while also providing additional operations. 
 
-Refer to the [wiki](https://github.com/open-tool/ultron/wiki/Espresso-operations) for further details.
+Refer to the [doc](./android/espress.md) for further details.
 
 #### 4. Action on RecyclerView list item
 
@@ -109,7 +109,7 @@ withRecyclerView(R.id.recycler_friends)
     .click()
 ```
 
-Explore the [wiki](https://github.com/open-tool/ultron/wiki/RecyclerView) to unveil Ultron's magic with RecyclerView interactions.
+Explore the [doc](./android/espress.md) to unveil Ultron's magic with RecyclerView interactions.
 
 #### 5. Espresso WebView operations 
 
@@ -133,7 +133,7 @@ id("button1").webClick()
 id("title").hasText(newTitle)
 ```
 
-Refer to the [wiki](https://github.com/open-tool/ultron/wiki/WebView) for more details.
+Refer to the [doc](./android/webview.md) for more details.
 
 #### 6. UI Automator operations
 
@@ -151,7 +151,7 @@ _Ultron_
 ```kotlin
 byResId(R.id.button1).click() 
 ```
-Refer to the [wiki](https://github.com/open-tool/ultron/wiki/UI-Automator-operation) 
+Refer to the [doc](./android/uiautomator.md) 
 ***
 ### Acquiring the result of any operation as Boolean value
 
