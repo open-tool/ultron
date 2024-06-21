@@ -9,7 +9,7 @@ plugins {
 kotlin {
     jvm()
     wasmJs()
-    js(IR) {}
+//    js(IR) {}
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -50,16 +50,16 @@ kotlin {
                 implementation(kotlin("stdlib-jdk8"))
             }
         }
-        val jsMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib-js"))
-            }
-        }
-        val wasmJsMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib"))
-            }
-        }
+//        val jsMain by getting {
+//            dependencies {
+//                implementation(kotlin("stdlib-js"))
+//            }
+//        }
+//        val wasmJsMain by getting {
+//            dependencies {
+//                implementation(kotlin("stdlib"))
+//            }
+//        }
     }
 }
 android {

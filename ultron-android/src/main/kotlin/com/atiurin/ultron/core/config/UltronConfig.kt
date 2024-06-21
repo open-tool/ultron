@@ -22,14 +22,11 @@ import com.atiurin.ultron.core.common.OperationResultAnalyzer
 import com.atiurin.ultron.core.common.UltronDefaultOperationResultAnalyzer
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
-import com.atiurin.ultron.core.espresso.UltronEspressoOperationLifecycle
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
-import com.atiurin.ultron.core.espressoweb.UltronWebLifecycle
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
 import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
-import com.atiurin.ultron.core.uiautomator.UltronUiAutomatorLifecycle
 import com.atiurin.ultron.core.uiautomator.uiobject.UiAutomatorUiSelectorOperation
 import com.atiurin.ultron.exceptions.UltronAssertionException
 import com.atiurin.ultron.exceptions.UltronException
@@ -43,8 +40,6 @@ import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.log.getFileLogger
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionExecutorWrapper
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionsExecutor
-import com.atiurin.ultron.testlifecycle.setupteardown.DefaultConditionExecutorWrapper
-import com.atiurin.ultron.testlifecycle.setupteardown.DefaultConditionsExecutor
 import junit.framework.AssertionFailedError
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
@@ -293,12 +288,20 @@ object UltronConfig {
                 replaceWith = ReplaceWith("UltronAndroidCommonConfig.Conditions.conditionExecutorWrapper")
             )
             var conditionExecutorWrapper: ConditionExecutorWrapper = UltronAndroidCommonConfig.Conditions.conditionExecutorWrapper
+                set(value) {
+                    field = value
+                    UltronAndroidCommonConfig.Conditions.conditionExecutorWrapper = value
+                }
 
             @Deprecated(
                 message = "ConditionsExecutor moved to UltronAndroidCommonConfig.",
                 replaceWith = ReplaceWith("UltronAndroidCommonConfig.Conditions.conditionsExecutor")
             )
-            var conditionsExecutor: ConditionsExecutor =  UltronAndroidCommonConfig.Conditions.conditionsExecutor
+            var conditionsExecutor: ConditionsExecutor = UltronAndroidCommonConfig.Conditions.conditionsExecutor
+                set(value) {
+                    field = value
+                    UltronAndroidCommonConfig.Conditions.conditionsExecutor = value
+                }
         }
     }
 }

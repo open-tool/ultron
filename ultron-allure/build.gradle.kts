@@ -63,3 +63,16 @@ tasks {
         add("archives", javadocJar)
     }
 }
+
+tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
+    dokkaSourceSets.configureEach {
+        // Configure Dokka source sets here
+    }
+}
+afterEvaluate {
+    tasks.findByName("generateMetadataFileForMavenPublication")?.let { generateMetadataTask ->
+        tasks.findByName("androidSourcesJar")?.let { androidSourcesJarTask ->
+            generateMetadataTask.dependsOn(androidSourcesJarTask)
+        }
+    }
+}

@@ -92,7 +92,7 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
             }
         }
         val operationExceptions = exceptions.map { getWrapperException(it) }
-            .distinctBy { it.simpleClassName() + it.message }
+            .distinctBy { "${it.simpleClassName()} + ${it.message}" }
         descriptor.describeResult(description, isSuccess, execTime, operationExceptions)
         descriptor.decreaseLevel()
         descriptor.append(description, "------ End of operation '${operation.name}' ------")
@@ -126,7 +126,7 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
                     UltronAssertionBlockException(
                         """
                         |Exception in assertion block '${operation.assertion.name}' of operation '${operation.name}'. 
-                        |${"exception: ${originalException::class.qualifiedName}".prefixTab()}
+                        |${"exception: ${originalException::class.simpleName}".prefixTab()}
                         |${"message: ${originalException.message}".prefixTabForAllLines()}
                     """.trimMargin()
                     )

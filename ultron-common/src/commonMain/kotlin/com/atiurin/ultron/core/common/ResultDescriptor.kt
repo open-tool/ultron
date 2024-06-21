@@ -32,13 +32,13 @@ class ResultDescriptor {
                     if (exceptions.size > 1) {
                         """
                     |Errors were caught: 
-                    |${exceptions.map { "- '${it.javaClass.simpleName}', message: '${it.message}' cause: '${it.cause}'\n" }}
-                    |Last error is ${exceptions.last()::class.java.canonicalName}
+                    |${exceptions.map { "- '${it::class.simpleName}', message: '${it.message}' cause: '${it.cause}'\n" }}
+                    |Last error is ${exceptions.last()::class.simpleName}
                     |message: ${exceptions.last().message}
                     """.trimMargin()
                     } else {
                         """
-                    |exception: ${exceptions.last()::class.java.canonicalName} 
+                    |exception: ${exceptions.last()::class.simpleName} 
                     |message: ${exceptions.last().message}
                     """.trimMargin()
                     }
