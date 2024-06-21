@@ -75,7 +75,7 @@ object UltronConfig {
         Espresso.ASSERTION_TIMEOUT = params.operationTimeoutMs
         UltronCommonConfig.addListener(LogLifecycleListener())
         if (params.logToFile) {
-            UltronLog.addLogger(getFileLogger())
+            UltronLog.addLogger(UltronLog.fileLogger)
         } else {
             UltronLog.removeLogger(UltronLog.fileLogger.id)
         }

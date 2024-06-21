@@ -64,8 +64,9 @@ const config: Config = {
         },
         {
           href: 'https://github.com/open-tool/ultron',
-          label: 'GitHub',
           position: 'right',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
         },
         {
           type: 'search',
@@ -86,10 +87,10 @@ const config: Config = {
           contextualSearch: true,
 
           // Optional: Replace parts of the item URLs from Algolia. Useful when using the same search index for multiple deployments using a different baseUrl. You can use regexp or string in the `from` param. For example: localhost:3000 vs myCompany.com/docs
-          replaceSearchResultPathname: {
-            from: '/docs/', // or as RegExp: /\/docs\//
-            to: '/',
-          },
+//           replaceSearchResultPathname: {
+//             from: '/docs/', // or as RegExp: /\/docs\//
+//             to: '/',
+//           },
 
           // Optional: Algolia search parameters
           searchParameters: {},
