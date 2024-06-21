@@ -13,6 +13,8 @@ Ultron can be easially customised and extended. Wish you exclusively stable test
 <img src="https://user-images.githubusercontent.com/12834123/252498170-61e5a440-c2b5-42ea-8bfb-91ee12248422.png#gh-dark-mode-only" width=600>
 </p>
 
+## [Documentation](https://open-tool.github.io/ultron/) | [Releases](https://github.com/open-tool/ultron/releases)
+
 ## What are the benefits of using the framework?
 
 - Exceptional support for [**Compose**](https://github.com/open-tool/ultron/wiki/Compose)
@@ -247,21 +249,11 @@ For the complete guide, refer to the [wiki](https://github.com/open-tool/ultron/
 fun setConfig() {
     UltronConfig.applyRecommended()
     UltronAllureConfig.applyRecommended()
+    UltronComposeConfig.applyRecommended()
 }
 ```
 ![allure](https://github.com/open-tool/ultron/assets/12834123/c05c813a-ece6-45e6-a04f-e1c92b82ffb1)
 
-for Compose add 4 lines more
-```kotlin
-@BeforeClass @JvmStatic
-fun setConfig() {
-    ...
-    UltronComposeConfig.applyRecommended() 
-    UltronComposeConfig.addListener(ScreenshotAttachListener())
-    UltronComposeConfig.addListener(WindowHierarchyAttachListener())
-    UltronComposeConfig.addListener(DetailedOperationAllureListener())
-}
-```
 ![allure compose](https://github.com/open-tool/ultron/assets/12834123/1f751f3d-fc58-4874-a850-acd9181bfb70)
 
 
@@ -274,7 +266,7 @@ repositories {
 }
 
 dependencies {
-    androidTestImplementation 'com.atiurin:ultron:<latest_version>'
+    androidTestImplementation 'com.atiurin:ultron-android:<latest_version>'
     androidTestImplementation 'com.atiurin:ultron-allure:<latest_version>'
     androidTestImplementation 'com.atiurin:ultron-compose:<latest_version>'
 }
@@ -284,8 +276,3 @@ Please, read [gradle dependencies management](https://github.com/open-tool/ultro
 ## AndroidX
 
 It is required to use AndroidX libraries. You can get some problems with Android Support ones.
-
-## Roadmap
-
-- https://github.com/open-tool/ultron/issues/50 Meta information for UI elements
-- https://github.com/open-tool/ultron/issues/33 Screenshot testign ?

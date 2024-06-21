@@ -42,7 +42,6 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
       title: 'Ultron',
@@ -58,66 +57,38 @@ const config: Config = {
           label: 'Docs',
         },
         {
-          type: 'search',
-          position: 'right',
-        },
-        {
           label: 'Telegram',
           href: 'https://t.me/ultron_framework',
           position: 'right',
         },
         {
           href: 'https://github.com/open-tool/ultron',
-          label: 'GitHub',
+          position: 'right',
+          className: 'header-github-link',
+          'aria-label': 'GitHub repository',
+        },
+        {
+          type: 'search',
           position: 'right',
         },
       ],
     },
-    // footer: {
-    //   style: 'dark',
-    //   links: [
-    //     {
-    //       title: 'Docs',
-    //       items: [
-    //         {
-    //           label: 'Tutorial',
-    //           to: '/docs/intro',
-    //         },
-    //       ],
-    //     },
-    //     {
-    //       title: 'Community',
-    //       items: [
-    //         {
-    //           label: 'Telegram',
-    //           href: 'https://t.me/ultron_framework',
-    //         }
-    //       ],
-    //     },
-    //     {
-    //       title: 'More',
-    //       items: [
-    //         {
-    //           label: 'Blog',
-    //           to: '/blog',
-    //         },
-    //         {
-    //           label: 'GitHub',
-    //           href: 'https://github.com/open-tool/ultron',
-    //         },
-    //       ],
-    //     },
-    //   ],
-    //   copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
-    // },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
     },
-    // https://docusaurus.io/blog/2021/11/21/algolia-docsearch-migration#docsearch-has-a-new-home
-    // algolia: {
-    //   contextualSearch: true,
-    // },
+    algolia: {
+          appId: 'TLB3E9OO68',
+          apiKey: '06f26f943a74848657b1e5bec4c85aaf',
+          indexName: 'open-toolio',
+          contextualSearch: true,
+          searchParameters: {},
+          insights: false,
+        },
+    prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
+    },
   } satisfies Preset.ThemeConfig,
 
   plugins: [

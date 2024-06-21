@@ -160,7 +160,7 @@ object ComposeListPage : Page<ComposeListPage>() {
 
 ## `UltronComposeListItem` API
 
-It's pretty much the same as [simple node api](https://github.com/open-tool/ultron/wiki/Compose#ultron--compose-api), but extends it mostly for internal features.
+It's pretty much the same as [simple node api](../compose/api.md), but extends it mostly for internal features.
 
 ***
 ## Efficient Strategies for Locating Items in Compose LazyList

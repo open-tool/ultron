@@ -3,29 +3,22 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-    id("com.vanniktech.maven.publish")
+    id("org.jetbrains.dokka")
+    id("maven-publish")
+    id("signing")
 }
+
+group = project.findProperty("GROUP")!!
+version = project.findProperty("VERSION_NAME")!!
 
 kotlin {
     jvm()
-    wasmJs()
-    js(IR) {}
     androidTarget {
+        publishLibraryVariants("release")
         compilations.all {
             kotlinOptions {
                 jvmTarget = "17"
             }
-        }
-    }
-
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
-            isStatic = true
         }
     }
 
@@ -47,21 +40,13 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
+                implementation(project(":ultron-common"))
                 implementation(kotlin("stdlib-jdk8"))
-            }
-        }
-        val jsMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib-js"))
-            }
-        }
-        val wasmJsMain by getting {
-            dependencies {
-                implementation(kotlin("stdlib"))
             }
         }
     }
 }
+
 android {
     compileSdk = 34
     namespace = "com.atiurin.ultron.compose"
@@ -75,18 +60,76 @@ android {
     }
 }
 
-tasks {
-    val javadoc by creating(Javadoc::class) {
-        options {
-            this as StandardJavadocDocletOptions
-            addStringOption("Xdoclint:none", "-quiet")
-            addStringOption("Xmaxwarns", "1")
-            addStringOption("charSet", "UTF-8")
+val dokkaOutputDir = buildDir.resolve("dokka")
+tasks.dokkaHtml { outputDirectory.set(file(dokkaOutputDir)) }
+val deleteDokkaOutputDir by tasks.register<Delete>("deleteDokkaOutputDirectory") { delete(dokkaOutputDir) }
+
+val ultronComposeJavadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn(deleteDokkaOutputDir, tasks.dokkaHtml)
+    from(dokkaOutputDir)
+}
+
+publishing {
+    publications {
+        publications.withType<MavenPublication> {
+            artifact(ultronComposeJavadocJar)
+
+            pom {
+                name.set("Ultron Compose")
+                description.set("Android & Compose Multiplatform UI testing framework")
+                url.set("https://github.com/open-tool/ultron")
+                inceptionYear.set("2021")
+
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+
+                issueManagement {
+                    system.set("GitHub Issues")
+                    url.set("https://github.com/open-tool/ultron/issues")
+                }
+
+                developers {
+                    developer {
+                        id.set("alex-tiurin")
+                        name.set("Aleksei Tiurin")
+                        url.set("https://github.com/open-tool")
+                    }
+                }
+
+                scm {
+                    connection.set("scm:git@github.com:open-tool/ultron.git")
+                    developerConnection.set("scm:git@github.com:open-tool/ultron.git")
+                    url.set("https://github.com/open-tool/ultron")
+                }
+            }
         }
     }
+}
 
-    val javadocJar by creating(Jar::class) {
-        dependsOn(javadoc)
-        from(javadoc.destinationDir)
-    }
+tasks.withType<PublishToMavenRepository>().configureEach {
+    dependsOn(tasks.withType<Sign>())
+    dependsOn(ultronComposeJavadocJar)
+    dependsOn(tasks.withType<Jar>())
+    mustRunAfter(tasks.withType<Sign>())
+}
+
+tasks.withType<PublishToMavenLocal>().configureEach {
+    dependsOn("signJvmPublication")
+    dependsOn("signKotlinMultiplatformPublication")
+    dependsOn("signAndroidReleasePublication")
+    mustRunAfter("signJvmPublication")
+    mustRunAfter("signKotlinMultiplatformPublication")
+    mustRunAfter("signAndroidReleasePublication")
+}
+
+signing {
+    println("Signing lib...")
+    useGpgCmd()
+    sign(publishing.publications)
 }

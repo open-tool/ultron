@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  run_tests_on_api_29:
+  compileKotlin:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v4
@@ -17,4 +17,4 @@ jobs:
         java-version: '17'
 
     - name: Compile framework
-      run: ./gradlew :ultron:compileDebugKotlin
+      run: ./gradlew compileDebugKotlin
