@@ -8,8 +8,6 @@ plugins {
 
 kotlin {
     jvm()
-    wasmJs()
-//    js(IR) {}
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -17,17 +15,18 @@ kotlin {
             }
         }
     }
-
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
-            baseName = "shared"
-            isStatic = true
-        }
-    }
+//    wasmJs()
+//    js(IR) {}
+//    listOf(
+//        iosX64(),
+//        iosArm64(),
+//        iosSimulatorArm64()
+//    ).forEach {
+//        it.binaries.framework {
+//            baseName = "shared"
+//            isStatic = true
+//        }
+//    }
 
     sourceSets {
         commonMain.dependencies {

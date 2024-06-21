@@ -58,10 +58,6 @@ const config: Config = {
           label: 'Docs',
         },
         {
-          type: 'search',
-          position: 'right',
-        },
-        {
           label: 'Telegram',
           href: 'https://t.me/ultron_framework',
           position: 'right',
@@ -71,8 +67,36 @@ const config: Config = {
           label: 'GitHub',
           position: 'right',
         },
+        {
+          type: 'search',
+          position: 'right',
+        },
       ],
     },
+    algolia: {
+          // The application ID provided by Algolia
+          appId: 'TLB3E9OO68',
+
+          // Public API key: it is safe to commit it
+          apiKey: '06f26f943a74848657b1e5bec4c85aaf',
+
+          indexName: 'open-toolio',
+
+          // Optional: see doc section below
+          contextualSearch: true,
+
+          // Optional: Replace parts of the item URLs from Algolia. Useful when using the same search index for multiple deployments using a different baseUrl. You can use regexp or string in the `from` param. For example: localhost:3000 vs myCompany.com/docs
+          replaceSearchResultPathname: {
+            from: '/docs/', // or as RegExp: /\/docs\//
+            to: '/',
+          },
+
+          // Optional: Algolia search parameters
+          searchParameters: {},
+
+          // Optional: whether the insights feature is enabled or not on Docsearch (`false` by default)
+          insights: false,
+        },
     // footer: {
     //   style: 'dark',
     //   links: [
