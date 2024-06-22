@@ -2,7 +2,7 @@ object Versions {
     const val kotlin = "2.0.0"
     const val androidToolsBuildGradle = "8.3.1"
     const val androidMavenGradlePlugin = "2.1"
-    const val publishPlugin = "0.13.0"
+    const val publishPlugin = "0.29.0"
     const val dokkaPlugin = "1.9.20"
 
     const val recyclerView = "1.2.1"
