@@ -5,7 +5,9 @@ import androidx.compose.ui.input.key.KeyEvent
 import androidx.compose.ui.semantics.AccessibilityAction
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.SemanticsNode
+import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.MouseInjectionScope
 import androidx.compose.ui.test.SemanticsMatcher
@@ -190,3 +192,9 @@ fun SemanticsMatcher.assertWidthIsEqualTo(expectedWidth: Dp) = UltronComposeSema
 
 fun SemanticsMatcher.assertMatches(matcher: SemanticsMatcher, messagePrefixOnError: (() -> String)? = null) =
     UltronComposeSemanticsNodeInteraction(this).assertMatches(matcher, messagePrefixOnError)
+
+fun SemanticsMatcher.assertIsIndeterminate() = UltronComposeSemanticsNodeInteraction(this).assertIsIndeterminate()
+
+fun isIndeterminate(): SemanticsMatcher = SemanticsMatcher.expectValue(
+    SemanticsProperties.ToggleableState, ToggleableState.Indeterminate
+)

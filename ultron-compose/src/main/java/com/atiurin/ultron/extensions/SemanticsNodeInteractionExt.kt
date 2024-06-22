@@ -7,6 +7,7 @@ import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.test.SemanticsSelector
 import androidx.compose.ui.test.TestContext
+import androidx.compose.ui.test.assert
 import com.atiurin.ultron.exceptions.UltronException
 
 fun SemanticsNodeInteraction.getDescription() = this.getProperty<SemanticsSelector>("selector")?.description
@@ -63,3 +64,5 @@ fun SemanticsNodeInteraction.findNodeInTree(
     )
 }
 
+fun SemanticsNodeInteraction.assertIsIndeterminate(): SemanticsNodeInteraction =
+    assert(isIndeterminate())
