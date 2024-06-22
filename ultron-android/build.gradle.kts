@@ -1,7 +1,9 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
-    id("com.vanniktech.maven.publish")
+    id("org.jetbrains.dokka")
+    id("maven-publish")
+    id("signing")
 }
 
 group = project.findProperty("GROUP")!!
@@ -34,28 +36,68 @@ dependencies {
     api(Libs.hamcrestCore)
 }
 
-tasks {
-    val sourcesJar by creating(Jar::class) {
-        archiveClassifier.set("sources")
-        from(tasks)
-    }
+val dokkaOutputDir = buildDir.resolve("dokka")
+tasks.dokkaHtml { outputDirectory.set(file(dokkaOutputDir)) }
+val deleteDokkaOutputDir by tasks.register<Delete>("deleteDokkaOutputDirectory") { delete(dokkaOutputDir) }
+val javadocJar = tasks.create<Jar>("javadocJar") {
+    archiveClassifier.set("javadoc")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn(deleteDokkaOutputDir, tasks.dokkaHtml)
+    from(dokkaOutputDir)
+}
 
-    val javadoc by creating(Javadoc::class) {
-        options {
-            this as StandardJavadocDocletOptions
-            addStringOption("Xdoclint:none", "-quiet")
-            addStringOption("Xmaxwarns", "1")
-            addStringOption("charSet", "UTF-8")
+val sourcesJar = tasks.create<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(android.sourceSets["main"].java.srcDirs)
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            artifact(javadocJar)
+            artifact(sourcesJar) // добавление sourcesJar в публикацию
+
+            pom {
+                name.set("ultron-android")
+                description.set("Android & Compose Multiplatform UI testing framework")
+                url.set("https://github.com/open-tool/ultron")
+                packaging = "aar"
+                inceptionYear.set("2021")
+
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+
+                issueManagement {
+                    system.set("GitHub Issues")
+                    url.set("https://github.com/open-tool/ultron/issues")
+                }
+
+                developers {
+                    developer {
+                        id.set("alex-tiurin")
+                        name.set("Aleksei Tiurin")
+                        url.set("https://github.com/open-tool")
+                    }
+                }
+
+                scm {
+                    connection.set("scm:git@github.com:open-tool/ultron.git")
+                    developerConnection.set("scm:git@github.com:open-tool/ultron.git")
+                    url.set("https://github.com/open-tool/ultron")
+                }
+            }
         }
     }
+}
 
-    val javadocJar by creating(Jar::class){
-        dependsOn(javadoc)
-        from(javadoc.destinationDir)
-    }
-
-    artifacts {
-        add("archives", sourcesJar)
-        add("archives", javadocJar)
+signing {
+    if (project.hasProperty("signing.gnupg.keyName")) {
+        println("Signing lib...")
+        useGpgCmd()
+        sign(publishing.publications)
     }
 }

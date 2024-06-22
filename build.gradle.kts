@@ -9,6 +9,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
     }
     dependencies {
         classpath(Plugins.kotlinGradle)
@@ -33,29 +34,21 @@ plugins {
 nexusPublishing {
     repositories {
         sonatype {
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"))
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
             snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
             username.set(getLocalProperty("sonatype.username") ?: System.getenv("OSSRH_USERNAME"))
             password.set(getLocalProperty("sonatype.password") ?: System.getenv("OSSRH_PASSWORD"))
+            stagingProfileId.set(getLocalProperty("sonatype.stagingProfileId") ?: System.getenv("OSSRH_STAGING_PROFILE_ID"))
         }
     }
 }
-//nexusPublishing {
-//    repositories {
-//        sonatype {
-//            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-//            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
-//            username.set(gradleLocalProperties(rootDir).getProperty("sonatype.username") ?: System.getenv("OSSRH_USERNAME"))
-//            password.set(gradleLocalProperties(rootDir).getProperty("sonatype.password") ?: System.getenv("OSSRH_PASSWORD"))
-//            stagingProfileId.set(gradleLocalProperties(rootDir).getProperty("sonatype.stagingProfileId") ?: System.getenv("OSSRH_STAGING_PROFILE_ID"))
-//        }
-//    }
-//}
+
 
 allprojects {
     repositories {
         google()
         mavenCentral()
+        mavenLocal()
         gradlePluginPortal()
     }
 }

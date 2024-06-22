@@ -41,9 +41,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":ultron-android"))
-    implementation(project(":ultron-compose"))
-    implementation(project(":ultron-allure"))
+    implementation("com.atiurin:ultron-android:2.5.0-alpha01")
+    implementation("com.atiurin:ultron-compose:2.5.0-alpha01")
+    implementation("com.atiurin:ultron-allure:2.5.0-alpha01")
     implementation(Libs.kotlinStdlib)
     implementation(Libs.coroutines)
     implementation(Libs.appcompat)

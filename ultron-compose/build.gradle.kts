@@ -167,3 +167,11 @@ publishing {
 tasks.withType<PublishToMavenRepository>().configureEach {
     dependsOn(ultronComposeJavadocJar, ultronComposeAndroidSourcesJar, ultronComposeJvmSourcesJar)
 }
+
+signing {
+    if (project.hasProperty("signing.gnupg.keyName")) {
+        println("Signing lib...")
+        useGpgCmd()
+        sign(publishing.publications)
+    }
+}
