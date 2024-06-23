@@ -40,6 +40,7 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
+                implementation(project(":ultron-common"))
                 implementation(kotlin("stdlib-jdk8"))
             }
         }
@@ -72,12 +73,11 @@ val ultronComposeJavadocJar by tasks.registering(Jar::class) {
 
 publishing {
     publications {
-        create<MavenPublication>("multiplatform") {
-            from(components["kotlin"])
+        publications.withType<MavenPublication> {
             artifact(ultronComposeJavadocJar)
 
             pom {
-                name.set("ultron-compose")
+                name.set("Ultron Compose")
                 description.set("Android & Compose Multiplatform UI testing framework")
                 url.set("https://github.com/open-tool/ultron")
                 inceptionYear.set("2021")

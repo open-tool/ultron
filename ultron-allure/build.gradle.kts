@@ -11,8 +11,8 @@ version =  project.findProperty("VERSION_NAME")!!
 
 
 android {
-    compileSdk = 34
     namespace = "com.atiurin.ultron.allure"
+    compileSdk = 34
     defaultConfig {
         minSdk = 21
     }
@@ -29,6 +29,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
         sourceCompatibility = JavaVersion.VERSION_17
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 dependencies {
     implementation(Libs.kotlinStdlib)
@@ -43,29 +49,25 @@ dependencies {
 val dokkaOutputDir = buildDir.resolve("dokka")
 tasks.dokkaHtml { outputDirectory.set(file(dokkaOutputDir)) }
 val deleteDokkaOutputDir by tasks.register<Delete>("deleteDokkaOutputDirectory") { delete(dokkaOutputDir) }
-val javadocJar = tasks.create<Jar>("javadocJar") {
+val javadocJar = tasks.register<Jar>("javadocJar") {
     archiveClassifier.set("javadoc")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     dependsOn(deleteDokkaOutputDir, tasks.dokkaHtml)
     from(dokkaOutputDir)
 }
 
-val sourcesJar = tasks.create<Jar>("sourcesJar") {
-    archiveClassifier.set("sources")
-    from(android.sourceSets["main"].java.srcDirs)
-}
-
 publishing {
     publications {
-        create<MavenPublication>("mavenKotlin") {
-            artifact(javadocJar)
-            artifact(sourcesJar)
+        create<MavenPublication>("release") {
+            artifact(javadocJar.get())
+            afterEvaluate {
+                from(components["release"])
+            }
 
             pom {
-                name.set("ultron-allure")
+                name.set("Ultron Allure")
                 description.set("Android & Compose Multiplatform UI testing framework")
                 url.set("https://github.com/open-tool/ultron")
-                packaging = "aar"
                 inceptionYear.set("2021")
 
                 licenses {
@@ -96,6 +98,16 @@ publishing {
             }
         }
     }
+}
+
+tasks.withType<PublishToMavenRepository>().configureEach {
+    dependsOn(tasks.withType<Sign>())
+    dependsOn(javadocJar)
+    mustRunAfter(tasks.withType<Sign>())
+}
+
+tasks.named("generateMetadataFileForReleasePublication") {
+    dependsOn(javadocJar)
 }
 
 signing {

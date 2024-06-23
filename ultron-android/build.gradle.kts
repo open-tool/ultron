@@ -1,5 +1,3 @@
-import org.jetbrains.compose.internal.utils.getLocalProperty
-
 plugins {
     id("com.android.library")
     id("kotlin-android")
@@ -9,7 +7,7 @@ plugins {
 }
 
 group = project.findProperty("GROUP")!!
-version =  project.findProperty("VERSION_NAME")!!
+version = project.findProperty("VERSION_NAME")!!
 
 android {
     namespace = "com.atiurin.ultron.android"
@@ -23,6 +21,12 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
     }
 }
 
@@ -39,31 +43,33 @@ dependencies {
 }
 
 val dokkaOutputDir = buildDir.resolve("dokka")
-tasks.dokkaHtml { outputDirectory.set(file(dokkaOutputDir)) }
-val deleteDokkaOutputDir by tasks.register<Delete>("deleteDokkaOutputDirectory") { delete(dokkaOutputDir) }
-val javadocJar = tasks.create<Jar>("javadocJar") {
+
+tasks.dokkaHtml.configure { outputDirectory.set(file(dokkaOutputDir)) }
+
+val deleteDokkaOutputDir by tasks.register<Delete>("deleteDokkaOutputDirectory") {
+    delete(dokkaOutputDir)
+}
+
+val javadocJar = tasks.register<Jar>("javadocJar") {
     archiveClassifier.set("javadoc")
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     dependsOn(deleteDokkaOutputDir, tasks.dokkaHtml)
     from(dokkaOutputDir)
 }
 
-val sourcesJar = tasks.create<Jar>("sourcesJar") {
-    archiveClassifier.set("sources")
-    from(android.sourceSets["main"].java.srcDirs)
-}
-
 publishing {
     publications {
-        create<MavenPublication>("mavenKotlin") {
-            artifact(javadocJar)
-            artifact(sourcesJar)
-
+        create<MavenPublication>("release") {
+            println("Start publishing _-------------")
+            println(this.name)
+            artifact(javadocJar.get())
+            afterEvaluate {
+                from(components["release"])
+            }
             pom {
-                name.set("ultron-android")
+                name.set("Ultron Android")
                 description.set("Android & Compose Multiplatform UI testing framework")
                 url.set("https://github.com/open-tool/ultron")
-                packaging = "aar"
                 inceptionYear.set("2021")
 
                 licenses {
@@ -94,6 +100,16 @@ publishing {
             }
         }
     }
+}
+
+tasks.withType<PublishToMavenRepository>().configureEach {
+    dependsOn(tasks.withType<Sign>())
+    dependsOn(javadocJar)
+    mustRunAfter(tasks.withType<Sign>())
+}
+
+tasks.named("generateMetadataFileForReleasePublication") {
+    dependsOn(javadocJar)
 }
 
 signing {
