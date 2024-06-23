@@ -1,3 +1,5 @@
+import org.jetbrains.compose.internal.utils.getLocalProperty
+
 plugins {
     id("com.android.library")
     id("kotlin-android")
@@ -53,9 +55,9 @@ val sourcesJar = tasks.create<Jar>("sourcesJar") {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        create<MavenPublication>("mavenKotlin") {
             artifact(javadocJar)
-            artifact(sourcesJar) // добавление sourcesJar в публикацию
+            artifact(sourcesJar)
 
             pom {
                 name.set("ultron-android")
@@ -95,9 +97,7 @@ publishing {
 }
 
 signing {
-    if (project.hasProperty("signing.gnupg.keyName")) {
-        println("Signing lib...")
-        useGpgCmd()
-        sign(publishing.publications)
-    }
+    println("Signing lib...")
+    useGpgCmd()
+    sign(publishing.publications)
 }

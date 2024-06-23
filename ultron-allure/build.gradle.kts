@@ -50,7 +50,6 @@ val javadocJar = tasks.create<Jar>("javadocJar") {
     from(dokkaOutputDir)
 }
 
-// Создание другого arтефакта, например sourcesJar, если он нужен
 val sourcesJar = tasks.create<Jar>("sourcesJar") {
     archiveClassifier.set("sources")
     from(android.sourceSets["main"].java.srcDirs)
@@ -58,9 +57,9 @@ val sourcesJar = tasks.create<Jar>("sourcesJar") {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        create<MavenPublication>("mavenKotlin") {
             artifact(javadocJar)
-            artifact(sourcesJar) // добавление sourcesJar в публикацию
+            artifact(sourcesJar)
 
             pom {
                 name.set("ultron-allure")
@@ -100,26 +99,7 @@ publishing {
 }
 
 signing {
-    if (project.hasProperty("signing.gnupg.keyName")) {
-        println("Signing lib...")
-        useGpgCmd()
-        sign(publishing.publications)
-    }
+    println("Signing lib...")
+    useGpgCmd()
+    sign(publishing.publications)
 }
-
-//afterEvaluate {
-//    tasks.findByName("generateMetadataFileForMavenPublication")?.let { generateMetadataTask ->
-//        tasks.findByName("androidSourcesJar")?.let { androidSourcesJarTask ->
-//            generateMetadataTask.dependsOn(androidSourcesJarTask)
-//        }
-//    }
-//}
-//afterEvaluate {
-//    configure<PublishingExtension> {
-//        publications.all {
-//            val mavenPublication = this as? MavenPublication
-//            mavenPublication?.artifactId =
-//                "${project.name}${"-$name".takeUnless { "kotlinMultiplatform" in name }.orEmpty()}"
-//        }
-//    }
-//}

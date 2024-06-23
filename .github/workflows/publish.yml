@@ -18,11 +18,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - target: ":ultron-compose:publishJvmJavaPublicationToSonatypeRepository"
+          - target: :ultron-compose:publishMultiplatformPublicationToSonatypeRepository
             os: ubuntu-latest
-          - target: ":ultron-compose:publishAndroidReleasePublicationToSonatypeRepository"
+          - target: :ultron-android:publishMavenKotlinPublicationToSonatypeRepository
             os: ubuntu-latest
-          - target: ":ultron-compose:publishKotlinMultiplatformPublicationToSonatypeRepository"
+          - target: :ultron-compose:publishMavenKotlinPublicationToSonatypeRepository
             os: ubuntu-latest
     runs-on: ${{ matrix.os }}
 

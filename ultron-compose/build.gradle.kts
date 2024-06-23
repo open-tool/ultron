@@ -70,26 +70,14 @@ val ultronComposeJavadocJar by tasks.registering(Jar::class) {
     from(dokkaOutputDir)
 }
 
-val ultronComposeAndroidSourcesJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("android-sources")
-    from(android.sourceSets["main"].java.srcDirs)
-}
-
-val ultronComposeJvmSourcesJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("jvm-sources")
-    from(kotlin.sourceSets["jvmMain"].kotlin.srcDirs)
-    dependsOn("generateResourceAccessorsForJvmMain")
-}
-
 publishing {
     publications {
-        create<MavenPublication>("android") {
+        create<MavenPublication>("multiplatform") {
             from(components["kotlin"])
             artifact(ultronComposeJavadocJar)
-            artifact(ultronComposeAndroidSourcesJar)
 
             pom {
-                name.set("ultron-compose-android")
+                name.set("ultron-compose")
                 description.set("Android & Compose Multiplatform UI testing framework")
                 url.set("https://github.com/open-tool/ultron")
                 inceptionYear.set("2021")
@@ -121,57 +109,18 @@ publishing {
                 }
             }
         }
-
-        create<MavenPublication>("jvmJava") {
-            from(components["kotlin"])
-            artifact(ultronComposeJavadocJar)
-            artifact(ultronComposeJvmSourcesJar)
-
-            pom {
-                name.set("ultron-compose-jvm")
-                description.set("Compose Multiplatform UI testing framework for JVM")
-                url.set("https://github.com/open-tool/ultron")
-                inceptionYear.set("2021")
-
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-
-                issueManagement {
-                    system.set("GitHub Issues")
-                    url.set("https://github.com/open-tool/ultron/issues")
-                }
-
-                developers {
-                    developer {
-                        id.set("alex-tiurin")
-                        name.set("Aleksei Tiurin")
-                        url.set("https://github.com/open-tool")
-                    }
-                }
-
-                scm {
-                    connection.set("scm:git@github.com:open-tool/ultron.git")
-                    developerConnection.set("scm:git@github.com:open-tool/ultron.git")
-                    url.set("https://github.com/open-tool/ultron")
-                }
-            }
-        }
     }
 }
 
-// Указание зависимостей для задач публикации
 tasks.withType<PublishToMavenRepository>().configureEach {
-    dependsOn(ultronComposeJavadocJar, ultronComposeAndroidSourcesJar, ultronComposeJvmSourcesJar)
+    dependsOn(tasks.withType<Sign>())
+    dependsOn(ultronComposeJavadocJar)
+    dependsOn(tasks.withType<Jar>())
+    mustRunAfter(tasks.withType<Sign>())
 }
 
 signing {
-    if (project.hasProperty("signing.gnupg.keyName")) {
-        println("Signing lib...")
-        useGpgCmd()
-        sign(publishing.publications)
-    }
+    println("Signing lib...")
+    useGpgCmd()
+    sign(publishing.publications)
 }

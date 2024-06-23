@@ -34,10 +34,11 @@ plugins {
 nexusPublishing {
     repositories {
         sonatype {
+            username
             nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
             snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
-            username.set(getLocalProperty("sonatype.username") ?: System.getenv("OSSRH_USERNAME"))
-            password.set(getLocalProperty("sonatype.password") ?: System.getenv("OSSRH_PASSWORD"))
+            username.set(getLocalProperty("ossrhToken") ?: System.getenv("OSSRH_USERNAME"))
+            password.set(getLocalProperty("ossrhTokenPassword") ?: System.getenv("OSSRH_PASSWORD"))
             stagingProfileId.set(getLocalProperty("sonatype.stagingProfileId") ?: System.getenv("OSSRH_STAGING_PROFILE_ID"))
         }
     }
