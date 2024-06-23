@@ -53,11 +53,7 @@ jobs:
           passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
 
       - name: Gradle publish
-        uses: gradle/gradle-build-action@v3
-        with:
-          arguments: |
-            "${{ matrix.target }}"
-            closeAndReleaseSonatypeStagingRepository
+        run: ./gradlew "${{ matrix.target }}" closeAndReleaseSonatypeStagingRepository
             -Psigning.gnupg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
             -Psigning.gnupg.keyName=${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
             -PsonatypeUsername=${{ secrets.OSSRH_USERNAME }}
