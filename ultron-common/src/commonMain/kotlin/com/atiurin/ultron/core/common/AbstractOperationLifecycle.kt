@@ -22,18 +22,18 @@ abstract class AbstractOperationLifecycle : AbstractListenersContainer<UltronLif
         executor: OperationExecutor<Op, OpRes>,
         resultHandler: (OpRes) -> Unit = {}
     ): OpRes {
-        val listeners = getListeners()
+        val lifecycleListeners = getListeners() + UltronCommonConfig.getListeners()
         val isListen = executor.operation.type !in UltronCommonConfig.operationsExcludedFromListeners
                 && UltronCommonConfig.isListenersOn
-        if (isListen) listeners.forEach { it.before(executor.operation) }
+        if (isListen) lifecycleListeners.forEach { it.before(executor.operation) }
         val operationResult = operationProcessor.process(executor)
         if (isListen) {
             if (operationResult.success) {
-                listeners.forEach { it.afterSuccess(operationResult as OperationResult<Operation>) }
+                lifecycleListeners.forEach { it.afterSuccess(operationResult as OperationResult<Operation>) }
             } else {
-                listeners.forEach { it.afterFailure(operationResult as OperationResult<Operation>) }
+                lifecycleListeners.forEach { it.afterFailure(operationResult as OperationResult<Operation>) }
             }
-            listeners.forEach { it.after(operationResult as OperationResult<Operation>) }
+            lifecycleListeners.forEach { it.after(operationResult as OperationResult<Operation>) }
         }
         resultHandler(operationResult)
         return operationResult

@@ -11,9 +11,11 @@ on:
 jobs:
   publish:
     env:
-      OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+      OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
       OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
       OSSRH_STAGING_PROFILE_ID: ${{ secrets.OSSRH_STAGING_PROFILE_ID }}
+      OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+      OSSRH_GPG_SECRET_KEY_ID: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
 
     strategy:
       matrix:
@@ -56,8 +58,3 @@ jobs:
 
       - name: Gradle publish
         run: ./gradlew "${{ matrix.target }}" closeAndReleaseSonatypeStagingRepository
-            -Psigning.gnupg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-            -Psigning.gnupg.keyName=${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
-            -PsonatypeUsername=${{ secrets.OSSRH_USERNAME }}
-            -PsonatypePassword=${{ secrets.OSSRH_PASSWORD }}
-            -PsonatypeStagingProfileId=${{ secrets.OSSRH_STAGING_PROFILE_ID }}
