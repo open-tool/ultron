@@ -18,11 +18,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - target: :ultron-compose:publishJvmJavaPublicationToSonatypeRepository
+          - target: ":ultron-compose:publishJvmJavaPublicationToSonatypeRepository"
             os: ubuntu-latest
-          - target: :ultron-compose:publishAndroidReleasePublicationToSonatypeRepository
+          - target: ":ultron-compose:publishAndroidReleasePublicationToSonatypeRepository"
             os: ubuntu-latest
-          - target: :ultron-compose:publishKotlinMultiplatformPublicationToSonatypeRepository
+          - target: ":ultron-compose:publishKotlinMultiplatformPublicationToSonatypeRepository"
             os: ubuntu-latest
     runs-on: ${{ matrix.os }}
 
@@ -56,7 +56,7 @@ jobs:
         uses: gradle/gradle-build-action@v3
         with:
           arguments: |
-            ${{ matrix.target }}
+            "${{ matrix.target }}"
             closeAndReleaseSonatypeStagingRepository
             -Psigning.gnupg.passphrase=${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
             -Psigning.gnupg.keyName=${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
