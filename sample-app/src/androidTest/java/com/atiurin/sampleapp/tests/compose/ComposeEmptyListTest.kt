@@ -5,7 +5,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.test.hasTestTag
-import com.atiurin.sampleapp.compose.contactsListTestTag
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.core.compose.createDefaultUltronComposeRule

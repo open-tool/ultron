@@ -3,6 +3,7 @@ package com.atiurin.ultron.allure.runner
 import com.atiurin.ultron.extensions.createDirectoryIfNotExists
 import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.runner.UltronRunListener
+import org.junit.runner.Description
 import org.junit.runner.Result
 import java.io.File
 import kotlin.system.measureTimeMillis
@@ -12,7 +13,15 @@ import kotlin.system.measureTimeMillis
  * to custom directory [targetDir] provided by user [UltronAllureConfig.setAllureResultsDirectory]
  */
 class UltronAllureResultsTransferListener(private val sourceDir: File, private val targetDir: File) : UltronRunListener() {
+    override fun testFinished(description: Description) {
+        transferFiles()
+    }
+
     override fun testRunFinished(result: Result) {
+        transferFiles()
+    }
+
+    private fun transferFiles(){
         UltronLog.info("Copy Allure results from '${sourceDir.absolutePath}' to '${targetDir.absolutePath}'")
         targetDir.createDirectoryIfNotExists()
         var isSuccessfullyCopied = true

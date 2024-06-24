@@ -7,6 +7,7 @@ import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.common.UltronDefaultOperationResultAnalyzer
+import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
@@ -60,9 +61,8 @@ class UltronEspressoConfigTest : UiElementsTest() {
             UltronConfig.Espresso.resultAnalyzer = UltronDefaultOperationResultAnalyzer()
         }
         .add(SET_DEFAULT_TIMEOUT) {
-            UltronConfig.Espresso.ACTION_TIMEOUT = UltronConfig.Espresso.DEFAULT_ACTION_TIMEOUT
-            UltronConfig.Espresso.ASSERTION_TIMEOUT =
-                UltronConfig.Espresso.DEFAULT_ASSERTION_TIMEOUT
+            UltronConfig.Espresso.ACTION_TIMEOUT = UltronCommonConfig.Defaults.OPERATION_TIMEOUT_MS
+            UltronConfig.Espresso.ASSERTION_TIMEOUT = UltronCommonConfig.Defaults.OPERATION_TIMEOUT_MS
         }
 
     init {
@@ -100,7 +100,7 @@ class UltronEspressoConfigTest : UiElementsTest() {
     //timeouts
     @Test
     fun withTimeout_action_default() {
-        val default = UltronConfig.Espresso.DEFAULT_ACTION_TIMEOUT
+        val default = UltronCommonConfig.Defaults.OPERATION_TIMEOUT_MS
         AssertUtils.assertExecTimeBetween(default, default + 5_000) { page.notExistElement.click() }
     }
 
@@ -124,7 +124,7 @@ class UltronEspressoConfigTest : UiElementsTest() {
 
     @Test
     fun withTimeout_assertion_default() {
-        val default = UltronConfig.Espresso.DEFAULT_ASSERTION_TIMEOUT
+        val default = UltronCommonConfig.Defaults.OPERATION_TIMEOUT_MS
         AssertUtils.assertExecTimeBetween(
             default,
             default + 2_000

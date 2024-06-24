@@ -1,0 +1,33 @@
+.features {
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+  width: 100%;
+}
+
+.featureSvg {
+  height: 150px;
+  width: 150px;
+  padding: 10px;
+  overflow: 'hidden';
+  display: 'flex';
+  justify-content: center;
+}
+
+.imageContainer {
+  width: 150px;
+  height: 150px;
+  /* display: flex; */
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+
+  /* overflow: hidden; */
+}
+
+.imageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}

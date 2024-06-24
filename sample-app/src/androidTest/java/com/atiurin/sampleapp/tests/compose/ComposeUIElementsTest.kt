@@ -3,15 +3,12 @@ package com.atiurin.sampleapp.tests.compose
 import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
-import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performSemanticsAction
-import androidx.compose.ui.test.printToLog
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.dp
 import com.atiurin.sampleapp.activity.ActionsStatus
@@ -26,7 +23,6 @@ import com.atiurin.sampleapp.framework.ultronext.hasProgress
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.ComposeElementsPage
 import com.atiurin.sampleapp.tests.BaseTest
-import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.options.ClickOption
 import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
 import com.atiurin.ultron.core.common.options.PerformCustomBlockOption
@@ -36,12 +32,8 @@ import com.atiurin.ultron.core.compose.createUltronComposeRule
 import com.atiurin.ultron.core.compose.nodeinteraction.UltronComposeSemanticsNodeInteraction
 import com.atiurin.ultron.core.compose.nodeinteraction.click
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType
-import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
-import com.atiurin.ultron.exceptions.UltronAssertionException
-import com.atiurin.ultron.exceptions.UltronException
-import com.atiurin.ultron.exceptions.UltronOperationException
 import com.atiurin.ultron.extensions.*
 import org.junit.Assert
 import org.junit.Ignore

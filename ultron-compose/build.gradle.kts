@@ -1,27 +1,58 @@
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
-    id("com.vanniktech.maven.publish")
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
+    id("org.jetbrains.dokka")
+    id("maven-publish")
+    id("signing")
 }
 
 group = project.findProperty("GROUP")!!
-version =  project.findProperty("VERSION_NAME")!!
+version = project.findProperty("VERSION_NAME")!!
+
+kotlin {
+    jvm()
+    androidTarget {
+        publishLibraryVariants("release")
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "17"
+            }
+        }
+    }
+
+    sourceSets {
+        commonMain.dependencies {
+            api(project(":ultron-common"))
+            implementation(kotlin("reflect"))
+            implementation(libs.kotlin.test)
+            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
+            implementation(libs.atomicfu)
+        }
+        val androidMain by getting {
+            dependencies {
+                api(project(":ultron-common"))
+                implementation(Libs.androidXRunner)
+                api(Libs.composeUiTest)
+            }
+        }
+        val jvmMain by getting {
+            dependencies {
+                implementation(project(":ultron-common"))
+                implementation(kotlin("stdlib-jdk8"))
+            }
+        }
+    }
+}
 
 android {
     compileSdk = 34
     namespace = "com.atiurin.ultron.compose"
     defaultConfig {
         minSdk = 16
-        targetSdk = 34
         multiDexEnabled = true
-    }
-    sourceSets {
-        named("main").configure {
-            java.srcDir("src/main/java")
-        }
-        named("test").configure {
-            java.srcDir("src/test/java")
-        }
     }
     compileOptions {
         targetCompatibility = JavaVersion.VERSION_17
@@ -29,35 +60,76 @@ android {
     }
 }
 
-dependencies {
-    implementation(project(":ultron"))
-    implementation(Libs.kotlinStdlib)
-    implementation(Libs.androidXRunner)
-    api(Libs.composeUiTest)
+val dokkaOutputDir = buildDir.resolve("dokka")
+tasks.dokkaHtml { outputDirectory.set(file(dokkaOutputDir)) }
+val deleteDokkaOutputDir by tasks.register<Delete>("deleteDokkaOutputDirectory") { delete(dokkaOutputDir) }
+
+val ultronComposeJavadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn(deleteDokkaOutputDir, tasks.dokkaHtml)
+    from(dokkaOutputDir)
 }
 
-tasks {
-    val sourcesJar by creating(Jar::class) {
-        archiveClassifier.set("sources")
-        from(tasks)
-    }
+publishing {
+    publications {
+        publications.withType<MavenPublication> {
+            artifact(ultronComposeJavadocJar)
 
-    val javadoc by creating(Javadoc::class) {
-        options {
-            this as StandardJavadocDocletOptions
-            addStringOption("Xdoclint:none", "-quiet")
-            addStringOption("Xmaxwarns", "1")
-            addStringOption("charSet", "UTF-8")
+            pom {
+                name.set("Ultron Compose")
+                description.set("Android & Compose Multiplatform UI testing framework")
+                url.set("https://github.com/open-tool/ultron")
+                inceptionYear.set("2021")
+
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+
+                issueManagement {
+                    system.set("GitHub Issues")
+                    url.set("https://github.com/open-tool/ultron/issues")
+                }
+
+                developers {
+                    developer {
+                        id.set("alex-tiurin")
+                        name.set("Aleksei Tiurin")
+                        url.set("https://github.com/open-tool")
+                    }
+                }
+
+                scm {
+                    connection.set("scm:git@github.com:open-tool/ultron.git")
+                    developerConnection.set("scm:git@github.com:open-tool/ultron.git")
+                    url.set("https://github.com/open-tool/ultron")
+                }
+            }
         }
     }
+}
 
-    val javadocJar by creating(Jar::class){
-        dependsOn(javadoc)
-        from(javadoc.destinationDir)
-    }
+tasks.withType<PublishToMavenRepository>().configureEach {
+    dependsOn(tasks.withType<Sign>())
+    dependsOn(ultronComposeJavadocJar)
+    dependsOn(tasks.withType<Jar>())
+    mustRunAfter(tasks.withType<Sign>())
+}
 
-    artifacts {
-        add("archives", sourcesJar)
-        add("archives", javadocJar)
-    }
+tasks.withType<PublishToMavenLocal>().configureEach {
+    dependsOn("signJvmPublication")
+    dependsOn("signKotlinMultiplatformPublication")
+    dependsOn("signAndroidReleasePublication")
+    mustRunAfter("signJvmPublication")
+    mustRunAfter("signKotlinMultiplatformPublication")
+    mustRunAfter("signAndroidReleasePublication")
+}
+
+signing {
+    println("Signing lib...")
+    useGpgCmd()
+    sign(publishing.publications)
 }
