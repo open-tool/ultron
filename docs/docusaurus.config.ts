@@ -74,6 +74,10 @@ const config: Config = {
         },
       ],
     },
+    prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
+    },
     algolia: {
           // The application ID provided by Algolia
           appId: 'TLB3E9OO68',
@@ -135,10 +139,7 @@ const config: Config = {
     //   ],
     //   copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
     // },
-    prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
-    },
+
     // https://docusaurus.io/blog/2021/11/21/algolia-docsearch-migration#docsearch-has-a-new-home
     // algolia: {
     //   contextualSearch: true,
