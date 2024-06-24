@@ -1,6 +1,6 @@
 # Ultron
 
-[ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.atiurin/ultron/badge.svg) ](https://maven-badges.herokuapp.com/maven-central/com.atiurin/ultron)
+[ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.atiurin/ultron-compose/badge.svg) ](https://maven-badges.herokuapp.com/maven-central/com.atiurin/ultron-compose)
 ![Android CI](https://github.com/open-tool/ultron/workflows/AndroidCI/badge.svg)
 
 Ultron is the simplest framework to develop Android UI tests. It provides simplicity, stability, and maintainability to your tests. It's constructed upon the Espresso, UI Automator and Compose UI testing frameworks. Ultron introduces a range of remarkable new features. Furthermore, Ultron puts you in complete control of your tests!
