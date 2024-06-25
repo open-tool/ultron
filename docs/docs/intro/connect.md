@@ -28,11 +28,24 @@ dependencies {
 ```
 
 For Compose Multiplatform UI tests
+
+As Ultron supports Desktop and Android targets for KMP. You better specify depencencies in relevant part
 ```kotlin
 kotlin {
+    androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        instrumentedTestVariant {
+            ...
+            dependencies {
+                implementation("com.atiurin:ultron-compose:<latest_version>")
+            }
+        }
+    }
     sourceSets {
-         commonTest.dependencies {
-            implementation("com.atiurin:ultron-compose:<latest_version>")
+        val desktopTest by getting {
+            dependencies {
+                implementation("com.atiurin:ultron-compose:<latest_version>")
+            }
         }
     }
 }
