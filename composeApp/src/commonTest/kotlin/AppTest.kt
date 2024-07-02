@@ -31,10 +31,17 @@ class AppTest {
         setContent {
             App()
         }
-        val contact = ContactRepository.getFirst()
         composeList(hasTestTag("contactsListTestTag"))
             .assertIsDisplayed().assertNotEmpty()
             .firstVisibleItem().assertIsDisplayed()
+    }
+
+    @Test
+    fun testListItemChildElements() = runUltronUiTest {
+        setContent {
+            App()
+        }
+        val contact = ContactRepository.getFirst()
         ListScreen {
             list.assertContentDescriptionEquals(contactsListContentDesc)
             list.getFirstVisibleItem<ListScreen.ListItem>().apply {

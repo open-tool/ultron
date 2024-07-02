@@ -8,7 +8,7 @@ object AssertUtils {
         try {
             block()
         } catch (ex: Throwable) {
-            throw ex
+//            throw ex
             exceptionOccurs = true
         }
         Assert.assertEquals(expected, exceptionOccurs)

@@ -42,7 +42,7 @@ kotlin {
     }
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs()
-    js(IR) 
+    js(IR)
     sourceSets {
         commonMain.dependencies {
             implementation(libs.okio)

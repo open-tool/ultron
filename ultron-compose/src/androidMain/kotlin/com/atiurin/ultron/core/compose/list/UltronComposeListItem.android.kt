@@ -18,6 +18,7 @@ actual inline fun <reified T : UltronComposeListItem> getComposeListItemInstance
     isPositionPropertyConfigured: Boolean
 ): T {
     val item = createUltronComposeListItemInstance<T>()
+    item.setExecutor(ultronComposeList, position, isPositionPropertyConfigured)
     return item
 }
 
