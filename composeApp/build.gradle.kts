@@ -26,22 +26,22 @@ kotlin {
             dependencies {
                 implementation(libs.androidx.ui.test.junit4.android)
                 debugImplementation(libs.androidx.ui.test.manifest)
+                implementation(project(":ultron-compose"))
             }
         }
     }
     
     jvm("desktop")
-    
-//    listOf(
-//        iosX64(),
-//        iosArm64(),
-//        iosSimulatorArm64()
-//    ).forEach { iosTarget ->
-//        iosTarget.binaries.framework {
-//            baseName = "ComposeApp"
-//            isStatic = true
-//        }
-//    }
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
+    }
     
     sourceSets {
         val desktopMain by getting
@@ -70,7 +70,6 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
         }
-        // Adds the desktop test dependency
         val desktopTest by getting {
             dependencies {
                 implementation(compose.desktop.uiTestJUnit4)

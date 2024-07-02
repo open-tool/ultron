@@ -49,7 +49,6 @@ import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
-import com.atiurin.ultron.exceptions.UltronException
 
 open class UltronComposeListItem {
     lateinit var executor: ComposeItemExecutor
@@ -191,51 +190,15 @@ open class UltronComposeListItem {
 
     fun assertTextEquals(expected: String) = apply { getItemUltronComposeInteraction().assertTextEquals(expected) }
     fun assertTextContains(expected: String) = apply { getItemUltronComposeInteraction().assertTextContains(expected) }
-
-
-    companion object {
-        inline fun <reified T : UltronComposeListItem> getInstance(
-            ultronComposeList: UltronComposeList,
-            itemMatcher: SemanticsMatcher
-        ): T {
-            val item = createUltronComposeListItemInstance<T>()
-            item.setExecutor(ultronComposeList, itemMatcher)
-            return item
-        }
-
-        inline fun <reified T : UltronComposeListItem> getInstance(
-            ultronComposeList: UltronComposeList,
-            position: Int,
-            isPositionPropertyConfigured: Boolean = false
-        ): T {
-            val item = createUltronComposeListItemInstance<T>()
-            item.setExecutor(ultronComposeList, position, isPositionPropertyConfigured)
-            return item
-        }
-
-        inline fun <reified T : UltronComposeListItem> createUltronComposeListItemInstance(): T {
-            return try {
-                T::class.java.newInstance()
-            } catch (ex: Exception) {
-                val desc = when {
-                    T::class.isInner -> {
-                        "${T::class.simpleName} is an inner class so you have to delete inner modifier (It is often when kotlin throws 'has no zero argument constructor' but real reason is an inner modifier)"
-                    }
-
-                    T::class.constructors.find { it.parameters.isEmpty() } == null -> {
-                        "${T::class.simpleName} doesn't have a constructor without params (create an empty constructor)"
-                    }
-
-                    else -> ex.message
-                }
-                throw UltronException(
-                    """
-                    |Couldn't create an instance of ${T::class.simpleName}. 
-                    |Possible reason: $desc 
-                    |Original exception: ${ex.message}, cause ${ex.cause}
-                """.trimMargin()
-                )
-            }
-        }
-    }
 }
+
+expect inline fun <reified T : UltronComposeListItem> getComposeListItemInstance(
+    ultronComposeList: UltronComposeList,
+    itemMatcher: SemanticsMatcher
+): T
+
+expect inline fun <reified T : UltronComposeListItem> getComposeListItemInstance(
+    ultronComposeList: UltronComposeList,
+    position: Int,
+    isPositionPropertyConfigured: Boolean = false
+): T
