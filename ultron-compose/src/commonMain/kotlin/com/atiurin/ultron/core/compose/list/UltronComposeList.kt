@@ -16,15 +16,24 @@ import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 import com.atiurin.ultron.exceptions.UltronAssertionException
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.utils.AssertUtils
+import kotlin.reflect.KClass
 
 class UltronComposeList(
     val listMatcher: SemanticsMatcher,
     var useUnmergedTree: Boolean = true,
     var positionPropertyKey: SemanticsPropertyKey<Int>? = null,
+    val itemsRegistrator: UltronComposeList.() -> Unit = {},
     private val itemSearchLimit: Int = UltronComposeConfig.params.lazyColumnItemSearchLimit,
     private var operationTimeoutMs: Long = UltronComposeConfig.params.lazyColumnOperationTimeoutMs
 ) {
     private val itemChildInteractionProvider = getItemChildInteractionProvider()
+    val instancesMap = mutableMapOf<KClass<*>, () -> UltronComposeListItem>()
+    inline fun <reified T : UltronComposeListItem> registerItem(noinline creator: () -> T){
+        instancesMap[T::class] = creator
+    }
+    init {
+        itemsRegistrator()
+    }
 
     open fun withTimeout(timeoutMs: Long) =
         UltronComposeList(
@@ -45,8 +54,11 @@ class UltronComposeList(
         if (positionPropertyKey == null) {
             throw UltronException(
                 """
-                    |[positionPropertyKey] parameter is not specified for Compose List 
-                    |Configure it by using [composeList(.., positionPropertyKey = ListItemPositionPropertyKey)]
+                    |[positionPropertyKey] parameter is not specified for UltronComposeList
+                    |Configure it like
+                    |```
+                    |composeList(.., positionPropertyKey = ListItemPositionPropertyKey)
+                    |```
                 """.trimMargin()
             )
         }
@@ -101,19 +113,22 @@ class UltronComposeList(
     )
 
     inline fun <reified T : UltronComposeListItem> getItem(matcher: SemanticsMatcher): T {
-        return UltronComposeListItem.getInstance(this, matcher)
+        return getComposeListItemInstance(this, matcher)
     }
 
     inline fun <reified T : UltronComposeListItem> getItem(position: Int): T {
         if (positionPropertyKey == null) {
             throw UltronException(
                 """
-                    |[positionPropertyKey] parameter is not specified for Compose List 
-                    |Configure it by using [composeList(.., positionPropertyKey = ListItemPositionPropertyKey)]
+                    |[positionPropertyKey] parameter is not specified for UltronComposeList
+                    |Configure it like 
+                    |```
+                    |composeList(.., positionPropertyKey = ListItemPositionPropertyKey)
+                    |```
                 """.trimMargin()
             )
         }
-        return UltronComposeListItem.getInstance(this, position, true)
+        return getComposeListItemInstance(this, position, true)
     }
 
     inline fun <reified T : UltronComposeListItem> getFirstItem(): T = getItem(0)
@@ -123,7 +138,7 @@ class UltronComposeList(
      * After scroll the positions of children inside the list are changed.
      */
     inline fun <reified T : UltronComposeListItem> getVisibleItem(index: Int): T {
-        return UltronComposeListItem.getInstance(this, index)
+        return getComposeListItemInstance(this, index)
     }
 
     /**
@@ -277,5 +292,6 @@ class UltronComposeList(
 fun composeList(
     listMatcher: SemanticsMatcher,
     useUnmergedTree: Boolean = true,
-    positionPropertyKey: SemanticsPropertyKey<Int>? = null
-) = UltronComposeList(listMatcher, useUnmergedTree, positionPropertyKey)
+    positionPropertyKey: SemanticsPropertyKey<Int>? = null,
+    initBlock: UltronComposeList.() -> Unit = {}
+) = UltronComposeList(listMatcher, useUnmergedTree, positionPropertyKey, initBlock)

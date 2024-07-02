@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -26,23 +25,26 @@ kotlin {
             dependencies {
                 implementation(libs.androidx.ui.test.junit4.android)
                 debugImplementation(libs.androidx.ui.test.manifest)
+                implementation(project(":ultron-compose"))
             }
         }
     }
     
     jvm("desktop")
-    
-//    listOf(
-//        iosX64(),
-//        iosArm64(),
-//        iosSimulatorArm64()
-//    ).forEach { iosTarget ->
-//        iosTarget.binaries.framework {
-//            baseName = "ComposeApp"
-//            isStatic = true
-//        }
-//    }
-    
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
+            isStatic = true
+        }
+    }
+    js(IR)
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs()
+
     sourceSets {
         val desktopMain by getting
 
@@ -70,13 +72,15 @@ kotlin {
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
         }
-        // Adds the desktop test dependency
         val desktopTest by getting {
             dependencies {
                 implementation(compose.desktop.uiTestJUnit4)
                 implementation(compose.desktop.currentOs)
             }
         }
+        @OptIn(ExperimentalWasmDsl::class)
+        wasmJs()
+        val wasmJsTest by getting
     }
 }
 
