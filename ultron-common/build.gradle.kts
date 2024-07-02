@@ -14,11 +14,12 @@ group = project.findProperty("GROUP")!!
 version = project.findProperty("VERSION_NAME")!!
 
 kotlin {
-    jvm()
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
         apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
     }
+    // targets
+    jvm()
     androidTarget {
         publishLibraryVariants("release")
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -26,9 +27,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_17)
         }
     }
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    applyDefaultHierarchyTemplate {
-    }
+    applyDefaultHierarchyTemplate()
     macosX64()
     macosArm64()
     listOf(
@@ -41,10 +40,9 @@ kotlin {
             isStatic = true
         }
     }
-
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs()
-    js(IR) {}
+    js(IR) 
     sourceSets {
         commonMain.dependencies {
             implementation(libs.okio)

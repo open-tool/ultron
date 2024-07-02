@@ -42,7 +42,10 @@ kotlin {
             isStatic = true
         }
     }
-    
+    js(IR)
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs()
+
     sourceSets {
         val desktopMain by getting
 
@@ -76,6 +79,9 @@ kotlin {
                 implementation(compose.desktop.currentOs)
             }
         }
+        @OptIn(ExperimentalWasmDsl::class)
+        wasmJs()
+        val wasmJsTest by getting
     }
 }
 

@@ -50,9 +50,9 @@ object ListScreen : Screen<ListScreen>() {
     const val contactsListContentDesc = "contactsListContentDesc"
     val list = composeList(
         listMatcher = hasTestTag(contactsListTestTag),
-//        initBlock = {
-//            registerItem { ListItem() }
-//        }
+        initBlock = {
+            registerItem { ListItem() }
+        }
     )
 
     class ListItem : UltronComposeListItem() {
