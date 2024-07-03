@@ -6,6 +6,6 @@ abstract class AbstractListener {
         this.id = id
     }
     constructor(){
-        this.id = this::class.qualifiedName.orEmpty()
+        this.id = this::class.simpleName.orEmpty()
     }
 }

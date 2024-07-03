@@ -27,7 +27,7 @@ abstract class AbstractListenersContainer<T: AbstractListener> {
     }
 
     fun <T : AbstractListener> removeListener(listenerClass: KClass<T>) {
-        val exist = listeners.find { it.id == listenerClass.qualifiedName }
+        val exist = listeners.find { it.id == listenerClass.simpleName }
         if (exist != null) {
             listeners.remove(exist)
         }

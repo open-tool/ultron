@@ -7,7 +7,7 @@ abstract class ULogger {
         this.id = id
     }
     constructor(){
-        this.id = this::class.qualifiedName.orEmpty()
+        this.id = this::class.simpleName.orEmpty()
     }
 
     abstract fun info(message: String): Any
