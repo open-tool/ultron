@@ -40,7 +40,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
 ) {
     constructor(
         matcher: SemanticsMatcher,
-        useUnmergedTree: Boolean = false,
+        useUnmergedTree: Boolean = UltronComposeConfig.params.useUnmergedTree,
         timeoutMs: Long = UltronComposeConfig.params.operationTimeoutMs,
         resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeConfig.resultHandler,
         assertion: OperationAssertion = EmptyOperationAssertion(),
@@ -48,7 +48,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     ) : this(SemanticsNodeInteractionProviderContainer.getProvider().onNode(matcher, useUnmergedTree), timeoutMs, resultHandler, assertion, elementInfo)
 
     init {
-        if (elementInfo.name.isEmpty()) elementInfo.name = semanticsNodeInteraction.getSelectorDescription().toString()
+        if (elementInfo.name.isEmpty()) elementInfo.name = semanticsNodeInteraction.getSelectorDescription()
     }
 
     fun <T> isSuccess(action: UltronComposeSemanticsNodeInteraction.() -> T): Boolean = runCatching { action() }.isSuccess

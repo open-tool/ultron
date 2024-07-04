@@ -7,7 +7,7 @@ actual inline fun <reified T : UltronComposeListItem> getComposeListItemInstance
     ultronComposeList: UltronComposeList,
     itemMatcher: SemanticsMatcher
 ): T {
-    val item = ultronComposeList.instancesMap[T::class]?.invoke()
+    val item = ultronComposeList.itemInstancesMap[T::class]?.invoke()
         ?: throw UltronException(
             """
             |Item with ${T::class} not registered in compose list ${ultronComposeList.listMatcher.description}
@@ -28,7 +28,7 @@ actual inline fun <reified T : UltronComposeListItem> getComposeListItemInstance
     position: Int,
     isPositionPropertyConfigured: Boolean
 ): T {
-    val item = ultronComposeList.instancesMap[T::class]?.invoke()
+    val item = ultronComposeList.itemInstancesMap[T::class]?.invoke()
         ?: throw UltronException(
             """
             |Item with ${T::class} not registered in compose list ${ultronComposeList.listMatcher.description}
