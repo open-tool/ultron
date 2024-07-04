@@ -5,8 +5,8 @@ permissions:
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - 'release/*'
 
 jobs:
   publish:
@@ -20,15 +20,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - target: :ultron-compose:publishToSonatype
-            os: ubuntu-latest
-          - target: :ultron-android:publishToSonatype
-            os: ubuntu-latest
-          - target: :ultron-allure:publishToSonatype
-            os: ubuntu-latest
           - target: :ultron-common:publishToSonatype
-            os: ubuntu-latest
-    runs-on: ${{ matrix.os }}
+          - target: :ultron-compose:publishToSonatype
+          - target: :ultron-android:publishToSonatype
+          - target: :ultron-allure:publishToSonatype
+    runs-on: macos-latest
 
     steps:
       - name: Checkout
@@ -57,7 +53,7 @@ jobs:
           passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
 
       - name: Gradle publish
-        run: ./gradlew "${{ matrix.target }}" closeAndReleaseSonatypeStagingRepository
+        run: ./gradlew "${{ matrix.target }}" --no-configuration-cache 
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_TOKEN }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
