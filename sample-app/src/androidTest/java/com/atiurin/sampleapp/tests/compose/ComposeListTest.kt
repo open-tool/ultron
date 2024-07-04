@@ -59,7 +59,6 @@ class ComposeListTest : BaseTest() {
         val contact = CONTACTS[index]
         listWithMergedTree.visibleItem(index).printToLog("ULTRON")
             .assertMatches(hasAnyDescendant(hasText(contact.name)))
-
     }
 
     @Test

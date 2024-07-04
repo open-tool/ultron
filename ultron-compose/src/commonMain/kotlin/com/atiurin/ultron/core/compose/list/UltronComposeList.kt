@@ -22,17 +22,17 @@ class UltronComposeList(
     val listMatcher: SemanticsMatcher,
     var useUnmergedTree: Boolean = true,
     var positionPropertyKey: SemanticsPropertyKey<Int>? = null,
-    val itemsRegistrator: UltronComposeList.() -> Unit = {},
+    val initBlock: UltronComposeList.() -> Unit = {},
     private val itemSearchLimit: Int = UltronComposeConfig.params.lazyColumnItemSearchLimit,
     private var operationTimeoutMs: Long = UltronComposeConfig.params.lazyColumnOperationTimeoutMs
 ) {
     private val itemChildInteractionProvider = getItemChildInteractionProvider()
-    val instancesMap = mutableMapOf<KClass<*>, () -> UltronComposeListItem>()
+    val itemInstancesMap = mutableMapOf<KClass<*>, () -> UltronComposeListItem>()
     inline fun <reified T : UltronComposeListItem> registerItem(noinline creator: () -> T){
-        instancesMap[T::class] = creator
+        itemInstancesMap[T::class] = creator
     }
     init {
-        itemsRegistrator()
+        initBlock()
     }
 
     open fun withTimeout(timeoutMs: Long) =
@@ -224,15 +224,15 @@ class UltronComposeList(
     fun scrollToNode(itemMatcher: SemanticsMatcher) = apply { getInteraction().scrollToNode(itemMatcher) }
     fun scrollToIndex(index: Int) = apply { getInteraction().scrollToIndex(index) }
     fun scrollToKey(key: Any) = apply { getInteraction().scrollToKey(key) }
-    fun assertIsDisplayed() = apply { getInteraction().withTimeout(getOperationTimeout()).assertIsDisplayed() }
-    fun assertIsNotDisplayed() = apply { getInteraction().withTimeout(getOperationTimeout()).assertIsNotDisplayed() }
-    fun assertExists() = apply { getInteraction().withTimeout(getOperationTimeout()).assertExists() }
-    fun assertDoesNotExist() = apply { getInteraction().withTimeout(getOperationTimeout()).assertDoesNotExist() }
-    fun assertContentDescriptionEquals(vararg expected: String) = apply { getInteraction().withTimeout(getOperationTimeout()).assertContentDescriptionEquals(*expected) }
+    fun assertIsDisplayed() = apply { getInteraction().assertIsDisplayed() }
+    fun assertIsNotDisplayed() = apply { getInteraction().assertIsNotDisplayed() }
+    fun assertExists() = apply { getInteraction().assertExists() }
+    fun assertDoesNotExist() = apply { getInteraction().assertDoesNotExist() }
+    fun assertContentDescriptionEquals(vararg expected: String) = apply { getInteraction().assertContentDescriptionEquals(*expected) }
     fun assertContentDescriptionContains(expected: String, option: ContentDescriptionContainsOption? = null) =
-        apply { getInteraction().withTimeout(getOperationTimeout()).assertContentDescriptionContains(expected, option) }
+        apply { getInteraction().assertContentDescriptionContains(expected, option) }
 
-    fun assertMatches(matcher: SemanticsMatcher) = apply { getInteraction().withTimeout(getOperationTimeout()).assertMatches(matcher) }
+    fun assertMatches(matcher: SemanticsMatcher) = apply { getInteraction().assertMatches(matcher) }
     fun assertNotEmpty() = apply {
         AssertUtils.assertTrue(
             { getVisibleItemsCount() > 0 }, getOperationTimeout(),
@@ -261,7 +261,7 @@ class UltronComposeList(
      * Otherwise, an exception will be thrown.
      */
     fun assertItemDoesNotExist(itemMatcher: SemanticsMatcher) {
-        getInteraction().withTimeout(getOperationTimeout()).perform(
+        getInteraction().perform(
             params = UltronComposeOperationParams(
                 operationName = "Assert item ${itemMatcher.description} doesn't exist in list ${getInteraction().elementInfo.name}",
                 operationDescription = "Assert item ${itemMatcher.description} doesn't exist in list ${getInteraction().elementInfo.name} during ${getOperationTimeout()}",
@@ -281,7 +281,7 @@ class UltronComposeList(
     }
 
     fun getVisibleItemsCount(): Int = getInteraction().execute { it.fetchSemanticsNode().children.size }
-    fun getInteraction() = UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree)
+    fun getInteraction() = UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree, operationTimeoutMs)
 
     @Deprecated("Use getInteraction() instead", ReplaceWith("getInteraction()"))
     fun getMatcher() = getInteraction()

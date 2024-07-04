@@ -17,4 +17,4 @@ jobs:
         java-version: '17'
 
     - name: Compile framework
-      run: ./gradlew compileDebugKotlin
+      run: ./gradlew compileDebugKotlin compileDebugKotlinAndroid compileKotlinDesktop compileKotlinJvm compileKotlinIosArm64 compileKotlinIosSimulatorArm64 compileKotlinJs compileKotlinWasmJs
