@@ -53,7 +53,7 @@ jobs:
           passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
 
       - name: Gradle publish
-        run: ./gradlew "${{ matrix.target }}" closeAndReleaseSonatypeStagingRepository
+        run: ./gradlew "${{ matrix.target }}" --no-configuration-cache 
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_TOKEN }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
