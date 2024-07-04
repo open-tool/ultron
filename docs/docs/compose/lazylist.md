@@ -123,6 +123,18 @@ class ComposeFriendListItem : UltronComposeListItem(){
 ```
 **Note: you have to use delegated initialisation with `by child`.**
 
+For Compose Multiplatform `commonTest` you need to register Item class instances, like:
+
+```kotlin
+composeList(.., initBlock = {
+    registerItem { ComposeFriendListItem() }
+    registerItem { AnotherListItem() }
+})
+```
+It is required cause Kotlin Multiplatfor Project has limited reflation API for different platforms.
+
+You don't need to register Items for Android UI tests (and JVM).
+
 Now you're able to get `ComposeFriendListItem` object using methods `getItem`, `getVisibleItem`, `getFirstVisibleItem`, `getLastVisibleItem`
 
 ```kotlin
@@ -138,7 +150,7 @@ lazyList.getItem<ComposeFriendListItem>(hasTestTag(..))
 Mark such methods with `private` visibility modifier. e.g. `getContactItem`
 ```kotlin
 object ComposeListPage : Page<ComposeListPage>() {
-    private val lazyList = composeList(hasContentDescription(contactsListContentDesc))
+    private val lazyList = composeList(hasContentDescription(contactsListContentDesc), ..)
     private fun getContactItem(contact: Contact): ComposeFriendListItem = lazyList.getItem(hasTestTag(contact.id))
 
     class ComposeFriendListItem : UltronComposeListItem(){
@@ -168,7 +180,7 @@ It's pretty much the same as [simple node api](../compose/api.md), but extends i
 Let's start with approaches that you can use without additional efforts. For example, you have identified `LazyList` in your tests code like
 
 ```kotlin
-val lazyList = composeList(listMatcher = hasTestTag("listTestTag"))
+val lazyList = composeList(listMatcher = hasTestTag("listTestTag"), ..)
 
 class ComposeListItem : UltronComposeListItem() {
     val name by lazy { getChild(hasTestTag(contactNameTestTag)) }

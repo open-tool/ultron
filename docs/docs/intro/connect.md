@@ -18,7 +18,7 @@ repositories {
 }
 ```
 
-For Android application instrumented UI tests
+### Android application instrumented UI tests
 ```kotlin
 dependencies {
     androidTestImplementation("com.atiurin:ultron-compose:<latest_version>")
@@ -27,12 +27,36 @@ dependencies {
 }
 ```
 
-For Compose Multiplatform UI tests
+### Compose Multiplatform UI tests
+
 ```kotlin
 kotlin {
     sourceSets {
          commonTest.dependencies {
             implementation("com.atiurin:ultron-compose:<latest_version>")
+        }
+    }
+}
+```
+Since Multiplatform support in alpha state it's possible to have some problems with `commonTest` usage.
+
+In this case you can specify dependencies in relevant part.
+```kotlin
+kotlin {
+    androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        instrumentedTestVariant {
+            ...
+            dependencies {
+                implementation("com.atiurin:ultron-compose:<latest_version>")
+            }
+        }
+    }
+    sourceSets {
+        val desktopTest by getting {
+            dependencies {
+                implementation("com.atiurin:ultron-compose:<latest_version>")
+            }
         }
     }
 }
