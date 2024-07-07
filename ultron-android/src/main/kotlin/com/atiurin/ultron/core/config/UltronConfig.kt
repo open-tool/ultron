@@ -73,6 +73,7 @@ object UltronConfig {
     private fun modify() {
         Espresso.ACTION_TIMEOUT = params.operationTimeoutMs
         Espresso.ASSERTION_TIMEOUT = params.operationTimeoutMs
+        UiAutomator.OPERATION_TIMEOUT = params.operationTimeoutMs
         UltronCommonConfig.addListener(LogLifecycleListener())
         if (params.logToFile) {
             UltronLog.addLogger(UltronLog.fileLogger)
