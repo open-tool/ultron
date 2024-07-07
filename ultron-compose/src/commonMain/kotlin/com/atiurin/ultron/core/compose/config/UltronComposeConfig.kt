@@ -79,10 +79,21 @@ object UltronComposeConfig {
 
     fun applyRecommended() {
         params = UltronComposeConfigParams()
+        modify()
     }
 
     fun apply(block: UltronComposeConfigParams.() -> Unit) {
         params.block()
+        modify()
+    }
+
+    private fun modify(){
+        UltronCommonConfig.addListener(LogLifecycleListener())
+        if (UltronCommonConfig.logToFile) {
+            UltronLog.addLogger(UltronLog.fileLogger)
+        } else {
+            UltronLog.removeLogger(UltronLog.fileLogger.id)
+        }
         UltronLog.info("UltronComposeConfig applied with params $params}")
     }
 }

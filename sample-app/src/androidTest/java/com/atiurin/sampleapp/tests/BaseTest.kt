@@ -31,8 +31,8 @@ abstract class BaseTest {
         @JvmStatic
         fun config() {
             UltronConfig.applyRecommended()
-            UltronAllureConfig.applyRecommended()
             UltronComposeConfig.applyRecommended()
+            UltronAllureConfig.applyRecommended()
             UltronAllureConfig.setAllureResultsDirectory(Environment.DIRECTORY_DOWNLOADS)
         }
     }
