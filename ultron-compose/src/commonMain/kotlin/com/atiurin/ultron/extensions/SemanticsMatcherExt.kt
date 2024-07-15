@@ -160,6 +160,7 @@ fun SemanticsMatcher.assertIsNotFocused() = UltronComposeSemanticsNodeInteractio
 fun SemanticsMatcher.assertIsSelected() = UltronComposeSemanticsNodeInteraction(this).assertIsSelected()
 fun SemanticsMatcher.assertIsNotSelected() = UltronComposeSemanticsNodeInteraction(this).assertIsNotSelected()
 fun SemanticsMatcher.assertIsSelectable() = UltronComposeSemanticsNodeInteraction(this).assertIsSelectable()
+fun SemanticsMatcher.assertIsIndeterminate() = UltronComposeSemanticsNodeInteraction(this).assertIsIndeterminate()
 fun SemanticsMatcher.assertIsOn() = UltronComposeSemanticsNodeInteraction(this).assertIsOn()
 fun SemanticsMatcher.assertIsOff() = UltronComposeSemanticsNodeInteraction(this).assertIsOff()
 fun SemanticsMatcher.assertIsToggleable() = UltronComposeSemanticsNodeInteraction(this).assertIsToggleable()
