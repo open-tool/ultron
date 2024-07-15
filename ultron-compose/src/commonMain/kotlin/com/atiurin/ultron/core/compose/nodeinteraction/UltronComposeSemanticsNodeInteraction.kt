@@ -620,6 +620,15 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         )
     }
 
+    fun assertIsIndeterminate() = apply {
+        executeOperation(
+            operationBlock = { semanticsNodeInteraction.assertIsIndeterminate() },
+            name = "Assert '${elementInfo.name}' is indeterminate",
+            type = IS_INDETERMINATE,
+            description = "Compose assertIsIndeterminate '${elementInfo.name}' during $timeoutMs ms",
+        )
+    }
+
     fun assertIsOn() = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.assertIsOn() },
