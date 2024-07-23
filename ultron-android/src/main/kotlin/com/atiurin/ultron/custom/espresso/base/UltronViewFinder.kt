@@ -9,12 +9,6 @@ import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewInteraction
-import androidx.test.espresso.core.internal.deps.guava.base.Joiner
-import androidx.test.espresso.core.internal.deps.guava.base.Preconditions
-import androidx.test.espresso.core.internal.deps.guava.base.Predicate
-import androidx.test.espresso.core.internal.deps.guava.collect.Iterables
-import androidx.test.espresso.core.internal.deps.guava.collect.Iterators
-import androidx.test.espresso.core.internal.deps.guava.collect.Lists
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.util.EspressoOptional
 import androidx.test.espresso.util.TreeIterables
@@ -25,6 +19,12 @@ import com.atiurin.ultron.extensions.getTargetMatcher
 import com.atiurin.ultron.extensions.getViewMatcher
 import com.atiurin.ultron.extensions.simpleClassName
 import com.atiurin.ultron.utils.runOnUiThread
+import com.google.common.base.Joiner
+import com.google.common.base.Preconditions
+import com.google.common.base.Predicate
+import com.google.common.collect.Iterables
+import com.google.common.collect.Iterators
+import com.google.common.collect.Lists
 import org.hamcrest.Matcher
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
