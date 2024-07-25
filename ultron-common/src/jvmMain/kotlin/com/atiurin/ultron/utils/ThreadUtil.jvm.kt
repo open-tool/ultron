@@ -1,5 +1,10 @@
 package com.atiurin.ultron.utils
 
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+
 actual fun sleep(timeMs: Long) {
-    Thread.sleep(timeMs)
+    runBlocking {
+        delay(timeMs)
+    }
 }

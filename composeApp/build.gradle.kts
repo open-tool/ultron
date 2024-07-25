@@ -41,9 +41,20 @@ kotlin {
             isStatic = true
         }
     }
-    js(IR)
+    js(IR){
+        browser()
+    }
     @OptIn(ExperimentalWasmDsl::class)
-    wasmJs()
+    wasmJs(){
+        browser {
+            testTask(Action {
+                useKarma {
+                    useChromeHeadless()
+                    useConfigDirectory(project.projectDir.resolve("karma.config.d").resolve("wasm"))
+                }
+            })
+        }
+    }
 
     sourceSets {
         val desktopMain by getting

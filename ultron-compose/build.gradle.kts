@@ -1,3 +1,4 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
@@ -16,7 +17,6 @@ group = project.findProperty("GROUP")!!
 version = project.findProperty("VERSION_NAME")!!
 
 kotlin {
-    jvm()
     @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
         apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
@@ -28,55 +28,80 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_17)
         }
     }
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    applyDefaultHierarchyTemplate {
-    }
+    jvm("desktop")
+    linuxX64()
+    mingwX64()
     macosX64()
     macosArm64()
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs(){
+        browser()
+        nodejs()
+    }
+    js(IR){
+        browser()
+        nodejs()
     }
 
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs()
-    js(IR)
-
+    @OptIn(ExperimentalComposeLibrary::class)
     sourceSets {
-        commonMain.dependencies {
-            api(project(":ultron-common"))
-            implementation(kotlin("reflect"))
-            implementation(libs.kotlin.test)
-            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-            implementation(compose.uiTest)
-            implementation(libs.atomicfu)
+        val commonMain by getting {
+            dependencies {
+                api(project(":ultron-common"))
+                implementation(kotlin("reflect"))
+                api(libs.kotlin.test)
+                api(compose.uiTest)
+                implementation(libs.atomicfu)
+            }
         }
         val androidMain by getting {
-//            dependsOn(jvmMain.get())
             dependencies {
                 api(project(":ultron-common"))
                 implementation(Libs.androidXRunner)
                 api(Libs.composeUiTest)
             }
         }
-        val jvmMain by getting {
+        val shared by creating {
+            dependsOn(commonMain)
+        }
+        jvmMain {
+            dependsOn(shared)
             dependencies {
-                implementation(project(":ultron-common"))
-                implementation(kotlin("stdlib-jdk8"))
+                api(kotlin("stdlib"))
             }
         }
+        val desktopMain by getting {
+            dependsOn(shared)
+            dependsOn(jvmMain.get())
+            dependencies {
+                api(project(":ultron-common"))
+                implementation(compose.uiTest)
+            }
+        }
+        val linuxX64Main by getting { dependsOn(desktopMain) }
+        val mingwX64Main by getting { dependsOn(desktopMain) }
+
+        val nativeMain by creating { dependsOn(shared) }
+        val macosX64Main by getting { dependsOn(nativeMain) }
+        val macosArm64Main by getting { dependsOn(nativeMain) }
+        val iosX64Main by getting { dependsOn(nativeMain) }
+        val iosArm64Main by getting { dependsOn(nativeMain) }
+        val iosSimulatorArm64Main by getting { dependsOn(nativeMain) }
+
+        val jsWasmMain by creating {
+            dependsOn(shared)
+        }
         val jsMain by getting {
+            dependsOn(jsWasmMain)
             dependencies {
                 implementation(kotlin("stdlib-js"))
             }
         }
         val wasmJsMain by getting {
+            dependsOn(jsWasmMain)
             dependencies {
                 implementation(kotlin("stdlib"))
             }

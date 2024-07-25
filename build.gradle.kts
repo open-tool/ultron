@@ -29,6 +29,7 @@ plugins {
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.compose.compiler) apply false
     id("io.github.gradle-nexus.publish-plugin").version("2.0.0-rc-1")
+    alias(libs.plugins.kotlinAndroid) apply false
 }
 
 nexusPublishing {

@@ -5,7 +5,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.*
 import kotlin.test.Test
 
-class DesktopExampleTest {
+class ExampleTest {
 
     @OptIn(ExperimentalTestApi::class)
     @Test

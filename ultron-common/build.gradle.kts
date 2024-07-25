@@ -18,8 +18,6 @@ kotlin {
     compilerOptions {
         apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
     }
-    // targets
-    jvm()
     androidTarget {
         publishLibraryVariants("release")
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -27,30 +25,32 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_17)
         }
     }
-    applyDefaultHierarchyTemplate()
+    jvm("desktop")
+    linuxX64()
+    mingwX64()
     macosX64()
     macosArm64()
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
-    }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
     @OptIn(ExperimentalWasmDsl::class)
-    wasmJs()
-    js(IR)
+    wasmJs(){
+        browser()
+        nodejs()
+    }
+    js(IR){
+        browser()
+        nodejs()
+    }
     sourceSets {
-        commonMain.dependencies {
-            implementation(libs.okio)
-            implementation(libs.kotlinx.datetime)
-            implementation(libs.atomicfu)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.okio)
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.atomicfu)
+                implementation(libs.kotlin.test)
+                implementation(libs.kotlinx.coroutines.core)
+            }
         }
         val androidMain by getting {
             dependencies {
@@ -60,17 +60,44 @@ kotlin {
                 api(Libs.junit)
             }
         }
-        val jvmMain by getting {
+        val shared by creating {
+            dependsOn(commonMain)
             dependencies {
-                implementation(kotlin("stdlib-jdk8"))
+                api(libs.kotlinx.coroutines.core)
             }
         }
+        // desktop
+        jvmMain {
+            dependsOn(shared)
+            dependencies {
+                api(kotlin("stdlib"))
+            }
+        }
+        val desktopMain by getting {
+            dependsOn(shared)
+            dependsOn(jvmMain.get())
+        }
+        val linuxX64Main by getting { dependsOn(desktopMain) }
+        val mingwX64Main by getting { dependsOn(desktopMain) }
+        // native
+        val nativeMain by creating { dependsOn(shared) }
+        val macosX64Main by getting { dependsOn(nativeMain) }
+        val macosArm64Main by getting { dependsOn(nativeMain) }
+        val iosX64Main by getting { dependsOn(nativeMain) }
+        val iosArm64Main by getting { dependsOn(nativeMain) }
+        val iosSimulatorArm64Main by getting { dependsOn(nativeMain) }
+        // js
+        val jsWasmMain by creating {
+            dependsOn(shared)
+        }
         val jsMain by getting {
+            dependsOn(jsWasmMain)
             dependencies {
                 implementation(kotlin("stdlib-js"))
             }
         }
         val wasmJsMain by getting {
+            dependsOn(jsWasmMain)
             dependencies {
                 implementation(kotlin("stdlib"))
             }
@@ -162,14 +189,14 @@ tasks.named("publishKotlinMultiplatformPublicationToMavenLocal") {
     mustRunAfter("signKotlinMultiplatformPublication")
 }
 
-tasks.named("publishJvmPublicationToMavenLocal") {
-    dependsOn("signJvmPublication")
-    dependsOn("signKotlinMultiplatformPublication")
-    dependsOn("signAndroidReleasePublication")
-    mustRunAfter("signJvmPublication")
-    mustRunAfter("signKotlinMultiplatformPublication")
-    mustRunAfter("signAndroidReleasePublication")
-}
+//tasks.named("publishJvmPublicationToMavenLocal") {
+//    dependsOn("signJvmPublication")
+//    dependsOn("signKotlinMultiplatformPublication")
+//    dependsOn("signAndroidReleasePublication")
+//    mustRunAfter("signJvmPublication")
+//    mustRunAfter("signKotlinMultiplatformPublication")
+//    mustRunAfter("signAndroidReleasePublication")
+//}
 
 tasks.withType<PublishToMavenLocal>().configureEach {
     dependsOn("signJvmPublication")
