@@ -173,11 +173,25 @@ tasks.named("publishJvmPublicationToMavenLocal") {
 
 tasks.withType<PublishToMavenLocal>().configureEach {
     dependsOn("signJvmPublication")
+    dependsOn("signIosArm64Publication")
+    dependsOn("signIosSimulatorArm64Publication")
+    dependsOn("signIosX64Publication")
     dependsOn("signKotlinMultiplatformPublication")
     dependsOn("signAndroidReleasePublication")
+    dependsOn("signJsPublication")
+    dependsOn("signMacosArm64Publication")
+    dependsOn("signMacosX64Publication")
+    dependsOn("signWasmJsPublication")
     mustRunAfter("signJvmPublication")
+    mustRunAfter("signIosArm64Publication")
+    mustRunAfter("signIosX64Publication")
+    mustRunAfter("signIosSimulatorArm64Publication")
     mustRunAfter("signKotlinMultiplatformPublication")
     mustRunAfter("signAndroidReleasePublication")
+    mustRunAfter("signJsPublication")
+    mustRunAfter("signMacosArm64Publication")
+    mustRunAfter("signMacosX64Publication")
+    mustRunAfter("signWasmJsPublication")
 }
 
 signing {
