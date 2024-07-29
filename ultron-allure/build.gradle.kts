@@ -9,6 +9,10 @@ plugins {
 group = project.findProperty("GROUP")!!
 version =  project.findProperty("VERSION_NAME")!!
 
+kotlin {
+    jvmToolchain(11)
+}
+
 android {
     namespace = "com.atiurin.ultron.allure"
     compileSdk = 34
