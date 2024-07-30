@@ -9,6 +9,9 @@ plugins {
 group = project.findProperty("GROUP")!!
 version =  project.findProperty("VERSION_NAME")!!
 
+kotlin {
+    jvmToolchain(11)
+}
 
 android {
     namespace = "com.atiurin.ultron.allure"
@@ -26,8 +29,8 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility = JavaVersion.VERSION_17
-        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_11
     }
 
     publishing {
