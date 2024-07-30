@@ -1,3 +1,4 @@
+
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -29,8 +30,6 @@ kotlin {
         }
     }
     jvm("desktop")
-    linuxX64()
-    mingwX64()
     macosX64()
     macosArm64()
     iosX64()
@@ -48,6 +47,7 @@ kotlin {
 
     @OptIn(ExperimentalComposeLibrary::class)
     sourceSets {
+        applyDefaultHierarchyTemplate()
         val commonMain by getting {
             dependencies {
                 api(project(":ultron-common"))
@@ -81,15 +81,7 @@ kotlin {
                 implementation(compose.uiTest)
             }
         }
-        val linuxX64Main by getting { dependsOn(desktopMain) }
-        val mingwX64Main by getting { dependsOn(desktopMain) }
-
-        val nativeMain by creating { dependsOn(shared) }
-        val macosX64Main by getting { dependsOn(nativeMain) }
-        val macosArm64Main by getting { dependsOn(nativeMain) }
-        val iosX64Main by getting { dependsOn(nativeMain) }
-        val iosArm64Main by getting { dependsOn(nativeMain) }
-        val iosSimulatorArm64Main by getting { dependsOn(nativeMain) }
+        val nativeMain by getting { dependsOn(shared) }
 
         val jsWasmMain by creating {
             dependsOn(shared)
@@ -182,14 +174,28 @@ tasks.withType<PublishToMavenRepository>().configureEach {
 }
 
 tasks.withType<PublishToMavenLocal>().configureEach {
-    dependsOn("signJvmPublication")
     dependsOn("signKotlinMultiplatformPublication")
     dependsOn("signAndroidReleasePublication")
-    mustRunAfter("signJvmPublication")
+    dependsOn("signDesktopPublication")
+    dependsOn("signIosArm64Publication")
+    dependsOn("signIosSimulatorArm64Publication")
+    dependsOn("signIosX64Publication")
+    dependsOn("signJsPublication")
+    dependsOn("signWasmJsPublication")
+    dependsOn("signMacosArm64Publication")
+    dependsOn("signMacosX64Publication")
+
     mustRunAfter("signKotlinMultiplatformPublication")
     mustRunAfter("signAndroidReleasePublication")
+    mustRunAfter("signDesktopPublication")
+    mustRunAfter("signIosArm64Publication")
+    mustRunAfter("signIosSimulatorArm64Publication")
+    mustRunAfter("signIosX64Publication")
+    mustRunAfter("signJsPublication")
+    mustRunAfter("signWasmJsPublication")
+    mustRunAfter("signMacosArm64Publication")
+    mustRunAfter("signMacosX64Publication")
 }
-
 signing {
     println("Signing lib...")
     useGpgCmd()

@@ -34,7 +34,7 @@ UltronComposeConfig.apply {
     lazyColumnOperationTimeoutMs = 15_000
     operationPollingTimeoutMs = 100
     lazyColumnItemSearchLimit = 100
-    useUnmergedTree = true //set up this value as a default for all SemanticNodeInteractions
+    useUnmergedTree = true // set up this value as a default for all SemanticNodeInteractions
 }
 ```
 

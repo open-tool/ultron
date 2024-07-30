@@ -4,7 +4,7 @@ sidebar_position: 1
 
 # Allure
 
-Ultron can generate artifacts for Allure report. 
+Ultron can generate artifacts for Allure report only for Android UI tests. 
 
 Just set Ultron `testInstrumentationRunner` in your app build.gradle file ([example build.gradle.kts](https://github.com/open-tool/ultron/blob/master/sample-app/build.gradle.kts#L14))
 
@@ -49,8 +49,6 @@ fun setConfig() {
 You also can add any artifact you need. It will be described later.
 
 ![allure](https://github.com/open-tool/ultron/assets/12834123/c05c813a-ece6-45e6-a04f-e1c92b82ffb1)
-
-
 
 ***
 ## Ultron `step`
@@ -109,7 +107,7 @@ UltronComposeConfig.apply {
 ```
 ## Add detailed info about your conditions to report
 
-Ultron provides cool feature called **Test condition management** (https://github.com/open-tool/ultron/wiki/Full-control-of-your-tests)
+Ultron provides cool feature called [Test condition management](../android/testconditions.md) 
 
 With recommended config all conditions will be added to Allure report automatically. The `name` of rule and condition is used as Allure `step` name.
 

@@ -26,8 +26,6 @@ kotlin {
         }
     }
     jvm("desktop")
-    linuxX64()
-    mingwX64()
     macosX64()
     macosArm64()
     iosX64()
@@ -43,6 +41,7 @@ kotlin {
         nodejs()
     }
     sourceSets {
+        applyDefaultHierarchyTemplate()
         val commonMain by getting {
             dependencies {
                 implementation(libs.okio)
@@ -77,15 +76,8 @@ kotlin {
             dependsOn(shared)
             dependsOn(jvmMain.get())
         }
-        val linuxX64Main by getting { dependsOn(desktopMain) }
-        val mingwX64Main by getting { dependsOn(desktopMain) }
         // native
-        val nativeMain by creating { dependsOn(shared) }
-        val macosX64Main by getting { dependsOn(nativeMain) }
-        val macosArm64Main by getting { dependsOn(nativeMain) }
-        val iosX64Main by getting { dependsOn(nativeMain) }
-        val iosArm64Main by getting { dependsOn(nativeMain) }
-        val iosSimulatorArm64Main by getting { dependsOn(nativeMain) }
+        val nativeMain by getting { dependsOn(shared) }
         // js
         val jsWasmMain by creating {
             dependsOn(shared)
@@ -182,29 +174,28 @@ tasks.withType<PublishToMavenRepository>().configureEach {
     mustRunAfter(tasks.withType<Sign>())
 }
 
-tasks.named("publishKotlinMultiplatformPublicationToMavenLocal") {
-    dependsOn("signJvmPublication")
-    dependsOn("signKotlinMultiplatformPublication")
-    mustRunAfter("signJvmPublication")
-    mustRunAfter("signKotlinMultiplatformPublication")
-}
-
-//tasks.named("publishJvmPublicationToMavenLocal") {
-//    dependsOn("signJvmPublication")
-//    dependsOn("signKotlinMultiplatformPublication")
-//    dependsOn("signAndroidReleasePublication")
-//    mustRunAfter("signJvmPublication")
-//    mustRunAfter("signKotlinMultiplatformPublication")
-//    mustRunAfter("signAndroidReleasePublication")
-//}
-
 tasks.withType<PublishToMavenLocal>().configureEach {
-    dependsOn("signJvmPublication")
     dependsOn("signKotlinMultiplatformPublication")
     dependsOn("signAndroidReleasePublication")
-    mustRunAfter("signJvmPublication")
+    dependsOn("signDesktopPublication")
+    dependsOn("signIosArm64Publication")
+    dependsOn("signIosSimulatorArm64Publication")
+    dependsOn("signIosX64Publication")
+    dependsOn("signJsPublication")
+    dependsOn("signWasmJsPublication")
+    dependsOn("signMacosArm64Publication")
+    dependsOn("signMacosX64Publication")
+
     mustRunAfter("signKotlinMultiplatformPublication")
     mustRunAfter("signAndroidReleasePublication")
+    mustRunAfter("signDesktopPublication")
+    mustRunAfter("signIosArm64Publication")
+    mustRunAfter("signIosSimulatorArm64Publication")
+    mustRunAfter("signIosX64Publication")
+    mustRunAfter("signJsPublication")
+    mustRunAfter("signWasmJsPublication")
+    mustRunAfter("signMacosArm64Publication")
+    mustRunAfter("signMacosX64Publication")
 }
 
 signing {

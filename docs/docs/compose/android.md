@@ -4,6 +4,9 @@ sidebar_position: 2
 
 # Android
 
+Note: it's possible to use Multiplatform approach using methods `runComposeUiTest` and `runUltronUiTest` for Android UI tests. 
+You can read about it in [multiplatform description](multiplatform.md)
+
 ## Android Compose testing API
 
 Typical Android test looks smth like this:
@@ -20,16 +23,16 @@ class ComposeContentTest {
     }
 }
 ```
-You can read more aboit it in [official documentation](https://developer.android.com/jetpack/compose/testing)
+You can read more about it in [official documentation](https://developer.android.com/jetpack/compose/testing)
 
 So, all compose testing APIs are provided by `composeTestRule`. It's definitely uncomfortable. Moreover, in case your UI loading takes some time, e.g. in integration test, an assertion or an action fails.
 
-If you need to launch an Activity it's required to use another factory method to create Compose TestRule - `createUltronComposeRule<A>`
+If you need to launch an Activity it's required to use another factory method to create Compose TestRule - `createAndroidComposeRule<A>`
 
 ```kotlin
 class ActivityComposeTest {
     @get:Rule
-    val composeTestRule = createUltronComposeRule<YourActivity>()
+    val composeTestRule = createAndroidComposeRule<YourActivity>()
     @Test
     fun myTest() {
         composeTestRule.onNode(hasTestTag("Continue")).performClick()
@@ -62,3 +65,5 @@ To launch an Activity use `createUltronComposeRule<A>`
 @get:Rule
 val composeTestRule = createUltronComposeRule<YourActivity>()
 ```
+
+
