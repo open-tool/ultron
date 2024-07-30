@@ -7,6 +7,7 @@ compose = "1.6.7"
 compose-compiler = "1.5.4"
 compose-material3 = "1.2.1"
 androidx-activityCompose = "1.9.0"
+kotlinxCoroutinesCore = "1.9.0-RC"
 kotlinxDatetime = "0.6.0"
 compose-plugin = "1.6.10"
 okio = "3.9.0"
@@ -38,6 +39,7 @@ compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = 
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
 compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "compose-material3" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 

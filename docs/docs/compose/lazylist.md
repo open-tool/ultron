@@ -123,7 +123,7 @@ class ComposeFriendListItem : UltronComposeListItem(){
 ```
 **Note: you have to use delegated initialisation with `by child`.**
 
-For Compose Multiplatform `commonTest` you need to register Item class instances, like:
+For Compose Multiplatform project you need to register Item class instances with `initBlock` param:
 
 ```kotlin
 composeList(.., initBlock = {
@@ -133,7 +133,7 @@ composeList(.., initBlock = {
 ```
 It is required cause Kotlin Multiplatfor Project has limited reflation API for different platforms.
 
-You don't need to register Items for Android UI tests (and JVM).
+You don't need to register Items for Android UI tests.
 
 Now you're able to get `ComposeFriendListItem` object using methods `getItem`, `getVisibleItem`, `getFirstVisibleItem`, `getLastVisibleItem`
 

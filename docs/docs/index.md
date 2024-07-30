@@ -14,19 +14,19 @@ You don't need to learn any new classes or special syntax. All magic actions and
 
 ## What are the benefits of using the framework?
 
-- Exceptional support for [**Compose**](./compose/index.md)
+- Page/Screen Object pattern support
+- Exceptional simplification for [**Compose UI tests**](compose/index.md)
 - Out-of-the-box generation of [**Allure report**](./common/allure.md) (Now, for Android UI tests only)
 - A straightforward and expressive syntax
 - Ensured **Stability** for all actions and assertions
 - Complete control over every action and assertion
-- Incredible interaction with [**RecyclerView**](./android/recyclerview.md) and [**Compose lists**](./compose/lazylist.md).
-- An **Architectural** approach to developing UI tests
+- Incredible interaction with lists: [**RecyclerView**](./android/recyclerview.md) and [**Compose LazyList**](compose/lazylist.md).
+- An **Architectural** approach to developing UI tests (search "Best practice")
 - An incredible mechanism for setups and teardowns (You can even set up preconditions for a single test within a test class, without affecting the others)
-- [The ability to effortlessly extend the framework with your own operations](./common/extension.md)
+- [The ability to effortlessly extend the framework with your own operations](common/extension.md)
 - Accelerated UI Automator operations
-- Ability to monitor each stage of operation execution with [Listeners](./common/listeners.md)
-- [Custom operation assertions](https://github.com/open-tool/ultron/wiki/Custom-operation-assertions)
-
+- Ability to monitor each stage of operation execution with [Listeners](common/listeners.md)
+- [Custom operation assertions](common/customassertion.md)
 ***
 
 ### A few words about syntax

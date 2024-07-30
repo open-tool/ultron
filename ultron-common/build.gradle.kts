@@ -18,8 +18,6 @@ kotlin {
     compilerOptions {
         apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
     }
-    // targets
-    jvm()
     androidTarget {
         publishLibraryVariants("release")
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -27,30 +25,31 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    applyDefaultHierarchyTemplate()
+    jvm("desktop")
     macosX64()
     macosArm64()
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-            isStatic = true
-        }
-    }
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
     @OptIn(ExperimentalWasmDsl::class)
-    wasmJs()
-    js(IR)
+    wasmJs(){
+        browser()
+        nodejs()
+    }
+    js(IR){
+        browser()
+        nodejs()
+    }
     sourceSets {
-        commonMain.dependencies {
-            implementation(libs.okio)
-            implementation(libs.kotlinx.datetime)
-            implementation(libs.atomicfu)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
+        applyDefaultHierarchyTemplate()
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.okio)
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.atomicfu)
+                implementation(libs.kotlin.test)
+                implementation(libs.kotlinx.coroutines.core)
+            }
         }
         val androidMain by getting {
             dependencies {
@@ -60,17 +59,37 @@ kotlin {
                 api(Libs.junit)
             }
         }
-        val jvmMain by getting {
+        val shared by creating {
+            dependsOn(commonMain)
             dependencies {
-                implementation(kotlin("stdlib-jdk8"))
+                api(libs.kotlinx.coroutines.core)
             }
         }
+        // desktop
+        jvmMain {
+            dependsOn(shared)
+            dependencies {
+                api(kotlin("stdlib"))
+            }
+        }
+        val desktopMain by getting {
+            dependsOn(shared)
+            dependsOn(jvmMain.get())
+        }
+        // native
+        val nativeMain by getting { dependsOn(shared) }
+        // js
+        val jsWasmMain by creating {
+            dependsOn(shared)
+        }
         val jsMain by getting {
+            dependsOn(jsWasmMain)
             dependencies {
                 implementation(kotlin("stdlib-js"))
             }
         }
         val wasmJsMain by getting {
+            dependsOn(jsWasmMain)
             dependencies {
                 implementation(kotlin("stdlib"))
             }
@@ -155,29 +174,28 @@ tasks.withType<PublishToMavenRepository>().configureEach {
     mustRunAfter(tasks.withType<Sign>())
 }
 
-tasks.named("publishKotlinMultiplatformPublicationToMavenLocal") {
-    dependsOn("signJvmPublication")
-    dependsOn("signKotlinMultiplatformPublication")
-    mustRunAfter("signJvmPublication")
-    mustRunAfter("signKotlinMultiplatformPublication")
-}
-
-tasks.named("publishJvmPublicationToMavenLocal") {
-    dependsOn("signJvmPublication")
-    dependsOn("signKotlinMultiplatformPublication")
-    dependsOn("signAndroidReleasePublication")
-    mustRunAfter("signJvmPublication")
-    mustRunAfter("signKotlinMultiplatformPublication")
-    mustRunAfter("signAndroidReleasePublication")
-}
-
 tasks.withType<PublishToMavenLocal>().configureEach {
-    dependsOn("signJvmPublication")
     dependsOn("signKotlinMultiplatformPublication")
     dependsOn("signAndroidReleasePublication")
-    mustRunAfter("signJvmPublication")
+    dependsOn("signDesktopPublication")
+    dependsOn("signIosArm64Publication")
+    dependsOn("signIosSimulatorArm64Publication")
+    dependsOn("signIosX64Publication")
+    dependsOn("signJsPublication")
+    dependsOn("signWasmJsPublication")
+    dependsOn("signMacosArm64Publication")
+    dependsOn("signMacosX64Publication")
+
     mustRunAfter("signKotlinMultiplatformPublication")
     mustRunAfter("signAndroidReleasePublication")
+    mustRunAfter("signDesktopPublication")
+    mustRunAfter("signIosArm64Publication")
+    mustRunAfter("signIosSimulatorArm64Publication")
+    mustRunAfter("signIosX64Publication")
+    mustRunAfter("signJsPublication")
+    mustRunAfter("signWasmJsPublication")
+    mustRunAfter("signMacosArm64Publication")
+    mustRunAfter("signMacosX64Publication")
 }
 
 signing {

@@ -14,34 +14,35 @@ You don't need to learn any new classes or special syntax. All magic actions and
 <img src="https://user-images.githubusercontent.com/12834123/252498170-61e5a440-c2b5-42ea-8bfb-91ee12248422.png#gh-dark-mode-only" width=600>
 </p>
 
-## [Documentation](https://open-tool.github.io/ultron/) | [Releases](https://github.com/open-tool/ultron/releases)
+## [Documentation](https://open-tool.github.io/ultron/) | [Releases](https://github.com/open-tool/ultron/releases) | [Telegram](https://t.me/ultron_framework)
 
 ## What are the benefits of using the framework?
 
-- Exceptional support for [**Compose**](https://github.com/open-tool/ultron/wiki/Compose)
-- Out-of-the-box generation of [**Allure report**](https://github.com/open-tool/ultron/wiki/Allure)
+- Page/Screen Object pattern support
+- Exceptional simplification for [**Compose UI tests**](https://open-tool.github.io/ultron/docs/compose/index)
+- Out-of-the-box generation of [**Allure report**](https://open-tool.github.io/ultron/docs/common/allure) (Now, for Android UI tests only)
 - A straightforward and expressive syntax
 - Ensured **Stability** for all actions and assertions
 - Complete control over every action and assertion
-- Incredible interaction with [**RecyclerView**](https://github.com/open-tool/ultron/wiki/RecyclerView) and [**Compose lists**](https://github.com/open-tool/ultron/wiki/Compose#ultron-compose-lazycolumnlazyrow).
-- An **Architectural** approach to developing UI tests
+- Incredible interaction with lists: [**RecyclerView**](./android/recyclerview.md) and [**Compose LazyList**](https://open-tool.github.io/ultron/docs/compose/lazylist).
+- An **Architectural** approach to developing UI tests (search "Best practice")
 - An incredible mechanism for setups and teardowns (You can even set up preconditions for a single test within a test class, without affecting the others)
-- [The ability to effortlessly extend the framework with your own operations](https://github.com/open-tool/ultron/wiki/Ultron-Extension)
+- [The ability to effortlessly extend the framework with your own operations](https://open-tool.github.io/ultron/docs/common/extension)
 - Accelerated UI Automator operations
-- Ability to monitor each stage of operation execution with [Listeners](https://github.com/open-tool/ultron/wiki/Listeners)
-- [Custom operation assertions](https://github.com/open-tool/ultron/wiki/Custom-operation-assertions)
+- Ability to monitor each stage of operation execution with [Listeners](https://open-tool.github.io/ultron/docs/common/listeners)
+- [Custom operation assertions](https://open-tool.github.io/ultron/docs/common/customassertion)
 
 ***
-### Wiki
-The framework offers an excellent [wiki](https://github.com/open-tool/ultron/wiki) that addresses the majority of significant usage scenarios.
+### Documentation
+The framework offers an excellent [documentation](https://open-tool.github.io/ultron/docs/) that addresses the majority of significant usage scenarios.
 
 ### A few words about syntax
 
-The standard syntax provided by Google is intricate and not intuitive. This is especially evident when dealing with RecyclerView interactions.
+The standard syntax provided by Google is intricate and not intuitive. This is especially evident when dealing with **LazyList** and **RecyclerView** interactions.
 
 Let's explore some examples:
 
-#### 1. Simple compose operation (refer to the wiki [here](https://github.com/open-tool/ultron/wiki/Compose#ultron-compose))
+#### 1. Simple compose operation (refer to the doc [here](https://open-tool.github.io/ultron/docs/compose/index))
 
 _Compose framework_
 
@@ -56,7 +57,7 @@ hasTestTag("Continue").click()
 hasText("Welcome").assertIsDisplayed()
 ```
 
-#### 2. Compose list operation (refer to the wiki [here](https://github.com/open-tool/ultron/wiki/Compose#ultron-compose-lazycolumnlazyrow))
+#### 2. Compose list operation (refer to the [doc](https://open-tool.github.io/ultron/docs/compose/lazylist))
 
 _Compose framework_
 
@@ -89,9 +90,9 @@ _Ultron_
 ```kotlin
 withId(R.id.send_button).isDisplayed().click()
 ```
-This presents a cleaner approach. Ultron's operation names mirror Espresso's, while also providing additional operations. 
+This presents a cleaner approach. Ultron's operation names mirror Espresso's, while also providing additional operations.
 
-Refer to the [wiki](https://github.com/open-tool/ultron/wiki/Espresso-operations) for further details.
+Refer to the [doc](https://open-tool.github.io/ultron/docs/android/espress) for further details.
 
 #### 4. Action on RecyclerView list item
 
@@ -115,9 +116,9 @@ withRecyclerView(R.id.recycler_friends)
     .click()
 ```
 
-Explore the [wiki](https://github.com/open-tool/ultron/wiki/RecyclerView) to unveil Ultron's magic with RecyclerView interactions.
+Explore the [doc](https://open-tool.github.io/ultron/docs/android/espress) to unveil Ultron's magic with RecyclerView interactions.
 
-#### 5. Espresso WebView operations 
+#### 5. Espresso WebView operations
 
 _Espresso_
 
@@ -139,7 +140,7 @@ id("button1").webClick()
 id("title").hasText(newTitle)
 ```
 
-Refer to the [wiki](https://github.com/open-tool/ultron/wiki/WebView) for more details.
+Refer to the [doc](https://open-tool.github.io/ultron/docs/android/webview) for more details.
 
 #### 6. UI Automator operations
 
@@ -157,7 +158,7 @@ _Ultron_
 ```kotlin
 byResId(R.id.button1).click() 
 ```
-Refer to the [wiki](https://github.com/open-tool/ultron/wiki/UI-Automator-operation) 
+Refer to the [doc](https://open-tool.github.io/ultron/docs/android/uiautomator)
 ***
 ### Acquiring the result of any operation as Boolean value
 
@@ -237,26 +238,26 @@ Refer to the full code sample [DemoEspressoTest.class](https://github.com/open-t
 
 In essence, your project's architecture will look like this:
 
-<img src="https://github.com/open-tool/ultron/assets/12834123/b0882d34-a18d-4f1f-959b-f75796d11036" width=700>
+[acrchitecture](https://github.com/open-tool/ultron/assets/12834123/b0882d34-a18d-4f1f-959b-f75796d11036)
 
+***
 ## Allure report
 
-Ultron has built in support to generate artifacts for Allure reports. Just apply the recommended configuration and set testIntrumentationRunner. 
+Ultron has built in support to generate artifacts for Allure reports. Just apply the recommended configuration and set testIntrumentationRunner.
 
-For the complete guide, refer to the [wiki](https://github.com/open-tool/ultron/wiki/Allure)
+For the complete guide, refer to the [Allure description](https://open-tool.github.io/ultron/docs/common/allure)
 
 ```kotlin
 @BeforeClass @JvmStatic
 fun setConfig() {
     UltronConfig.applyRecommended()
     UltronAllureConfig.applyRecommended()
-    UltronComposeConfig.applyRecommended()
+    UltronComposeConfig.applyRecommended() 
 }
 ```
 ![allure](https://github.com/open-tool/ultron/assets/12834123/c05c813a-ece6-45e6-a04f-e1c92b82ffb1)
 
 ![allure compose](https://github.com/open-tool/ultron/assets/12834123/1f751f3d-fc58-4874-a850-acd9181bfb70)
-
 
 ## Add Ultron to your project
 
@@ -272,8 +273,4 @@ dependencies {
     androidTestImplementation 'com.atiurin:ultron-compose:<latest_version>'
 }
 ```
-Please, read [gradle dependencies management](https://github.com/open-tool/ultron/wiki/Gradle-Dependencies-Management) wiki page.
-
-## AndroidX
-
-It is required to use AndroidX libraries. You can get some problems with Android Support ones.
+Please, read [gradle dependencies management](https://open-tool.github.io/ultron/docs/intro/dependencies) doc.

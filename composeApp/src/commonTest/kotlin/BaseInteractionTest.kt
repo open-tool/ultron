@@ -1,3 +1,4 @@
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -11,9 +12,9 @@ import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.core.compose.nodeinteraction.click
 import com.atiurin.ultron.core.compose.runUltronUiTest
 import com.atiurin.ultron.extensions.assertIsDisplayed
-import com.atiurin.ultron.extensions.assertTextContains
 import com.atiurin.ultron.extensions.isSuccess
 import com.atiurin.ultron.extensions.withAssertion
+import com.atiurin.ultron.extensions.withTimeout
 import com.atiurin.ultron.extensions.withUseUnmergedTree
 import kotlin.test.AfterTest
 import kotlin.test.Test
@@ -47,7 +48,7 @@ class BaseInteractionTest {
         }
         UltronComposeConfig.params.useUnmergedTree = true
         assertFalse("Ultron operation success should be false") {
-            hasTestTag(testTag).isSuccess { assertTextContains("Text1") }
+            hasTestTag(testTag).isSuccess { withTimeout(1000).assertTextContains("Text1") }
         }
         assertTrue ("Ultron operation success should be true") {
             hasTestTag(testTag).withUseUnmergedTree(false).isSuccess { assertTextContains("Text1") }
