@@ -8,11 +8,11 @@ import com.atiurin.ultron.extensions.putArguments
 import com.atiurin.ultron.runner.UltronRunInformer
 import io.qameta.allure.android.runners.AllureAndroidJUnitRunner
 
-class UltronAllureTestRunner : AllureAndroidJUnitRunner() {
+open class UltronAllureTestRunner : AllureAndroidJUnitRunner() {
     val informer: UltronRunInformer = UltronAllureRunInformer()
 
     override fun onCreate(arguments: Bundle) {
-        arguments.putArguments("listener", UltronTestRunListener::class.java.name)
+        arguments.putArguments("listener", UltronTestRunListener::class.qualifiedName!!)
         super.onCreate(arguments)
     }
 }
