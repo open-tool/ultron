@@ -12,7 +12,7 @@ android {
         minSdk = 21
         targetSdk = 34
         multiDexEnabled = true
-        testInstrumentationRunner = "com.atiurin.ultron.allure.UltronAllureTestRunner"
+        testInstrumentationRunner = "com.atiurin.sampleapp.framework.CustomTestRunner"
     }
 
     compileOptions {
