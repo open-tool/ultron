@@ -2,7 +2,6 @@ package com.atiurin.ultron.log
 
 expect fun getFileLogger(): UltronFileLogger
 
-
 object UltronLog {
     val fileLogger by lazy { getFileLogger() }
 
