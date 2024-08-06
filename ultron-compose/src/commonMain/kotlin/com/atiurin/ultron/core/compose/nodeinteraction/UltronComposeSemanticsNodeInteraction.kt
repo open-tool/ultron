@@ -2,42 +2,179 @@ package com.atiurin.ultron.core.compose.nodeinteraction
 
 
 import androidx.compose.ui.input.key.KeyEvent
-import androidx.compose.ui.semantics.*
-import androidx.compose.ui.test.*
+import androidx.compose.ui.semantics.AccessibilityAction
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsNode
+import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.MouseInjectionScope
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertContentDescriptionContains
+import androidx.compose.ui.test.assertContentDescriptionEquals
+import androidx.compose.ui.test.assertHasClickAction
+import androidx.compose.ui.test.assertHasNoClickAction
+import androidx.compose.ui.test.assertHeightIsAtLeast
+import androidx.compose.ui.test.assertHeightIsEqualTo
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsFocused
+import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsNotFocused
+import androidx.compose.ui.test.assertIsNotSelected
+import androidx.compose.ui.test.assertIsOff
+import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.assertIsSelectable
+import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsToggleable
+import androidx.compose.ui.test.assertRangeInfoEquals
+import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.assertValueEquals
+import androidx.compose.ui.test.assertWidthIsAtLeast
+import androidx.compose.ui.test.assertWidthIsEqualTo
+import androidx.compose.ui.test.click
+import androidx.compose.ui.test.doubleClick
+import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.performImeAction
+import androidx.compose.ui.test.performKeyPress
+import androidx.compose.ui.test.performMouseInput
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToIndex
+import androidx.compose.ui.test.performScrollToKey
+import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performSemanticsAction
+import androidx.compose.ui.test.performTextClearance
+import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextInputSelection
+import androidx.compose.ui.test.performTextReplacement
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.printToLog
+import androidx.compose.ui.test.swipe
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.Dp
 import com.atiurin.ultron.core.common.CommonOperationType
-import com.atiurin.ultron.core.common.ElementInfo
 import com.atiurin.ultron.core.common.DefaultElementInfo
+import com.atiurin.ultron.core.common.ElementInfo
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
-import com.atiurin.ultron.core.common.options.*
+import com.atiurin.ultron.core.common.options.ClickOption
+import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
+import com.atiurin.ultron.core.common.options.DoubleClickOption
+import com.atiurin.ultron.core.common.options.LongClickOption
+import com.atiurin.ultron.core.common.options.PerformCustomBlockOption
+import com.atiurin.ultron.core.common.options.TextContainsOption
+import com.atiurin.ultron.core.common.options.TextEqualsOption
 import com.atiurin.ultron.core.compose.SemanticsNodeInteractionProviderContainer
 import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.core.compose.operation.ComposeOperationExecutor
 import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
-import com.atiurin.ultron.core.compose.operation.ComposeOperationType.*
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.ASSERT_MATCHES
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.CLEAR_TEXT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.CLICK
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.COLLAPSE
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.CONTAINS_TEXT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.CONTENT_DESCRIPTION_CONTAINS_TEXT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.COPY_TEXT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.CUT_TEXT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.DISMISS
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.DOES_NOT_EXIST
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.DOUBLE_CLICK
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.EXISTS
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.EXPAND
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.GET_SEMANTICS_NODE
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.GET_TEXT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.HAS_CLICK_ACTION
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.HAS_CONTENT_DESCRIPTION
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.HAS_NO_CLICK_ACTION
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.HEIGHT_IS_AT_LEAST
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.HEIGHT_IS_EQUAL_TO
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IME_ACTION
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_DISPLAYED
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_ENABLED
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_FOCUSED
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_INDETERMINATE
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_NOT_DISPLAYED
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_NOT_ENABLED
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_NOT_FOCUSED
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_NOT_SELECTED
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_OFF
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_ON
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_SELECTABLE
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_SELECTED
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.IS_TOGGLEABLE
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.LONG_CLICK
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.MOUSE_INPUT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.PASTE_TEXT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.PRESS_KEY
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.PRINT_TO_LOG
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.PROGRESS_BAR_RANGE_EQUALS
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.REPLACE_TEXT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.SCROLL_TO
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.SCROLL_TO_INDEX
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.SCROLL_TO_KEY
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.SCROLL_TO_NODE
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.SEMANTIC_ACTION
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.SET_PROGRESS
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.SET_SELECTION
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.SET_TEXT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.SWIPE_DOWN
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.SWIPE_LEFT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.SWIPE_RIGHT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.SWIPE_UP
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.TEXT_EQUALS
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.TEXT_INPUT
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.TEXT_INPUT_SELECTION
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.VALUE_EQUALS
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.WIDTH_IS_AT_LEAST
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType.WIDTH_IS_EQUAL_TO
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationLifecycle
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
 import com.atiurin.ultron.exceptions.UltronOperationException
-import com.atiurin.ultron.extensions.*
+import com.atiurin.ultron.extensions.assertIsIndeterminate
+import com.atiurin.ultron.extensions.getDefaultDoubleClickDelay
+import com.atiurin.ultron.extensions.getDefaultLongClickDuration
+import com.atiurin.ultron.extensions.getOneOfConfigFields
+import com.atiurin.ultron.extensions.getSelectorDescription
+import com.atiurin.ultron.extensions.getUltronComposeOffset
+import com.atiurin.ultron.extensions.provideSwipeDownPosition
+import com.atiurin.ultron.extensions.provideSwipeLeftPosition
+import com.atiurin.ultron.extensions.provideSwipeRightPosition
+import com.atiurin.ultron.extensions.provideSwipeUpPosition
 import com.atiurin.ultron.listeners.setListenersState
 import kotlinx.atomicfu.AtomicRef
 import kotlinx.atomicfu.atomic
 import kotlinx.atomicfu.update
 
 open class UltronComposeSemanticsNodeInteraction constructor(
-    val semanticsNodeInteraction: SemanticsNodeInteraction,
+    private val semanticsNodeInteractionProvider: () -> SemanticsNodeInteraction,
     val timeoutMs: Long = UltronComposeConfig.params.operationTimeoutMs,
     val resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeConfig.resultHandler,
     val assertion: OperationAssertion = EmptyOperationAssertion(),
     val elementInfo: ElementInfo = DefaultElementInfo()
 ) {
+    val semanticsNodeInteraction: SemanticsNodeInteraction
+        get() = semanticsNodeInteractionProvider()
+
+    constructor(
+        semanticsNodeInteraction: SemanticsNodeInteraction,
+        timeoutMs: Long = UltronComposeConfig.params.operationTimeoutMs,
+        resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeConfig.resultHandler,
+        assertion: OperationAssertion = EmptyOperationAssertion(),
+        elementInfo: ElementInfo = DefaultElementInfo()
+    ) :  this(
+        semanticsNodeInteractionProvider = { semanticsNodeInteraction },
+        timeoutMs, resultHandler, assertion, elementInfo
+    )
+
     constructor(
         matcher: SemanticsMatcher,
         useUnmergedTree: Boolean = UltronComposeConfig.params.useUnmergedTree,
@@ -45,7 +182,10 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeConfig.resultHandler,
         assertion: OperationAssertion = EmptyOperationAssertion(),
         elementInfo: ElementInfo = DefaultElementInfo()
-    ) : this(SemanticsNodeInteractionProviderContainer.getProvider().onNode(matcher, useUnmergedTree), timeoutMs, resultHandler, assertion, elementInfo)
+    ) : this(
+        semanticsNodeInteractionProvider = { SemanticsNodeInteractionProviderContainer.getProvider().onNode(matcher, useUnmergedTree) },
+        timeoutMs, resultHandler, assertion, elementInfo
+    )
 
     init {
         if (elementInfo.name.isEmpty()) elementInfo.name = semanticsNodeInteraction.getSelectorDescription()
@@ -54,22 +194,30 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun <T> isSuccess(action: UltronComposeSemanticsNodeInteraction.() -> T): Boolean = runCatching { action() }.isSuccess
 
     fun withResultHandler(resultHandler: (ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeSemanticsNodeInteraction(
-        semanticsNodeInteraction, this.timeoutMs, resultHandler, this.assertion, this.elementInfo
+        semanticsNodeInteractionProvider, this.timeoutMs, resultHandler, this.assertion, this.elementInfo
     )
 
     fun withTimeout(timeoutMs: Long) = UltronComposeSemanticsNodeInteraction(
-        semanticsNodeInteraction, timeoutMs, this.resultHandler, this.assertion, this.elementInfo
+        semanticsNodeInteractionProvider, timeoutMs, this.resultHandler, this.assertion, this.elementInfo
     )
 
 
-    fun withAssertion(assertion: OperationAssertion) = UltronComposeSemanticsNodeInteraction(semanticsNodeInteraction, timeoutMs, resultHandler, assertion, this.elementInfo)
+    fun withAssertion(assertion: OperationAssertion) =
+        UltronComposeSemanticsNodeInteraction(semanticsNodeInteractionProvider, timeoutMs, resultHandler, assertion, this.elementInfo)
+
     fun withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
-        UltronComposeSemanticsNodeInteraction(semanticsNodeInteraction, timeoutMs, resultHandler, DefaultOperationAssertion(name, block.setListenersState(isListened)), this.elementInfo)
+        UltronComposeSemanticsNodeInteraction(
+            semanticsNodeInteractionProvider,
+            timeoutMs,
+            resultHandler,
+            DefaultOperationAssertion(name, block.setListenersState(isListened)),
+            this.elementInfo
+        )
 
     fun withName(name: String) = apply { elementInfo.name = name }
-    
+
     fun withMetaInfo(meta: Any) = apply { elementInfo.meta = meta }
-    
+
     internal fun click(position: UltronComposeOffsets, option: ClickOption? = null) = apply {
         val _option = option ?: ClickOption(0, 0)
         executeOperation(
@@ -428,7 +576,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     @Deprecated("Use the method 'execute' instead", ReplaceWith("execute(params, block)"))
     fun <T> perform(params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> T): T {
         val _params = params ?: getDefaultOperationParams()
-        val container : AtomicRef<T?> = atomic(null)
+        val container: AtomicRef<T?> = atomic(null)
         executeOperation(
             operationBlock = { container.update { block(semanticsNodeInteraction) } },
             name = _params.operationName,
@@ -477,7 +625,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
      */
     fun <T> execute(params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> T): T {
         val _params = params ?: getDefaultOperationParams()
-        val container : AtomicRef<T?> = atomic(null)
+        val container: AtomicRef<T?> = atomic(null)
         executeOperation(
             operationBlock = { container.update { block(semanticsNodeInteraction) } },
             name = _params.operationName,

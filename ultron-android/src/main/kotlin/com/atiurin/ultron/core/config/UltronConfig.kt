@@ -37,6 +37,7 @@ import com.atiurin.ultron.extensions.simpleClassName
 import com.atiurin.ultron.listeners.LogLifecycleListener
 import com.atiurin.ultron.listeners.UltronLifecycleListener
 import com.atiurin.ultron.log.UltronLog
+import com.atiurin.ultron.log.UltronLogcatLogger
 import com.atiurin.ultron.log.getFileLogger
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionExecutorWrapper
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionsExecutor
@@ -75,6 +76,7 @@ object UltronConfig {
         Espresso.ASSERTION_TIMEOUT = params.operationTimeoutMs
         UiAutomator.OPERATION_TIMEOUT = params.operationTimeoutMs
         UltronCommonConfig.addListener(LogLifecycleListener())
+        UltronLog.addLogger(UltronLogcatLogger())
         if (params.logToFile) {
             UltronLog.addLogger(UltronLog.fileLogger)
         } else {

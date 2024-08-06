@@ -1,6 +1,5 @@
 package com.atiurin.ultron.core.compose.config
 
-import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.common.OperationResultAnalyzer
@@ -8,13 +7,14 @@ import com.atiurin.ultron.core.common.UltronDefaultOperationResultAnalyzer
 import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
-import com.atiurin.ultron.core.compose.operation.UltronComposeOperationLifecycle
+import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.exceptions.UltronAssertionException
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.exceptions.UltronWrapperException
 import com.atiurin.ultron.extensions.simpleClassName
 import com.atiurin.ultron.listeners.LogLifecycleListener
 import com.atiurin.ultron.listeners.UltronLifecycleListener
+import com.atiurin.ultron.log.ULogger
 import com.atiurin.ultron.log.UltronLog
 
 object UltronComposeConfig {
@@ -88,6 +88,9 @@ object UltronComposeConfig {
     }
 
     private fun modify(){
+        getPlatformLoggers().forEach {
+            UltronLog.addLogger(it)
+        }
         UltronCommonConfig.addListener(LogLifecycleListener())
         if (UltronCommonConfig.logToFile) {
             UltronLog.addLogger(UltronLog.fileLogger)
@@ -97,3 +100,5 @@ object UltronComposeConfig {
         UltronLog.info("UltronComposeConfig applied with params $params}")
     }
 }
+
+expect fun getPlatformLoggers(): List<ULogger>

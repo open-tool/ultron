@@ -2,15 +2,12 @@ package com.atiurin.sampleapp.tests
 
 import android.os.Environment
 import androidx.test.platform.app.InstrumentationRegistry
-import com.atiurin.ultron.testlifecycle.rulesequence.RuleSequence
 import com.atiurin.sampleapp.data.repositories.CURRENT_USER
 import com.atiurin.sampleapp.managers.AccountManager
 import com.atiurin.ultron.allure.config.UltronAllureConfig
-import com.atiurin.ultron.allure.listeners.DetailedOperationAllureListener
-import com.atiurin.ultron.allure.listeners.ScreenshotAttachListener
-import com.atiurin.ultron.allure.listeners.WindowHierarchyAttachListener
 import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.testlifecycle.rulesequence.RuleSequence
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
 import org.junit.BeforeClass
 import org.junit.Rule
