@@ -1,7 +1,7 @@
 # Ultron
 
 [ ![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.atiurin/ultron-compose/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.atiurin/ultron-compose)
-![Multiplatform CI](https://github.com/open-tool/ultron/workflows/MultiplatformCI/badge.svg)
+![Android CI](https://github.com/open-tool/ultron/workflows/AndroidCI/badge.svg)
 
 Ultron is the simplest framework to develop UI tests for **Android** & **Compose Multiplatform**.
 
