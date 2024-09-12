@@ -39,7 +39,6 @@ dependencies {
     implementation(Libs.kotlinReflect)
     implementation(Libs.kotlinStdlib)
     implementation(Libs.recyclerView)
-    implementation(libs.guava)
     api(Libs.espressoCore)
     api(Libs.espressoContrib)
     api(Libs.espressoWeb)

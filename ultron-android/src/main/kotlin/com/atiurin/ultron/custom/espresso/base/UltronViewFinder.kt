@@ -1,6 +1,5 @@
 package com.atiurin.ultron.custom.espresso.base
 
-import android.os.Looper
 import android.view.View
 import android.widget.AdapterView
 import androidx.test.espresso.AmbiguousViewMatcherException
@@ -9,8 +8,7 @@ import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewInteraction
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.util.EspressoOptional
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.util.TreeIterables
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.custom.espresso.action.CustomEspressoActionType.GET_VIEW_FORCIBLY
@@ -19,12 +17,6 @@ import com.atiurin.ultron.extensions.getTargetMatcher
 import com.atiurin.ultron.extensions.getViewMatcher
 import com.atiurin.ultron.extensions.simpleClassName
 import com.atiurin.ultron.utils.runOnUiThread
-import com.google.common.base.Joiner
-import com.google.common.base.Preconditions
-import com.google.common.base.Predicate
-import com.google.common.collect.Iterables
-import com.google.common.collect.Iterators
-import com.google.common.collect.Lists
 import org.hamcrest.Matcher
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicReference
@@ -34,8 +26,10 @@ class UltronViewFinder<T>(val interaction: T) {
     private val viewMatcher: Matcher<View> = when (interaction) {
         is ViewInteraction -> interaction.getViewMatcher()
             ?: throw NullPointerException("Matcher<View> is null")
+
         is DataInteraction -> interaction.getTargetMatcher()
             ?: throw NullPointerException("Matcher<View> is null")
+
         else -> throw UltronException("Unknown type of interaction provided!")
     }
     private val root: View by lazy {
@@ -51,13 +45,11 @@ class UltronViewFinder<T>(val interaction: T) {
 
     @Throws(AmbiguousViewMatcherException::class, NoMatchingViewException::class)
     fun fetchView(): View {
-        checkMainThread()
-        val matcherPredicate: Predicate<View> =
-            MatcherPredicateAdapter(Preconditions.checkNotNull(viewMatcher))
-        val matchedViewIterator: Iterator<View> =
-            Iterables.filter(TreeIterables.breadthFirstViewTraversal(root), matcherPredicate)
-                .iterator()
+        Checker.checkMainThread()
+        val matchedViewIterator =
+            filter(TreeIterables.breadthFirstViewTraversal(root), viewMatcher).iterator()
         var matchedView: View? = null
+
         while (matchedViewIterator.hasNext()) {
             if (matchedView != null) {
                 // Ambiguous!
@@ -67,7 +59,7 @@ class UltronViewFinder<T>(val interaction: T) {
                     .withView1(matchedView)
                     .withView2(matchedViewIterator.next())
                     .withOtherAmbiguousViews(
-                        *Iterators.toArray(
+                        *toArray(
                             matchedViewIterator,
                             View::class.java
                         )
@@ -78,61 +70,38 @@ class UltronViewFinder<T>(val interaction: T) {
             }
         }
         if (null == matchedView) {
-            val adapterViewPredicate: Predicate<View> =
-                MatcherPredicateAdapter(
-                    ViewMatchers.isAssignableFrom(
-                        AdapterView::class.java
-                    )
-                )
-            val adapterViews: List<View> = Lists.newArrayList(
-                Iterables.filter(
+            val adapterViews =
+                filterToList(
                     TreeIterables.breadthFirstViewTraversal(root),
-                    adapterViewPredicate
-                ).iterator()
-            )
+                    isAssignableFrom(AdapterView::class.java)
+                )
+
             if (adapterViews.isEmpty()) {
                 throw NoMatchingViewException.Builder()
                     .withViewMatcher(viewMatcher)
                     .withRootView(root)
                     .build()
             }
+
             val warning = String.format(
                 Locale.ROOT,
-                "\n"
-                        + "If the target view is not part of the view hierarchy, you may need to use"
-                        + " Espresso.onData to load it from one of the following AdapterViews:%s",
-                Joiner.on("\n- ").join(adapterViews)
+                """
+                    If the target view is not part of the view hierarchy, you may need to use Espresso.onData to load it from one of the following AdapterViews:%s
+                """.trimIndent(),
+                joinToString(adapterViews, "\n- ")
             )
             throw NoMatchingViewException.Builder()
                 .withViewMatcher(viewMatcher)
                 .withRootView(root)
                 .withAdapterViews(adapterViews)
-                .withAdapterViewWarning(EspressoOptional.of(warning))
+                .withAdapterViewWarning(warning)
                 .build()
         } else {
             return matchedView
         }
     }
 
-    private fun checkMainThread() {
-        Preconditions.checkState(
-            (Thread.currentThread() == Looper.getMainLooper().thread),
-            "Executing a query on the view hierarchy outside of the main thread (on: %s)",
-            Thread.currentThread().name
-        )
-    }
 
-    private class MatcherPredicateAdapter<T>(matcher: Matcher<in T>) : Predicate<T> {
-        private val matcher: Matcher<in T>
-
-        init {
-            this.matcher = Preconditions.checkNotNull(matcher)
-        }
-
-        override fun apply(input: T): Boolean {
-            return matcher.matches(input)
-        }
-    }
 }
 
 
