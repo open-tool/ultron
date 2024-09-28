@@ -29,6 +29,13 @@ class UiAutomatorCustomAssertionTest : UiElementsTest() {
     }
 
     @Test
+    fun withAssertionAllureResult(){
+        uiObjectPage.editTextContentDesc.withAssertion("some test", isListened = true) {
+            uiObjectPage.editTextContentDesc.hasText("123")
+        }.replaceText("123")
+    }
+
+    @Test
     fun uiObject2ValidAssertionTest() {
         uiObject2Page.button.withAssertion {
             uiObject2Page.eventStatus.textContains(TestDataUtils.getResourceString(R.string.button_event_click))
