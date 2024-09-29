@@ -57,9 +57,10 @@ const config: Config = {
           label: 'Docs',
         },
         {
-          label: 'Telegram',
           href: 'https://t.me/ultron_framework',
           position: 'right',
+          className: 'header-telegram-link',
+          'aria-label': 'Telegram',
         },
         {
           href: 'https://github.com/open-tool/ultron',

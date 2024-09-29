@@ -14,7 +14,9 @@ You don't need to learn any new classes or special syntax. All magic actions and
 <img src="https://user-images.githubusercontent.com/12834123/252498170-61e5a440-c2b5-42ea-8bfb-91ee12248422.png#gh-dark-mode-only" width=600>
 </p>
 
+<div align="center">
 ## [Documentation](https://open-tool.github.io/ultron/) | [Releases](https://github.com/open-tool/ultron/releases) | [Telegram](https://t.me/ultron_framework)
+</div>
 
 ## What are the benefits of using the framework?
 

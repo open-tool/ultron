@@ -17,6 +17,7 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 } */
 
+
 :root {
   --ifm-color-primary: #233a60;
   --ifm-color-primary-dark: #29784c;
@@ -59,4 +60,20 @@
 
 .header-github-link:hover::before {
   background-color: var(--ifm-navbar-link-hover-color);
+}
+
+.header-telegram-link {
+  display: flex;
+  align-items: center;
+}
+
+.header-telegram-link::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url('/img/telegram-icon.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 8px;
 }
