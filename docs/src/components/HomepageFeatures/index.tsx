@@ -42,10 +42,10 @@ const FeatureList: FeatureItem[] = [
     ),
     description: (
       <>
+        <p>Page Object support</p>
         <p>Allure support</p>
         <p>Detailed logs</p>
         <p>Extendable API</p>
-        <p>An architectural approach to developing UI tests</p>
       </>
     ),
   },
