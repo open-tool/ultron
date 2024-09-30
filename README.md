@@ -15,7 +15,11 @@ You don't need to learn any new classes or special syntax. All magic actions and
 </p>
 
 <div align="center">
-## [Documentation](https://open-tool.github.io/ultron/) | [Releases](https://github.com/open-tool/ultron/releases) | [Telegram](https://t.me/ultron_framework)
+
+[![Documentation][documentation-badge]][documentation]
+[![Releases][releases-badge]][releases]
+[![Telegram][telegram-badge]][telegram]
+
 </div>
 
 ## What are the benefits of using the framework?
@@ -276,3 +280,15 @@ dependencies {
 }
 ```
 Please, read [gradle dependencies management](https://open-tool.github.io/ultron/docs/intro/dependencies) doc.
+
+<!--
+Link References
+-->
+
+[telegram-badge]:https://img.shields.io/badge/Chat-Telegram-0088CC?style=for-the-badge
+[documentation-badge]:https://img.shields.io/badge/Documentation-233a60?style=for-the-badge
+[releases-badge]:https://img.shields.io/github/release/open-tool/ultron.svg?style=for-the-badge
+
+[telegram]:https://t.me/ultron_framework
+[documentation]:https://open-tool.github.io/ultron/
+[releases]:https://github.com/open-tool/ultron/releases
