@@ -3,7 +3,7 @@ package com.atiurin.ultron.custom.espresso.base
 import android.os.Looper
 
 
-object Checker {
+internal object Checker {
     fun checkMainThread() {
         checkState(
             Thread.currentThread() == Looper.getMainLooper().thread,
