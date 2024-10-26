@@ -23,6 +23,8 @@ import com.atiurin.sampleapp.framework.ultronext.hasProgress
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.ComposeElementsPage
 import com.atiurin.sampleapp.tests.BaseTest
+import com.atiurin.ultron.core.common.assertion.softAssertion
+import com.atiurin.ultron.core.common.assertion.verifySoftAssertions
 import com.atiurin.ultron.core.common.options.ClickOption
 import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
 import com.atiurin.ultron.core.common.options.PerformCustomBlockOption
@@ -34,7 +36,58 @@ import com.atiurin.ultron.core.compose.nodeinteraction.click
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
-import com.atiurin.ultron.extensions.*
+import com.atiurin.ultron.extensions.assertContentDescriptionContains
+import com.atiurin.ultron.extensions.assertContentDescriptionEquals
+import com.atiurin.ultron.extensions.assertDoesNotExist
+import com.atiurin.ultron.extensions.assertExists
+import com.atiurin.ultron.extensions.assertHasClickAction
+import com.atiurin.ultron.extensions.assertHasNoClickAction
+import com.atiurin.ultron.extensions.assertHeightIsAtLeast
+import com.atiurin.ultron.extensions.assertHeightIsEqualTo
+import com.atiurin.ultron.extensions.assertIsDisplayed
+import com.atiurin.ultron.extensions.assertIsEnabled
+import com.atiurin.ultron.extensions.assertIsNotEnabled
+import com.atiurin.ultron.extensions.assertIsNotFocused
+import com.atiurin.ultron.extensions.assertIsNotSelected
+import com.atiurin.ultron.extensions.assertIsOff
+import com.atiurin.ultron.extensions.assertIsSelectable
+import com.atiurin.ultron.extensions.assertIsToggleable
+import com.atiurin.ultron.extensions.assertTextContains
+import com.atiurin.ultron.extensions.assertTextEquals
+import com.atiurin.ultron.extensions.assertValueEquals
+import com.atiurin.ultron.extensions.assertWidthIsAtLeast
+import com.atiurin.ultron.extensions.assertWidthIsEqualTo
+import com.atiurin.ultron.extensions.captureToImage
+import com.atiurin.ultron.extensions.clearText
+import com.atiurin.ultron.extensions.click
+import com.atiurin.ultron.extensions.clickBottomCenter
+import com.atiurin.ultron.extensions.clickBottomLeft
+import com.atiurin.ultron.extensions.clickBottomRight
+import com.atiurin.ultron.extensions.clickCenterLeft
+import com.atiurin.ultron.extensions.clickCenterRight
+import com.atiurin.ultron.extensions.clickTopCenter
+import com.atiurin.ultron.extensions.clickTopLeft
+import com.atiurin.ultron.extensions.clickTopRight
+import com.atiurin.ultron.extensions.copyText
+import com.atiurin.ultron.extensions.doubleClick
+import com.atiurin.ultron.extensions.execute
+import com.atiurin.ultron.extensions.getNode
+import com.atiurin.ultron.extensions.getNodeConfigProperty
+import com.atiurin.ultron.extensions.getText
+import com.atiurin.ultron.extensions.inputText
+import com.atiurin.ultron.extensions.longClick
+import com.atiurin.ultron.extensions.pasteText
+import com.atiurin.ultron.extensions.perform
+import com.atiurin.ultron.extensions.performMouseInput
+import com.atiurin.ultron.extensions.replaceText
+import com.atiurin.ultron.extensions.selectText
+import com.atiurin.ultron.extensions.setProgress
+import com.atiurin.ultron.extensions.swipeDown
+import com.atiurin.ultron.extensions.swipeLeft
+import com.atiurin.ultron.extensions.swipeRight
+import com.atiurin.ultron.extensions.swipeUp
+import com.atiurin.ultron.extensions.typeText
+import com.atiurin.ultron.extensions.withTimeout
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Rule
@@ -719,5 +772,14 @@ class ComposeUIElementsTest : BaseTest() {
         }.perform(params){
             it.assertTextContains("Some invalid text")
         }
+    }
+
+    @Test
+    fun softAssertionTest(){
+        softAssertion(false) {
+            hasText("NotExist").withTimeout(100).assertIsDisplayed()
+            hasTestTag("NotExist").withTimeout(100).assertHasClickAction()
+        }
+        verifySoftAssertions()
     }
 }

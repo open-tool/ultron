@@ -2,8 +2,7 @@ package com.atiurin.ultron.core.compose.config
 
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationResult
-import com.atiurin.ultron.core.common.OperationResultAnalyzer
-import com.atiurin.ultron.core.common.UltronDefaultOperationResultAnalyzer
+import com.atiurin.ultron.core.common.resultanalyzer.OperationResultAnalyzer
 import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
@@ -45,7 +44,13 @@ object UltronComposeConfig {
     @Deprecated("Use [UltronComposeConfig.params.operationTimeoutMs]")
     var OPERATION_TIMEOUT = params.operationTimeoutMs
 
-    var resultAnalyzer: OperationResultAnalyzer = UltronDefaultOperationResultAnalyzer()
+    var resultAnalyzer: OperationResultAnalyzer = UltronCommonConfig.resultAnalyzer
+        get(){
+            return if (UltronCommonConfig.isSoftAssertion) UltronCommonConfig.softAnalyzer.apply {
+                this.originalAnalyzer = field
+            }
+            else field
+        }
 
     inline fun setResultAnalyzer(crossinline block: (OperationResult<Operation>) -> Boolean) {
         resultAnalyzer = object : OperationResultAnalyzer {
