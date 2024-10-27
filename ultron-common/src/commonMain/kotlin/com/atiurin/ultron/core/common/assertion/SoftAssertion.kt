@@ -5,15 +5,17 @@ import com.atiurin.ultron.log.UltronLog
 
 fun softAssertion(failOnExceptions: Boolean = true, block: () -> Unit){
     UltronLog.info("Start soft assertion context")
-    UltronCommonConfig.isSoftAssertion = true
-    block()
-    UltronCommonConfig.isSoftAssertion = false
-    if (failOnExceptions) {
-        UltronCommonConfig.softAnalyzer.throwIfCaughtExceptions()
+    with(UltronCommonConfig.testContext){
+        softAssertion = true
+        block()
+        softAssertion = false
+        if (failOnExceptions){
+            softAnalyzer.verify()
+        }
     }
     UltronLog.info("Finish soft assertion context")
 }
 
 fun verifySoftAssertions(){
-    UltronCommonConfig.softAnalyzer.throwIfCaughtExceptions()
+    UltronCommonConfig.testContext.softAnalyzer.verify()
 }

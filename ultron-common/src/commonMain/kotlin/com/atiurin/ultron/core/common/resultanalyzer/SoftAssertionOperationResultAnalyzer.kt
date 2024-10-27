@@ -16,7 +16,11 @@ class SoftAssertionOperationResultAnalyzer() : OperationResultAnalyzer {
         }.isSuccess
     }
 
-    fun throwIfCaughtExceptions(){
+    fun clear(){
+        caughtExceptions.clear()
+    }
+
+    fun verify(){
         val message = StringBuilder()
         if (caughtExceptions.isNotEmpty()){
             val delimiter = "========================================================================================"
@@ -24,7 +28,8 @@ class SoftAssertionOperationResultAnalyzer() : OperationResultAnalyzer {
                 message.appendLine(ex.message)
                 message.appendLine(delimiter)
             }
-            throw UltronOperationException("SOFT ASSERTION FAILED\n$message")
+            clear()
+            throw UltronOperationException("SOFT ASSERTION FAILED. Details:\n$message")
         }
     }
 }
