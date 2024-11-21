@@ -23,7 +23,9 @@ object UltronComposeConfig {
         )
         config.addListener(LogLifecycleListener())
     }
+
     const val DEFAULT_LAZY_COLUMN_OPERATIONS_TIMEOUT = 10_000L
+
     @Deprecated(
         message = "Default moved to UltronCommonConfig.Defaults",
         replaceWith = ReplaceWith(expression = "UltronCommonConfig.Defaults.OPERATION_TIMEOUT_MS")
@@ -45,7 +47,6 @@ object UltronComposeConfig {
     var OPERATION_TIMEOUT = params.operationTimeoutMs
 
     var resultAnalyzer: OperationResultAnalyzer = config.resultAnalyzer
-        get() = config.wrapAnalyzerIfSoftAssertion(field)
 
     inline fun setResultAnalyzer(crossinline block: (OperationResult<Operation>) -> Boolean) {
         resultAnalyzer = object : OperationResultAnalyzer {
@@ -58,7 +59,7 @@ object UltronComposeConfig {
     }
 
     val resultHandler: (ComposeOperationResult<UltronComposeOperation>) -> Unit = {
-        resultAnalyzer.analyze(it)
+        config.testContext.wrapAnalyzerIfSoftAssertion(resultAnalyzer).analyze(it)
     }
 
     var allowedExceptions = mutableListOf(
@@ -87,7 +88,7 @@ object UltronComposeConfig {
         modify()
     }
 
-    private fun modify(){
+    private fun modify() {
         getPlatformLoggers().forEach {
             UltronLog.addLogger(it)
         }

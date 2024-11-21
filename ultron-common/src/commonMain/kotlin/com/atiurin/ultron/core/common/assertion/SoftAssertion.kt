@@ -3,13 +3,13 @@ package com.atiurin.ultron.core.common.assertion
 import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.log.UltronLog
 
-fun softAssertion(failOnExceptions: Boolean = true, block: () -> Unit){
+fun softAssertion(failOnException: Boolean = true, block: () -> Unit){
     UltronLog.info("Start soft assertion context")
     with(UltronCommonConfig.testContext){
         softAssertion = true
         block()
         softAssertion = false
-        if (failOnExceptions){
+        if (failOnException){
             softAnalyzer.verify()
         }
     }

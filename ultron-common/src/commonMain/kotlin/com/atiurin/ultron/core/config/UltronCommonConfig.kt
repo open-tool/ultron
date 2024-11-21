@@ -1,7 +1,8 @@
 package com.atiurin.ultron.core.config
 
 import com.atiurin.ultron.core.common.UltronOperationType
-import com.atiurin.ultron.core.common.context.TestContext
+import com.atiurin.ultron.core.test.context.DefaultUltronTestContext
+import com.atiurin.ultron.core.test.context.UltronTestContext
 import com.atiurin.ultron.core.common.resultanalyzer.OperationResultAnalyzer
 import com.atiurin.ultron.core.common.resultanalyzer.UltronDefaultOperationResultAnalyzer
 import com.atiurin.ultron.listeners.AbstractListenersContainer
@@ -14,13 +15,7 @@ object UltronCommonConfig : AbstractListenersContainer<UltronLifecycleListener>(
     var logDateFormat = "MM-dd HH:mm:ss.SSS"
     var logToFile: Boolean = true
     var resultAnalyzer: OperationResultAnalyzer = UltronDefaultOperationResultAnalyzer()
-    var testContext = TestContext()
-
-    fun wrapAnalyzerIfSoftAssertion(analyzer: OperationResultAnalyzer): OperationResultAnalyzer{
-        return if (testContext.softAssertion) testContext.softAnalyzer.apply {
-            originalAnalyzer = analyzer
-        } else analyzer
-    }
+    var testContext: UltronTestContext = DefaultUltronTestContext()
 
     class Defaults {
         companion object {
