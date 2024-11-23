@@ -12,7 +12,7 @@ class TestMethod(testContext: UltronTestContext) {
     private var afterTest: TestMethod.() -> Unit = {}
     internal var test: TestMethod.() -> Unit = {}
 
-    fun runTest() {
+    internal fun attack() {
         beforeTest()
         test()
         afterTest()
@@ -26,7 +26,7 @@ class TestMethod(testContext: UltronTestContext) {
         afterTest = block
     }
 
-    fun run(block: TestMethod.() -> Unit) {
+    fun go(block: TestMethod.() -> Unit) = apply {
         test = block
     }
 }

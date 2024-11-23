@@ -5,19 +5,11 @@ import com.atiurin.ultron.annotations.ExperimentalUltronApi
 import com.atiurin.ultron.log.UltronLog
 import org.junit.Test
 
-class UltronTestFlowTest : BaseTest() {
+class UltronTestFlowTest2 : BaseTest() {
     @OptIn(ExperimentalUltronApi::class)
     override val beforeAllTests = {
         UltronLog.info("Before Class")
     }
-
-    override val beforeTest = {
-        UltronLog.info("Before test common")
-    }
-    override val afterTest = {
-        UltronLog.info("After test common")
-    }
-
     @Test
     fun someTest1() = test {
         before {
@@ -40,10 +32,5 @@ class UltronTestFlowTest : BaseTest() {
             UltronLog.info("Run TestMethod 2")
         }
         UltronLog.info("UltronTest test 2")
-    }
-
-    @Test
-    fun simpleTest() = test {
-        UltronLog.info("UltronTest simpleTest")
     }
 }

@@ -3,9 +3,9 @@ import com.atiurin.ultron.log.UltronLog
 import kotlin.test.Test
 
 class UltronTestFlowTest: UltronTest() {
-    override val beforeClass = {}
+    override val beforeAllTests = {}
 
-    override val afterClass = {}
+    override val afterAllTests = {}
 
     override val afterTest = {}
 
@@ -15,7 +15,7 @@ class UltronTestFlowTest: UltronTest() {
             UltronLog.info("Before TestMethod")
         }.after {
             UltronLog.info("Before TestMethod")
-        }.run {
+        }.go {
             UltronLog.info("Run TestMethod")
         }
         UltronLog.info("UltronTest test")
