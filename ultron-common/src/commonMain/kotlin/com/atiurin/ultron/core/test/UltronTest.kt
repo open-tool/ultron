@@ -1,7 +1,6 @@
 package com.atiurin.ultron.core.test
 
 import com.atiurin.ultron.annotations.ExperimentalUltronApi
-import com.atiurin.ultron.core.config.UltronCommonConfig.testContext
 import com.atiurin.ultron.core.test.context.DefaultUltronTestContextProvider
 import com.atiurin.ultron.core.test.context.UltronTestContextProvider
 import com.atiurin.ultron.exceptions.UltronException
@@ -35,7 +34,7 @@ open class UltronTest(
      * Can be overridden in subclasses.
      */
     @ExperimentalUltronApi
-    open val beforeAllTests: () -> Unit = {}
+    open val beforeFirstTests: () -> Unit = {}
 
     /**
      * Function to be executed before each test.
@@ -63,11 +62,9 @@ open class UltronTest(
         configureTestBlock: TestMethod.() -> Unit
     ) {
         TestMethod(testContextProvider.provide()).apply {
-            testContext = testContext
-
             // Ensure `beforeAllTests` is executed only once per class
             if (beforeAllTestsExecutionMap[className] != true) {
-                beforeAllTests()
+                beforeFirstTests()
                 beforeAllTestsExecutionMap[className] = true
             }
 

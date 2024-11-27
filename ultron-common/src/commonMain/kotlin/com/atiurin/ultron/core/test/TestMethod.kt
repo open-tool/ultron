@@ -10,7 +10,7 @@ class TestMethod(testContext: UltronTestContext) {
 
     private var beforeTest: TestMethod.() -> Unit = {}
     private var afterTest: TestMethod.() -> Unit = {}
-    internal var test: TestMethod.() -> Unit = {}
+    private var test: TestMethod.() -> Unit = {}
 
     internal fun attack() {
         beforeTest()

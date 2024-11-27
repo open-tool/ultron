@@ -1,4 +1,4 @@
-package com.atiurin.sampleapp.tests.compose
+package com.atiurin.sampleapp.tests.testlifecycle
 
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
