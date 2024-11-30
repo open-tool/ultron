@@ -18,8 +18,8 @@ import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObjectNotFoundException
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationResult
-import com.atiurin.ultron.core.common.OperationResultAnalyzer
-import com.atiurin.ultron.core.common.UltronDefaultOperationResultAnalyzer
+import com.atiurin.ultron.core.common.resultanalyzer.OperationResultAnalyzer
+import com.atiurin.ultron.core.common.resultanalyzer.UltronDefaultOperationResultAnalyzer
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
@@ -38,7 +38,6 @@ import com.atiurin.ultron.listeners.LogLifecycleListener
 import com.atiurin.ultron.listeners.UltronLifecycleListener
 import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.log.UltronLogcatLogger
-import com.atiurin.ultron.log.getFileLogger
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionExecutorWrapper
 import com.atiurin.ultron.testlifecycle.setupteardown.ConditionsExecutor
 import junit.framework.AssertionFailedError
@@ -148,7 +147,7 @@ object UltronConfig {
             var RECYCLER_VIEW_ITEM_SEARCH_LIMIT = -1
             var INCLUDE_VIEW_HIERARCHY_TO_EXCEPTION = false //where it applicable
 
-            var resultAnalyzer: OperationResultAnalyzer = UltronDefaultOperationResultAnalyzer()
+            var resultAnalyzer: OperationResultAnalyzer = UltronCommonConfig.resultAnalyzer
 
             inline fun setResultAnalyzer(crossinline block: (OperationResult<Operation>) -> Boolean) {
                 resultAnalyzer = object : OperationResultAnalyzer {
@@ -208,10 +207,9 @@ object UltronConfig {
                     AssertionFailedError::class.java,
                     RuntimeException::class.java
                 )
-                val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit =
-                    {
-                        resultAnalyzer.analyze(it)
-                    }
+                val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit = {
+                    resultAnalyzer.analyze(it)
+                }
             }
         }
     }
@@ -221,7 +219,7 @@ object UltronConfig {
             var UIAUTOMATOR_OPERATION_POLLING_TIMEOUT = UltronCommonConfig.Defaults.POLLING_TIMEOUT_MS
             var OPERATION_TIMEOUT = UltronCommonConfig.Defaults.OPERATION_TIMEOUT_MS
 
-            var resultAnalyzer: OperationResultAnalyzer = UltronDefaultOperationResultAnalyzer()
+            var resultAnalyzer: OperationResultAnalyzer = UltronCommonConfig.resultAnalyzer
 
             inline fun setResultAnalyzer(crossinline block: (OperationResult<Operation>) -> Boolean) {
                 resultAnalyzer = object : OperationResultAnalyzer {
@@ -258,10 +256,9 @@ object UltronConfig {
                     UiObjectNotFoundException::class.java,
                     NullPointerException::class.java,
                 )
-                val resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit =
-                    {
-                        resultAnalyzer.analyze(it)
-                    }
+                val resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = {
+                    resultAnalyzer.analyze(it)
+                }
             }
         }
 
@@ -276,10 +273,9 @@ object UltronConfig {
                     UiObjectNotFoundException::class.java,
                     NullPointerException::class.java,
                 )
-                val resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit =
-                    {
-                        resultAnalyzer.analyze(it)
-                    }
+                val resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit = {
+                    resultAnalyzer.analyze(it)
+                }
             }
         }
     }

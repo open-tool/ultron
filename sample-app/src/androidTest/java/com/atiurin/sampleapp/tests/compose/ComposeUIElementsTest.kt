@@ -23,6 +23,8 @@ import com.atiurin.sampleapp.framework.ultronext.hasProgress
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.ComposeElementsPage
 import com.atiurin.sampleapp.tests.BaseTest
+import com.atiurin.ultron.core.common.assertion.softAssertion
+import com.atiurin.ultron.core.common.assertion.verifySoftAssertions
 import com.atiurin.ultron.core.common.options.ClickOption
 import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
 import com.atiurin.ultron.core.common.options.PerformCustomBlockOption
@@ -34,7 +36,59 @@ import com.atiurin.ultron.core.compose.nodeinteraction.click
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
-import com.atiurin.ultron.extensions.*
+import com.atiurin.ultron.core.config.UltronCommonConfig
+import com.atiurin.ultron.extensions.assertContentDescriptionContains
+import com.atiurin.ultron.extensions.assertContentDescriptionEquals
+import com.atiurin.ultron.extensions.assertDoesNotExist
+import com.atiurin.ultron.extensions.assertExists
+import com.atiurin.ultron.extensions.assertHasClickAction
+import com.atiurin.ultron.extensions.assertHasNoClickAction
+import com.atiurin.ultron.extensions.assertHeightIsAtLeast
+import com.atiurin.ultron.extensions.assertHeightIsEqualTo
+import com.atiurin.ultron.extensions.assertIsDisplayed
+import com.atiurin.ultron.extensions.assertIsEnabled
+import com.atiurin.ultron.extensions.assertIsNotEnabled
+import com.atiurin.ultron.extensions.assertIsNotFocused
+import com.atiurin.ultron.extensions.assertIsNotSelected
+import com.atiurin.ultron.extensions.assertIsOff
+import com.atiurin.ultron.extensions.assertIsSelectable
+import com.atiurin.ultron.extensions.assertIsToggleable
+import com.atiurin.ultron.extensions.assertTextContains
+import com.atiurin.ultron.extensions.assertTextEquals
+import com.atiurin.ultron.extensions.assertValueEquals
+import com.atiurin.ultron.extensions.assertWidthIsAtLeast
+import com.atiurin.ultron.extensions.assertWidthIsEqualTo
+import com.atiurin.ultron.extensions.captureToImage
+import com.atiurin.ultron.extensions.clearText
+import com.atiurin.ultron.extensions.click
+import com.atiurin.ultron.extensions.clickBottomCenter
+import com.atiurin.ultron.extensions.clickBottomLeft
+import com.atiurin.ultron.extensions.clickBottomRight
+import com.atiurin.ultron.extensions.clickCenterLeft
+import com.atiurin.ultron.extensions.clickCenterRight
+import com.atiurin.ultron.extensions.clickTopCenter
+import com.atiurin.ultron.extensions.clickTopLeft
+import com.atiurin.ultron.extensions.clickTopRight
+import com.atiurin.ultron.extensions.copyText
+import com.atiurin.ultron.extensions.doubleClick
+import com.atiurin.ultron.extensions.execute
+import com.atiurin.ultron.extensions.getNode
+import com.atiurin.ultron.extensions.getNodeConfigProperty
+import com.atiurin.ultron.extensions.getText
+import com.atiurin.ultron.extensions.inputText
+import com.atiurin.ultron.extensions.longClick
+import com.atiurin.ultron.extensions.pasteText
+import com.atiurin.ultron.extensions.perform
+import com.atiurin.ultron.extensions.performMouseInput
+import com.atiurin.ultron.extensions.replaceText
+import com.atiurin.ultron.extensions.selectText
+import com.atiurin.ultron.extensions.setProgress
+import com.atiurin.ultron.extensions.swipeDown
+import com.atiurin.ultron.extensions.swipeLeft
+import com.atiurin.ultron.extensions.swipeRight
+import com.atiurin.ultron.extensions.swipeUp
+import com.atiurin.ultron.extensions.typeText
+import com.atiurin.ultron.extensions.withTimeout
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Rule
@@ -76,10 +130,7 @@ class ComposeUIElementsTest : BaseTest() {
 
     @Test
     fun clickCheckBox() {
-        hasTestTag(simpleCheckbox)
-            .assertIsOff()
-            .click()
-            .assertIsOn()
+        hasTestTag(simpleCheckbox).assertIsOff().click().assertIsOn()
     }
 
     @Test
@@ -205,11 +256,7 @@ class ComposeUIElementsTest : BaseTest() {
 
     @Test
     fun setSelection() {
-        page.editableText.replaceText("qwerty")
-            .setSelection(0, 3, true)
-            .assertIsDisplayed()
-            .cutText()
-            .assertTextContains("rty")
+        page.editableText.replaceText("qwerty").setSelection(0, 3, true).assertIsDisplayed().cutText().assertTextContains("rty")
     }
 
     @Test
@@ -220,8 +267,7 @@ class ComposeUIElementsTest : BaseTest() {
 
     @Test
     fun setProgress() {
-        page.progressBar.setProgress(0.7f)
-            .assertIsDisplayed()
+        page.progressBar.setProgress(0.7f).assertIsDisplayed()
         page.status.assertTextEquals("set progress 0.7")
     }
 
@@ -251,7 +297,7 @@ class ComposeUIElementsTest : BaseTest() {
 
     @Test
     fun semanticsMatcher_performDeprecated() {
-        val text = page.status.perform<String>( {
+        val text = page.status.perform<String>({
             it.fetchSemanticsNode().config[SemanticsProperties.Text].first().text
         }, option = PerformCustomBlockOption(ComposeOperationType.CUSTOM, ""))
         Assert.assertTrue(text.isNotBlank())
@@ -259,7 +305,7 @@ class ComposeUIElementsTest : BaseTest() {
 
     @Test
     fun ultronComposeSemanticsNodeInteraction_performDeprecated() {
-        val text = page.status.assertExists().perform( option = PerformCustomBlockOption(ComposeOperationType.CUSTOM, "")) {
+        val text = page.status.assertExists().perform(option = PerformCustomBlockOption(ComposeOperationType.CUSTOM, "")) {
             it.fetchSemanticsNode().config[SemanticsProperties.Text].first().text
         }
         Assert.assertTrue(text.isNotBlank())
@@ -288,13 +334,13 @@ class ComposeUIElementsTest : BaseTest() {
     }
 
     @Test
-    fun getNode_exits(){
+    fun getNode_exits() {
         val node = page.status.getNode()
         Assert.assertEquals(ComposeElementsActivity.Constants.statusText, node.config[SemanticsProperties.TestTag])
     }
 
     @Test
-    fun getNodeConfigProperty_exist(){
+    fun getNodeConfigProperty_exist() {
         val testTag = page.status.getNodeConfigProperty(SemanticsProperties.TestTag)
         Assert.assertEquals(ComposeElementsActivity.Constants.statusText, testTag)
     }
@@ -487,9 +533,7 @@ class ComposeUIElementsTest : BaseTest() {
     fun assertTextEquals_editableNotEmpty_includeEditableFalse() {
         val text = "editable text"
         AssertUtils.assertException {
-            page.editableText.withTimeout(100)
-                .replaceText(text)
-                .assertTextEquals("Label", text, option = TextEqualsOption(false))
+            page.editableText.withTimeout(100).replaceText(text).assertTextEquals("Label", text, option = TextEqualsOption(false))
         }
     }
 
@@ -518,18 +562,13 @@ class ComposeUIElementsTest : BaseTest() {
     @Test
     fun assertTextContains_substringTrue_validSubstringProvided() {
         val text = "some text"
-        page.editableText
-            .replaceText(text)
-            .assertTextContains(text.substring(0, 4), TextContainsOption(substring = true))
+        page.editableText.replaceText(text).assertTextContains(text.substring(0, 4), TextContainsOption(substring = true))
     }
 
     @Test
     fun assertTextContains_substringTrue_wrongSubstringProvided() {
         AssertUtils.assertException {
-            page.editableText
-                .replaceText("valid text")
-                .withTimeout(100)
-                .assertTextContains("wrong text", TextContainsOption(substring = true))
+            page.editableText.replaceText("valid text").withTimeout(100).assertTextContains("wrong text", TextContainsOption(substring = true))
         }
     }
 
@@ -537,45 +576,33 @@ class ComposeUIElementsTest : BaseTest() {
     fun assertTextContains_substringFalse_validSubstringProvided() {
         val text = "some text"
         AssertUtils.assertException {
-            page.editableText
-                .replaceText(text)
-                .withTimeout(100)
-                .assertTextContains(text.substring(0, 4), TextContainsOption(substring = false))
+            page.editableText.replaceText(text).withTimeout(100).assertTextContains(text.substring(0, 4), TextContainsOption(substring = false))
         }
     }
 
     @Test
     fun assertTextContains_ignoreCase_lowercase() {
         val text = "SoMe TexT"
-        page.editableText
-            .replaceText(text)
-            .assertTextContains(text.lowercase(), TextContainsOption(ignoreCase = true))
+        page.editableText.replaceText(text).assertTextContains(text.lowercase(), TextContainsOption(ignoreCase = true))
     }
 
     @Test
     fun assertTextContains_ignoreCase_uppercase() {
         val text = "SoMe TexT"
-        page.editableText
-            .replaceText(text)
-            .assertTextContains(text.uppercase(), TextContainsOption(ignoreCase = true))
+        page.editableText.replaceText(text).assertTextContains(text.uppercase(), TextContainsOption(ignoreCase = true))
     }
 
     @Test
     fun assertTextContains_ignoreCase_and_substring() {
         val text = "SoMe TexT"
-        page.editableText
-            .replaceText(text)
-            .assertTextContains(text.substring(0, 4).lowercase(), TextContainsOption(substring = true, ignoreCase = true))
+        page.editableText.replaceText(text).assertTextContains(text.substring(0, 4).lowercase(), TextContainsOption(substring = true, ignoreCase = true))
     }
 
     @Test
     fun assertTextContains_ignoreCaseFalse() {
         val text = "SoMe TexT"
         AssertUtils.assertException {
-            page.editableText
-                .replaceText(text)
-                .withTimeout(100)
-                .assertTextContains(text.lowercase(), TextContainsOption(ignoreCase = false))
+            page.editableText.replaceText(text).withTimeout(100).assertTextContains(text.lowercase(), TextContainsOption(ignoreCase = false))
         }
     }
 
@@ -621,9 +648,7 @@ class ComposeUIElementsTest : BaseTest() {
     @Test
     fun assertContentDescriptionContains_ignoreCaseFalse() {
         AssertUtils.assertException {
-            page.likesCounter
-                .withTimeout(100)
-                .assertContentDescriptionContains(likesCounterContentDesc.lowercase(), ContentDescriptionContainsOption(ignoreCase = false))
+            page.likesCounter.withTimeout(100).assertContentDescriptionContains(likesCounterContentDesc.lowercase(), ContentDescriptionContainsOption(ignoreCase = false))
         }
     }
 
@@ -640,16 +665,13 @@ class ComposeUIElementsTest : BaseTest() {
 
     @Test
     fun assertRangeInfoEquals() {
-        page.progressBar.setProgress(0.7f)
-            .assertRangeInfoEquals(ProgressBarRangeInfo(0.7f, range = 0f..0.7f, 100))
+        page.progressBar.setProgress(0.7f).assertRangeInfoEquals(ProgressBarRangeInfo(0.7f, range = 0f..0.7f, 100))
     }
 
     @Test
     fun assertRangeInfoEquals_invalidInfo() {
         AssertUtils.assertException {
-            page.progressBar
-                .setProgress(0.7f).withTimeout(100)
-                .assertRangeInfoEquals(ProgressBarRangeInfo(0.0f, range = 0f..0.0f, 100))
+            page.progressBar.setProgress(0.7f).withTimeout(100).assertRangeInfoEquals(ProgressBarRangeInfo(0.0f, range = 0f..0.0f, 100))
         }
     }
 
@@ -701,11 +723,14 @@ class ComposeUIElementsTest : BaseTest() {
 
     @Test
     fun assertMatches_invalid() {
-        AssertUtils.assertException { page.editableText.replaceText("some text").withTimeout(100).assertMatches(hasText("invalid text")) }
+        AssertUtils.assertException {
+            page.editableText.replaceText("some text").withTimeout(100)
+                .assertMatches(hasText("invalid text"))
+        }
     }
 
     @Test
-    fun customPerformParamsMapping(){
+    fun customPerformParamsMapping() {
         val params = UltronComposeOperationParams(
             operationName = "operationName",
             operationDescription = "operationDescription",
@@ -716,8 +741,25 @@ class ComposeUIElementsTest : BaseTest() {
             Assert.assertEquals(params.operationName, op.name)
             Assert.assertEquals(params.operationDescription, op.description)
             Assert.assertEquals(params.operationType, op.type)
-        }.perform(params){
+        }.perform(params) {
             it.assertTextContains("Some invalid text")
         }
+    }
+
+    @Test
+    fun softAssertionTest() {
+        UltronCommonConfig.testContext.softAnalyzer.clear()
+        softAssertion(false) {
+            hasText("NotExistText").withTimeout(100).assertIsDisplayed()
+            hasTestTag("NotExistTestTag").withTimeout(100).assertHasClickAction()
+        }
+        runCatching {
+            verifySoftAssertions()
+        }.onFailure { exception ->
+            val message = exception.message ?: throw RuntimeException("Empty exception message: $exception")
+            Assert.assertTrue(message.contains("NotExistText"))
+            Assert.assertTrue(message.contains("NotExistTestTag"))
+        }
+
     }
 }

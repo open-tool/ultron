@@ -6,7 +6,7 @@ import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
-import com.atiurin.ultron.core.common.UltronDefaultOperationResultAnalyzer
+import com.atiurin.ultron.core.common.resultanalyzer.UltronDefaultOperationResultAnalyzer
 import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.EspressoOperationResult

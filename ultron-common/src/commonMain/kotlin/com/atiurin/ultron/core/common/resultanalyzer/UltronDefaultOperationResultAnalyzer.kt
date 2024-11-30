@@ -1,10 +1,12 @@
-package com.atiurin.ultron.core.common
+package com.atiurin.ultron.core.common.resultanalyzer
 
+import com.atiurin.ultron.core.common.Operation
+import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.common.assertion.isEmptyAssertion
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.exceptions.UltronOperationException
 
-class UltronDefaultOperationResultAnalyzer : OperationResultAnalyzer {
+open class UltronDefaultOperationResultAnalyzer : OperationResultAnalyzer {
     override fun <Op : Operation, OpRes : OperationResult<Op>> analyze(operationResult: OpRes): Boolean {
         if (!operationResult.success) {
             val exceptionToThrow = operationResult.exceptions.lastOrNull()
