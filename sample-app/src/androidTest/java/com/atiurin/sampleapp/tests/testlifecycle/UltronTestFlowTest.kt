@@ -8,7 +8,7 @@ import org.junit.Test
 class UltronTestFlowTest : BaseTest() {
     companion object {
         var order = 0
-        var beforeAllTestCounter = -1
+        var isBeforeFirstTestCounter = 0
         var commonBeforeOrder = -1
         var commonAfterOrder = -1
         var afterOrder = -1
@@ -17,7 +17,7 @@ class UltronTestFlowTest : BaseTest() {
 
     @OptIn(ExperimentalUltronApi::class)
     override val beforeFirstTest = {
-        beforeAllTestCounter = order
+        isBeforeFirstTestCounter++
         UltronLog.info("Before Class")
     }
 
@@ -39,6 +39,7 @@ class UltronTestFlowTest : BaseTest() {
         var goOrder = -1
         order++
         before {
+            assert(isBeforeFirstTestCounter == 1, lazyMessage = { "beforeFirstTest block should run before commonBefore block" })
             beforeOrder = order
             order++
             UltronLog.info("Before TestMethod 1")
@@ -49,8 +50,6 @@ class UltronTestFlowTest : BaseTest() {
         }.after {
             afterOrder = order
             order++
-            assert(beforeAllTestCounter == 0, lazyMessage = { "beforeAllTests block should run before all test" })
-            assert(beforeAllTestCounter < commonBeforeOrder, lazyMessage = { "beforeAllTests block should run before commonBefore block" })
             assert(commonBeforeOrder < beforeOrder, lazyMessage = { "beforeOrder block should run after commonBefore block" })
             assert(beforeOrder < goOrder, lazyMessage = { "Before block should run before 'go'" })
             assert(goOrder < afterOrder, lazyMessage = { "After block should run after 'go'" })
@@ -64,14 +63,14 @@ class UltronTestFlowTest : BaseTest() {
         }.after {
             UltronLog.info("After TestMethod 2")
         }.go {
-            assert(beforeAllTestCounter == 0, lazyMessage = { "beforeAllTests block should run only once" })
+            assert(isBeforeFirstTestCounter == 1, lazyMessage = { "beforeFirstTest block should run only once" })
             UltronLog.info("Run TestMethod 2")
         }
     }
 
     @Test
     fun simpleTest() = test {
-        assert(beforeAllTestCounter == 0, lazyMessage = { "beforeAllTests block should run only once" })
+        assert(isBeforeFirstTestCounter == 1, lazyMessage = { "beforeAllTests block should run only once" })
         UltronLog.info("UltronTest simpleTest")
     }
 }

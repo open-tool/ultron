@@ -8,16 +8,15 @@ import kotlin.test.assertTrue
 class UltronTestFlowTest : UltronTest() {
     companion object {
         var order = 0
-        var beforeAllTestCounter = -1
+        var beforeFirstTestCounter = 0
         var commonBeforeOrder = -1
         var commonAfterOrder = -1
         var afterOrder = -1
-
     }
 
     @OptIn(ExperimentalUltronApi::class)
     override val beforeFirstTest = {
-        beforeAllTestCounter = order
+        beforeFirstTestCounter++
         UltronLog.info("Before Class")
     }
 
@@ -39,6 +38,7 @@ class UltronTestFlowTest : UltronTest() {
         var goOrder = -1
         order++
         before {
+            assertTrue(beforeFirstTestCounter == 1, message = "beforeFirstTest block should run before all test")
             beforeOrder = order
             order++
             UltronLog.info("Before TestMethod 1")
@@ -49,8 +49,6 @@ class UltronTestFlowTest : UltronTest() {
         }.after {
             afterOrder = order
             order++
-            assertTrue(beforeAllTestCounter == 0, message = "beforeAllTests block should run before all test")
-            assertTrue(beforeAllTestCounter < commonBeforeOrder, message = "beforeAllTests block should run before commonBefore block")
             assertTrue(commonBeforeOrder < beforeOrder, message = "beforeOrder block should run after commonBefore block")
             assertTrue(beforeOrder < goOrder, message = "Before block should run before 'go'")
             assertTrue(goOrder < afterOrder, message = "After block should run after 'go'")
@@ -64,14 +62,14 @@ class UltronTestFlowTest : UltronTest() {
         }.after {
             UltronLog.info("After TestMethod 2")
         }.go {
-            assertTrue(beforeAllTestCounter == 0, message = "beforeAllTests block should run only once")
+            assertTrue(beforeFirstTestCounter == 1, message = "beforeFirstTest block should run only once")
             UltronLog.info("Run TestMethod 2")
         }
     }
 
     @Test
     fun simpleTest() = test {
-        assertTrue(beforeAllTestCounter == 0, message = "beforeAllTests block should run only once")
+        assertTrue(beforeFirstTestCounter == 1, message = "beforeFirstTest block should run only once")
         UltronLog.info("UltronTest simpleTest")
     }
 }

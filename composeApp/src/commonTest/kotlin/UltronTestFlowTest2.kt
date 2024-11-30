@@ -2,15 +2,18 @@ import com.atiurin.ultron.annotations.ExperimentalUltronApi
 import com.atiurin.ultron.core.test.UltronTest
 import com.atiurin.ultron.log.UltronLog
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class UltronTestFlowTest2 : UltronTest() {
-    var order = 0
-    var beforeAllTestCounter = 0
+    companion object {
+        var order = 0
+        var beforeFirstTestCounter = 0
+    }
 
     @OptIn(ExperimentalUltronApi::class)
     override val beforeFirstTest = {
-        beforeAllTestCounter = order
+        beforeFirstTestCounter++
         order++
         UltronLog.info("Before Class")
     }
@@ -22,6 +25,7 @@ class UltronTestFlowTest2 : UltronTest() {
         var goOrder = -1
         order++
         before {
+            assertEquals(1, beforeFirstTestCounter, message = "beforeFirstTest block should run before all test")
             beforeOrder = order
             order++
             UltronLog.info("Before TestMethod 1")
@@ -31,8 +35,6 @@ class UltronTestFlowTest2 : UltronTest() {
             UltronLog.info("Run TestMethod 1")
         }.after {
             afterOrder = order
-            assertTrue(beforeAllTestCounter == 0, message = "beforeAllTests block should run before all test")
-            assertTrue(beforeOrder > beforeAllTestCounter, message = "Before block should run after 'Before All'")
             assertTrue(beforeOrder < goOrder, message = "Before block should run before 'go'")
             assertTrue(goOrder < afterOrder, message = "After block should run after 'go'")
         }
@@ -45,7 +47,7 @@ class UltronTestFlowTest2 : UltronTest() {
         }.after {
             UltronLog.info("After TestMethod 2")
         }.go {
-            assertTrue(beforeAllTestCounter == 0, message = "beforeAllTests block should run only once")
+            assertEquals(1, beforeFirstTestCounter, message = "beforeFirstTest block should run before all test")
             UltronLog.info("Run TestMethod 2")
         }
     }

@@ -26,7 +26,7 @@ open class UltronTest(
      *
      * @throws UltronException if the test class is anonymous.
      */
-    private val className = this::class.qualifiedName
+    private val className = this::class.simpleName
         ?: throw UltronException("Don't use anonymous class for UltronTest")
 
     /**
