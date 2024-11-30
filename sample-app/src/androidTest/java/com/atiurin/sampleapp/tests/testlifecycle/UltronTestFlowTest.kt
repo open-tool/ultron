@@ -16,7 +16,7 @@ class UltronTestFlowTest : BaseTest() {
     }
 
     @OptIn(ExperimentalUltronApi::class)
-    override val beforeFirstTests = {
+    override val beforeFirstTest = {
         beforeAllTestCounter = order
         UltronLog.info("Before Class")
     }

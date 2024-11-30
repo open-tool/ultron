@@ -34,7 +34,7 @@ open class UltronTest(
      * Can be overridden in subclasses.
      */
     @ExperimentalUltronApi
-    open val beforeFirstTests: () -> Unit = {}
+    open val beforeFirstTest: () -> Unit = {}
 
     /**
      * Function to be executed before each test.
@@ -64,7 +64,7 @@ open class UltronTest(
         TestMethod(testContextProvider.provide()).apply {
             // Ensure `beforeAllTests` is executed only once per class
             if (beforeAllTestsExecutionMap[className] != true) {
-                beforeFirstTests()
+                beforeFirstTest()
                 beforeAllTestsExecutionMap[className] = true
             }
 
