@@ -1,8 +1,8 @@
-
 import com.atiurin.ultron.annotations.ExperimentalUltronApi
 import com.atiurin.ultron.core.test.UltronTest
 import com.atiurin.ultron.log.UltronLog
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class UltronTestFlowTest : UltronTest() {
@@ -71,5 +71,39 @@ class UltronTestFlowTest : UltronTest() {
     fun simpleTest() = test {
         assertTrue(beforeFirstTestCounter == 1, message = "beforeFirstTest block should run only once")
         UltronLog.info("UltronTest simpleTest")
+    }
+
+
+    @Test
+    fun afterBlockExecutedOnFailedTest() {
+        var isAfterExecuted = false
+        runCatching {
+            test {
+                go {
+                    throw RuntimeException("test exception")
+                }
+                after {
+                    isAfterExecuted = true
+                }
+            }
+        }
+        assertTrue(isAfterExecuted)
+    }
+
+    @Test
+    fun testExceptionMessageThrownOnFailedTest() {
+        val testExceptionMessage = "test exception"
+        runCatching {
+            test {
+                go {
+                    throw RuntimeException(testExceptionMessage)
+                }
+                after {
+                    throw RuntimeException("Another after exception")
+                }
+            }
+        }.onFailure { ex ->
+            assertEquals(ex.message, testExceptionMessage)
+        }
     }
 }

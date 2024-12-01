@@ -3,6 +3,7 @@ package com.atiurin.sampleapp.tests.testlifecycle
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.annotations.ExperimentalUltronApi
 import com.atiurin.ultron.log.UltronLog
+import org.junit.Assert
 import org.junit.Test
 
 class UltronTestFlowTest : BaseTest() {
@@ -60,9 +61,11 @@ class UltronTestFlowTest : BaseTest() {
     fun someTest2() = test(suppressCommonBefore = true) {
         before {
             UltronLog.info("Before TestMethod 2")
-        }.after {
+        }
+        after {
             UltronLog.info("After TestMethod 2")
-        }.go {
+        }
+        go {
             assert(isBeforeFirstTestCounter == 1, lazyMessage = { "beforeFirstTest block should run only once" })
             UltronLog.info("Run TestMethod 2")
         }
@@ -72,5 +75,21 @@ class UltronTestFlowTest : BaseTest() {
     fun simpleTest() = test {
         assert(isBeforeFirstTestCounter == 1, lazyMessage = { "beforeAllTests block should run only once" })
         UltronLog.info("UltronTest simpleTest")
+    }
+
+    @Test
+    fun afterBlockExecutedOnFailedTest() {
+        var isAfterExecuted = false
+        runCatching {
+            test {
+                go{
+                    throw RuntimeException("test exception")
+                }
+                after {
+                    isAfterExecuted = true
+                }
+            }
+        }
+        Assert.assertTrue(isAfterExecuted)
     }
 }
