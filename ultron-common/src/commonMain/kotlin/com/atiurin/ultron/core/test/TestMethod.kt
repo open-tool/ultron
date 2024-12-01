@@ -13,9 +13,16 @@ class TestMethod(testContext: UltronTestContext) {
     private var test: TestMethod.() -> Unit = {}
 
     internal fun attack() {
+        var throwable: Throwable? = null
         beforeTest()
-        test()
-        afterTest()
+        runCatching(test).onFailure { ex ->
+            throwable = ex
+        }
+        runCatching(afterTest).onFailure { ex ->
+            throwable?.let { throw it }
+            throw ex
+        }
+        throwable?.let { throw it }
     }
 
     fun before(block: TestMethod.() -> Unit) = apply {

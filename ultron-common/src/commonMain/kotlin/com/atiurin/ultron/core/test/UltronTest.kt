@@ -26,7 +26,7 @@ open class UltronTest(
      *
      * @throws UltronException if the test class is anonymous.
      */
-    private val className = this::class.qualifiedName
+    private val className = this::class.simpleName
         ?: throw UltronException("Don't use anonymous class for UltronTest")
 
     /**
@@ -72,15 +72,25 @@ open class UltronTest(
             if (!suppressCommonBefore) {
                 beforeTest()
             }
-
+            var throwable: Throwable? = null
             // Configure and execute the test block
-            configureTestBlock()
-            attack()
+            runCatching {
+                configureTestBlock()
+                attack()
+            }.onFailure { ex ->
+                throwable = ex
+            }
 
             // Execute common `afterTest` logic if not suppressed
             if (!suppressCommonAfter) {
-                afterTest()
+                runCatching(afterTest).onFailure { ex ->
+                    throwable?.let { throw it }
+                    throw ex
+                }
             }
+            throwable?.let { throw it }
         }
     }
+
+
 }
