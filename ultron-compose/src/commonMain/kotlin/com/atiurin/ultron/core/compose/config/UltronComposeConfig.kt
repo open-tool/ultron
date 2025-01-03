@@ -3,6 +3,7 @@ package com.atiurin.ultron.core.compose.config
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.common.resultanalyzer.OperationResultAnalyzer
+import com.atiurin.ultron.core.compose.ComposeTestEnvironment
 import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
@@ -55,6 +56,12 @@ object UltronComposeConfig {
             ): Boolean {
                 return block(operationResult as OperationResult<Operation>)
             }
+        }
+    }
+
+    var doBetweenPollingRetry: (ComposeTestEnvironment) -> Unit = { testData ->
+        if (testData.mainClock.autoAdvance){
+            testData.mainClock.advanceTimeByFrame()
         }
     }
 

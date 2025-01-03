@@ -6,7 +6,7 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.onChildAt
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.performScrollToNode
-import com.atiurin.ultron.core.compose.SemanticsNodeInteractionProviderContainer.withSemanticsProvider
+import com.atiurin.ultron.core.compose.ComposeTestContainer.withComposeTestEnvironment
 import com.atiurin.ultron.extensions.findNodeInTree
 
 actual fun getItemChildInteractionProvider(): ItemChildInteractionProvider {
@@ -20,7 +20,7 @@ class AndroidItemChildInteractionProvider : ItemChildInteractionProvider {
         childMatcher: SemanticsMatcher,
         useUnmergedTree: Boolean
     ): () -> SemanticsNodeInteraction = {
-        withSemanticsProvider { provider ->
+        withComposeTestEnvironment { provider ->
             provider.onNode(listMatcher, useUnmergedTree).performScrollToNode(itemMatcher)
                 .onChildren().filterToOne(itemMatcher)
                 .findNodeInTree(childMatcher, useUnmergedTree)
@@ -33,7 +33,7 @@ class AndroidItemChildInteractionProvider : ItemChildInteractionProvider {
         childMatcher: SemanticsMatcher,
         useUnmergedTree: Boolean
     ): () -> SemanticsNodeInteraction = {
-        withSemanticsProvider { provider ->
+        withComposeTestEnvironment { provider ->
             provider.onNode(listMatcher, useUnmergedTree)
                 .onChildAt(index)
                 .findNodeInTree(childMatcher, useUnmergedTree)

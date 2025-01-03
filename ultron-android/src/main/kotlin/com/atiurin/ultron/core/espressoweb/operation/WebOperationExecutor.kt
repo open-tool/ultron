@@ -13,7 +13,7 @@ internal abstract class WebOperationExecutor<T : Operation>(
 ) : OperationExecutor<T, WebOperationResult<T>> {
     override val pollingTimeout: Long
         get() = UltronConfig.Espresso.ESPRESSO_OPERATION_POLLING_TIMEOUT
-
+    override var doBetweenPollingRetry: () -> Unit = {}
     override fun generateResult(
         success: Boolean,
         exceptions: List<Throwable>,
