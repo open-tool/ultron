@@ -10,9 +10,7 @@ import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onParent
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.printToLog
-import com.atiurin.ultron.core.compose.SemanticsNodeInteractionProviderContainer
-import com.atiurin.ultron.core.compose.config.UltronComposeConfig
-import com.atiurin.ultron.core.config.UltronCommonConfig
+import com.atiurin.ultron.core.compose.ComposeTestContainer
 import com.atiurin.ultron.exceptions.UltronAssertionException
 import com.atiurin.ultron.log.UltronLog
 
@@ -23,9 +21,10 @@ interface ItemChildInteractionProvider {
         childMatcher: SemanticsMatcher,
         useUnmergedTree: Boolean
     ): () -> SemanticsNodeInteraction = {
-        SemanticsNodeInteractionProviderContainer.withSemanticsProvider {
-            it.onNode(listMatcher).performScrollToNode(itemMatcher)
-            it.onNode(
+        ComposeTestContainer.withComposeTestEnvironment { testEnvironment ->
+            val snip = testEnvironment.provider
+            snip.onNode(listMatcher).performScrollToNode(itemMatcher)
+            snip.onNode(
                 hasAnyAncestor(listMatcher)
                     .and(hasAnyAncestor(itemMatcher))
                     .and(childMatcher),
@@ -35,8 +34,9 @@ interface ItemChildInteractionProvider {
     }
 
     fun onVisibleItemChild(listMatcher: SemanticsMatcher, index: Int, childMatcher: SemanticsMatcher, useUnmergedTree: Boolean): () -> SemanticsNodeInteraction = {
-        SemanticsNodeInteractionProviderContainer.withSemanticsProvider {
-            val itemInteraction = it.onNode(listMatcher, useUnmergedTree).onChildAt(index)
+        ComposeTestContainer.withComposeTestEnvironment { testEnvironment ->
+            val snip = testEnvironment.provider
+            val itemInteraction = snip.onNode(listMatcher, useUnmergedTree).onChildAt(index)
             if (childMatcher.matches(itemInteraction.fetchSemanticsNode())) {
                 UltronLog.warn("Child matcher matches item itself. Ultron will return item interaction instead of child interaction")
                 itemInteraction.onParent().printToLog("Ultron")

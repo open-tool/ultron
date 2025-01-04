@@ -71,7 +71,7 @@ import com.atiurin.ultron.core.common.options.LongClickOption
 import com.atiurin.ultron.core.common.options.PerformCustomBlockOption
 import com.atiurin.ultron.core.common.options.TextContainsOption
 import com.atiurin.ultron.core.common.options.TextEqualsOption
-import com.atiurin.ultron.core.compose.SemanticsNodeInteractionProviderContainer
+import com.atiurin.ultron.core.compose.ComposeTestContainer
 import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.core.compose.operation.ComposeOperationExecutor
 import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
@@ -175,6 +175,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         timeoutMs, resultHandler, assertion, elementInfo
     )
 
+    @OptIn(ExperimentalTestApi::class)
     constructor(
         matcher: SemanticsMatcher,
         useUnmergedTree: Boolean = UltronComposeConfig.params.useUnmergedTree,
@@ -183,7 +184,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         assertion: OperationAssertion = EmptyOperationAssertion(),
         elementInfo: ElementInfo = DefaultElementInfo()
     ) : this(
-        semanticsNodeInteractionProvider = { SemanticsNodeInteractionProviderContainer.getProvider().onNode(matcher, useUnmergedTree) },
+        semanticsNodeInteractionProvider = { ComposeTestContainer.getProvider().onNode(matcher, useUnmergedTree) },
         timeoutMs, resultHandler, assertion, elementInfo
     )
 

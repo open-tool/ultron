@@ -12,7 +12,13 @@ fun runUltronUiTest(
     block: ComposeUiTest.() -> Unit
 ) {
     runComposeUiTest(effectContext){
-        SemanticsNodeInteractionProviderContainer.init(this)
+        ComposeTestContainer.init(
+            UltronComposeTestEnvironment(
+                provider = this,
+                mainClock = this.mainClock,
+                density = this.density
+            )
+        )
         block()
     }
 }

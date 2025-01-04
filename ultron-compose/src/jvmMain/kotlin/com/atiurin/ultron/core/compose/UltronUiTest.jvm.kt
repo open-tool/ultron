@@ -13,7 +13,13 @@ fun runDesktopUltronUiTest(
     block: SkikoComposeUiTest.() -> Unit
 ) {
     SkikoComposeUiTest(width, height, effectContext).runTest {
-        SemanticsNodeInteractionProviderContainer.init(this)
+        ComposeTestContainer.init(
+            UltronComposeTestEnvironment(
+                provider = this,
+                mainClock = this.mainClock,
+                density = this.density
+            )
+        )
         block()
     }
 }

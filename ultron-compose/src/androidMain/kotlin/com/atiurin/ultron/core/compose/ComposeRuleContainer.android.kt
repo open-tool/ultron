@@ -18,7 +18,13 @@ object ComposeRuleContainer {
 
     fun init(composeRule: ComposeTestRule) {
         rule = composeRule
-        SemanticsNodeInteractionProviderContainer.init(composeRule)
+        ComposeTestContainer.init(
+            UltronComposeTestEnvironment(
+                provider = composeRule,
+                mainClock = composeRule.mainClock,
+                density = composeRule.density
+            )
+        )
         testContext = composeRule.getTestContext()
     }
 

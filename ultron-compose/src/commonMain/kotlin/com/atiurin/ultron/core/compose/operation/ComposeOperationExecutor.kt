@@ -4,6 +4,7 @@ import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationExecutor
 import com.atiurin.ultron.core.common.OperationIterationResult
 import com.atiurin.ultron.core.common.ResultDescriptor
+import com.atiurin.ultron.core.compose.ComposeTestContainer.withComposeTestEnvironment
 import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.exceptions.UltronWrapperException
 import kotlin.reflect.KClass
@@ -16,6 +17,11 @@ internal class ComposeOperationExecutor(
     override val pollingTimeout: Long
         get() = UltronComposeConfig.params.operationPollingTimeoutMs
 
+    override var doBetweenOperationRetry: () -> Unit = {
+        withComposeTestEnvironment { testEnvironment ->
+            UltronComposeConfig.doBetweenOperationRetry(operation, testEnvironment)
+        }
+    }
     override fun generateResult(
         success: Boolean,
         exceptions: List<Throwable>,

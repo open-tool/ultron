@@ -12,6 +12,7 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
     val operation: Op
     val pollingTimeout: Long
     val descriptor: ResultDescriptor
+    var doBetweenOperationRetry: () -> Unit
 
     fun getAllowedExceptions(operation: Operation): List<KClass<out Throwable>>
 
@@ -83,6 +84,7 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
                     }
                     lastIteration = result
                     if (!isSuccess) {
+                        doBetweenOperationRetry()
                         if (pollingTimeout > 0) sleep(pollingTimeout)
                     }
 

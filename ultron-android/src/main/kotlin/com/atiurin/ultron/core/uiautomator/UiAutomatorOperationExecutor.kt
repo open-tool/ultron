@@ -16,7 +16,7 @@ abstract class UiAutomatorOperationExecutor<T : Operation>(
         get() = ResultDescriptor()
     override val pollingTimeout: Long
         get() = UIAUTOMATOR_OPERATION_POLLING_TIMEOUT
-
+    override var doBetweenOperationRetry: () -> Unit = {}
     override fun generateResult(
         success: Boolean,
         exceptions: List<Throwable>,
