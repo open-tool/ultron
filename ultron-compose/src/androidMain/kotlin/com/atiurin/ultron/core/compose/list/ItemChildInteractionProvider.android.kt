@@ -20,8 +20,9 @@ class AndroidItemChildInteractionProvider : ItemChildInteractionProvider {
         childMatcher: SemanticsMatcher,
         useUnmergedTree: Boolean
     ): () -> SemanticsNodeInteraction = {
-        withComposeTestEnvironment { provider ->
-            provider.onNode(listMatcher, useUnmergedTree).performScrollToNode(itemMatcher)
+        withComposeTestEnvironment { testEnvironment ->
+            testEnvironment.provider.onNode(listMatcher, useUnmergedTree)
+                .performScrollToNode(itemMatcher)
                 .onChildren().filterToOne(itemMatcher)
                 .findNodeInTree(childMatcher, useUnmergedTree)
         }
@@ -33,8 +34,8 @@ class AndroidItemChildInteractionProvider : ItemChildInteractionProvider {
         childMatcher: SemanticsMatcher,
         useUnmergedTree: Boolean
     ): () -> SemanticsNodeInteraction = {
-        withComposeTestEnvironment { provider ->
-            provider.onNode(listMatcher, useUnmergedTree)
+        withComposeTestEnvironment { testEnvironment ->
+            testEnvironment.provider.onNode(listMatcher, useUnmergedTree)
                 .onChildAt(index)
                 .findNodeInTree(childMatcher, useUnmergedTree)
         }

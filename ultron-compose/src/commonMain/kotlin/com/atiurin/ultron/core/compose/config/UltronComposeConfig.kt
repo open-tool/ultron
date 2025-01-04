@@ -59,9 +59,9 @@ object UltronComposeConfig {
         }
     }
 
-    var doBetweenPollingRetry: (ComposeTestEnvironment) -> Unit = { testData ->
-        if (testData.mainClock.autoAdvance){
-            testData.mainClock.advanceTimeByFrame()
+    var doBetweenOperationRetry: (Operation, ComposeTestEnvironment) -> Unit = { operation, testEnvironment ->
+        if (testEnvironment.mainClock.autoAdvance){
+            testEnvironment.mainClock.advanceTimeByFrame()
         }
     }
 

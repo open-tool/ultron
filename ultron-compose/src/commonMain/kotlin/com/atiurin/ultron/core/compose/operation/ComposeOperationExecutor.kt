@@ -17,9 +17,9 @@ internal class ComposeOperationExecutor(
     override val pollingTimeout: Long
         get() = UltronComposeConfig.params.operationPollingTimeoutMs
 
-    override var doBetweenPollingRetry: () -> Unit = {
-        withComposeTestEnvironment { testData ->
-            UltronComposeConfig.doBetweenPollingRetry(testData)
+    override var doBetweenOperationRetry: () -> Unit = {
+        withComposeTestEnvironment { testEnvironment ->
+            UltronComposeConfig.doBetweenOperationRetry(operation, testEnvironment)
         }
     }
     override fun generateResult(
