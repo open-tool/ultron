@@ -3,24 +3,36 @@ package com.atiurin.sampleapp.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.pointer.consumeAllChanges
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.semantics.*
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.clickListenerButton
@@ -29,9 +41,12 @@ import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCou
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCounterContentDesc
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCounterTextContainer
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCounterTextContainerContentDesc
-import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.radioButtonFemaleTestTag
-import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.radioButtonMaleTestTag
-import com.atiurin.sampleapp.compose.*
+import com.atiurin.sampleapp.compose.CustomButton
+import com.atiurin.sampleapp.compose.LinearProgressBar
+import com.atiurin.sampleapp.compose.RadioGroup
+import com.atiurin.sampleapp.compose.RegionsClickListener
+import com.atiurin.sampleapp.compose.SimpleOutlinedText
+import com.atiurin.sampleapp.compose.SwipeableNode
 
 class ComposeElementsActivity : ComponentActivity() {
     companion object Constants {
@@ -128,6 +143,12 @@ fun ButtonWithCount() {
             }
         )
     }
+}
+
+@Preview
+@Composable
+fun ButtonWithCountPreview(){
+    ButtonWithCount()
 }
 
 @Composable

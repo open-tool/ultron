@@ -1,17 +1,20 @@
 package com.atiurin.sampleapp.compose
 
-import androidx.compose.foundation.layout.*
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.atiurin.sampleapp.compose.RegionsClickListenerTestTags.regionsClickedText
 import com.atiurin.sampleapp.compose.RegionsClickListenerTestTags.regionsNode
 
 object RegionsClickListenerTestTags {
@@ -57,6 +60,13 @@ fun RegionsClickListener(clickState: MutableState<String>) {
         }
     }
 
+}
+
+@SuppressLint("UnrememberedMutableState")
+@Preview
+@Composable
+fun RegionsClickListenerPreview(){
+    RegionsClickListener(mutableStateOf(""))
 }
 
 enum class RegionName {
