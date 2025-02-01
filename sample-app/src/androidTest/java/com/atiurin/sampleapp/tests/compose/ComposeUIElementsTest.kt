@@ -18,8 +18,8 @@ import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCou
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCounterTextContainerContentDesc
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.simpleCheckbox
 import com.atiurin.sampleapp.compose.RegionName
-import com.atiurin.sampleapp.framework.ultronext.assertProgress
-import com.atiurin.sampleapp.framework.ultronext.hasProgress
+import com.atiurin.sampleapp.framework.ultronext.ProgressBar
+import com.atiurin.sampleapp.framework.ultronext.getProgress
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.ComposeElementsPage
 import com.atiurin.sampleapp.tests.BaseTest
@@ -82,7 +82,6 @@ import com.atiurin.ultron.extensions.perform
 import com.atiurin.ultron.extensions.performMouseInput
 import com.atiurin.ultron.extensions.replaceText
 import com.atiurin.ultron.extensions.selectText
-import com.atiurin.ultron.extensions.setProgress
 import com.atiurin.ultron.extensions.swipeDown
 import com.atiurin.ultron.extensions.swipeLeft
 import com.atiurin.ultron.extensions.swipeRight
@@ -274,13 +273,29 @@ class ComposeUIElementsTest : BaseTest() {
     @Test
     fun performCustomSemanticsAction() {
         val progress = 0.7f
-        page.progressBar.setProgress(progress).assertMatches(hasProgress(progress))
+        val progressBar = ProgressBar(hasTestTag(ComposeElementsActivity.progressBar))
+        progressBar.setProgress(progress)
+        val current = progressBar.getProgress()
+        Assert.assertEquals(current, progress )
+
+    }
+
+
+    @Test
+    fun performCustomSemanticsAssertion() {
+        val progress = 0.7f
+        val progressBar = ProgressBar(hasTestTag(ComposeElementsActivity.progressBar))
+        progressBar.setProgress(progress)
+        progressBar.assertProgress(progress)
     }
 
     @Test
     fun performExtendedAssertion() {
         val progress = 0.7f
-        page.progressBar.setProgress(progress).assertProgress(progress)
+        page.progressBar.apply {
+            setProgress(progress)
+            assertProgress(progress)
+        }
     }
 
     @Test
