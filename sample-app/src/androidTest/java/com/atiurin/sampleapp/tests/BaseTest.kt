@@ -6,6 +6,8 @@ import com.atiurin.sampleapp.data.repositories.CURRENT_USER
 import com.atiurin.sampleapp.managers.AccountManager
 import com.atiurin.ultron.allure.config.UltronAllureConfig
 import com.atiurin.ultron.core.compose.config.UltronComposeConfig
+import com.atiurin.ultron.core.compose.listeners.ComposDebugListener
+import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.test.UltronTest
 import com.atiurin.ultron.testlifecycle.rulesequence.RuleSequence
@@ -30,6 +32,7 @@ abstract class BaseTest : UltronTest(){
         fun config() {
             UltronConfig.applyRecommended()
             UltronComposeConfig.applyRecommended()
+            UltronCommonConfig.addListener(ComposDebugListener())
             UltronAllureConfig.applyRecommended()
             UltronAllureConfig.setAllureResultsDirectory(Environment.DIRECTORY_DOWNLOADS)
         }

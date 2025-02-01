@@ -14,8 +14,7 @@ fun UltronComposeSemanticsNodeInteraction.getProgress() = execute(
         operationDescription = "Compose get current progress of '${elementInfo.name}' during $timeoutMs ms"
     )
 ) {
-    val node = semanticsNodeInteraction.fetchSemanticsNode()
-    node.config[SemanticsProperties.ProgressBarRangeInfo].current
+    getNodeConfigProperty(SemanticsProperties.ProgressBarRangeInfo).current
 }
 
 // step 2: extend [SemanticsMatcher] class with new action method
