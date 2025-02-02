@@ -12,8 +12,8 @@ import androidx.test.espresso.web.webdriver.DriverAtoms
 import androidx.test.espresso.web.webdriver.DriverAtoms.findElement
 import androidx.test.espresso.web.webdriver.Locator
 import com.atiurin.ultron.core.common.CommonOperationType
-import com.atiurin.ultron.core.common.ElementInfo
 import com.atiurin.ultron.core.common.DefaultElementInfo
+import com.atiurin.ultron.core.common.ElementInfo
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
@@ -25,7 +25,6 @@ import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperationExecutor
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperationIterationResult
 import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
-import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.listeners.setListenersState
 import com.atiurin.ultron.log.UltronLog
 import org.hamcrest.Matcher
@@ -136,7 +135,7 @@ open class UltronWebElement internal constructor(
                 type = EspressoWebOperationType.WEB_GET_TEXT,
                 description = "GetText of '${elementInfo.name}' during $timeoutMs ms"
             )
-        )
+        ) ?: ""
     }
 
     /** Simulates the javascript events to click on a particular element. */
@@ -184,8 +183,7 @@ open class UltronWebElement internal constructor(
     }
 
     /** Returns {@code true} if the desired element is in view after scrolling. */
-    fun webScrollIntoViewBoolean(
-    ): Boolean {
+    fun webScrollIntoViewBoolean(): Boolean {
         return executeOperation(
             getUltronWebActionOperation(
                 webInteractionBlock = { webInteractionBlock().perform(DriverAtoms.webScrollIntoView()) },
@@ -193,7 +191,7 @@ open class UltronWebElement internal constructor(
                 type = EspressoWebOperationType.WEB_SCROLL_INTO_VIEW,
                 description = "'${elementInfo.name}' WebScrollIntoView during $timeoutMs ms"
             )
-        )
+        ) ?: false
     }
 
     /** Executes scroll to view. */
@@ -301,13 +299,12 @@ open class UltronWebElement internal constructor(
 
     fun <R> executeOperation(
         webInteractionOperation: WebInteractionOperation<R>
-    ): R {
+    ): R? {
         val result = UltronWebLifecycle.execute(
             executor = WebInteractionOperationExecutor(webInteractionOperation),
             resultHandler = resultHandler as (WebOperationResult<WebInteractionOperation<R>>) -> Unit
         )
         return (result.operationIterationResult as WebInteractionOperationIterationResult<R>).webInteraction?.get()
-            ?: throw UltronException("Couldn't get result of ${webInteractionOperation.name}.")
     }
 
     fun <R> executeOperationVoid(

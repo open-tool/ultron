@@ -12,6 +12,9 @@ import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
+import com.atiurin.ultron.core.common.assertion.softAssertion
+import com.atiurin.ultron.core.common.assertion.verifySoftAssertions
+import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.core.config.UltronConfig
 import com.atiurin.ultron.core.espresso.UltronEspresso
 import com.atiurin.ultron.custom.espresso.action.getContentDescription
@@ -19,7 +22,18 @@ import com.atiurin.ultron.custom.espresso.action.getDrawable
 import com.atiurin.ultron.custom.espresso.action.getText
 import com.atiurin.ultron.custom.espresso.assertion.hasAnyDrawable
 import com.atiurin.ultron.custom.espresso.assertion.hasDrawable
-import com.atiurin.ultron.extensions.*
+import com.atiurin.ultron.extensions.clearText
+import com.atiurin.ultron.extensions.click
+import com.atiurin.ultron.extensions.closeSoftKeyboard
+import com.atiurin.ultron.extensions.doubleClick
+import com.atiurin.ultron.extensions.isDisplayed
+import com.atiurin.ultron.extensions.isSameAs
+import com.atiurin.ultron.extensions.isSuccess
+import com.atiurin.ultron.extensions.longClick
+import com.atiurin.ultron.extensions.perform
+import com.atiurin.ultron.extensions.replaceText
+import com.atiurin.ultron.extensions.textContains
+import com.atiurin.ultron.extensions.withTimeout
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
 import org.junit.Test
@@ -258,4 +272,29 @@ class ViewInteractionActionsTest : UiElementsTest() {
         )
     }
 
+    @Test
+    fun verifySoftAssertionsTest() {
+        UltronCommonConfig.testContext.softAnalyzer.clear()
+        softAssertion(false) {
+            withText("NotExistText").withTimeout(100).click()
+            withText("NotExistTestTag").withTimeout(100).click()
+        }
+        runCatching {
+            verifySoftAssertions()
+        }.onFailure { exception ->
+            val message = exception.message ?: throw RuntimeException("Empty exception message: $exception")
+            Assert.assertTrue(message.contains("NotExistText"))
+            Assert.assertTrue(message.contains("NotExistTestTag"))
+        }
+    }
+
+    @Test
+    fun softAssertionTest() {
+        UltronCommonConfig.testContext.softAnalyzer.clear()
+        AssertUtils.assertException {
+            softAssertion {
+                withText("NotExistText").withTimeout(100).click()
+            }
+        }
+    }
 }

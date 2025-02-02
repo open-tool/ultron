@@ -6,11 +6,12 @@ import com.atiurin.sampleapp.framework.DummyMetaObject
 import com.atiurin.sampleapp.framework.ultronext.appendText
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.WebViewPage
+import com.atiurin.ultron.core.common.assertion.softAssertion
+import com.atiurin.ultron.core.common.assertion.verifySoftAssertions
+import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.className
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.id
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.xpath
-import com.atiurin.ultron.extensions.withName
-import com.atiurin.ultron.extensions.withTimeout
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Test
@@ -260,5 +261,31 @@ class UltronWebElementTest : BaseWebViewTest() {
         page.notExistedElement.withTimeout(100).withMetaInfo(meta).withResultHandler { result ->
             Assert.assertEquals(meta, result.operation.elementInfo.meta)
         }.exists()
+    }
+
+    @Test
+    fun verifySoftAssertionsTest() {
+        UltronCommonConfig.testContext.softAnalyzer.clear()
+        softAssertion(false) {
+            id("NotExistText").withTimeout(100).webClick()
+            id("NotExistTestTag").withTimeout(100).webClick()
+        }
+        runCatching {
+            verifySoftAssertions()
+        }.onFailure { exception ->
+            val message = exception.message ?: throw RuntimeException("Empty exception message: $exception")
+            Assert.assertTrue(message.contains("NotExistText"))
+            Assert.assertTrue(message.contains("NotExistTestTag"))
+        }
+    }
+
+    @Test
+    fun softAssertionTest() {
+        UltronCommonConfig.testContext.softAnalyzer.clear()
+        AssertUtils.assertException {
+            softAssertion {
+                page.notExistedElement.withTimeout(100).webClick()
+            }
+        }
     }
 }

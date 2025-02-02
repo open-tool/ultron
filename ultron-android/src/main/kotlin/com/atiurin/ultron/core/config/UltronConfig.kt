@@ -20,6 +20,7 @@ import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.common.resultanalyzer.OperationResultAnalyzer
 import com.atiurin.ultron.core.common.resultanalyzer.UltronDefaultOperationResultAnalyzer
+import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
@@ -149,6 +150,7 @@ object UltronConfig {
 
             var resultAnalyzer: OperationResultAnalyzer = UltronCommonConfig.resultAnalyzer
 
+
             inline fun setResultAnalyzer(crossinline block: (OperationResult<Operation>) -> Boolean) {
                 resultAnalyzer = object : OperationResultAnalyzer {
                     override fun <Op : Operation, OpRes : OperationResult<Op>> analyze(
@@ -173,8 +175,9 @@ object UltronConfig {
                     AmbiguousViewMatcherException::class.java,
                     UltronOperationException::class.java
                 )
+
                 val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
-                    resultAnalyzer.analyze(it)
+                    UltronCommonConfig.testContext.wrapAnalyzerIfSoftAssertion(resultAnalyzer).analyze(it)
                 }
             }
         }
@@ -192,7 +195,7 @@ object UltronConfig {
                     AmbiguousViewMatcherException::class.java
                 )
                 val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
-                    resultAnalyzer.analyze(it)
+                    UltronCommonConfig.testContext.wrapAnalyzerIfSoftAssertion(resultAnalyzer).analyze(it)
                 }
             }
         }
@@ -208,7 +211,7 @@ object UltronConfig {
                     RuntimeException::class.java
                 )
                 val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit = {
-                    resultAnalyzer.analyze(it)
+                    UltronCommonConfig.testContext.wrapAnalyzerIfSoftAssertion(resultAnalyzer).analyze(it)
                 }
             }
         }
@@ -257,7 +260,7 @@ object UltronConfig {
                     NullPointerException::class.java,
                 )
                 val resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = {
-                    resultAnalyzer.analyze(it)
+                    UltronCommonConfig.testContext.wrapAnalyzerIfSoftAssertion(Espresso.resultAnalyzer).analyze(it)
                 }
             }
         }
@@ -274,7 +277,7 @@ object UltronConfig {
                     NullPointerException::class.java,
                 )
                 val resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit = {
-                    resultAnalyzer.analyze(it)
+                    UltronCommonConfig.testContext.wrapAnalyzerIfSoftAssertion(Espresso.resultAnalyzer).analyze(it)
                 }
             }
         }
