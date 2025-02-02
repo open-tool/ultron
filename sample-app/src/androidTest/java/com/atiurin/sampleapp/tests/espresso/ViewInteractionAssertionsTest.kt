@@ -1,20 +1,47 @@
 package com.atiurin.sampleapp.tests.espresso
 
-import androidx.test.espresso.matcher.ViewMatchers.*
-import com.atiurin.ultron.custom.espresso.matcher.hasAnyDrawable
-import com.atiurin.ultron.custom.espresso.matcher.withDrawable
-import com.atiurin.ultron.extensions.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.framework.ultronext.assertChecked
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.framework.utils.TestDataUtils.getResourceString
 import com.atiurin.sampleapp.pages.UiElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
+import com.atiurin.ultron.core.common.assertion.softAssertion
+import com.atiurin.ultron.core.common.assertion.verifySoftAssertions
+import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.custom.espresso.assertion.doesNotExistInAnyVisibleRoot
 import com.atiurin.ultron.custom.espresso.assertion.hasCurrentHintTextColor
 import com.atiurin.ultron.custom.espresso.assertion.hasCurrentTextColor
 import com.atiurin.ultron.custom.espresso.assertion.hasHighlightColor
 import com.atiurin.ultron.custom.espresso.assertion.hasShadowColor
+import com.atiurin.ultron.custom.espresso.matcher.hasAnyDrawable
+import com.atiurin.ultron.custom.espresso.matcher.withDrawable
+import com.atiurin.ultron.extensions.assertMatches
+import com.atiurin.ultron.extensions.click
+import com.atiurin.ultron.extensions.doesNotExist
+import com.atiurin.ultron.extensions.exists
+import com.atiurin.ultron.extensions.hasContentDescription
+import com.atiurin.ultron.extensions.hasFocus
+import com.atiurin.ultron.extensions.hasText
+import com.atiurin.ultron.extensions.isChecked
+import com.atiurin.ultron.extensions.isClickable
+import com.atiurin.ultron.extensions.isDisplayed
+import com.atiurin.ultron.extensions.isEnabled
+import com.atiurin.ultron.extensions.isFocusable
+import com.atiurin.ultron.extensions.isJavascriptEnabled
+import com.atiurin.ultron.extensions.isNotChecked
+import com.atiurin.ultron.extensions.isNotClickable
+import com.atiurin.ultron.extensions.isNotDisplayed
+import com.atiurin.ultron.extensions.isNotEnabled
+import com.atiurin.ultron.extensions.isNotFocusable
+import com.atiurin.ultron.extensions.isNotSelected
+import com.atiurin.ultron.extensions.isSelected
+import com.atiurin.ultron.extensions.isSuccess
+import com.atiurin.ultron.extensions.textContains
+import com.atiurin.ultron.extensions.withTimeout
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import org.junit.Assert
@@ -479,5 +506,31 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
     @Test
     fun notExist_customAssertion(){
         AssertUtils.assertException { withText("not exist").withTimeout(100).assertChecked(true) }
+    }
+
+    @Test
+    fun verifySoftAssertionsTest() {
+        UltronCommonConfig.testContext.softAnalyzer.clear()
+        softAssertion(false) {
+            withText("NotExistText").withTimeout(100).isDisplayed()
+            withText("NotExistTestTag").withTimeout(100).isDisplayed()
+        }
+        runCatching {
+            verifySoftAssertions()
+        }.onFailure { exception ->
+            val message = exception.message ?: throw RuntimeException("Empty exception message: $exception")
+            Assert.assertTrue(message.contains("NotExistText"))
+            Assert.assertTrue(message.contains("NotExistTestTag"))
+        }
+    }
+
+    @Test
+    fun softAssertionTest() {
+        UltronCommonConfig.testContext.softAnalyzer.clear()
+        AssertUtils.assertException {
+            softAssertion {
+                withText("NotExistText").withTimeout(100).isDisplayed()
+            }
+        }
     }
 }
