@@ -166,3 +166,15 @@ fun configureUltron() {
     UltronAllureConfig.addRunListener(AppLogAttachRunListener())
 }
 ```
+
+## ComposDebugListener
+
+If you have had issues debugging Compose tests, such as not seeing UI changes on the screen immediately, Ultron can help you fix this. Simply add ComposeDebugListener to the framework configuration.
+
+```kotlin
+@BeforeClass @JvmStatic
+fun configureUltron() {
+    ...
+    UltronCommonConfig.addListener(ComposDebugListener())
+}
+```
