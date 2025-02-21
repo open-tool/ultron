@@ -25,8 +25,7 @@ dependencies {
 
 If you need another Espresso library in dependencies. It's better to use the same Espresso version as Ultron. 
 
-Now - [Ultron Espresso verion](https://github.com/open-tool/ultron/blob/1c81014f4cbea97b2f24128831a13e601936ef57/buildSrc/src/main/kotlin/Versions.kt#L9) is `3.4.0`. 
-We don't update to `3.5.1` because it brings only a set of problems and nothing improve.
+Now - [Ultron Espresso verion](https://github.com/open-tool/ultron/blob/master/buildSrc/src/main/kotlin/Versions.kt#L9) is `3.6.1`. 
 
 ## Allure Dependencies
 
