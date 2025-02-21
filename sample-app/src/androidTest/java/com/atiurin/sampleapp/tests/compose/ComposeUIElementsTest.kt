@@ -82,6 +82,7 @@ import com.atiurin.ultron.extensions.perform
 import com.atiurin.ultron.extensions.performMouseInput
 import com.atiurin.ultron.extensions.replaceText
 import com.atiurin.ultron.extensions.selectText
+import com.atiurin.ultron.extensions.swipe
 import com.atiurin.ultron.extensions.swipeDown
 import com.atiurin.ultron.extensions.swipeLeft
 import com.atiurin.ultron.extensions.swipeRight
@@ -241,11 +242,22 @@ class ComposeUIElementsTest : BaseTest() {
     }
 
     @Test
+    fun swipe_general() {
+        page.swipeableNode.swipe(ComposeSwipeOption(
+            startXOffset = 0.1f,
+            startYOffset = 0.1f,
+            endXOffset = 0.9f,
+            endYOffset = 0.1f,
+            durationMs = 1000L
+        ))
+        page.status.assertTextEquals(ActionsStatus.SwipeRight.name)
+    }
+
+    @Test
     fun inputText() {
         val text = "some text"
         page.editableText.inputText(text).assertTextContains(text)
     }
-
 
     @Test
     fun typeText() {

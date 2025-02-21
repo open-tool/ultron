@@ -75,6 +75,7 @@ import com.atiurin.ultron.core.compose.ComposeTestContainer
 import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.core.compose.operation.ComposeOperationExecutor
 import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
+import com.atiurin.ultron.core.compose.operation.ComposeOperationType
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType.ASSERT_MATCHES
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType.CLEAR_TEXT
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType.CLICK
@@ -266,7 +267,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         )
     }
 
-    internal fun swipeDown(option: ComposeSwipeOption? = null) = apply {
+    fun swipeDown(option: ComposeSwipeOption? = null) = apply {
         val _option = option ?: ComposeSwipeOption(0f, 0f, 0f, 0f, DEFAULT_SWIPE_DURATION)
         executeOperation(
             operationBlock = {
@@ -281,7 +282,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         )
     }
 
-    internal fun swipeUp(option: ComposeSwipeOption? = null) = apply {
+    fun swipeUp(option: ComposeSwipeOption? = null) = apply {
         val _option = option ?: ComposeSwipeOption(0f, 0f, 0f, 0f, DEFAULT_SWIPE_DURATION)
         executeOperation(
             operationBlock = {
@@ -296,7 +297,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         )
     }
 
-    internal fun swipeLeft(option: ComposeSwipeOption? = null) = apply {
+    fun swipeLeft(option: ComposeSwipeOption? = null) = apply {
         val _option = option ?: ComposeSwipeOption(0f, 0f, 0f, 0f, DEFAULT_SWIPE_DURATION)
         executeOperation(
             operationBlock = {
@@ -311,7 +312,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         )
     }
 
-    internal fun swipeRight(option: ComposeSwipeOption? = null) = apply {
+    fun swipeRight(option: ComposeSwipeOption? = null) = apply {
         val _option = option ?: ComposeSwipeOption(0f, 0f, 0f, 0f, DEFAULT_SWIPE_DURATION)
         executeOperation(
             operationBlock = {
@@ -323,6 +324,20 @@ open class UltronComposeSemanticsNodeInteraction constructor(
             name = "SwipeRight to '${elementInfo.name}'",
             type = SWIPE_RIGHT,
             description = "Compose swipeRight '${elementInfo.name}' with option = '$_option' during $timeoutMs ms ",
+        )
+    }
+
+    fun swipe(option: ComposeSwipeOption) = apply {
+        executeOperation(
+            operationBlock = {
+                semanticsNodeInteraction.performTouchInput {
+                    val position = provideSwipeRightPosition(option)
+                    this.swipe(position.start, position.end, option.durationMs)
+                }
+            },
+            name = "Swipe to '${elementInfo.name}'",
+            type = ComposeOperationType.SWIPE,
+            description = "Compose swipe '${elementInfo.name}' with option = '$option' during $timeoutMs ms ",
         )
     }
 

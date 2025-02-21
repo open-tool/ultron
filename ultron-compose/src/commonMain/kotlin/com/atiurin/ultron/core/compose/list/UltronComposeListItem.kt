@@ -124,6 +124,7 @@ open class UltronComposeListItem {
     fun swipeUp(option: ComposeSwipeOption? = null) = apply { getItemUltronComposeInteraction().swipeUp(option) }
     fun swipeLeft(option: ComposeSwipeOption? = null) = apply { getItemUltronComposeInteraction().swipeLeft(option) }
     fun swipeRight(option: ComposeSwipeOption? = null) = apply { getItemUltronComposeInteraction().swipeRight(option) }
+    fun swipe(option: ComposeSwipeOption) = apply { getItemUltronComposeInteraction().swipe(option) }
 
     fun imeAction() = apply { getItemUltronComposeInteraction().imeAction() }
     fun pressKey(keyEvent: KeyEvent) = apply { getItemUltronComposeInteraction().pressKey(keyEvent) }
