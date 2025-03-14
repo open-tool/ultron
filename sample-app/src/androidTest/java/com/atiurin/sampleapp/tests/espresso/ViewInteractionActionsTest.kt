@@ -155,6 +155,7 @@ class ViewInteractionActionsTest : UiElementsTest() {
         }
     }
 
+
     @Test
     fun pressEspressoKey_onEditable() {
         val text = "simple text"

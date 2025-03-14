@@ -3,6 +3,8 @@ package com.atiurin.sampleapp.tests.testlifecycle
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.annotations.ExperimentalUltronApi
 import com.atiurin.ultron.log.UltronLog
+import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
+import com.atiurin.ultron.testlifecycle.setupteardown.TearDownRule
 import org.junit.Assert
 import org.junit.Test
 
@@ -13,13 +15,18 @@ class UltronTestFlowTest : BaseTest() {
         var commonBeforeOrder = -1
         var commonAfterOrder = -1
         var afterOrder = -1
+    }
+    val ruleSetUp = SetUpRule().add { UltronLog.info("SetUpRule") }
+    val tearDownRule = TearDownRule().add { UltronLog.info("TearDownRule") }
 
+    init {
+        ruleSequence.add(ruleSetUp, tearDownRule)
     }
 
     @OptIn(ExperimentalUltronApi::class)
     override val beforeFirstTest = {
         isBeforeFirstTestCounter++
-        UltronLog.info("Before Class")
+        UltronLog.info("beforeFirstTest")
     }
 
     override val beforeTest = {

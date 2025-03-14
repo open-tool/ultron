@@ -166,6 +166,11 @@ fun SemanticsMatcher.setProgress(value: Float) = UltronComposeSemanticsNodeInter
 fun SemanticsMatcher.performMouseInput(block: MouseInjectionScope.() -> Unit) = UltronComposeSemanticsNodeInteraction(this).performMouseInput(block)
 
 fun SemanticsMatcher.performSemanticsAction(key: SemanticsPropertyKey<AccessibilityAction<() -> Boolean>>) = UltronComposeSemanticsNodeInteraction(this).performSemanticsAction(key)
+fun SemanticsMatcher.performCustomAccessibilityActionWithLabel(label: String) = UltronComposeSemanticsNodeInteraction(this).performCustomAccessibilityActionWithLabel(label)
+fun SemanticsMatcher.performCustomAccessibilityActionWithLabelMatching(
+    predicateDescription: String? = null,
+    labelPredicate: (label: String) -> Boolean
+) = UltronComposeSemanticsNodeInteraction(this).performCustomAccessibilityActionWithLabelMatching(predicateDescription, labelPredicate)
 
 @Deprecated(
     "Use execute(params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> T) instead", ReplaceWith("execute(params, block)")
@@ -180,6 +185,7 @@ fun <T> SemanticsMatcher.execute(params: UltronComposeOperationParams? = null, b
 
 fun SemanticsMatcher.getNode(): SemanticsNode = UltronComposeSemanticsNodeInteraction(this).getNode()
 fun <T> SemanticsMatcher.getNodeConfigProperty(key: SemanticsPropertyKey<T>): T = UltronComposeSemanticsNodeInteraction(this).getNodeConfigProperty(key)
+fun SemanticsMatcher.printToLog(tag: String, maxDepth: Int = Int.MAX_VALUE) = UltronComposeSemanticsNodeInteraction(this).printToLog(tag, maxDepth)
 
 //asserts
 fun SemanticsMatcher.assertIsDisplayed() = UltronComposeSemanticsNodeInteraction(this).assertIsDisplayed()
