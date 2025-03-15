@@ -40,6 +40,10 @@
             android:icon="@android:drawable/ic_menu_preferences"
             android:title="@string/menu_compose_ui_elements"/>
         <item
+            android:id="@+id/compose_router"
+            android:icon="@android:drawable/ic_dialog_map"
+            android:title="@string/menu_compose_router"/>
+        <item
             android:id="@+id/compose_list"
             android:icon="@android:drawable/ic_menu_gallery"
             android:title="@string/menu_compose_list"/>

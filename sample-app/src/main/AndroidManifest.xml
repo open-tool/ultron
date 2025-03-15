@@ -49,6 +49,9 @@
             android:name="com.atiurin.sampleapp.activity.ComposeElementsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name="com.atiurin.sampleapp.activity.ComposeRouterActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name="com.atiurin.sampleapp.activity.ComposeListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

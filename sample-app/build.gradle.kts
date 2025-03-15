@@ -14,16 +14,21 @@ android {
         multiDexEnabled = true
         testInstrumentationRunner = "com.atiurin.sampleapp.framework.CustomTestRunner"
     }
-
     compileOptions {
         targetCompatibility = JavaVersion.VERSION_17
         sourceCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+    buildTypes {
+        debug {
+            isMinifyEnabled = false
+        }
     }
 
     packagingOptions {
@@ -50,11 +55,12 @@ dependencies {
     implementation(Libs.androidXKtx)
     implementation(Libs.supportV4)
     implementation(Libs.material)
+    implementation(Libs.material3)
     implementation(Libs.constraintLayout)
     implementation(Libs.recyclerView)
     implementation(Libs.cardview)
     implementation(Libs.espressoIdlingResource)
-
+    implementation(libs.androidx.navigation.compose)
     //compose
     implementation(Libs.composeUi)
     implementation(Libs.composeUiTooling)

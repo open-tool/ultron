@@ -1,31 +1,30 @@
 package com.atiurin.sampleapp.activity
 
-import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.core.view.GravityCompat
-import androidx.appcompat.app.ActionBarDrawerToggle
-import android.view.MenuItem
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.navigation.NavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.content.Intent
-import com.atiurin.sampleapp.adapters.ContactAdapter
-import com.atiurin.sampleapp.data.entities.Contact
-import com.atiurin.sampleapp.R
-import kotlin.collections.ArrayList
-import com.atiurin.sampleapp.MyApplication
+import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.atiurin.sampleapp.MyApplication
+import com.atiurin.sampleapp.R
+import com.atiurin.sampleapp.adapters.ContactAdapter
 import com.atiurin.sampleapp.async.ContactsPresenter
 import com.atiurin.sampleapp.async.ContactsProvider
 import com.atiurin.sampleapp.data.Tags
+import com.atiurin.sampleapp.data.entities.Contact
 import com.atiurin.sampleapp.idlingresources.IdlingHelper
 import com.atiurin.sampleapp.idlingresources.resources.ContactsIdlingResource
 import com.atiurin.sampleapp.managers.AccountManager
 import com.atiurin.sampleapp.view.CircleImageView
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener, ContactsProvider {
@@ -134,6 +133,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.compose_elements -> {
                 startActivity(Intent(applicationContext, ComposeElementsActivity::class.java))
+            }
+            R.id.compose_router -> {
+                startActivity(Intent(applicationContext, ComposeRouterActivity::class.java))
             }
             R.id.compose_list -> {
                 startActivity(Intent(applicationContext, ComposeListActivity::class.java))

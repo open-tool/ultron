@@ -39,6 +39,8 @@ import androidx.compose.ui.test.assertWidthIsEqualTo
 import androidx.compose.ui.test.click
 import androidx.compose.ui.test.doubleClick
 import androidx.compose.ui.test.longClick
+import androidx.compose.ui.test.performCustomAccessibilityActionWithLabel
+import androidx.compose.ui.test.performCustomAccessibilityActionWithLabelMatching
 import androidx.compose.ui.test.performImeAction
 import androidx.compose.ui.test.performKeyPress
 import androidx.compose.ui.test.performMouseInput
@@ -171,7 +173,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         resultHandler: ((ComposeOperationResult<UltronComposeOperation>) -> Unit) = UltronComposeConfig.resultHandler,
         assertion: OperationAssertion = EmptyOperationAssertion(),
         elementInfo: ElementInfo = DefaultElementInfo()
-    ) :  this(
+    ) : this(
         semanticsNodeInteractionProvider = { semanticsNodeInteraction },
         timeoutMs, resultHandler, assertion, elementInfo
     )
@@ -560,6 +562,29 @@ open class UltronComposeSemanticsNodeInteraction constructor(
             name = "SemanticAction '${key.name}' to '${elementInfo.name}'",
             type = SEMANTIC_ACTION,
             description = "Compose semanticAction '${key.name}' to '${elementInfo.name} during $timeoutMs ms",
+        )
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    fun performCustomAccessibilityActionWithLabel(label: String) = apply {
+        executeOperation(
+            operationBlock = { semanticsNodeInteraction.performCustomAccessibilityActionWithLabel(label) },
+            name = "PerformCustomAccessibilityActionWithLabel '${label}' to '${elementInfo.name}'",
+            type = SEMANTIC_ACTION,
+            description = "Compose PerformCustomAccessibilityActionWithLabel '${label}' to '${elementInfo.name} during $timeoutMs ms",
+        )
+    }
+
+    @OptIn(ExperimentalTestApi::class)
+    fun performCustomAccessibilityActionWithLabelMatching(
+        predicateDescription: String? = null,
+        labelPredicate: (label: String) -> Boolean
+    ) = apply {
+        executeOperation(
+            operationBlock = { semanticsNodeInteraction.performCustomAccessibilityActionWithLabelMatching(predicateDescription, labelPredicate) },
+            name = "PerformCustomAccessibilityActionWithLabelMatching '${predicateDescription}' to '${elementInfo.name}'",
+            type = SEMANTIC_ACTION,
+            description = "Compose PerformCustomAccessibilityActionWithLabelMatching '${predicateDescription}' to '${elementInfo.name} during $timeoutMs ms",
         )
     }
 
