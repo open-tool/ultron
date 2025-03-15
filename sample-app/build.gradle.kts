@@ -14,16 +14,21 @@ android {
         multiDexEnabled = true
         testInstrumentationRunner = "com.atiurin.sampleapp.framework.CustomTestRunner"
     }
-
     compileOptions {
         targetCompatibility = JavaVersion.VERSION_17
         sourceCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     kotlinOptions {
         jvmTarget = "17"
+    }
+    buildTypes {
+        debug {
+            isMinifyEnabled = false
+        }
     }
 
     packagingOptions {

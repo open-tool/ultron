@@ -40,13 +40,14 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import com.atiurin.sampleapp.BuildConfig
+import com.atiurin.sampleapp.compose.DatePickerTestTags.SelectedDateValue
 import com.atiurin.sampleapp.compose.DatePickerTestTags.SetDatePickerTimeCustomActionLabel
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.atiurin.sampleapp.utils.convertMillisToDate
 
 object DatePickerTestTags {
-    const val DockerIconButton = "DockerIconButton"
+    const val DockedIconButton = "DockerIconButton"
+    const val SelectedDateValue = "SelectedDateValue"
     const val DataPicker = "DataPicker"
     const val SetDatePickerTimeCustomActionLabel = "SetDatePickerTimeCustomAction"
 }
@@ -56,7 +57,7 @@ object DatePickerTestData {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-fun Modifier.setDatePicker(state: DatePickerState): Modifier {
+fun Modifier.setDatePickerTimeCustomAction(state: DatePickerState): Modifier {
     return this.semantics {
         customActions = listOf(
             CustomAccessibilityAction(SetDatePickerTimeCustomActionLabel) {
@@ -65,6 +66,25 @@ fun Modifier.setDatePicker(state: DatePickerState): Modifier {
             }
         )
     }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun TestableDatePicker(
+    state: DatePickerState,
+    modifier: Modifier = Modifier,
+    showModeToggle: Boolean = true,
+) {
+    val testableModifier = if (BuildConfig.DEBUG) {
+        modifier
+            .testTag(DatePickerTestTags.DataPicker)
+            .setDatePickerTimeCustomAction(state)
+    } else modifier
+    DatePicker(
+        state = state,
+        modifier = testableModifier,
+        showModeToggle = showModeToggle
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,11 +102,11 @@ fun DatePickerDocked() {
         OutlinedTextField(
             value = selectedDate,
             onValueChange = { },
-            label = { Text("DOB") },
+            label = { Text("No value selected") },
             readOnly = true,
             trailingIcon = {
                 IconButton(
-                    modifier = Modifier.testTag(DatePickerTestTags.DockerIconButton),
+                    modifier = Modifier.testTag(DatePickerTestTags.DockedIconButton),
                     onClick = { showDatePicker = !showDatePicker }
                 ) {
                     Icon(
@@ -95,7 +115,7 @@ fun DatePickerDocked() {
                     )
                 }
             },
-            modifier = Modifier
+            modifier = Modifier.testTag(SelectedDateValue)
                 .fillMaxWidth()
                 .height(64.dp)
 
@@ -114,14 +134,11 @@ fun DatePickerDocked() {
                         .background(MaterialTheme.colorScheme.surface)
                         .padding(16.dp)
                 ) {
-                    DatePicker(
-                        modifier = Modifier
-                            .testTag(DatePickerTestTags.DataPicker)
-                            .setDatePicker(datePickerState),
+                    TestableDatePicker(
+                        modifier = Modifier,
                         state = datePickerState,
                         showModeToggle = false,
-
-                        )
+                    )
                 }
             }
         }
@@ -165,10 +182,6 @@ fun DatePickerFieldToModal(modifier: Modifier = Modifier) {
     }
 }
 
-fun convertMillisToDate(millis: Long): String {
-    val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-    return formatter.format(Date(millis))
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 // [START android_compose_components_datepicker_modal]
@@ -195,7 +208,7 @@ fun DatePickerModal(
             }
         }
     ) {
-        DatePicker(state = datePickerState)
+        TestableDatePicker(state = datePickerState)
     }
 }
 // [END android_compose_components_datepicker_modal]
@@ -225,6 +238,7 @@ fun DatePickerModalInput(
             }
         }
     ) {
-        DatePicker(state = datePickerState)
+        TestableDatePicker(state = datePickerState)
     }
 }
+
