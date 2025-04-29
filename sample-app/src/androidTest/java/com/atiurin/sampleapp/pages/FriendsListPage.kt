@@ -7,6 +7,8 @@ import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.data.entities.Contact
 import com.atiurin.ultron.allure.step.step
+import com.atiurin.ultron.core.espresso.recyclerviewv2.UltronRecyclerViewItemV2
+import com.atiurin.ultron.core.espresso.recyclerviewv2.withRecyclerViewV2
 import com.atiurin.ultron.custom.espresso.matcher.withSuitableRoot
 import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
@@ -16,6 +18,7 @@ import org.junit.Assert
 
 object FriendsListPage : Page<FriendsListPage>() {
     val recycler = withRecyclerView(R.id.recycler_friends)
+    val recyclerV2 = withRecyclerViewV2(R.id.recycler_friends)
 
     fun assertPageDisplayed() = apply {
         step("Assert friends list page displayed") {
@@ -35,8 +38,18 @@ object FriendsListPage : Page<FriendsListPage>() {
         val avatar by lazy { getChild(withId(R.id.avatar)) }
     }
 
+    class FriendRecyclerItemV2 : UltronRecyclerViewItemV2() {
+        val name by child { withId(R.id.tv_name) }
+        val status by lazy { getChild(withId(R.id.tv_status)) }
+        val avatar by lazy { getChild(withId(R.id.avatar)) }
+    }
+
     fun getListItem(contactName: String): FriendRecyclerItem {
         return recycler.getItem(hasDescendant(allOf(withId(R.id.tv_name), withText(contactName))))
+    }
+
+    fun getListItemV2(contactName: String): FriendRecyclerItemV2 {
+        return recyclerV2.getItem(hasDescendant(allOf(withId(R.id.tv_name), withText(contactName))))
     }
 
     fun getListItem(positions: Int): FriendRecyclerItem {
