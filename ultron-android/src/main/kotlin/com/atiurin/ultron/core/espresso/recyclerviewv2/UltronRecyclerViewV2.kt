@@ -9,7 +9,6 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
-import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.util.HumanReadables
@@ -600,15 +599,17 @@ open class UltronRecyclerViewV2(
         childMatcher: Matcher<View>
     ): Matcher<View> {
         return object : TypeSafeMatcher<View>() {
+            var childView: View? = null
 
             override fun describeTo(description: Description) {
                 description.appendText("RecyclerViewItem of '$recyclerViewMatcher', itemMatcher: '$itemMatcher', childMatcher: '$childMatcher'")
             }
 
             override fun matchesSafely(view: View): Boolean {
-                return if (childMatcher.matches(view)) {
-                    isDescendantOfA(atItem(itemMatcher)).matches(view)
-                } else false
+                findItemView(itemMatcher, view.rootView)?.itemView?.let {
+                    childView = it.findChildView(childMatcher)
+                }
+                return if (childView != null) childView == view else false
             }
         }
     }
@@ -620,15 +621,17 @@ open class UltronRecyclerViewV2(
      */
     internal fun atPositionItemChild(position: Int, childMatcher: Matcher<View>): Matcher<View> {
         return object : TypeSafeMatcher<View>() {
+            var childView: View? = null
 
             override fun describeTo(description: Description) {
                 description.appendText("RecyclerViewItem of '$recyclerViewMatcher', itemPosition: '$position', childMatcher: '$childMatcher'")
             }
 
             override fun matchesSafely(view: View): Boolean {
-                return if (childMatcher.matches(view)) {
-                    isDescendantOfA(atPosition(position)).matches(view)
-                } else false
+                findItemViewAtPosition(position, view.rootView)?.itemView.let {
+                    childView = it?.findChildView(childMatcher)
+                }
+                return if (childView != null) childView == view else false
             }
         }
     }
