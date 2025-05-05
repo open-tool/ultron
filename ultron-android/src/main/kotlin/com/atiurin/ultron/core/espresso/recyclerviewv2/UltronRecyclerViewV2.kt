@@ -9,13 +9,16 @@ import androidx.test.espresso.ViewAction
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
+import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_IMPL
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_ITEM_SEARCH_LIMIT
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_LOAD_TIMEOUT
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_OPERATIONS_TIMEOUT
+import com.atiurin.ultron.core.config.UltronRecyclerImpl
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
@@ -40,7 +43,8 @@ open class UltronRecyclerViewV2(
     val recyclerViewMatcher: Matcher<View>,
     val loadTimeoutMs: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     private val itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
-    private var operationTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
+    private var operationTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
+    private val recyclerImpl: UltronRecyclerImpl = RECYCLER_IMPL
 ) {
     private var recyclerView: RecyclerView? = null
 
@@ -606,10 +610,20 @@ open class UltronRecyclerViewV2(
             }
 
             override fun matchesSafely(view: View): Boolean {
-                findItemView(itemMatcher, view.rootView)?.itemView?.let {
-                    childView = it.findChildView(childMatcher)
+                return when(recyclerImpl) {
+                    UltronRecyclerImpl.STANDART -> {
+                        findItemView(itemMatcher, view.rootView)?.itemView?.let {
+                            childView = it.findChildView(childMatcher)
+                        }
+                        return if (childView != null) childView == view else false
+                    }
+
+                    UltronRecyclerImpl.PERFORMANCE -> {
+                        if (childMatcher.matches(view)) {
+                            isDescendantOfA(atItem(itemMatcher)).matches(view)
+                        } else false
+                    }
                 }
-                return if (childView != null) childView == view else false
             }
         }
     }
@@ -628,10 +642,20 @@ open class UltronRecyclerViewV2(
             }
 
             override fun matchesSafely(view: View): Boolean {
-                findItemViewAtPosition(position, view.rootView)?.itemView.let {
-                    childView = it?.findChildView(childMatcher)
+                return when(recyclerImpl) {
+                    UltronRecyclerImpl.STANDART -> {
+                        findItemViewAtPosition(position, view.rootView)?.itemView.let {
+                            childView = it?.findChildView(childMatcher)
+                        }
+                        return if (childView != null) childView == view else false
+                    }
+
+                    UltronRecyclerImpl.PERFORMANCE -> {
+                        if (childMatcher.matches(view)) {
+                            isDescendantOfA(atPosition(position)).matches(view)
+                        } else false
+                    }
                 }
-                return if (childView != null) childView == view else false
             }
         }
     }
@@ -682,13 +706,15 @@ fun withRecyclerViewV2(
     recyclerViewMatcher: Matcher<View>,
     loadTimeout: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
-    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
+    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
+    recyclerImpl: UltronRecyclerImpl = RECYCLER_IMPL
 ): UltronRecyclerViewV2 {
     return UltronRecyclerViewV2(
         recyclerViewMatcher,
         loadTimeout,
         itemSearchLimit,
-        operationsTimeoutMs
+        operationsTimeoutMs,
+        recyclerImpl
     )
 }
 
@@ -696,13 +722,15 @@ fun withRecyclerViewV2(
     @IntegerRes resourceId: Int,
     loadTimeout: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
-    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
+    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
+    recyclerImpl: UltronRecyclerImpl = RECYCLER_IMPL
 ): UltronRecyclerViewV2 {
     return UltronRecyclerViewV2(
         withId(resourceId),
         loadTimeout,
         itemSearchLimit,
-        operationsTimeoutMs
+        operationsTimeoutMs,
+        recyclerImpl
     )
 }
 
