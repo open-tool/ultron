@@ -9,11 +9,14 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.BoundedMatcher
+import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.util.TreeIterables
+import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_IMPL
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_ITEM_SEARCH_LIMIT
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_LOAD_TIMEOUT
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_OPERATIONS_TIMEOUT
+import com.atiurin.ultron.core.config.UltronRecyclerImpl
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
@@ -32,12 +35,14 @@ import org.hamcrest.TypeSafeMatcher
  *  @param itemSearchLimit set an amount of RecyclerView items to be researched for target item. There is no limit by default
  *  [itemSearchLimit] is applied for matcher search. If you're looking for RecyclerView item by position it isn't used.
  *  @param operationTimeoutMs specifies a timeout for actions and assertions on [UltronRecyclerView]. [UltronRecyclerViewItem] has it own timeout.
+ *  @param recyclerImpl specifies a recycler item child matcher implementation
  */
 open class UltronRecyclerView(
     val recyclerViewMatcher: Matcher<View>,
     val loadTimeoutMs: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     private val itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
-    private var operationTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
+    private var operationTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
+    private val recyclerImpl: UltronRecyclerImpl = RECYCLER_IMPL
 ) {
     private var recyclerView: RecyclerView? = null
 
@@ -550,10 +555,20 @@ open class UltronRecyclerView(
             }
 
             override fun matchesSafely(view: View): Boolean {
-                findItemView(itemMatcher, view.rootView)?.itemView?.let {
-                    childView = it.findChildView(childMatcher)
+                return when(recyclerImpl) {
+                    UltronRecyclerImpl.STANDART -> {
+                        findItemView(itemMatcher, view.rootView)?.itemView?.let {
+                            childView = it.findChildView(childMatcher)
+                        }
+                        if (childView != null) childView == view else false
+                    }
+
+                    UltronRecyclerImpl.PERFORMANCE -> {
+                        if (childMatcher.matches(view)) {
+                            isDescendantOfA(atItem(itemMatcher)).matches(view)
+                        } else false
+                    }
                 }
-                return if (childView != null) childView == view else false
             }
         }
     }
@@ -571,10 +586,20 @@ open class UltronRecyclerView(
             }
 
             override fun matchesSafely(view: View): Boolean {
-                findItemViewAtPosition(position, view.rootView)?.itemView.let {
-                    childView = it?.findChildView(childMatcher)
+                return when(recyclerImpl) {
+                    UltronRecyclerImpl.STANDART -> {
+                        findItemViewAtPosition(position, view.rootView)?.itemView.let {
+                            childView = it?.findChildView(childMatcher)
+                        }
+                        return if (childView != null) childView == view else false
+                    }
+
+                    UltronRecyclerImpl.PERFORMANCE -> {
+                        if (childMatcher.matches(view)) {
+                            isDescendantOfA(atPosition(position)).matches(view)
+                        } else false
+                    }
                 }
-                return if (childView != null) childView == view else false
             }
         }
     }
@@ -615,18 +640,20 @@ fun withRecyclerView(
     recyclerViewMatcher: Matcher<View>,
     loadTimeout: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
-    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
+    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
+    recyclerImpl: UltronRecyclerImpl = RECYCLER_IMPL
 ): UltronRecyclerView {
-    return UltronRecyclerView(recyclerViewMatcher, loadTimeout, itemSearchLimit, operationsTimeoutMs)
+    return UltronRecyclerView(recyclerViewMatcher, loadTimeout, itemSearchLimit, operationsTimeoutMs, recyclerImpl)
 }
 
 fun withRecyclerView(
     @IntegerRes resourceId: Int,
     loadTimeout: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
-    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
+    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
+    recyclerImpl: UltronRecyclerImpl = RECYCLER_IMPL
 ): UltronRecyclerView {
-    return UltronRecyclerView(withId(resourceId), loadTimeout, itemSearchLimit, operationsTimeoutMs)
+    return UltronRecyclerView(withId(resourceId), loadTimeout, itemSearchLimit, operationsTimeoutMs, recyclerImpl)
 }
 
 private fun View.findChildView(matcher: Matcher<View>): View? {
