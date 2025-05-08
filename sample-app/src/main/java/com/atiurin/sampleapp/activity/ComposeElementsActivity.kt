@@ -28,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
@@ -36,7 +37,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.clickListenerButton
+import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.contactBlock1Tag
+import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.contactBlock2Tag
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.disabledButton
+import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.firstNameTag
+import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.lastNameTag
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCounterButton
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCounterContentDesc
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCounterTextContainer
@@ -63,6 +68,11 @@ class ComposeElementsActivity : ComponentActivity() {
         const val radioButtonFemaleTestTag = "radioButtonFemaleTestTag"
         const val likesCounterContentDesc = "LikeS_CounteR_ContentDesc"
         const val likesCounterTextContainerContentDesc = "text_container_content_desc"
+        const val contactsListTag = "contactsListTag"
+        const val contactBlock1Tag = "contactBlock1"
+        const val contactBlock2Tag = "contactBlock2"
+        const val firstNameTag = "firstNameTag"
+        const val lastNameTag = "lastNameTag"
     }
 
     @ExperimentalMaterialApi
@@ -90,6 +100,7 @@ class ComposeElementsActivity : ComponentActivity() {
                 DisabledButton()
                 LinearProgressBar(statusState = status)
                 RadioGroup()
+                ContactsList(modifier = Modifier.testTag(contactsListTag))
             }
         }
     }
@@ -147,7 +158,7 @@ fun ButtonWithCount() {
 
 @Preview
 @Composable
-fun ButtonWithCountPreview(){
+fun ButtonWithCountPreview() {
     ButtonWithCount()
 }
 
@@ -168,14 +179,44 @@ fun ClickListener(statusState: MutableState<String>) {
 }
 
 @Composable
-fun DisabledButton(){
-    Button(modifier = Modifier.semantics {
-        testTag = disabledButton
-    },
+fun DisabledButton() {
+    Button(
+        modifier = Modifier.semantics {
+            testTag = disabledButton
+        },
         onClick = {},
-        content = { Text(text = "Disabled button")},
+        content = { Text(text = "Disabled button") },
         enabled = false
     )
 }
+
+@Composable
+fun ContactsList(modifier: Modifier){
+    Column(modifier = modifier) {
+        ContactInfoBlock(Modifier.testTag(contactBlock1Tag), "John", "Gold")
+        ContactInfoBlock(Modifier.testTag(contactBlock2Tag), "Spider", "Man")
+    }
+}
+
+@Composable
+fun ContactInfoBlock(modifier: Modifier, firstName: String, lastName: String) {
+    Column(modifier = modifier) {
+        DisabledButton()
+        Row {
+            Column(modifier = Modifier.testTag("Inner column")) {
+                TextItem(modifier = Modifier.testTag(firstNameTag), firstName)
+                TextItem(modifier = Modifier.testTag(lastNameTag), lastName)
+            }
+        }
+    }
+}
+
+@Composable
+fun TextItem(modifier: Modifier, text: String){
+    Text(text, modifier = modifier.padding(8.dp))
+}
+
+
+
 
 
