@@ -4,13 +4,12 @@ import android.view.View
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
-import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.sampleapp.R
+import com.atiurin.ultron.core.espresso.page.EspressoUiBlock
 import com.atiurin.ultron.page.Page
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.allOf
 
 object UiElementsPage : Page<UiElementsPage>() {
     val notExistElement = withText("Some not existed text element")
@@ -36,13 +35,7 @@ object UiElementsPage : Page<UiElementsPage>() {
     val hiddenButton = withId(R.id.exist_hidden_button)
 }
 
-class ButtonBlock(parent: Matcher<View>): EspressoElement(parent){
-    val button = child { withId(R.id.button1) }
-    val eventStatus = child { withId(R.id.last_event_status) }
-}
-
-open class EspressoElement(open val parentMatcher: Matcher<View>){
-    fun child(matcher: () -> Matcher<View>): Matcher<View> {
-        return allOf(isDescendantOfA(parentMatcher), matcher())
-    }
+class ButtonBlock(parent: Matcher<View>): EspressoUiBlock(parent){
+    val button = child(withId(R.id.button1))
+    val eventStatus = child(withId(R.id.last_event_status))
 }

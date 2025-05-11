@@ -26,8 +26,6 @@
             android:textColor="@color/colorPrimary"
             android:textColorHighlight="@color/colorHighlight"
             android:textColorHint="@color/colorHint" />
-
-
     </LinearLayout>
 
 
