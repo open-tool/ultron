@@ -10,8 +10,6 @@ import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerView
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
-import com.atiurin.ultron.core.espresso.recyclerviewv2.UltronRecyclerViewItemV2
-import com.atiurin.ultron.core.espresso.recyclerviewv2.UltronRecyclerViewV2
 import org.hamcrest.Matcher
 
 fun <T> UltronEspressoInteraction<T>.appendText(value: String) = perform(
@@ -36,11 +34,9 @@ fun DataInteraction.appendText(text: String) = UltronEspressoInteraction(this).a
 //support action for RecyclerView list. appendText action is useless for RecyclerView.
 // This is just an example of how to add new behaviour for UltronRecyclerView
 fun UltronRecyclerView.appendText(text: String) = apply { recyclerViewMatcher.appendText(text) }
-fun UltronRecyclerViewV2.appendText(text: String) = apply { recyclerViewMatcher.appendText(text) }
 
 //support action for RecyclerView item
 fun UltronRecyclerViewItem.appendText(text: String) = apply { getMatcher().appendText(text) }
-fun UltronRecyclerViewItemV2.appendText(text: String) = apply { getMatcher().appendText(text) }
 
 // assertion example
 fun <T> UltronEspressoInteraction<T>.assertChecked(expectedState: Boolean) = assertMatches { view ->

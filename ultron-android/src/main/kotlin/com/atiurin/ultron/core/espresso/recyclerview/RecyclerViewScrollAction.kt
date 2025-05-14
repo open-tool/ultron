@@ -4,16 +4,25 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import com.atiurin.ultron.exceptions.UltronOperationException
+import com.atiurin.ultron.extensions.instantScrollToPosition
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 
-class RecyclerViewScrollAction(private val itemMatcher: Matcher<View>, private val itemSearchLimit: Int = -1, private val offset: Int = 0) : ViewAction {
+class RecyclerViewScrollAction(
+    private val itemMatcher: Matcher<View>,
+    private val itemSearchLimit: Int = -1,
+    private val offset: Int = 0
+) : ViewAction {
+
     override fun getConstraints(): Matcher<View> {
         return allOf(
-            ViewMatchers.isAssignableFrom(RecyclerView::class.java),
-            ViewMatchers.isDisplayed()
+            isAssignableFrom(RecyclerView::class.java),
+            isDisplayed()
         )
     }
 
@@ -22,17 +31,17 @@ class RecyclerViewScrollAction(private val itemMatcher: Matcher<View>, private v
     }
 
     override fun perform(uiController: UiController, view: View) {
+
         val recyclerView = view as RecyclerView
         val viewHolderMatcher: Matcher<RecyclerView.ViewHolder> = viewHolderMatcher(itemMatcher)
-        val matchedItem = itemsMatching(recyclerView, viewHolderMatcher, 1, itemSearchLimit = itemSearchLimit).firstOrNull()
-            ?: throw UltronOperationException("No RecyclerView item found matches '$itemMatcher'${if (itemSearchLimit >= 0) " with search limit = $itemSearchLimit" else ""} ")
-        val itemCount = recyclerView.adapter?.itemCount ?: 0
-        val positionToScroll = matchedItem.position + offset
-        val finalPositionToScroll = when {
-            positionToScroll in 1 until itemCount -> positionToScroll
-            positionToScroll >= itemCount -> itemCount - 1
-            else -> 0
-        }
-        recyclerView.scrollToPosition(finalPositionToScroll)
+
+        val matchedItem =
+            itemsMatching(recyclerView, viewHolderMatcher, 1, itemSearchLimit).firstOrNull()
+                ?: throw UltronOperationException("The scroll action could not be performed because no matching element was found using the matcher: $itemMatcher")
+
+        val finalPositionToScroll = matchedItem.position + offset
+
+        recyclerView.instantScrollToPosition(finalPositionToScroll, 0.5f)
+        runBlocking { delay(10) }
     }
 }
