@@ -23,6 +23,6 @@ class UiObject2ElementsPage {
     val contentDescElement = by(By.desc("Content desc"))
     val webView = byResId(R.id.webview)
     val appCompatTextView = byResId(R.id.app_compat_text)
-    val swipableImageView = byResId(R.id.image_view)
+    val swipableImageView = byResId(R.id.swipe_image_view)
     val emptyImageView = byResId(R.id.empty_image_view)
 }
