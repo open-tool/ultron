@@ -6,13 +6,10 @@ import android.widget.TextView
 import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewInteraction
-import androidx.test.espresso.matcher.ViewMatchers
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerView
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
-import com.atiurin.ultron.custom.espresso.action.CustomEspressoActionType
-import com.atiurin.ultron.extensions.simpleClassName
 import org.hamcrest.Matcher
 
 fun <T> UltronEspressoInteraction<T>.appendText(value: String) = perform(

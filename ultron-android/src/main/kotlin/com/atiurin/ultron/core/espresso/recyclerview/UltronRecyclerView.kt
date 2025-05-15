@@ -2,18 +2,18 @@ package com.atiurin.ultron.core.espresso.recyclerview
 
 import android.os.SystemClock
 import android.view.View
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.annotation.IntegerRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.BoundedMatcher
+import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.util.TreeIterables
+import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_IMPL
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_ITEM_SEARCH_LIMIT
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_LOAD_TIMEOUT
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_OPERATIONS_TIMEOUT
+import com.atiurin.ultron.core.config.UltronRecyclerImpl
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
@@ -32,12 +32,14 @@ import org.hamcrest.TypeSafeMatcher
  *  @param itemSearchLimit set an amount of RecyclerView items to be researched for target item. There is no limit by default
  *  [itemSearchLimit] is applied for matcher search. If you're looking for RecyclerView item by position it isn't used.
  *  @param operationTimeoutMs specifies a timeout for actions and assertions on [UltronRecyclerView]. [UltronRecyclerViewItem] has it own timeout.
+ *  @param recyclerImpl specifies a recycler item child matcher implementation
  */
 open class UltronRecyclerView(
     val recyclerViewMatcher: Matcher<View>,
     val loadTimeoutMs: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     private val itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
-    private var operationTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
+    private var operationTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
+    private val recyclerImpl: UltronRecyclerImpl = RECYCLER_IMPL
 ) {
     private var recyclerView: RecyclerView? = null
 
@@ -140,7 +142,7 @@ open class UltronRecyclerView(
             valueBlock = { getItemAdapterPositionAtIndex(matcher, index) },
             assertionBlock = { value -> value >= 0 },
             timeoutMs = getTimeout(),
-            desc ="RecyclerView($recyclerViewMatcher) has item matched '$matcher' with index $index"
+            desc = "RecyclerView($recyclerViewMatcher) has item matched '$matcher' with index $index"
         )
         return UltronRecyclerViewItem.getInstance(this, position, autoScroll, scrollOffset)
     }
@@ -160,7 +162,7 @@ open class UltronRecyclerView(
     ): T {
         waitItemsLoaded()
         val position = AssertUtils.assertTrueAndReturnValue(
-            valueBlock = {getItemsAdapterPositionList(matcher).lastOrNull() ?: -1 },
+            valueBlock = { getItemsAdapterPositionList(matcher).lastOrNull() ?: -1 },
             assertionBlock = { value -> value >= 0 },
             timeoutMs = getTimeout(),
             desc = "RecyclerView($recyclerViewMatcher) has last item matched '$matcher'"
@@ -309,12 +311,31 @@ open class UltronRecyclerView(
     }
 
     /**
-     * Asserts RecyclerView list has [expected] items count during [timeoutMs]
+     * Asserts RecyclerView list size matches the expected condition during [operationTimeoutMs]
+     * @param expected The expected size value to compare against
+     * @param comparison The type of size comparison to perform
      */
-    open fun assertSize(expected: Int) {
+    open fun assertSize(expected: Int, comparison: SizeComparison = SizeComparison.EQUAL) {
+        val condition: (Int) -> Boolean = when (comparison) {
+            SizeComparison.EQUAL -> { size -> size == expected }
+            SizeComparison.GREATER_THAN -> { size -> size > expected }
+            SizeComparison.LESS_THAN -> { size -> size < expected }
+            SizeComparison.GREATER_THAN_OR_EQUAL -> { size -> size >= expected }
+            SizeComparison.LESS_THAN_OR_EQUAL -> { size -> size <= expected }
+        }
+
+        val operatorSymbol = when (comparison) {
+            SizeComparison.EQUAL -> "="
+            SizeComparison.GREATER_THAN -> ">"
+            SizeComparison.LESS_THAN -> "<"
+            SizeComparison.GREATER_THAN_OR_EQUAL -> ">="
+            SizeComparison.LESS_THAN_OR_EQUAL -> "<="
+        }
+
         AssertUtils.assertTrue(
-            { getSize() == expected }, operationTimeoutMs,
-            { "RecyclerView($recyclerViewMatcher) size is $expected (actual size = ${getSize()})" }
+            { condition(getSize()) },
+            operationTimeoutMs,
+            { "RecyclerView($recyclerViewMatcher) size expected to be $operatorSymbol $expected (actual size = ${getSize()})" }
         )
     }
 
@@ -393,19 +414,11 @@ open class UltronRecyclerView(
     @Deprecated("Use scrollToItem(itemMatcher, searchLimit, offset)")
     fun scrollToIem(itemMatcher: Matcher<View>, searchLimit: Int = this.itemSearchLimit, offset: Int = 0) = scrollToItem(itemMatcher, searchLimit, offset)
 
-    fun scrollToItem(position: Int, offset: Int = 0){
+    fun scrollToItem(position: Int, offset: Int = 0) {
         assertHasItemAtPosition(position)
-        val itemCount = getSize()
         val positionToScroll = position + offset
-        val finalPositionToScroll = when {
-            positionToScroll in 1 until itemCount -> positionToScroll
-            positionToScroll >= itemCount -> itemCount - 1
-            else -> 0
-        }
         recyclerViewMatcher.withTimeout(getTimeout()).perform(
-            viewAction = RecyclerViewActions.scrollToPosition<RecyclerView.ViewHolder>(
-                finalPositionToScroll
-            ),
+            viewAction = RecyclerViewScrollToPositionViewAction(positionToScroll),
             description = "RecyclerViewActions scrollToPosition $position with offset = $offset"
         )
     }
@@ -414,7 +427,12 @@ open class UltronRecyclerView(
      * Note: it doesn't modify [loadTimeoutMs] (waiting a RecyclerView to be loaded)
      * */
     open fun withTimeout(timeoutMs: Long) =
-        UltronRecyclerView(this.recyclerViewMatcher, this.loadTimeoutMs, this.itemSearchLimit, operationTimeoutMs = timeoutMs)
+        UltronRecyclerView(
+            this.recyclerViewMatcher,
+            this.loadTimeoutMs,
+            this.itemSearchLimit,
+            operationTimeoutMs = timeoutMs
+        )
 
     open fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
         recyclerViewMatcher.withResultHandler(resultHandler)
@@ -427,19 +445,26 @@ open class UltronRecyclerView(
      * It's waiting while RecyclerView items to be loaded
      * @throws [UltronOperationException] if no item is loaded during [loadTimeoutMs]
      */
-    fun waitItemsLoaded(recyclerView: RecyclerView = getRecyclerViewList()) = apply {
-        var isLoaded = false
-        if (recyclerView.adapter?.itemCount ?: 0 > 0) return@apply
-        recyclerView.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                isLoaded = true
-            }
-        })
-        val finishTime = SystemClock.elapsedRealtime() + loadTimeoutMs
-        while (!isLoaded && (finishTime > SystemClock.elapsedRealtime())) {
+    fun waitItemsLoaded(
+        recyclerView: RecyclerView = getRecyclerViewList(),
+        minItemsCount: Int = 1
+    ) = apply {
+        if ((recyclerView.adapter?.itemCount ?: 0) >= minItemsCount &&
+            recyclerView.childCount >= minItemsCount
+        ) {
+            return@apply
         }
-        if (!isLoaded) throw UltronOperationException("RecyclerView matches '$recyclerViewMatcher' doesn't load any item during $loadTimeoutMs ms")
+        var isLoaded = false
+        val finishTime = SystemClock.elapsedRealtime() + loadTimeoutMs
+        while (!isLoaded && finishTime > SystemClock.elapsedRealtime()) {
+            isLoaded = (recyclerView.adapter?.itemCount ?: 0) >= minItemsCount &&
+                    recyclerView.childCount >= minItemsCount
+        }
+        if (!isLoaded) throw UltronOperationException(
+            "RecyclerView failed to load $minItemsCount items in $loadTimeoutMs ms. " +
+                    "Current state: adapter.items = ${recyclerView.adapter?.itemCount}, " +
+                    "visible.items = ${recyclerView.childCount}"
+        )
     }
 
     /**
@@ -550,10 +575,20 @@ open class UltronRecyclerView(
             }
 
             override fun matchesSafely(view: View): Boolean {
-                findItemView(itemMatcher, view.rootView)?.itemView?.let {
-                    childView = it.findChildView(childMatcher)
+                return when (recyclerImpl) {
+                    UltronRecyclerImpl.STANDART -> {
+                        findItemView(itemMatcher, view.rootView)?.itemView?.let {
+                            childView = it.findChildView(childMatcher)
+                        }
+                        if (childView != null) childView == view else false
+                    }
+
+                    UltronRecyclerImpl.PERFORMANCE -> {
+                        if (childMatcher.matches(view)) {
+                            isDescendantOfA(atItem(itemMatcher)).matches(view)
+                        } else false
+                    }
                 }
-                return if (childView != null) childView == view else false
             }
         }
     }
@@ -566,15 +601,26 @@ open class UltronRecyclerView(
     internal fun atPositionItemChild(position: Int, childMatcher: Matcher<View>): Matcher<View> {
         return object : TypeSafeMatcher<View>() {
             var childView: View? = null
+
             override fun describeTo(description: Description) {
                 description.appendText("RecyclerViewItem of '$recyclerViewMatcher', itemPosition: '$position', childMatcher: '$childMatcher'")
             }
 
             override fun matchesSafely(view: View): Boolean {
-                findItemViewAtPosition(position, view.rootView)?.itemView.let {
-                    childView = it?.findChildView(childMatcher)
+                return when (recyclerImpl) {
+                    UltronRecyclerImpl.STANDART -> {
+                        findItemViewAtPosition(position, view.rootView)?.itemView.let {
+                            childView = it?.findChildView(childMatcher)
+                        }
+                        return if (childView != null) childView == view else false
+                    }
+
+                    UltronRecyclerImpl.PERFORMANCE -> {
+                        if (childMatcher.matches(view)) {
+                            isDescendantOfA(atPosition(position)).matches(view)
+                        } else false
+                    }
                 }
-                return if (childView != null) childView == view else false
             }
         }
     }
@@ -589,7 +635,8 @@ open class UltronRecyclerView(
     }
 
     private fun findItemViewAtPosition(position: Int, rootView: View): RecyclerView.ViewHolder? {
-        val recyclerView = rootView.findChildView(recyclerViewMatcher) as RecyclerView
+        val recyclerView = rootView.findChildView(recyclerViewMatcher) as? RecyclerView
+            ?: return null
         this.recyclerView = recyclerView
         return recyclerView.findViewHolderForAdapterPosition(position)
     }
@@ -609,38 +656,39 @@ open class UltronRecyclerView(
             }
         }
     }
+
+    enum class SizeComparison {
+        EQUAL,
+        GREATER_THAN,
+        LESS_THAN,
+        GREATER_THAN_OR_EQUAL,
+        LESS_THAN_OR_EQUAL
+    }
 }
 
 fun withRecyclerView(
     recyclerViewMatcher: Matcher<View>,
     loadTimeout: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
-    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
+    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
+    recyclerImpl: UltronRecyclerImpl = RECYCLER_IMPL
 ): UltronRecyclerView {
-    return UltronRecyclerView(recyclerViewMatcher, loadTimeout, itemSearchLimit, operationsTimeoutMs)
+    return UltronRecyclerView(recyclerViewMatcher, loadTimeout, itemSearchLimit, operationsTimeoutMs, recyclerImpl)
 }
 
 fun withRecyclerView(
     @IntegerRes resourceId: Int,
     loadTimeout: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
-    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT
+    operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
+    recyclerImpl: UltronRecyclerImpl = RECYCLER_IMPL
 ): UltronRecyclerView {
-    return UltronRecyclerView(withId(resourceId), loadTimeout, itemSearchLimit, operationsTimeoutMs)
+    return UltronRecyclerView(withId(resourceId), loadTimeout, itemSearchLimit, operationsTimeoutMs, recyclerImpl)
 }
 
-private fun View.findChildView(matcher: Matcher<View>): View? {
-    var childView: View? = null
-    for (child in TreeIterables.breadthFirstViewTraversal(this)) {
-        if (matcher.matches(child)) {
-            childView = child
-            break
-        }
-    }
-    return childView
-}
 
-private fun <T> UltronEspressoInteraction<T>.identifyRecyclerView(matcher: Matcher<View>) {
+
+internal fun <T> UltronEspressoInteraction<T>.identifyRecyclerView(matcher: Matcher<View>) {
     this.executeAssertion(
         UltronEspressoOperation(
             operationBlock = getInteractionAssertionBlock(matches(matcher)),
@@ -652,5 +700,5 @@ private fun <T> UltronEspressoInteraction<T>.identifyRecyclerView(matcher: Match
     )
 }
 
-private fun Matcher<View>.identifyRecyclerView(matcher: Matcher<View>): Unit =
+internal fun Matcher<View>.identifyRecyclerView(matcher: Matcher<View>): Unit =
     UltronEspressoInteraction(onView(this)).identifyRecyclerView(matcher)

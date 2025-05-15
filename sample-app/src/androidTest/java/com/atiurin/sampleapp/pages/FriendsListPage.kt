@@ -1,21 +1,25 @@
 package com.atiurin.sampleapp.pages
 
-import androidx.test.espresso.matcher.ViewMatchers.*
-import com.atiurin.ultron.page.Page
-import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
-import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.data.entities.Contact
 import com.atiurin.ultron.allure.step.step
+import com.atiurin.ultron.core.config.UltronRecyclerImpl
+import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
+import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.ultron.custom.espresso.matcher.withSuitableRoot
 import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
+import com.atiurin.ultron.page.Page
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import org.junit.Assert
 
 object FriendsListPage : Page<FriendsListPage>() {
-    val recycler = withRecyclerView(R.id.recycler_friends)
+    val recycler = withRecyclerView(R.id.recycler_friends,
+        recyclerImpl = UltronRecyclerImpl.PERFORMANCE)
 
     fun assertPageDisplayed() = apply {
         step("Assert friends list page displayed") {

@@ -1,7 +1,5 @@
 package com.atiurin.sampleapp.tests.espresso
 
-import android.view.View
-import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.isEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -14,7 +12,6 @@ import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.common.assertion.softAssertion
 import com.atiurin.ultron.core.common.assertion.verifySoftAssertions
 import com.atiurin.ultron.core.config.UltronCommonConfig
-import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.custom.espresso.assertion.doesNotExistInAnyVisibleRoot
 import com.atiurin.ultron.custom.espresso.assertion.hasCurrentHintTextColor
 import com.atiurin.ultron.custom.espresso.assertion.hasCurrentTextColor
@@ -22,7 +19,6 @@ import com.atiurin.ultron.custom.espresso.assertion.hasHighlightColor
 import com.atiurin.ultron.custom.espresso.assertion.hasShadowColor
 import com.atiurin.ultron.custom.espresso.matcher.hasAnyDrawable
 import com.atiurin.ultron.custom.espresso.matcher.withDrawable
-import com.atiurin.ultron.custom.espresso.matcher.withSuitableRoot
 import com.atiurin.ultron.extensions.assertMatches
 import com.atiurin.ultron.extensions.click
 import com.atiurin.ultron.extensions.doesNotExist
@@ -46,7 +42,6 @@ import com.atiurin.ultron.extensions.isSelected
 import com.atiurin.ultron.extensions.isSuccess
 import com.atiurin.ultron.extensions.textContains
 import com.atiurin.ultron.extensions.withTimeout
-import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import org.junit.Assert
@@ -408,29 +403,8 @@ class ViewInteractionAssertionsTest : UiElementsTest() {
 
     @Test
     fun isSuccess_NotExist_FalseTest() {
-        val success = page.notExistElement.isDisplayedCustom()
-//        Assert.assertFalse(success)
-    }
-
-
-    fun Matcher<View>.isDisplayedCustom(timeout: Long = 5000): UltronEspressoInteraction<ViewInteraction> {
-        val firstCheckSucceeded =
-            this.isSuccess {
-                withTimeout(1000).isDisplayed()
-            }
-        if (firstCheckSucceeded) {
-            return this.withTimeout(timeout).isDisplayed()
-        }
-
-        val secondCheckSucceeded =
-            this.withSuitableRoot().isSuccess {
-                withTimeout(1000).isDisplayed()
-            }
-        if (secondCheckSucceeded) {
-            return this.withSuitableRoot().withTimeout(timeout).isDisplayed()
-        }
-
-        return this.withTimeout(timeout).isDisplayed()
+        val success = page.notExistElement.isSuccess { withTimeout(100).isDisplayed() }
+        Assert.assertFalse(success)
     }
 
     // withAppCompatTextView

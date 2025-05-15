@@ -117,14 +117,14 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/image_view"
+            android:id="@+id/image_view2"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="10dp"
             android:src="@drawable/ic_account" />
 
         <ImageView
-            android:id="@+id/image_view2"
+            android:id="@+id/swipe_image_view"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_margin="10dp"

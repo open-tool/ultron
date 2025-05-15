@@ -10,26 +10,16 @@ import android.view.View
 import android.view.View.*
 import android.webkit.WebView
 import android.widget.*
-import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Column
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.async.AsyncDataLoading
-import com.atiurin.sampleapp.async.GetContacts
 import com.atiurin.sampleapp.async.UseCase
-import com.atiurin.sampleapp.compose.ContactsList
-import com.atiurin.sampleapp.compose.getContactItemTestTagById
-import com.atiurin.sampleapp.data.entities.Contact
-import com.atiurin.sampleapp.data.repositories.ContactRepositoty
-import com.atiurin.sampleapp.data.viewmodel.ContactsViewModel
 import com.atiurin.sampleapp.data.viewmodel.DataViewModel
 import com.atiurin.sampleapp.view.listeners.OnSwipeTouchListener
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 
 class UiElementsActivity : AppCompatActivity() {
     var lastEventDescription: TextView? = null
@@ -51,7 +41,7 @@ class UiElementsActivity : AppCompatActivity() {
         val etContentDescription: EditText = findViewById(R.id.et_contentDesc)
         val webView: WebView = findViewById(R.id.webview)
         val jsCheckBox: CheckBox = findViewById(R.id.checkbox_js_enabled)
-        val imageView : ImageView = findViewById(R.id.image_view)
+        val imageView : ImageView = findViewById(R.id.swipe_image_view)
         webView.settings.javaScriptEnabled = true
         val customHtml = applicationContext.assets.open("webview_small.html").reader().readText()
         webView.loadData(customHtml, "text/html", "UTF-8")
