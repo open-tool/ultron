@@ -15,6 +15,7 @@ import com.atiurin.sampleapp.pages.UiObject2ElementsPage
 import com.atiurin.sampleapp.tests.UiElementsTest
 import com.atiurin.ultron.core.uiautomator.uiobject2.UltronUiObject2.Companion.bySelector
 import com.atiurin.ultron.extensions.withTimeout
+import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.utils.getTargetString
 import org.junit.Assert
 import org.junit.Test
@@ -370,9 +371,10 @@ class UltronUiObject2ActionsTest : UiElementsTest() {
     @FlakyTest
     fun swipeRightTest() {
         page.editTextContentDesc.replaceText("some text")
+        UltronLog.info("In assertion, text = '${page.eventStatus.getText()}'")
         page.swipableImageView.withAssertion {
-            page.eventStatus.withTimeout(300)
-                .textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
+            UltronLog.info("In assertion, text = '${page.eventStatus.getText()}'")
+            page.eventStatus.withTimeout(500).textContains(UiElementsActivity.Event.SWIPE_RIGHT.name)
         }.swipeRight(speed = 2000)
     }
 

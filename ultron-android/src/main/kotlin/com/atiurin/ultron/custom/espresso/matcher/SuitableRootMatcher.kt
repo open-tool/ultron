@@ -5,7 +5,6 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Root
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerView
-import com.atiurin.ultron.core.espresso.recyclerviewv2.UltronRecyclerViewV2
 import com.atiurin.ultron.extensions.withSuitableRoot
 import com.atiurin.ultron.utils.allViews
 import com.atiurin.ultron.utils.isVisible
@@ -34,4 +33,3 @@ internal class SuitableRootMatcher(private val viewMatcher: Matcher<View>) :
 
 fun Matcher<View>.withSuitableRoot() = UltronEspressoInteraction(onView(this).withSuitableRoot())
 fun UltronRecyclerView.withSuitableRoot() = apply { recyclerViewMatcher.withSuitableRoot() }
-fun UltronRecyclerViewV2.withSuitableRoot() = apply { recyclerViewMatcher.withSuitableRoot() }

@@ -27,7 +27,7 @@ class UltronUiObject2ScrollTest : BaseTest() {
     fun scrollToBottom() {
         for (i in 0..10) {
             if (page.bottomElement.isSuccess { withTimeout(100).isDisplayed() }) break
-            page.list.scrollDown()
+            page.list.scrollDown(percent = 0.5f)
         }
         page.bottomElement.isDisplayed()
 //        UiScrollable(UiSelector().resourceId(getTargetResourceName(R.id.recycler_friends))).flingToEnd(10)
@@ -37,12 +37,12 @@ class UltronUiObject2ScrollTest : BaseTest() {
     fun scrollToTop() {
         for (i in 0..10) {
             if (page.bottomElement.isSuccess { withTimeout(100).isDisplayed() }) break
-            page.list.scrollDown()
+            page.list.scrollDown(percent = 0.5f)
         }
         page.bottomElement.isDisplayed()
         for (i in 0..10) {
             if (page.topElement.isSuccess { withTimeout(100).isDisplayed() }) break
-            page.list.scrollUp()
+            page.list.scrollUp(percent = 0.5f)
         }
     }
 }
