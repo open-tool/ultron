@@ -3,7 +3,7 @@ package com.atiurin.ultron.extensions
 import androidx.recyclerview.widget.RecyclerView
 import com.atiurin.ultron.utils.runOnUiThread
 
-fun RecyclerView.instantScrollToPosition(
+internal fun RecyclerView.instantScrollToPosition(
     position: Int,
     snapPreferredSide: Float = 0f
 ) {

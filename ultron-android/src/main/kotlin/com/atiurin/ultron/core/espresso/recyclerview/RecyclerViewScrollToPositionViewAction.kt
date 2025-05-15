@@ -12,7 +12,7 @@ import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 
-class RecyclerViewScrollToPositionViewAction (
+internal class RecyclerViewScrollToPositionViewAction (
     private val position: Int
 ) : ViewAction {
     override fun getConstraints(): Matcher<View> {

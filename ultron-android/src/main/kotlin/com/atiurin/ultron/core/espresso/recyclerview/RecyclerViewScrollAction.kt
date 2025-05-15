@@ -13,7 +13,7 @@ import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 
-class RecyclerViewScrollAction(
+internal class RecyclerViewScrollAction(
     private val itemMatcher: Matcher<View>,
     private val itemSearchLimit: Int = -1,
     private val offset: Int = 0
