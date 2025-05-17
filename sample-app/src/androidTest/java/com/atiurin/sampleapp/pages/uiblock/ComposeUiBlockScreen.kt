@@ -1,4 +1,4 @@
-package com.atiurin.sampleapp.pages
+package com.atiurin.sampleapp.pages.uiblock
 
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasTestTag
@@ -29,6 +29,6 @@ class ListUiBlock(parent: SemanticsMatcher): ComposeUiBlock(parent){
     //multiplatform & custom constructor variant
     val secondContact = child(
         childMatcher = hasTestTag(contactBlock2Tag),
-        uiBlockFactory = { m -> ContactUiBlock(m) }
+        uiBlockFactory = { m -> ContactUiBlockWithCustomConstructor(m, "contactBlock2Tag") }
     )
 }

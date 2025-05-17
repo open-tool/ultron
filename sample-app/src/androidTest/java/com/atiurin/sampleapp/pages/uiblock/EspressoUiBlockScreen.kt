@@ -1,9 +1,9 @@
-package com.atiurin.sampleapp.pages
+package com.atiurin.sampleapp.pages.uiblock
 
 import android.view.View
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.atiurin.sampleapp.R
-import com.atiurin.ultron.core.espresso.page.EspressoUiBlock
+import com.atiurin.ultron.core.espresso.UltronEspressoUiBlock
 import com.atiurin.ultron.extensions.withName
 import com.atiurin.ultron.page.Screen
 import org.hamcrest.Matcher
@@ -14,7 +14,7 @@ object EspressoUiBlockScreen : Screen<EspressoUiBlockScreen>() {
     val contactsListBlock = ContactsListUiBlock(withId(R.id.contact_items))
 }
 
-class ContactItemUiBlock(parent: Matcher<View>) : EspressoUiBlock(parent) {
+class ContactItemUiBlock(parent: Matcher<View>) : UltronEspressoUiBlock(parent) {
     private var parentName = "defaultValue"
 
     constructor(parent: Matcher<View>, parentName: String = "") : this(parent) {
@@ -26,11 +26,11 @@ class ContactItemUiBlock(parent: Matcher<View>) : EspressoUiBlock(parent) {
     val deepSearchChild = child(withId(R.id.deep_search_child))
 }
 
-class ContactItemUiBlockWithoutDeepSearch(parent: Matcher<View>) : EspressoUiBlock(parent) {
+class ContactItemUiBlockWithoutDeepSearch(parent: Matcher<View>) : UltronEspressoUiBlock(parent) {
     val deepSearchFalse = child(withId(R.id.deep_search_child), descendantSearch = false)
 }
 
-class ContactsListUiBlock(parent: Matcher<View>) : EspressoUiBlock(parent) {
+class ContactsListUiBlock(parent: Matcher<View>) : UltronEspressoUiBlock(parent) {
     val item1 = child(ContactItemUiBlock(withId(R.id.contact_item_1)))
     val item2 = child(
         childMatcher = withId(R.id.contact_item_2),

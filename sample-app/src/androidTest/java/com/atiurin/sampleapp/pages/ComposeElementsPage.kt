@@ -11,6 +11,9 @@ import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.radioBut
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.radioButtonMaleTestTag
 import com.atiurin.sampleapp.compose.RegionsClickListenerTestTags
 import com.atiurin.sampleapp.framework.ultronext.progressBar
+import com.atiurin.sampleapp.pages.uiblock.ContactUiBlock
+import com.atiurin.sampleapp.pages.uiblock.ContactUiBlockWithCustomConstructor
+import com.atiurin.sampleapp.pages.uiblock.ListUiBlock
 import com.atiurin.ultron.page.Page
 
 object ComposeElementsPage : Page<ComposeElementsPage>() {

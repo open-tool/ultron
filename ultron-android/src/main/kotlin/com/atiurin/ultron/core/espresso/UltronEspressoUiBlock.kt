@@ -1,4 +1,4 @@
-package com.atiurin.ultron.core.espresso.page
+package com.atiurin.ultron.core.espresso
 
 import android.view.View
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
@@ -18,7 +18,7 @@ import kotlin.reflect.typeOf
  *
  * @param blockMatcher The matcher used to identify this UI block.
  */
-open class EspressoUiBlock(val blockMatcher: Matcher<View>) : UiBlock<Matcher<View>>() {
+open class UltronEspressoUiBlock(val blockMatcher: Matcher<View>) : UiBlock<Matcher<View>>() {
     /**
      * Performs a descendant search within the UI hierarchy to find a child element.
      *
@@ -50,7 +50,7 @@ open class EspressoUiBlock(val blockMatcher: Matcher<View>) : UiBlock<Matcher<Vi
      * @return A new instance of the child UI block.
      * @throws UltronException If the specified class does not have a compatible constructor.
      */
-    inline fun <reified T : EspressoUiBlock> child(
+    inline fun <reified T : UltronEspressoUiBlock> child(
         uiBlock: T,
         descendantSearch: Boolean = true
     ): T {

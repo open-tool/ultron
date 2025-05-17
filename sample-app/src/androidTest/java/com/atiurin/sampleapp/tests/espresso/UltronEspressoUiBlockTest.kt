@@ -4,14 +4,13 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.atiurin.sampleapp.activity.UiBlockActivity
 import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.framework.utils.AssertUtils
-import com.atiurin.sampleapp.pages.EspressoUiBlockScreen
+import com.atiurin.sampleapp.pages.uiblock.EspressoUiBlockScreen
 import com.atiurin.sampleapp.tests.BaseTest
-import com.atiurin.ultron.extensions.isDisplayed
 import com.atiurin.ultron.extensions.withTimeout
 import org.junit.Rule
 import org.junit.Test
 
-class EspressoUiBlockTest: BaseTest() {
+class UltronEspressoUiBlockTest: BaseTest() {
     @get:Rule
     val activityRule = ActivityScenarioRule(UiBlockActivity::class.java)
 

@@ -201,7 +201,6 @@ fun ContactsList(modifier: Modifier){
 @Composable
 fun ContactInfoBlock(modifier: Modifier, firstName: String, lastName: String) {
     Column(modifier = modifier) {
-        DisabledButton()
         Row {
             Column(modifier = Modifier.testTag("Inner column")) {
                 TextItem(modifier = Modifier.testTag(firstNameTag), firstName)

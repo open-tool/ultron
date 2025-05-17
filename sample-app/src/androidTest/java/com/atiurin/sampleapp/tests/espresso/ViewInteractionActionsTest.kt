@@ -298,10 +298,4 @@ class ViewInteractionActionsTest : UiElementsTest() {
             }
         }
     }
-
-    @Test
-    fun elementBlockTest(){
-        page.block.button.click()
-        page.block.eventStatus.textContains(getTargetString(R.string.button_event_click))
-    }
 }
