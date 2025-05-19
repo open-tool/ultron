@@ -8,36 +8,27 @@ import com.atiurin.ultron.page.Screen
 
 object UiObject2UiBlockScreen : Screen<UiObject2UiBlockScreen>() {
     val block1 = ContactItemUiObject2Block { bySelector(R.id.contact_item_1) }
-    val block2 = UiObject2UiBlockWithoutDeepSearch { bySelector(R.id.contact_item_2) }
-    val blocks = UiObject2ListUiBlock { bySelector(R.id.contact_items) }
+    val block2 = ContactItemUiObject2Block("Block 2") { bySelector(R.id.contact_item_2) }
+    val blocks = UiObject2ListUiBlock("Item blocks") { bySelector(R.id.contact_items) }
 }
 
 
-class ContactItemUiObject2Block(val parent: () -> BySelector) : UltronUiObject2UiBlock(parent) {
-    val name = child { bySelector(R.id.name) }
-    val status = child { bySelector(R.id.status) }
-    val deepSearchChild = child { bySelector(R.id.deep_search_child) }
-}
-
-class UiObject2UiBlockWithoutDeepSearch(val parent: () -> BySelector?) : UltronUiObject2UiBlock(parent) {
-    private var parentName = parent.toString()
-
-    constructor(parentName: String, parent: () -> BySelector?) : this(parent) {
-        this.parentName = parentName
-    }
-    val name = child { bySelector(R.id.name) }
+class ContactItemUiObject2Block(desc:  String = "", parent: () -> BySelector) : UltronUiObject2UiBlock(desc, parent) {
+    val name = child(bySelector(R.id.name))
+    val status = child(bySelector(R.id.status))
+    val deepSearchChild = child(bySelector(R.id.deep_search_child))
     val notExisted by lazy {
-        child { bySelector(R.id.recycler_friends) }.withName("Not existed with parent $parentName")
+        child(bySelector(R.id.recycler_friends)).withTimeout(100)
     }
 }
 
-class UiObject2ListUiBlock(parent: () -> BySelector?) : UltronUiObject2UiBlock(parent) {
+class UiObject2ListUiBlock(desc: String = "", parent: () -> BySelector) : UltronUiObject2UiBlock(desc, parent) {
     val item1 = child(ContactItemUiObject2Block { bySelector(R.id.contact_item_1) })
     val item2 = child(
-        childSelector = { bySelector(R.id.contact_item_2) },
-        uiBlockFactory = { selector ->
-            val b = UiObject2UiBlockWithoutDeepSearch("Contact Item 2", selector)
-            b
+        selector = bySelector(R.id.contact_item_2),
+        description = "Item 2 in block $desc",
+        uiBlockFactory = { desc, selector ->
+            ContactItemUiObject2Block(desc, selector)
         }
     )
 }

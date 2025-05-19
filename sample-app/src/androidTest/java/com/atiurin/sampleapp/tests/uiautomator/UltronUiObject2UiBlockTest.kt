@@ -3,6 +3,7 @@ package com.atiurin.sampleapp.tests.uiautomator
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.atiurin.sampleapp.activity.UiBlockActivity
 import com.atiurin.sampleapp.data.repositories.CONTACTS
+import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.uiblock.UiObject2UiBlockScreen
 import com.atiurin.sampleapp.tests.BaseTest
 import org.junit.Rule
@@ -23,9 +24,9 @@ class UltronUiObject2UiBlockTest: BaseTest() {
     @Test
     fun notUniqueUiElement_WithoutDeepSearch(){
         UiObject2UiBlockScreen {
-//            AssertUtils.assertException {
-                block2.notExisted.withTimeout(100).isDisplayed()
-//            }
+            AssertUtils.assertException {
+                block2.notExisted.isDisplayed()
+            }
         }
     }
 
@@ -34,7 +35,9 @@ class UltronUiObject2UiBlockTest: BaseTest() {
         UiObject2UiBlockScreen {
             blocks.item1.name.isDisplayed().hasText(CONTACTS[0].name)
             blocks.item1.status.isDisplayed().hasText(CONTACTS[0].status)
-            blocks.item2.notExisted.withTimeout(100).isDisplayed()
+            AssertUtils.assertException {
+                blocks.item2.notExisted.isDisplayed()
+            }
         }
     }
 }

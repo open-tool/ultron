@@ -853,10 +853,5 @@ class UltronUiObject2 internal constructor(
         fun bySelector(@IntegerRes resourceId: Int): BySelector {
             return By.res(getTargetResourceName(resourceId))
         }
-
-        @JvmStatic
-        fun bySelector(text: String): BySelector {
-            return By.text(text)
-        }
     }
 }
