@@ -3,6 +3,7 @@ package com.atiurin.sampleapp.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,7 @@ import com.atiurin.sampleapp.data.repositories.ContactRepositoty
 class ComposeSecondActivity : ComponentActivity() {
     @ExperimentalUnitApi
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         val contactId = intent.getIntExtra(INTENT_CONTACT_ID, -1)
         val contact = ContactRepositoty.getContact(contactId)

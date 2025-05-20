@@ -1,6 +1,7 @@
 package com.atiurin.sampleapp.activity
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.async.task.CompatAsyncTask
@@ -11,6 +12,7 @@ class CustomClicksActivity : AppCompatActivity() {
     private val compatAsyncTask = CompatAsyncTask()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_custom_clicks)
         if(shouldBeAsyncTaskStart()) {

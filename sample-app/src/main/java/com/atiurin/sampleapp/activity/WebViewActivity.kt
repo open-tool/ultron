@@ -8,11 +8,13 @@ import android.view.View
 import android.view.View.*
 import android.webkit.WebView
 import android.widget.*
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.atiurin.sampleapp.R
 
 class WebViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_webview)
         val webView: WebView = findViewById(R.id.webview)

@@ -15,10 +15,10 @@ kotlin {
 
 android {
     namespace = "com.atiurin.ultron.android"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
-        minSdk = 16
+        minSdk = 21
         multiDexEnabled = true
     }
 

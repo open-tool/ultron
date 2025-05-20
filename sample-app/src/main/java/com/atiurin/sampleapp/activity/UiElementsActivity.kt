@@ -10,6 +10,7 @@ import android.view.View
 import android.view.View.*
 import android.webkit.WebView
 import android.widget.*
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -28,6 +29,7 @@ class UiElementsActivity : AppCompatActivity() {
     val model: DataViewModel by viewModels()
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_uielements)
         val simpleButton: Button = findViewById(R.id.button1)
