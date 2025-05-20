@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         setContent {
