@@ -8,7 +8,7 @@ import com.atiurin.ultron.exceptions.UltronUiAutomatorException
 import com.atiurin.ultron.extensions.getBySelector
 import kotlin.reflect.typeOf
 
-open class UltronUiObject2UiBlock(val blockDesc: String = "Empty block description", val blockSelector: () -> BySelector) {
+open class UltronUiObject2UiBlock(val blockDesc: String = "Empty block description", val blockSelector: () -> BySelector){
     /**
      * Provides a search mechanism for descendant elements within this block.
      *

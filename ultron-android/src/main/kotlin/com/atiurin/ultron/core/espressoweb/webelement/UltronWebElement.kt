@@ -46,9 +46,9 @@ open class UltronWebElement internal constructor(
     open val timeoutMs: Long? = null,
     open val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit = UltronConfig.Espresso.WebInteractionOperationConfig.resultHandler,
     open val assertion: OperationAssertion = EmptyOperationAssertion(),
-    open val elementInfo: ElementInfo = DefaultElementInfo()
+    open val elementInfo: ElementInfo = DefaultElementInfo(),
+    private val contextualElements: List<UltronWebElement> = mutableListOf<UltronWebElement>()
 ) {
-    private val contextualElements = mutableListOf<UltronWebElement>()
     private fun getActionTimeout(): Long = timeoutMs ?: UltronConfig.Espresso.ACTION_TIMEOUT
     private fun getAssertionTimeout(): Long = timeoutMs ?: UltronConfig.Espresso.ASSERTION_TIMEOUT
 
@@ -57,22 +57,65 @@ open class UltronWebElement internal constructor(
             this.elementInfo.name = "WebElement(locator = $locator, value = '$value')"
         }
     }
-    fun withContextual(ultronWebElement: UltronWebElement) = apply {
-        contextualElements.add(ultronWebElement)
+
+    fun withContextual(ultronWebElement: UltronWebElement, extendElementName: Boolean = true): UltronWebElement {
+        val newElement = UltronWebElement(
+            this.locator,
+            this.value,
+            this.webViewMatcher,
+            this.elementReference,
+            this.windowReference,
+            this.timeoutMs,
+            this.resultHandler,
+            this.assertion,
+            this.elementInfo.copy(),
+            contextualElements + ultronWebElement
+        )
+        if (extendElementName) {
+            newElement.withName("${elementInfo.name} with contextual [locator = ${ultronWebElement.locator}, value = '${ultronWebElement.value}')]")
+        }
+        return newElement
     }
 
     open fun withTimeout(timeoutMs: Long): UltronWebElement {
         return UltronWebElement(
-            this.locator, this.value, this.webViewMatcher, this.elementReference, this.windowReference, timeoutMs, this.resultHandler, this.assertion, this.elementInfo
+            this.locator,
+            this.value,
+            this.webViewMatcher,
+            this.elementReference,
+            this.windowReference,
+            timeoutMs,
+            this.resultHandler,
+            this.assertion,
+            this.elementInfo.copy(),
+            this.contextualElements
         )
     }
 
     open fun withResultHandler(resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit): UltronWebElement = UltronWebElement(
-        this.locator, this.value, this.webViewMatcher, this.elementReference, this.windowReference, this.timeoutMs, resultHandler, this.assertion, this.elementInfo
+        this.locator,
+        this.value,
+        this.webViewMatcher,
+        this.elementReference,
+        this.windowReference,
+        this.timeoutMs,
+        resultHandler,
+        this.assertion,
+        this.elementInfo.copy(),
+        this.contextualElements
     )
 
     open fun withAssertion(assertion: OperationAssertion): UltronWebElement = UltronWebElement(
-        this.locator, this.value, this.webViewMatcher, this.elementReference, this.windowReference, this.timeoutMs, this.resultHandler, assertion, this.elementInfo
+        this.locator,
+        this.value,
+        this.webViewMatcher,
+        this.elementReference,
+        this.windowReference,
+        this.timeoutMs,
+        this.resultHandler,
+        assertion,
+        this.elementInfo.copy(),
+        this.contextualElements
     )
 
     open fun withAssertion(
@@ -86,7 +129,8 @@ open class UltronWebElement internal constructor(
         this.timeoutMs,
         this.resultHandler,
         DefaultOperationAssertion(name, block.setListenersState(isListened)),
-        this.elementInfo
+        this.elementInfo.copy(),
+        this.contextualElements
     )
 
     open fun withName(name: String) = apply { elementInfo.name = name }
@@ -106,6 +150,7 @@ open class UltronWebElement internal constructor(
             var wvi = if (elementReference == null) {
                 webViewInteraction.withElement(findElement(locator, value))
             } else webViewInteraction.withElement(elementReference)
+            UltronLog.info("(UContextual): " + contextualElements.map { "[${it.locator}. ${it.value}]" }.toString())
             contextualElements.forEach {
                 wvi = wvi.withContextualElement(
                     findElement(it.locator, it.value)

@@ -6,12 +6,14 @@ import com.atiurin.sampleapp.framework.DummyMetaObject
 import com.atiurin.sampleapp.framework.ultronext.appendText
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.WebViewPage
+import com.atiurin.sampleapp.pages.uiblock.WebElementUiBlockScreen
 import com.atiurin.ultron.core.common.assertion.softAssertion
 import com.atiurin.ultron.core.common.assertion.verifySoftAssertions
 import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.className
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.id
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.xpath
+import com.atiurin.ultron.log.UltronLog
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Test
@@ -184,9 +186,30 @@ class UltronWebElementTest : BaseWebViewTest() {
     }
 
     @Test
+    fun webUiBlock(){
+        WebElementUiBlockScreen {
+            UltronLog.info("blocks ${teacherBlock.blockElement.elementInfo.name}")
+            UltronLog.info("blocks ${teacherBlock.name.elementInfo.name}")
+            teacherBlock.name.exists()
+        }
+        WebElementUiBlockScreen {
+            UltronLog.info("blocks.teacher.name.elementInfo.name ${persons.teacher.name.elementInfo.name}")
+            persons.student.name.apply {
+                UltronLog.info("blocks.student.name.elementInfo.name ${this.elementInfo.name}")
+            }.withTimeout(100).apply {
+                UltronLog.info("blocks.student.name.elementInfo.name ${this.elementInfo.name}")
+            }.hasText("1Plato")
+        }
+    }
+
+    @Test
+    fun webUiBlocksListTest(){
+
+    }
+
+    @Test
     fun scrollToWebElement() {
         id("list_element_12").webScrollIntoView().hasText("list_element_12").webClick()
-        Thread.sleep(3000)
     }
 
     @Test
