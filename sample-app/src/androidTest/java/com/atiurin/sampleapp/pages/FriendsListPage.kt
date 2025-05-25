@@ -6,7 +6,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.data.entities.Contact
 import com.atiurin.ultron.allure.step.step
-import com.atiurin.ultron.core.config.UltronRecyclerImpl
+import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewImpl
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
 import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.ultron.custom.espresso.matcher.withSuitableRoot
@@ -19,7 +19,7 @@ import org.junit.Assert
 
 object FriendsListPage : Page<FriendsListPage>() {
     val recycler = withRecyclerView(R.id.recycler_friends,
-        recyclerImpl = UltronRecyclerImpl.PERFORMANCE)
+        implementation = UltronRecyclerViewImpl.PERFORMANCE)
 
     fun assertPageDisplayed() = apply {
         step("Assert friends list page displayed") {

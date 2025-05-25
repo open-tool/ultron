@@ -9,6 +9,7 @@ import com.atiurin.ultron.core.compose.config.UltronComposeConfig
 import com.atiurin.ultron.core.compose.listeners.ComposDebugListener
 import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewImpl
 import com.atiurin.ultron.core.test.UltronTest
 import com.atiurin.ultron.testlifecycle.rulesequence.RuleSequence
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
@@ -30,7 +31,9 @@ abstract class BaseTest : UltronTest(){
         @BeforeClass
         @JvmStatic
         fun config() {
-            UltronConfig.applyRecommended()
+            UltronConfig.apply {
+                recyclerViewImpl = UltronRecyclerViewImpl.PERFORMANCE
+            }
             UltronComposeConfig.applyRecommended()
             UltronCommonConfig.addListener(ComposDebugListener())
             UltronAllureConfig.applyRecommended()

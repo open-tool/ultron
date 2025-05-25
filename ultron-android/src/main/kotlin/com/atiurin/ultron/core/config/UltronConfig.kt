@@ -19,11 +19,10 @@ import androidx.test.uiautomator.UiObjectNotFoundException
 import com.atiurin.ultron.core.common.Operation
 import com.atiurin.ultron.core.common.OperationResult
 import com.atiurin.ultron.core.common.resultanalyzer.OperationResultAnalyzer
-import com.atiurin.ultron.core.common.resultanalyzer.UltronDefaultOperationResultAnalyzer
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
+import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewImpl
 import com.atiurin.ultron.core.espressoweb.operation.WebInteractionOperation
 import com.atiurin.ultron.core.espressoweb.operation.WebOperationResult
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
@@ -75,6 +74,7 @@ object UltronConfig {
         Espresso.ACTION_TIMEOUT = params.operationTimeoutMs
         Espresso.ASSERTION_TIMEOUT = params.operationTimeoutMs
         UiAutomator.OPERATION_TIMEOUT = params.operationTimeoutMs
+        Espresso.RECYCLER_VIEW_IMPLEMENTATION = params.recyclerViewImpl
         UltronCommonConfig.addListener(LogLifecycleListener())
         UltronLog.addLogger(UltronLogcatLogger())
         if (params.logToFile) {
@@ -146,8 +146,8 @@ object UltronConfig {
             var RECYCLER_VIEW_LOAD_TIMEOUT = DEFAULT_RECYCLER_VIEW_LOAD_TIMEOUT
             var RECYCLER_VIEW_OPERATIONS_TIMEOUT = DEFAULT_RECYCLER_VIEW_OPERATION_TIMEOUT
             var RECYCLER_VIEW_ITEM_SEARCH_LIMIT = -1
+            var RECYCLER_VIEW_IMPLEMENTATION = UltronRecyclerViewImpl.STANDARD
             var INCLUDE_VIEW_HIERARCHY_TO_EXCEPTION = false //where it applicable
-            var RECYCLER_IMPL = UltronRecyclerImpl.STANDART
 
             var resultAnalyzer: OperationResultAnalyzer = UltronCommonConfig.resultAnalyzer
 
