@@ -39,9 +39,9 @@ import androidx.compose.ui.unit.dp
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.clickListenerButton
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.contactBlock1Tag
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.contactBlock2Tag
+import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.contactNameTag
+import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.contactStatusTag
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.disabledButton
-import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.firstNameTag
-import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.lastNameTag
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCounterButton
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCounterContentDesc
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCounterTextContainer
@@ -52,6 +52,7 @@ import com.atiurin.sampleapp.compose.RadioGroup
 import com.atiurin.sampleapp.compose.RegionsClickListener
 import com.atiurin.sampleapp.compose.SimpleOutlinedText
 import com.atiurin.sampleapp.compose.SwipeableNode
+import com.atiurin.sampleapp.data.repositories.CONTACTS
 
 class ComposeElementsActivity : ComponentActivity() {
     companion object Constants {
@@ -71,8 +72,8 @@ class ComposeElementsActivity : ComponentActivity() {
         const val contactsListTag = "contactsListTag"
         const val contactBlock1Tag = "contactBlock1"
         const val contactBlock2Tag = "contactBlock2"
-        const val firstNameTag = "firstNameTag"
-        const val lastNameTag = "lastNameTag"
+        const val contactNameTag = "firstNameTag"
+        const val contactStatusTag = "lastNameTag"
     }
 
     @ExperimentalMaterialApi
@@ -193,18 +194,18 @@ fun DisabledButton() {
 @Composable
 fun ContactsList(modifier: Modifier){
     Column(modifier = modifier) {
-        ContactInfoBlock(Modifier.testTag(contactBlock1Tag), "John", "Gold")
-        ContactInfoBlock(Modifier.testTag(contactBlock2Tag), "Spider", "Man")
+        ContactInfoBlock(Modifier.testTag(contactBlock1Tag), CONTACTS[0].name, CONTACTS[0].status)
+        ContactInfoBlock(Modifier.testTag(contactBlock2Tag), CONTACTS[1].name, CONTACTS[1].status)
     }
 }
 
 @Composable
-fun ContactInfoBlock(modifier: Modifier, firstName: String, lastName: String) {
+fun ContactInfoBlock(modifier: Modifier, name: String, status: String) {
     Column(modifier = modifier) {
         Row {
             Column(modifier = Modifier.testTag("Inner column")) {
-                TextItem(modifier = Modifier.testTag(firstNameTag), firstName)
-                TextItem(modifier = Modifier.testTag(lastNameTag), lastName)
+                TextItem(modifier = Modifier.testTag(contactNameTag), name)
+                TextItem(modifier = Modifier.testTag(contactStatusTag), status)
             }
         }
     }

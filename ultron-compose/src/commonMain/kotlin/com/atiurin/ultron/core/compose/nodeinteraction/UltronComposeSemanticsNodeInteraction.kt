@@ -178,7 +178,6 @@ open class UltronComposeSemanticsNodeInteraction constructor(
         timeoutMs, resultHandler, assertion, elementInfo
     )
 
-    @OptIn(ExperimentalTestApi::class)
     constructor(
         matcher: SemanticsMatcher,
         useUnmergedTree: Boolean = UltronComposeConfig.params.useUnmergedTree,

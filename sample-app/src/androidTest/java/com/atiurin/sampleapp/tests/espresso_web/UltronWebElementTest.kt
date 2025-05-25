@@ -13,7 +13,6 @@ import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.className
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.id
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.xpath
-import com.atiurin.ultron.log.UltronLog
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Test
@@ -188,17 +187,9 @@ class UltronWebElementTest : BaseWebViewTest() {
     @Test
     fun webUiBlock(){
         WebElementUiBlockScreen {
-            UltronLog.info("blocks ${teacherBlock.blockElement.elementInfo.name}")
-            UltronLog.info("blocks ${teacherBlock.name.elementInfo.name}")
-            teacherBlock.name.exists()
-        }
-        WebElementUiBlockScreen {
-            UltronLog.info("blocks.teacher.name.elementInfo.name ${persons.teacher.name.elementInfo.name}")
-            persons.student.name.apply {
-                UltronLog.info("blocks.student.name.elementInfo.name ${this.elementInfo.name}")
-            }.withTimeout(100).apply {
-                UltronLog.info("blocks.student.name.elementInfo.name ${this.elementInfo.name}")
-            }.hasText("1Plato")
+            teacherBlock.name.exists().hasText("Socrates")
+            teacherBlock.blockElement
+            persons.student.name.hasText("Plato")
         }
     }
 
