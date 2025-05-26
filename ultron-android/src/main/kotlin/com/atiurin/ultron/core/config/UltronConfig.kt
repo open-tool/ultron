@@ -74,7 +74,6 @@ object UltronConfig {
         Espresso.ACTION_TIMEOUT = params.operationTimeoutMs
         Espresso.ASSERTION_TIMEOUT = params.operationTimeoutMs
         UiAutomator.OPERATION_TIMEOUT = params.operationTimeoutMs
-        Espresso.RECYCLER_VIEW_IMPLEMENTATION = params.recyclerViewImpl
         UltronCommonConfig.addListener(LogLifecycleListener())
         UltronLog.addLogger(UltronLogcatLogger())
         if (params.logToFile) {

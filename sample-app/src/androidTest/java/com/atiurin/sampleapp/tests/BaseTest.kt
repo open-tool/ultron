@@ -31,9 +31,7 @@ abstract class BaseTest : UltronTest(){
         @BeforeClass
         @JvmStatic
         fun config() {
-            UltronConfig.apply {
-                recyclerViewImpl = UltronRecyclerViewImpl.PERFORMANCE
-            }
+            UltronConfig.Espresso.RECYCLER_VIEW_IMPLEMENTATION = UltronRecyclerViewImpl.PERFORMANCE
             UltronComposeConfig.applyRecommended()
             UltronCommonConfig.addListener(ComposDebugListener())
             UltronAllureConfig.applyRecommended()
