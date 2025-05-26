@@ -9,11 +9,10 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_IMPL
+import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_IMPLEMENTATION
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_ITEM_SEARCH_LIMIT
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_LOAD_TIMEOUT
 import com.atiurin.ultron.core.config.UltronConfig.Espresso.Companion.RECYCLER_VIEW_OPERATIONS_TIMEOUT
-import com.atiurin.ultron.core.config.UltronRecyclerImpl
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
 import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
@@ -39,7 +38,7 @@ open class UltronRecyclerView(
     val loadTimeoutMs: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     private val itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
     private var operationTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
-    private val recyclerImpl: UltronRecyclerImpl = RECYCLER_IMPL
+    private val recyclerImpl: UltronRecyclerViewImpl = RECYCLER_VIEW_IMPLEMENTATION
 ) {
     private var recyclerView: RecyclerView? = null
 
@@ -576,14 +575,14 @@ open class UltronRecyclerView(
 
             override fun matchesSafely(view: View): Boolean {
                 return when (recyclerImpl) {
-                    UltronRecyclerImpl.STANDART -> {
+                    UltronRecyclerViewImpl.STANDARD -> {
                         findItemView(itemMatcher, view.rootView)?.itemView?.let {
                             childView = it.findChildView(childMatcher)
                         }
                         if (childView != null) childView == view else false
                     }
 
-                    UltronRecyclerImpl.PERFORMANCE -> {
+                    UltronRecyclerViewImpl.PERFORMANCE -> {
                         if (childMatcher.matches(view)) {
                             isDescendantOfA(atItem(itemMatcher)).matches(view)
                         } else false
@@ -608,14 +607,14 @@ open class UltronRecyclerView(
 
             override fun matchesSafely(view: View): Boolean {
                 return when (recyclerImpl) {
-                    UltronRecyclerImpl.STANDART -> {
+                    UltronRecyclerViewImpl.STANDARD -> {
                         findItemViewAtPosition(position, view.rootView)?.itemView.let {
                             childView = it?.findChildView(childMatcher)
                         }
                         return if (childView != null) childView == view else false
                     }
 
-                    UltronRecyclerImpl.PERFORMANCE -> {
+                    UltronRecyclerViewImpl.PERFORMANCE -> {
                         if (childMatcher.matches(view)) {
                             isDescendantOfA(atPosition(position)).matches(view)
                         } else false
@@ -671,9 +670,9 @@ fun withRecyclerView(
     loadTimeout: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
     operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
-    recyclerImpl: UltronRecyclerImpl = RECYCLER_IMPL
+    implementation: UltronRecyclerViewImpl = RECYCLER_VIEW_IMPLEMENTATION
 ): UltronRecyclerView {
-    return UltronRecyclerView(recyclerViewMatcher, loadTimeout, itemSearchLimit, operationsTimeoutMs, recyclerImpl)
+    return UltronRecyclerView(recyclerViewMatcher, loadTimeout, itemSearchLimit, operationsTimeoutMs, implementation)
 }
 
 fun withRecyclerView(
@@ -681,12 +680,10 @@ fun withRecyclerView(
     loadTimeout: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
     operationsTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
-    recyclerImpl: UltronRecyclerImpl = RECYCLER_IMPL
+    implementation: UltronRecyclerViewImpl = RECYCLER_VIEW_IMPLEMENTATION
 ): UltronRecyclerView {
-    return UltronRecyclerView(withId(resourceId), loadTimeout, itemSearchLimit, operationsTimeoutMs, recyclerImpl)
+    return UltronRecyclerView(withId(resourceId), loadTimeout, itemSearchLimit, operationsTimeoutMs, implementation)
 }
-
-
 
 internal fun <T> UltronEspressoInteraction<T>.identifyRecyclerView(matcher: Matcher<View>) {
     this.executeAssertion(
