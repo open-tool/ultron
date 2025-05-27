@@ -4,105 +4,115 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/button_default_content_desc"
-            android:text="@string/button_text"
-            android:textAllCaps="false" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shadowColor="@color/colorShadow"
+        android:text="@string/ui_elements_activity_title"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/colorPrimary"
+        android:textColorHighlight="@color/colorHighlight"
+        android:textColorHint="@color/colorHint" />
 
-        <TextView
-            android:id="@+id/last_event_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:textColorHint="@color/colorHint"
-            android:shadowColor="@color/colorShadow"
-            android:textColorHighlight="@color/colorHighlight"
-            android:text="@string/button_text" />
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/button_default_content_desc"
+        android:text="@string/button_text"
+        android:textAllCaps="false" />
 
-        <RadioGroup
-            android:id="@+id/radio_group_visibility"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <TextView
+        android:id="@+id/last_event_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shadowColor="@color/colorShadow"
+        android:text="@string/button_text"
+        android:textColor="@color/colorPrimary"
+        android:textColorHighlight="@color/colorHighlight"
+        android:textColorHint="@color/colorHint" />
 
-            <RadioButton
-                android:id="@+id/radio_visible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="@string/radio_visible" />
+    <RadioGroup
+        android:id="@+id/radio_group_visibility"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-            <RadioButton
-                android:id="@+id/radio_invisible"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/radio_invisible" />
-
-            <RadioButton
-                android:id="@+id/radio_gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/radio_gone" />
-        </RadioGroup>
-
-        <CheckBox
-            android:id="@+id/checkbox_enable"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/radio_visible"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="@string/checkbox_enable" />
+            android:text="@string/radio_visible" />
 
-        <CheckBox
-            android:id="@+id/checkbox_clickable"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/radio_invisible"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/checkbox_clickable" />
+            android:text="@string/radio_invisible" />
 
-        <CheckBox
-            android:id="@+id/checkbox_selected"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/radio_gone"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="false"
-            android:text="@string/checkbox_selected" />
+            android:text="@string/radio_gone" />
+    </RadioGroup>
 
-        <CheckBox
-            android:id="@+id/checkbox_focusable"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/checkbox_focusable"
-            android:visibility="invisible" />
+    <CheckBox
+        android:id="@+id/checkbox_enable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/checkbox_enable" />
 
-        <EditText
-            android:id="@+id/et_contentDesc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/button_default_content_desc" />
+    <CheckBox
+        android:id="@+id/checkbox_clickable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/checkbox_clickable" />
 
-        <WebView
-            android:id="@+id/webview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <CheckBox
+        android:id="@+id/checkbox_selected"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="@string/checkbox_selected" />
 
-        <CheckBox
-            android:id="@+id/checkbox_js_enabled"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
+    <CheckBox
+        android:id="@+id/checkbox_focusable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="@string/checkbox_focusable"
+        android:visibility="invisible" />
 
-            android:text="@string/checkbox_js_enabled" />
+    <EditText
+        android:id="@+id/et_contentDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_default_content_desc" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/app_compat_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textColor="@color/colorPrimary"
-            android:text="@string/app_compat_text" />
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <CheckBox
+        android:id="@+id/checkbox_js_enabled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+
+        android:text="@string/checkbox_js_enabled" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/app_compat_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/app_compat_text"
+        android:textColor="@color/colorPrimary" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -115,6 +125,7 @@
             android:layout_height="100dp"
             android:layout_margin="10dp"
             android:src="@drawable/ic_account" />
+
         <ImageView
             android:id="@+id/swipe_image_view"
             android:layout_width="100dp"
@@ -124,18 +135,18 @@
 
     </LinearLayout>
 
-        <ImageView
-            android:id="@+id/empty_image_view"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
-            android:layout_margin="10dp"
-            android:clickable="false"
-            android:background="@color/colorAccent" />
+    <ImageView
+        android:id="@+id/empty_image_view"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:layout_margin="10dp"
+        android:background="@color/colorAccent"
+        android:clickable="false" />
 
     <Button
         android:id="@+id/exist_hidden_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
-        android:textAllCaps="false" />
-    </LinearLayout>
+        android:textAllCaps="false"
+        android:visibility="invisible" />
+</LinearLayout>
