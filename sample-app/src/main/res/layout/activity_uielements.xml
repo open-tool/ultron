@@ -4,6 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:shadowColor="@color/colorShadow"
+        android:text="@string/ui_elements_activity_title"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/colorPrimary"
+        android:textColorHighlight="@color/colorHighlight"
+        android:textColorHint="@color/colorHint" />
+
     <Button
         android:id="@+id/button1"
         android:layout_width="match_parent"
@@ -21,7 +31,6 @@
         android:textColor="@color/colorPrimary"
         android:textColorHighlight="@color/colorHighlight"
         android:textColorHint="@color/colorHint" />
-
 
     <RadioGroup
         android:id="@+id/radio_group_visibility"

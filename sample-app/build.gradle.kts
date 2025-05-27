@@ -6,11 +6,11 @@ plugins {
 
 android {
     namespace = "com.atiurin.sampleapp"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.atiurin.sampleapp"
         minSdk = 21
-        targetSdk = 34
+        targetSdk = 35
         multiDexEnabled = true
         testInstrumentationRunner = "com.atiurin.sampleapp.framework.CustomTestRunner"
     }

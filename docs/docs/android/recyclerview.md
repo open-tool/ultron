@@ -14,12 +14,33 @@ Before we go forward we need to define some terms:
 
 ## UltronRecyclerView
 
-Create an instance of `UltronRecyclerView` by calling a method `withRecyclerView(..)`
+Create an instance of `UltronRecyclerView` using the method `withRecyclerView(..)` method:
 
 ```kotlin
 withRecyclerView(R.id.recycler_friends).assertSize(CONTACTS.size)
 ```
-There is a list of methods to interact with RecyclerView and it could be extended.
+
+### Parameters for `withRecyclerView` method
+
+The withRecyclerView method allows creating an instance of UltronRecyclerView with customizable parameters:
+
+- `recyclerViewMatcher: Matcher`/ `resourceId: Int`, - A Matcher / @IntegerRes that identifies the target RecyclerView in the layout.
+- `loadTimeout: Long` - The maximum time (in milliseconds) to wait for RecyclerView items to load. The default value is defined by `UltronConfig.Espresso.RECYCLER_VIEW_LOAD_TIMEOUT`.
+- `itemSearchLimit: Int` - The maximum number of items to search through when locating an item in the RecyclerView. The default value is defined by `UltronConfig.Espresso.RECYCLER_VIEW_ITEM_SEARCH_LIMIT`.
+- `operationsTimeoutMs: Long` - The maximum time (in milliseconds) to wait for operations on RecyclerView to complete. The default value is defined by `UltronConfig.Espresso.RECYCLER_VIEW_OPERATIONS_TIMEOUT`.
+- `implementation: UltronRecyclerViewImpl`- Specifies the implementation of UltronRecyclerView to use. The default value is `UltronConfig.Espresso.RECYCLER_VIEW_IMPLEMENTATION`, which is set in the configuration.
+
+
+### UltronRecyclerViewImpl
+
+`UltronRecyclerViewImpl` has two available modes:
+
+- `STANDARD`: This is the default implementation. It is already 4 times faster than the previous version. When multiple identical child elements are found within an UltronRecyclerViewItem, the first matching element is selected without throwing an AmbiguousViewMatcherException.
+
+- `PERFORMANCE`: Optimized for higher performance. However, if multiple child elements matching the same criteria are found, an exception (AmbiguousViewMatcherException) will be thrown.
+
+The choice of implementation affects not only performance but also how child elements of `UltronRecyclerViewItem` are handled.
+For now, the actual difference in performance between these modes is minimal, but it could be highly valuable if your RecyclerView item contains many child elements.
 
 ### _Best practice_ - save `UltronRecyclerView` as page class properties   
 
@@ -33,6 +54,7 @@ object FriendsListPage : Page<FriendsListPage>() {
     }
 }
 ```
+
 `UltronRecyclerView` api
 
 ```kotlin

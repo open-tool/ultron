@@ -102,10 +102,10 @@ kotlin {
 }
 
 android {
-    compileSdk = 34
+    compileSdk = 35
     namespace = "com.atiurin.ultron.compose"
     defaultConfig {
-        minSdk = 16
+        minSdk = 21
         multiDexEnabled = true
     }
     compileOptions {
