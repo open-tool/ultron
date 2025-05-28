@@ -89,15 +89,15 @@ inline fun <reified T : UltronComposeUiBlock> UltronComposeUiBlock.child(
         return it
     } ?: throw UltronException(
         """ |${T::class.simpleName} doesn't have an appropriate constructor with arguments: (SemanticsMatcher, String) or (SemanticsMatcher)  
-                |Ensure that the class meets the following conditions:
-                |1. ${T::class.simpleName} must not be defined inside another class. It should be a top-level or file-level class.
-                |2. ${T::class.simpleName} must have one of the following constructors:
-                |- A constructor with one parameter of type SemanticsMatcher:
-                |class ${T::class.simpleName}(blockMatcher: SemanticsMatcher) : UltronComposeUiBlock(blockMatcher)
-                |- A constructor with two parameters: blockMatcher of type SemanticsMatcher and blockDescription of type String:
-                |class ${T::class.simpleName}(blockMatcher: SemanticsMatcher, blockDescription: String) : UltronComposeUiBlock(blockMatcher, blockDescription)
-                |If neither constructor is available, consider using another method for child declaration:
-                |fun <B : UltronComposeUiBlock> child(childMatcher: SemanticsMatcher, descendantSearch: Boolean = true, uiBlockFactory: (SemanticsMatcher) -> B): B
-            """.trimIndent()
+            |Ensure that the class meets the following conditions:
+            |1. ${T::class.simpleName} must not be defined inside another class. It should be a top-level or file-level class.
+            |2. ${T::class.simpleName} must have one of the following constructors:
+            |- A constructor with one parameter of type SemanticsMatcher:
+            |class ${T::class.simpleName}(blockMatcher: SemanticsMatcher) : UltronComposeUiBlock(blockMatcher)
+            |- A constructor with two parameters: blockMatcher of type SemanticsMatcher and blockDescription of type String:
+            |class ${T::class.simpleName}(blockMatcher: SemanticsMatcher, blockDescription: String) : UltronComposeUiBlock(blockMatcher, blockDescription)
+            |If neither constructor is available, consider using another method for child declaration:
+            |fun <B : UltronComposeUiBlock> child(childMatcher: SemanticsMatcher, descendantSearch: Boolean = true, uiBlockFactory: (SemanticsMatcher) -> B): B
+        """.trimIndent()
     )
 }

@@ -6,7 +6,6 @@ import com.atiurin.sampleapp.framework.DummyMetaObject
 import com.atiurin.sampleapp.framework.ultronext.appendText
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.WebViewPage
-import com.atiurin.sampleapp.pages.uiblock.WebElementUiBlockScreen
 import com.atiurin.ultron.core.common.assertion.softAssertion
 import com.atiurin.ultron.core.common.assertion.verifySoftAssertions
 import com.atiurin.ultron.core.config.UltronCommonConfig
@@ -182,20 +181,6 @@ class UltronWebElementTest : BaseWebViewTest() {
     @Test
     fun withContextual_containsText() {
         id("student").withContextual(className("person_name")).hasText("Plato")
-    }
-
-    @Test
-    fun webUiBlock(){
-        WebElementUiBlockScreen {
-            teacherBlock.name.exists().hasText("Socrates")
-            teacherBlock.blockElement
-            persons.student.name.hasText("Plato")
-        }
-    }
-
-    @Test
-    fun webUiBlocksListTest(){
-
     }
 
     @Test
