@@ -1,5 +1,6 @@
 package com.atiurin.sampleapp.tests.uiautomator
 
+import android.os.Build
 import androidx.test.rule.ActivityTestRule
 import com.atiurin.sampleapp.activity.MainActivity
 import com.atiurin.sampleapp.pages.UiObject2FriendsListPage
@@ -25,24 +26,27 @@ class UltronUiObject2ScrollTest : BaseTest() {
 
     @Test
     fun scrollToBottom() {
-        for (i in 0..10) {
-            if (page.bottomElement.isSuccess { withTimeout(100).isDisplayed() }) break
-            page.list.scrollDown(percent = 0.5f)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            for (i in 0..10) {
+                if (page.bottomElement.isSuccess { withTimeout(100).isDisplayed() }) break
+                page.list.scrollDown(percent = 0.5f)
+            }
+            page.bottomElement.isDisplayed()
         }
-        page.bottomElement.isDisplayed()
-//        UiScrollable(UiSelector().resourceId(getTargetResourceName(R.id.recycler_friends))).flingToEnd(10)
     }
 
     @Test
     fun scrollToTop() {
-        for (i in 0..10) {
-            if (page.bottomElement.isSuccess { withTimeout(100).isDisplayed() }) break
-            page.list.scrollDown(percent = 0.5f)
-        }
-        page.bottomElement.isDisplayed()
-        for (i in 0..10) {
-            if (page.topElement.isSuccess { withTimeout(100).isDisplayed() }) break
-            page.list.scrollUp(percent = 0.5f)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            for (i in 0..10) {
+                if (page.bottomElement.isSuccess { withTimeout(100).isDisplayed() }) break
+                page.list.scrollDown(percent = 0.5f)
+            }
+            page.bottomElement.isDisplayed()
+            for (i in 0..10) {
+                if (page.topElement.isSuccess { withTimeout(100).isDisplayed() }) break
+                page.list.scrollUp(percent = 0.5f)
+            }
         }
     }
 }

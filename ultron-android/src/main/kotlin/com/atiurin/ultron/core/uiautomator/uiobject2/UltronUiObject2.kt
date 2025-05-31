@@ -8,8 +8,8 @@ import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.UiObject2
 import com.atiurin.ultron.core.common.CommonOperationType
-import com.atiurin.ultron.core.common.ElementInfo
 import com.atiurin.ultron.core.common.DefaultElementInfo
+import com.atiurin.ultron.core.common.ElementInfo
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
@@ -21,6 +21,7 @@ import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
 import com.atiurin.ultron.core.uiautomator.UltronUiAutomatorLifecycle
 import com.atiurin.ultron.exceptions.UltronAssertionException
+import com.atiurin.ultron.extensions.getBySelector
 import com.atiurin.ultron.listeners.setListenersState
 import com.atiurin.ultron.utils.getTargetResourceName
 import org.hamcrest.Matcher
@@ -41,7 +42,7 @@ class UltronUiObject2 internal constructor(
     init {
         if (elementInfo.name.isEmpty()) elementInfo.name = selectorDesc
     }
-
+    fun getBySelector() = uiObject2ProviderBlock()?.getBySelector()
     fun isSuccess(action: UltronUiObject2.() -> Unit): Boolean = runCatching { action() }.isSuccess
 
     fun withResultHandler(resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit): UltronUiObject2 {

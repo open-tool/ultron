@@ -186,7 +186,6 @@ class UltronWebElementTest : BaseWebViewTest() {
     @Test
     fun scrollToWebElement() {
         id("list_element_12").webScrollIntoView().hasText("list_element_12").webClick()
-        Thread.sleep(3000)
     }
 
     @Test

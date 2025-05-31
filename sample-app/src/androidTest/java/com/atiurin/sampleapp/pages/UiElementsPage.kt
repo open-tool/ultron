@@ -5,8 +5,8 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import com.atiurin.ultron.page.Page
 import com.atiurin.sampleapp.R
+import com.atiurin.ultron.page.Page
 
 object UiElementsPage : Page<UiElementsPage>() {
     val notExistElement = withText("Some not existed text element")

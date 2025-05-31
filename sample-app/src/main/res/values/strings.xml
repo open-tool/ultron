@@ -39,5 +39,6 @@
     <string name="app_compat_text">Default AppCompatTextView</string>
     <string name="menu_custom_clicks">Custom Clicks</string>
     <string name="ui_elements_activity_title">UI elements activity title</string>
+    <string name="deep_search">Deep search</string>
 
 </resources>
