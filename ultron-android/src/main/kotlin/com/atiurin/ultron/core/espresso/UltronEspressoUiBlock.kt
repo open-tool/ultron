@@ -4,6 +4,7 @@ import android.view.View
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.withParent
 import com.atiurin.ultron.exceptions.UltronException
+import com.atiurin.ultron.extensions.ultronInteraction
 import com.atiurin.ultron.extensions.withName
 import com.atiurin.ultron.log.UltronLog
 import org.hamcrest.Matcher
@@ -54,7 +55,11 @@ open class UltronEspressoUiBlock(val blockMatcher: Matcher<View>, val blockDescr
      * Appends the block description to the matcher for better logging and debugging.
      */
     val uiBlock
-        get() = blockMatcher.withName(blockDescription)
+        get() = blockMatcher.let {
+            if (blockDescription.isNotBlank()) {
+                it.withName(blockDescription)
+            } else it.ultronInteraction()
+        }
 
     /**
      * Modifies the provided matcher based on the specified search type.

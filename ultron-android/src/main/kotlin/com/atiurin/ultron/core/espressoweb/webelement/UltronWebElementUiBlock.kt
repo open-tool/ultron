@@ -11,7 +11,11 @@ open class UltronWebElementUiBlock(val blockElement: UltronWebElement, val block
      * Appends the block description to the matcher for better logging and debugging.
      */
     val uiBlock
-        get() = blockElement.withName(blockDescription)
+        get() = blockElement.let {
+            if (blockDescription.isNotBlank()) {
+                it.withName(blockDescription)
+            } else it
+        }
 
     /**
      * Modifies the provided element by contextualizing it with the current block's element.
@@ -19,10 +23,10 @@ open class UltronWebElementUiBlock(val blockElement: UltronWebElement, val block
      * This method applies a contextual transformation to the given `element`, associating it with the context
      * of the current block's `blockElement`.
      *
-     * @param element The element to be contextualized.
+     * @param childElement The element to be contextualized.
      * @return A new element modified by adding the context of the current block's element.
      */
-    fun child(element: UltronWebElement): UltronWebElement = blockElement.withContextual(element)
+    fun child(childElement: UltronWebElement): UltronWebElement = blockElement.withContextual(childElement)
 
     /**
      * Creates a child UI block using an element contextualized with the current block's element.
@@ -30,16 +34,16 @@ open class UltronWebElementUiBlock(val blockElement: UltronWebElement, val block
      * This method applies a contextual transformation to the provided `element` and constructs a new UI block instance
      * using the `uiBlockFactory`.
      *
-     * @param element The element to be contextualized for the child UI block.
+     * @param childElement The element to be contextualized for the child UI block.
      * @param uiBlockFactory A factory function to create a new instance of the child UI block.
      *                       The function takes the contextualized element as input and returns a UI block instance.
      * @return A new instance of the child UI block, constructed with the contextualized element.
      */
     fun <B : UltronWebElementUiBlock> child(
-        element: UltronWebElement,
+        childElement: UltronWebElement,
         uiBlockFactory: (UltronWebElement) -> B
     ): B {
-        return uiBlockFactory(blockElement.withContextual(element))
+        return uiBlockFactory(blockElement.withContextual(childElement))
     }
 
     /**

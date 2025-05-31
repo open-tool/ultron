@@ -5,14 +5,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
@@ -22,6 +27,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -34,9 +42,11 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.clickListenerButton
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.contactBlock1Tag
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.contactBlock2Tag
@@ -161,8 +171,8 @@ fun ButtonWithCount() {
 
 @Preview
 @Composable
-fun ButtonWithCountPreview() {
-    ButtonWithCount()
+fun ContactInfoBlockPreview() {
+    ContactInfoBlock(name= "Tonny Kark", status = "Wipes off Thanos" )
 }
 
 @Composable
@@ -202,22 +212,64 @@ fun ContactsList(modifier: Modifier){
 }
 
 @Composable
-fun ContactInfoBlock(modifier: Modifier, name: String, status: String) {
-    Column(modifier = modifier) {
-        Row {
-            Column(modifier = Modifier.testTag("Inner column")) {
-                TextItem(modifier = Modifier.testTag(contactNameTag), name)
-                TextItem(modifier = Modifier.testTag(contactStatusTag), status)
+fun ContactInfoBlock(
+    modifier: Modifier = Modifier,
+    name: String,
+    status: String
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(8.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+                .testTag("Inner row"),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(
+                        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                        shape = RoundedCornerShape(24.dp)
+                    )
+            ) {
+                Text(
+                    text = name.firstOrNull()?.toString()?.uppercase() ?: "",
+                    modifier = Modifier.align(Alignment.Center),
+                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column {
+                Text(
+                    modifier = Modifier.testTag(contactNameTag),
+                    text = name,
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    modifier = Modifier.testTag(contactStatusTag),
+                    text = status,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }
 }
-
-@Composable
-fun TextItem(modifier: Modifier, text: String){
-    Text(text, modifier = modifier.padding(8.dp))
-}
-
 
 
 

@@ -13,13 +13,11 @@ object UiObject2UiBlockScreen : Screen<UiObject2UiBlockScreen>() {
 }
 
 
-class ContactItemUiObject2Block(desc:  String = "", parent: () -> BySelector) : UltronUiObject2UiBlock(desc, parent) {
-    val name = child(bySelector(R.id.name))
+class ContactItemUiObject2Block(blockDesc: String = "", blockSelector: () -> BySelector) : UltronUiObject2UiBlock(blockDesc, blockSelector) {
+    val name = child(bySelector(R.id.name)).withName("Name in block $blockDesc")
     val status = child(bySelector(R.id.status))
     val deepSearchChild = child(bySelector(R.id.deep_search_child))
-    val notExisted by lazy {
-        child(bySelector(R.id.recycler_friends)).withTimeout(100)
-    }
+    val notExisted = child(bySelector(R.id.recycler_friends)).withTimeout(100)
 }
 
 class UiObject2ListUiBlock(desc: String = "", parent: () -> BySelector) : UltronUiObject2UiBlock(desc, parent) {

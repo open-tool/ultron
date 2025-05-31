@@ -31,7 +31,7 @@ open class UltronUiObject2UiBlock(val blockDesc: String = "Empty block descripti
      * @param childSelector A [BySelector] to locate the child element.
      * @return A function that retrieves the descendant element or throws an exception if not found.
      */
-    fun _descendantSearchProvider(childSelector: BySelector): () -> UiObject2 = {
+    private fun descendantSearchProvider(childSelector: BySelector): () -> UiObject2 = {
         uiDevice.findObject(blockSelector())
             ?.findObject(childSelector)
             ?: throw UltronUiAutomatorException("'$childSelector' in block ${this::class.simpleName} '$blockDesc' not found!")
@@ -53,7 +53,7 @@ open class UltronUiObject2UiBlock(val blockDesc: String = "Empty block descripti
      * @return The [UltronUiObject2] representing the child element.
      */
     fun child(selector: BySelector, description: String = selector.toString()): UltronUiObject2 = UltronUiObject2(
-        uiObject2ProviderBlock = _descendantSearchProvider(selector),
+        uiObject2ProviderBlock = descendantSearchProvider(selector),
         selectorDesc = "Child of block '$blockDesc' with selector '$description'"
     )
 

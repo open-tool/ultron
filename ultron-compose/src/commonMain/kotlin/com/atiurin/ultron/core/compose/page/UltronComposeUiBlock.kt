@@ -3,6 +3,7 @@ package com.atiurin.ultron.core.compose.page
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasParent
+import com.atiurin.ultron.extensions.ultronInteraction
 import com.atiurin.ultron.extensions.withName
 
 /**
@@ -49,7 +50,11 @@ open class UltronComposeUiBlock(val blockMatcher: SemanticsMatcher, val blockDes
      * Appends the block description to the matcher for better logging and debugging.
      */
     val uiBlock
-        get() = blockMatcher.withName(blockDescription)
+        get() = blockMatcher.let {
+            if (blockDescription.isNotBlank()) {
+                it.withName(blockDescription)
+            } else it.ultronInteraction()
+        }
 
     /**
      * Modifies the provided matcher based on the specified search type.

@@ -16,7 +16,8 @@ class UltronUiObject2UiBlockTest: BaseTest() {
     @Test
     fun notUniqueUiElement_WithDeepSearch(){
         UiObject2UiBlockScreen {
-            block1.name.isDisplayed().hasText(CONTACTS[0].name)
+            block1.uiBlock.isDisplayed()
+            block2.name.isDisplayed().hasText(CONTACTS[1].name)
             block1.deepSearchChild.withTimeout(100).isDisplayed()
         }
     }
@@ -33,6 +34,8 @@ class UltronUiObject2UiBlockTest: BaseTest() {
     @Test
     fun uiBlockInBlock(){
         UiObject2UiBlockScreen {
+            blocks.uiBlock.isDisplayed()
+            blocks.item1.uiBlock.isDisplayed()
             blocks.item1.name.isDisplayed().hasText(CONTACTS[0].name)
             blocks.item1.status.isDisplayed().hasText(CONTACTS[0].status)
             AssertUtils.assertException {

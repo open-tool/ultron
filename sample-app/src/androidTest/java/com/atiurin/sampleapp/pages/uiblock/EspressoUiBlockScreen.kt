@@ -33,3 +33,4 @@ class ContactsListUiBlock(blockMatcher: Matcher<View>, blockDescription: String)
         }
     )
 }
+

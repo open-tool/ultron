@@ -23,7 +23,7 @@ import kotlin.reflect.typeOf
  *
  * @throws UltronException If the specified class [T] does not have an appropriate constructor or cannot be instantiated.
  *
- * ### Constructor Requirements:
+ * ### Requirements:
  * The class [T] must meet the following conditions to be instantiated:
  * 1. It must not be a nested or inner class. It should be defined at the top level or as a file-level class.
  * 2. It must have one of the following constructors:
