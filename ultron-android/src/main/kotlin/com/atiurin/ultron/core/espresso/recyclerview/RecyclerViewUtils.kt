@@ -1,53 +1,69 @@
 package com.atiurin.ultron.core.espresso.recyclerview
 
-import android.util.SparseArray
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.util.HumanReadables
-import androidx.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread
+import com.atiurin.ultron.utils.runOnUiThread
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
 
-internal fun <T : VH, VH : RecyclerView.ViewHolder> itemsMatching(
+@Suppress("UNCHECKED_CAST")
+internal fun <VH : RecyclerView.ViewHolder> itemsMatching(
     recyclerView: RecyclerView,
     viewHolderMatcher: Matcher<VH>,
     maxItemsCount: Int = -1,
     itemSearchLimit: Int = -1
 ): List<MatchedItem> {
-    val adapter = recyclerView.adapter
-    val viewHolderCache = SparseArray<VH>()
-    val matchedItems = ArrayList<MatchedItem>()
-    if (adapter == null) return matchedItems
-    val itemsToBeResearched =
-        if (adapter.itemCount > itemSearchLimit && itemSearchLimit > 0) itemSearchLimit else adapter.itemCount
-    for (position in 0 until itemsToBeResearched) {
-        val itemType = adapter.getItemViewType(position)
-        var cachedViewHolder: VH? = viewHolderCache.get(itemType)
-        //requires UI thread to create handler in some cases
-        runOnUiThread {
-            // Create a view holder per type if not exists
-            if (cachedViewHolder == null) {
-                cachedViewHolder = adapter.createViewHolder(recyclerView, itemType) as VH?
-                viewHolderCache.put(itemType, cachedViewHolder)
-            }
-            // Bind data to ViewHolder and apply matcher to view descendants.
-            adapter.bindViewHolder((cachedViewHolder as T?)!!, position)
-        }
-        if (viewHolderMatcher.matches(cachedViewHolder)) {
-            matchedItems.add(
-                MatchedItem(
-                    position,
-                    HumanReadables.getViewHierarchyErrorMessage(
-                        cachedViewHolder!!.itemView,
-                        null,
-                        "\n\n*** Matched ViewHolder item at position: $position ***",
-                        null
-                    )
+    val matchedItems = mutableListOf<MatchedItem>()
+    val adapter = recyclerView.adapter ?: return matchedItems
+    val layoutManager = recyclerView.layoutManager ?: return matchedItems
+
+    val itemCount = adapter.itemCount
+    if (itemCount <= 0) return matchedItems
+
+    val searchLimit = if (itemSearchLimit in 1 until itemCount) itemSearchLimit else itemCount
+    if (maxItemsCount == 0) return matchedItems
+
+    fun addMatch(position: Int, viewHolder: VH) {
+        matchedItems.add(
+            MatchedItem(
+                position,
+                HumanReadables.getViewHierarchyErrorMessage(
+                    viewHolder.itemView,
+                    null,
+                    "\n\n*** Matched ViewHolder at position: $position ***",
+                    null
                 )
             )
-            if (matchedItems.size == maxItemsCount) {
-                break
+        )
+    }
+
+    runOnUiThread {
+        val visibleHolders = mutableSetOf<Int>()
+        for (i in 0 until layoutManager.childCount) {
+            val child = layoutManager.getChildAt(i) ?: continue
+            val position = recyclerView.getChildAdapterPosition(child)
+            if (position in 0 until searchLimit) {
+                val viewHolder = recyclerView.getChildViewHolder(child) as? VH ?: continue
+                if (viewHolderMatcher.matches(viewHolder)) {
+                    addMatch(position, viewHolder)
+                    visibleHolders.add(position)
+                    if (maxItemsCount > 0 && matchedItems.size >= maxItemsCount) return@runOnUiThread
+                }
+            }
+        }
+
+        for (position in 0 until searchLimit) {
+            if (maxItemsCount > 0 && matchedItems.size >= maxItemsCount) break
+            if (position in visibleHolders) continue
+            if (position >= adapter.itemCount) continue
+
+            val itemType = adapter.getItemViewType(position)
+            val tempHolder = adapter.createViewHolder(recyclerView, itemType) as VH
+            adapter.bindViewHolder(tempHolder, position)
+            if (viewHolderMatcher.matches(tempHolder)) {
+                addMatch(position, tempHolder)
             }
         }
     }

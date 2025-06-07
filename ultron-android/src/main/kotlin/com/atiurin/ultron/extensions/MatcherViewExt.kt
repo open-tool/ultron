@@ -13,7 +13,7 @@ import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
 import com.atiurin.ultron.listeners.setListenersState
 import org.hamcrest.Matcher
-
+fun Matcher<View>.ultronInteraction() = UltronEspressoInteraction(onView(this))
 fun Matcher<View>.isSuccess(action: Matcher<View>.() -> Unit): Boolean =
     onView(this).isSuccess { action() }
 

@@ -3,6 +3,7 @@ package com.atiurin.sampleapp.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.unit.ExperimentalUnitApi
@@ -13,6 +14,7 @@ class ComposeRouterActivity : ComponentActivity() {
     @ExperimentalUnitApi
     @ExperimentalFoundationApi
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         setContent {

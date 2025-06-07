@@ -5,8 +5,8 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import com.atiurin.ultron.page.Page
 import com.atiurin.sampleapp.R
+import com.atiurin.ultron.page.Page
 
 object UiElementsPage : Page<UiElementsPage>() {
     val notExistElement = withText("Some not existed text element")
@@ -23,7 +23,7 @@ object UiElementsPage : Page<UiElementsPage>() {
     val editTextContentDesc = withId(R.id.et_contentDesc)
     val webView = withId(R.id.webview)
     val appCompatTextView = withId(R.id.app_compat_text)
-    val imageView = withId(R.id.image_view)
+    val imageView = withId(R.id.swipe_image_view)
     val imageView2 = withId(R.id.image_view2)
     val emptyNotClickableImageView = withId(R.id.empty_image_view)
     val dialogButtonOk = onView(withText("OK")).inRoot(isDialog())

@@ -7,6 +7,8 @@ import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.base.ViewFinderImpl
 import androidx.test.espresso.web.model.ElementReference
 import androidx.test.espresso.web.sugar.Web
+import androidx.test.uiautomator.BySelector
+import androidx.test.uiautomator.UiObject2
 import org.hamcrest.Matcher
 import java.util.concurrent.atomic.AtomicReference
 
@@ -52,4 +54,6 @@ internal fun <T> Web.WebInteraction<T>.getViewMatcher(): Matcher<View>? {
 internal fun <T> Web.WebInteraction<T>.getElementReference(): ElementReference? {
     return this.getProperty("element")
 }
+
+fun UiObject2.getBySelector(): BySelector? = this.getProperty<BySelector>("mSelector")
 

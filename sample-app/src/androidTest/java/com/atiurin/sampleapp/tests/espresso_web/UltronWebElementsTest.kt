@@ -5,7 +5,7 @@ import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElements.Companio
 import org.junit.Assert
 import org.junit.Test
 
-class UltronUltronWebElementsTest : BaseWebViewTest() {
+class UltronWebElementsTest : BaseWebViewTest() {
     @Test
     fun getSizeTest() {
         val buttonsAmount = classNames("button").getSize()

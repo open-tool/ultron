@@ -52,7 +52,7 @@ import com.atiurin.ultron.core.compose.operation.ComposeOperationResult
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperation
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
-
+fun SemanticsMatcher.ultronInteraction() = UltronComposeSemanticsNodeInteraction(this)
 fun SemanticsMatcher.isSuccess(action: SemanticsMatcher.() -> Unit) = UltronComposeSemanticsNodeInteraction(this).isSuccess { action() }
 
 fun SemanticsMatcher.withTimeout(timeoutMs: Long) = UltronComposeSemanticsNodeInteraction(this, timeoutMs = timeoutMs)
