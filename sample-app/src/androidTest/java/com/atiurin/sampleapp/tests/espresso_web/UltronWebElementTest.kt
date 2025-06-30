@@ -12,6 +12,7 @@ import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.className
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.id
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.xpath
+import com.atiurin.ultron.log.UltronLog
 import org.hamcrest.Matchers.`is`
 import org.junit.Assert
 import org.junit.Test
@@ -127,6 +128,8 @@ class UltronWebElementTest : BaseWebViewTest() {
         val text = "some text 3"
         page.textInput.replaceText(text + "additional")
         page.buttonUpdTitle.webClick()
+        val desc = page.contentDescBtn.isDisplayed().getText()
+        UltronLog.info("Desc: $desc")
         page.title.containsText(text)
     }
 

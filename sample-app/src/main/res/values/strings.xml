@@ -40,5 +40,6 @@
     <string name="menu_custom_clicks">Custom Clicks</string>
     <string name="ui_elements_activity_title">UI elements activity title</string>
     <string name="deep_search">Deep search</string>
+    <string name="click_to_crash_the_app">Click to crash the app</string>
 
 </resources>

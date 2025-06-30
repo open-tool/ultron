@@ -10,7 +10,9 @@ abstract class UltronRunInformer : AbstractListenersContainer<UltronRunListener>
     override fun testStarted(description: Description) = getListeners().forEach { it.testStarted(description) }
     override fun testFinished(description: Description) = getListeners().forEach { it.testFinished(description) }
     override fun testFailure(failure: Failure) {
-        getListeners().forEach { it.testFailure(failure) }
+        getListeners().forEach {
+            it.testFailure(failure)
+        }
     }
     override fun testAssumptionFailure(failure: Failure) = getListeners().forEach { it.testAssumptionFailure(failure) }
     override fun testIgnored(description: Description) = getListeners().forEach { it.testIgnored(description) }
