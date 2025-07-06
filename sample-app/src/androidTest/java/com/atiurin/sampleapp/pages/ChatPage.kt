@@ -20,7 +20,7 @@ object ChatPage : Page<ChatPage>() {
         }
     }
 
-    val messagesList = withRecyclerView(R.id.messages_list)
+    val messagesList = withRecyclerView(R.id.messages_list).withName("Messages list")
     val clearHistoryBtn = withText("Clear history")
     val inputMessageText = withId(R.id.message_input_text)
     val sendMessageBtn = withId(R.id.send_button)
@@ -65,11 +65,11 @@ object ChatPage : Page<ChatPage>() {
     }
 
     fun assertToolbarTitle(text: String){
-        toolbarTitle.withTimeout(1000).hasText(text)
+        toolbarTitle.withTimeout(1000).withName("Toolbar title").hasText(text)
     }
 
     fun assertToolbarTitleWithSuitableRoot(text: String){
-        toolbarTitle.withSuitableRoot().hasText(text)
+        toolbarTitle.withSuitableRoot().withName("Toolbar title").hasText(text)
     }
 
     fun clearHistory() = apply {

@@ -2,6 +2,9 @@ package com.atiurin.ultron.core.espresso.recyclerview
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.ViewInteraction
+import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.exceptions.UltronOperationException
 import org.hamcrest.Matcher
 
@@ -27,7 +30,17 @@ class RecyclerViewItemPositionalExecutor(
         return ultronRecyclerView.getViewHolderAtPosition(position)
     }
 
+    override fun getItemInteraction(): UltronEspressoInteraction<ViewInteraction> {
+        return UltronEspressoInteraction(onView(getItemMatcher()))
+            .withName("RecyclerViewItem at position: '$position', RecyclerView: ${ultronRecyclerView.recyclerViewInteraction.elementInfo.name}")
+    }
+
     override fun getItemChildMatcher(childMatcher: Matcher<View>): Matcher<View> {
         return ultronRecyclerView.atPositionItemChild(position, childMatcher)
+    }
+
+    override fun getItemChildInteraction(childInteraction: UltronEspressoInteraction<ViewInteraction>): UltronEspressoInteraction<ViewInteraction> {
+        return UltronEspressoInteraction(onView(getItemChildMatcher(childInteraction.getInteractionMatcher()!!)))
+            .withName("'${childInteraction.elementInfo.name}' of RecyclerViewItem at position: '$position', RecyclerView: ${ultronRecyclerView.recyclerViewInteraction.elementInfo.name}")
     }
 }
