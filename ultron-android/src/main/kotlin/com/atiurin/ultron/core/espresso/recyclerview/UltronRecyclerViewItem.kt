@@ -2,14 +2,16 @@ package com.atiurin.ultron.core.espresso.recyclerview
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.ViewInteraction
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.OperationAssertion
 import com.atiurin.ultron.core.espresso.EspressoOperationResult
+import com.atiurin.ultron.core.espresso.UltronEspressoInteraction
 import com.atiurin.ultron.core.espresso.UltronEspressoOperation
 import com.atiurin.ultron.custom.espresso.matcher.withSuitableRoot
 import com.atiurin.ultron.exceptions.UltronException
-import com.atiurin.ultron.extensions.*
 import com.atiurin.ultron.listeners.setListenersState
 import org.hamcrest.Matcher
 
@@ -30,13 +32,17 @@ open class UltronRecyclerViewItem {
         getChild(block())
     }
 
+    fun child(interaction: UltronEspressoInteraction<ViewInteraction>): Lazy<UltronEspressoInteraction<ViewInteraction>> = lazy {
+        getChild(interaction)
+    }
+
     constructor(
         ultronRecyclerView: UltronRecyclerView,
         itemViewMatcher: Matcher<View>,
         autoScroll: Boolean = true,
         scrollOffset: Int = 0
     ) {
-        setExecutor(ultronRecyclerView, itemViewMatcher)
+        setExecutor(ultronRecyclerView, UltronEspressoInteraction(onView(itemViewMatcher)))
         if (autoScroll) scrollToItem(scrollOffset)
     }
 
@@ -74,68 +80,84 @@ open class UltronRecyclerViewItem {
         return executor!!.getItemChildMatcher(childMatcher)
     }
 
-    fun withTimeout(timeoutMs: Long) = getMatcher().withTimeout(timeoutMs)
-    fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
-        getMatcher().withResultHandler(resultHandler)
+    /**
+     * @return interaction to a child element
+     */
+    fun getChild(childInteraction: UltronEspressoInteraction<ViewInteraction>): UltronEspressoInteraction<ViewInteraction> {
+        if (executor == null) throw UltronException(
+            """
+            |UltronRecyclerViewItem child element should have lazy initialisation in subclasses. 
+            |For example, do not use: 
+            |val name = getChild(matcher)
+            |Refactor it to:
+            |val name by lazy { getChild(matcher) }
+        """.trimMargin()
+        )
+        return executor!!.getItemChildInteraction(childInteraction)
+    }
 
-    fun withAssertion(assertion: OperationAssertion) = getMatcher().withAssertion(assertion)
+    fun withTimeout(timeoutMs: Long) = getInteraction().withTimeout(timeoutMs)
+    fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
+        getInteraction().withResultHandler(resultHandler)
+
+    fun withAssertion(assertion: OperationAssertion) = getInteraction().withAssertion(assertion)
     fun withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit) =
-        getMatcher().withAssertion(DefaultOperationAssertion(name, block.setListenersState(isListened)))
+        getInteraction().withAssertion(DefaultOperationAssertion(name, block.setListenersState(isListened)))
 
     //root view searching
     fun withSuitableRoot() = apply { this.getMatcher().withSuitableRoot() }
 
     //actions
-    fun click() = apply { this.getMatcher().click() }
-    fun longClick() = apply { this.getMatcher().longClick() }
-    fun doubleClick() = apply { this.getMatcher().doubleClick() }
+    fun click() = apply { this.getInteraction().click() }
+    fun longClick() = apply { this.getInteraction().longClick() }
+    fun doubleClick() = apply { this.getInteraction().doubleClick() }
 
-    fun clickTopLeft(offsetX: Int = 0, offsetY: Int = 0) = apply { this.getMatcher().clickTopLeft(offsetX, offsetY) }
-    fun clickTopCenter(offsetY: Int) = apply { this.getMatcher().clickTopCenter(offsetY) }
-    fun clickTopRight(offsetX: Int = 0, offsetY: Int = 0) = apply { this.getMatcher().clickTopRight(offsetX, offsetY) }
-    fun clickCenterRight(offsetX: Int = 0) = apply { this.getMatcher().clickCenterRight(offsetX) }
-    fun clickBottomRight(offsetX: Int = 0, offsetY: Int = 0) = apply { this.getMatcher().clickBottomRight(offsetX, offsetY) }
-    fun clickBottomCenter(offsetY: Int = 0) = apply { this.getMatcher().clickBottomCenter(offsetY) }
-    fun clickBottomLeft(offsetX: Int = 0, offsetY: Int = 0) = apply { this.getMatcher().clickBottomLeft(offsetX, offsetY) }
-    fun clickCenterLeft(offsetX: Int = 0) = apply { this.getMatcher().clickCenterLeft(offsetX) }
+    fun clickTopLeft(offsetX: Int = 0, offsetY: Int = 0) = apply { this.getInteraction().clickTopLeft(offsetX, offsetY) }
+    fun clickTopCenter(offsetY: Int) = apply { this.getInteraction().clickTopCenter(offsetY) }
+    fun clickTopRight(offsetX: Int = 0, offsetY: Int = 0) = apply { this.getInteraction().clickTopRight(offsetX, offsetY) }
+    fun clickCenterRight(offsetX: Int = 0) = apply { this.getInteraction().clickCenterRight(offsetX) }
+    fun clickBottomRight(offsetX: Int = 0, offsetY: Int = 0) = apply { this.getInteraction().clickBottomRight(offsetX, offsetY) }
+    fun clickBottomCenter(offsetY: Int = 0) = apply { this.getInteraction().clickBottomCenter(offsetY) }
+    fun clickBottomLeft(offsetX: Int = 0, offsetY: Int = 0) = apply { this.getInteraction().clickBottomLeft(offsetX, offsetY) }
+    fun clickCenterLeft(offsetX: Int = 0) = apply { this.getInteraction().clickCenterLeft(offsetX) }
 
-    fun swipeDown() = apply { this.getMatcher().swipeDown() }
-    fun swipeLeft() = apply { this.getMatcher().swipeLeft() }
-    fun swipeRight() = apply { this.getMatcher().swipeRight() }
-    fun swipeUp() = apply { this.getMatcher().swipeUp() }
-    fun perform(action: ViewAction) = apply { this.getMatcher().perform(action) }
+    fun swipeDown() = apply { this.getInteraction().swipeDown() }
+    fun swipeLeft() = apply { this.getInteraction().swipeLeft() }
+    fun swipeRight() = apply { this.getInteraction().swipeRight() }
+    fun swipeUp() = apply { this.getInteraction().swipeUp() }
+    fun perform(action: ViewAction) = apply { this.getInteraction().perform(action) }
 
     //assertions
-    fun isDisplayed() = apply { this.getMatcher().isDisplayed() }
-    fun isNotDisplayed() = apply { this.getMatcher().isNotDisplayed() }
-    fun isCompletelyDisplayed() = apply { this.getMatcher().isCompletelyDisplayed() }
+    fun isDisplayed() = apply { this.getInteraction().isDisplayed() }
+    fun isNotDisplayed() = apply { this.getInteraction().isNotDisplayed() }
+    fun isCompletelyDisplayed() = apply { this.getInteraction().isCompletelyDisplayed() }
     fun isDisplayingAtLeast(percentage: Int) =
-        apply { this.getMatcher().isDisplayingAtLeast(percentage) }
+        apply { this.getInteraction().isDisplayingAtLeast(percentage) }
 
-    fun isClickable() = apply { this.getMatcher().isClickable() }
-    fun isNotClickable() = apply { this.getMatcher().isNotClickable() }
-    fun isEnabled() = apply { this.getMatcher().isEnabled() }
-    fun isNotEnabled() = apply { this.getMatcher().isNotEnabled() }
+    fun isClickable() = apply { this.getInteraction().isClickable() }
+    fun isNotClickable() = apply { this.getInteraction().isNotClickable() }
+    fun isEnabled() = apply { this.getInteraction().isEnabled() }
+    fun isNotEnabled() = apply { this.getInteraction().isNotEnabled() }
     fun assertMatches(condition: Matcher<View>) =
-        apply { this.getMatcher().assertMatches(condition) }
+        apply { this.getInteraction().assertMatches(condition) }
 
     fun hasContentDescription(contentDescription: String) =
-        apply { this.getMatcher().hasContentDescription(contentDescription) }
+        apply { this.getInteraction().hasContentDescription(contentDescription) }
 
     fun hasContentDescription(resourceId: Int) =
-        apply { this.getMatcher().hasContentDescription(resourceId) }
+        apply { this.getInteraction().hasContentDescription(resourceId) }
 
     fun hasContentDescription(charSequenceMatcher: Matcher<CharSequence>) =
-        apply { this.getMatcher().hasContentDescription(charSequenceMatcher) }
+        apply { this.getInteraction().hasContentDescription(charSequenceMatcher) }
 
     fun contentDescriptionContains(text: String) =
-        apply { this.getMatcher().contentDescriptionContains(text) }
+        apply { this.getInteraction().contentDescriptionContains(text) }
 
     fun setExecutor(
         ultronRecyclerView: UltronRecyclerView,
-        itemViewMatcher: Matcher<View>
+        itemViewInteraction: UltronEspressoInteraction<ViewInteraction>,
     ) {
-        this.executor = RecyclerViewItemMatchingExecutor(ultronRecyclerView, itemViewMatcher)
+        this.executor = RecyclerViewItemMatchingExecutor(ultronRecyclerView, itemViewInteraction)
     }
 
     fun setExecutor(
@@ -149,15 +171,19 @@ open class UltronRecyclerViewItem {
         return executor!!.getItemMatcher()
     }
 
+    fun getInteraction(): UltronEspressoInteraction<ViewInteraction> {
+        return executor!!.getItemInteraction()
+    }
+
     companion object {
         inline fun <reified T : UltronRecyclerViewItem> getInstance(
             ultronRecyclerView: UltronRecyclerView,
-            itemViewMatcher: Matcher<View>,
+            itemViewInteraction: UltronEspressoInteraction<ViewInteraction>,
             autoScroll: Boolean = true,
             scrollOffset: Int = 0
         ): T {
             val item = this.createUltronRecyclerViewItemInstance<T>()
-            item.setExecutor(ultronRecyclerView, itemViewMatcher)
+            item.setExecutor(ultronRecyclerView, itemViewInteraction)
             if (autoScroll) item.scrollToItem(scrollOffset)
             return item
         }
