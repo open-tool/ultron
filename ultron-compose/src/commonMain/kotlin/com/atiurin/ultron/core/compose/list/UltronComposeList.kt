@@ -27,6 +27,7 @@ class UltronComposeList(
     private var operationTimeoutMs: Long = UltronComposeConfig.params.lazyColumnOperationTimeoutMs
 ) {
     private val itemChildInteractionProvider = getItemChildInteractionProvider()
+    private var listName: String = listMatcher.description
     val itemInstancesMap = mutableMapOf<KClass<*>, () -> UltronComposeListItem>()
     inline fun <reified T : UltronComposeListItem> registerItem(noinline creator: () -> T){
         itemInstancesMap[T::class] = creator
@@ -35,6 +36,8 @@ class UltronComposeList(
         initBlock()
     }
 
+    fun withDescription(description: String) = apply { this.listName = description }
+
     open fun withTimeout(timeoutMs: Long) =
         UltronComposeList(
             listMatcher = listMatcher,
@@ -42,7 +45,7 @@ class UltronComposeList(
             positionPropertyKey = positionPropertyKey,
             itemSearchLimit = itemSearchLimit,
             operationTimeoutMs = timeoutMs
-        )
+        ).withDescription(listName)
 
     /**
      * @return current [UltronComposeList] operations timeout
@@ -97,7 +100,7 @@ class UltronComposeList(
                 ) { listInteraction ->
                     itemChildInteractionProvider.onItemChild(listMatcher, itemMatcher, childMatcher, useUnmergedTree).invoke()
                 }
-        )
+        ).withName("Child: '${childMatcher.description}' on item with: '${itemMatcher.description}' in list: '$listName'")
 
 
     fun onVisibleItemChild(index: Int, childMatcher: SemanticsMatcher) = UltronComposeSemanticsNodeInteraction(
@@ -110,7 +113,7 @@ class UltronComposeList(
         ) { listInteraction ->
             itemChildInteractionProvider.onVisibleItemChild(listMatcher, index, childMatcher, useUnmergedTree).invoke()
         }
-    )
+    ).withName("Child: '$childMatcher' on item at position: '$index' in list: '$listName'")
 
     inline fun <reified T : UltronComposeListItem> getItem(matcher: SemanticsMatcher): T {
         return getComposeListItemInstance(this, matcher)
@@ -158,7 +161,7 @@ class UltronComposeList(
      * It is possible to evaluate any action or assertion on this node.
      */
     fun <T> performOnList(block: (SemanticsNode, SemanticsNodeInteraction) -> T): T =
-        UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree).execute { listSemanticsNodeInteraction ->
+        UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree).withName(listName).execute { listSemanticsNodeInteraction ->
             val listSemanticsNode = listSemanticsNodeInteraction.fetchSemanticsNode()
             block(listSemanticsNode, listSemanticsNodeInteraction)
         }
@@ -176,7 +179,7 @@ class UltronComposeList(
         ) { listInteraction ->
             listInteraction.performScrollToNode(matcher).onChildren().filterToOne(matcher)
         }
-    )
+    ).withName("Item with: '${matcher.description}' on '$listName'")
 
     fun visibleChild(childMatcher: SemanticsMatcher) = UltronComposeSemanticsNodeInteraction(
         getInteraction().execute(
@@ -188,7 +191,7 @@ class UltronComposeList(
         ) { listInteraction ->
             listInteraction.onChildren().filterToOne(childMatcher)
         }
-    )
+    ).withName("Child: '${childMatcher.description}' on '$listName")
 
     fun onVisibleItem(index: Int) = UltronComposeSemanticsNodeInteraction(
         getInteraction().execute(
@@ -219,7 +222,7 @@ class UltronComposeList(
             }
             listInteraction.onChildAt(index)
         }
-    )
+    ).withName("item at index $index on '$listName")
 
     fun scrollToNode(itemMatcher: SemanticsMatcher) = apply { getInteraction().scrollToNode(itemMatcher) }
     fun scrollToIndex(index: Int) = apply { getInteraction().scrollToIndex(index) }
@@ -236,21 +239,21 @@ class UltronComposeList(
     fun assertNotEmpty() = apply {
         AssertUtils.assertTrue(
             { getVisibleItemsCount() > 0 }, getOperationTimeout(),
-            { "Compose list (${listMatcher.description}) is NOT empty" }
+            { "Compose list (${listName}) is NOT empty" }
         )
     }
 
     fun assertEmpty() = apply {
         AssertUtils.assertTrue(
             { getVisibleItemsCount() == 0 }, getOperationTimeout(),
-            { "Compose list (${listMatcher.description}) has no items (visible items count = ${getVisibleItemsCount()})" }
+            { "Compose list (${listName}) has no items (visible items count = ${getVisibleItemsCount()})" }
         )
     }
 
     fun assertVisibleItemsCount(expected: Int) = apply {
         AssertUtils.assertTrue(
             { getVisibleItemsCount() == expected }, getOperationTimeout(),
-            { "Compose list (${listMatcher.description}) has visible items count = $expected (actual visible items count = ${getVisibleItemsCount()})" }
+            { "Compose list (${listName}) has visible items count = $expected (actual visible items count = ${getVisibleItemsCount()})" }
         )
     }
 
@@ -269,7 +272,7 @@ class UltronComposeList(
             )
         ) {
             runCatching { it.performScrollToNode(itemMatcher) }
-                .onSuccess { throw UltronAssertionException("Item '${itemMatcher.description}' exists in list '${listMatcher.description}'") }
+                .onSuccess { throw UltronAssertionException("Item '${itemMatcher.description}' exists in list '${listName}'") }
                 .onFailure { e ->
                     e.message?.let { message ->
                         if (!message.contains("No node found that matches")) {
@@ -281,7 +284,7 @@ class UltronComposeList(
     }
 
     fun getVisibleItemsCount(): Int = getInteraction().execute { it.fetchSemanticsNode().children.size }
-    fun getInteraction() = UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree, operationTimeoutMs)
+    fun getInteraction() = UltronComposeSemanticsNodeInteraction(listMatcher, useUnmergedTree, operationTimeoutMs).withName(listName)
 
     @Deprecated("Use getInteraction() instead", ReplaceWith("getInteraction()"))
     fun getMatcher() = getInteraction()

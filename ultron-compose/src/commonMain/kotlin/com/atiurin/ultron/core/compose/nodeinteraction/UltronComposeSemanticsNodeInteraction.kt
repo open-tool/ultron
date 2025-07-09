@@ -372,7 +372,7 @@ open class UltronComposeSemanticsNodeInteraction constructor(
     fun scrollToNode(matcher: SemanticsMatcher) = apply {
         executeOperation(
             operationBlock = { semanticsNodeInteraction.performScrollToNode(matcher) },
-            name = "ScrollToNode '${matcher.description}' on '${elementInfo.name}'",
+            name = "ScrollToNode with: '${matcher.description}' on '${elementInfo.name}'",
             type = SCROLL_TO_NODE,
             description = "Compose scrollToNode with matcher '${matcher.description}' on '${elementInfo.name} during $timeoutMs ms",
         )

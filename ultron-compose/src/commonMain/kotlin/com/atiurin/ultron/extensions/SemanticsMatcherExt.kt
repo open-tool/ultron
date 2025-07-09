@@ -229,3 +229,7 @@ fun SemanticsMatcher.assertWidthIsEqualTo(expectedWidth: Dp) = UltronComposeSema
 
 fun SemanticsMatcher.assertMatches(matcher: SemanticsMatcher, messagePrefixOnError: (() -> String)? = null) =
     UltronComposeSemanticsNodeInteraction(this).assertMatches(matcher, messagePrefixOnError)
+
+fun SemanticsMatcher.withDescription(description: String): SemanticsMatcher {
+    return SemanticsMatcher(description) { this@withDescription.matches(it) }
+}
