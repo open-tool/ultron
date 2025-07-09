@@ -24,6 +24,7 @@ import com.atiurin.ultron.extensions.assertIsDisplayed
 import com.atiurin.ultron.extensions.assertTextEquals
 import com.atiurin.ultron.extensions.click
 import com.atiurin.ultron.extensions.findNodeInTree
+import com.atiurin.ultron.extensions.withDescription
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test
@@ -32,7 +33,7 @@ class ComposeListTest : BaseTest() {
     @get:Rule
     val composeRule = createUltronComposeRule<ComposeListActivity>()
 
-    private val listWithMergedTree = composeList(hasTestTag(contactsListTestTag), false)
+    private val listWithMergedTree = composeList(hasTestTag(contactsListTestTag), false).withDescription("Contacts list")
     private val listPage = ComposeListPage
     private val notExistedList = composeList(hasTestTag("askjhsalk jdhas dlqk "))
     private val emptyListTestTag = "emptyList"
@@ -41,9 +42,10 @@ class ComposeListTest : BaseTest() {
     fun item_existItem() {
         val index = 20
         val contact = CONTACTS[index]
-        listWithMergedTree.item(hasAnyDescendant(hasText(contact.name)))
+        listWithMergedTree.assertIsDisplayed()
+        listWithMergedTree.item(hasAnyDescendant(hasText(contact.name)).withDescription("Contact '${contact.name}'"))
             .assertIsDisplayed()
-            .assertMatches(hasAnyDescendant(hasText(contact.name)))
+            .assertMatches(hasAnyDescendant(hasText(contact.name)).withDescription("Contact '${contact.name}'"))
     }
 
     @Test
@@ -162,13 +164,13 @@ class ComposeListTest : BaseTest() {
 
     @Test
     fun listHeader_asChild_TextEquals() {
-        listPage.lazyList.visibleChild(hasTestTag(contactsListHeaderTag))
+        listPage.lazyList.visibleChild(hasTestTag(contactsListHeaderTag).withDescription("header"))
             .assertTextEquals("Lazy column header")
     }
 
     @Test
     fun listHeader_asChild_TextEquals_mergedTree() {
-        listWithMergedTree.visibleChild(hasTestTag(contactsListHeaderTag))
+        listWithMergedTree.visibleChild(hasTestTag(contactsListHeaderTag).withDescription("header"))
             .assertTextEquals("Lazy column header")
     }
 
