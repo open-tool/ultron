@@ -9,10 +9,10 @@ jobs:
     strategy:
       matrix:
         include:
-          - target: :ultron-common:publishToSonatype
-          - target: :ultron-compose:publishToSonatype
-          - target: :ultron-android:publishToSonatype
-          - target: :ultron-allure:publishToSonatype
+          - target: :ultron-common:publishToMavenCentral
+          - target: :ultron-compose:publishToMavenCentral
+          - target: :ultron-android:publishToMavenCentral
+          - target: :ultron-allure:publishToMavenCentral
     runs-on: macos-latest
     steps:
       - name: Checkout
@@ -41,7 +41,7 @@ jobs:
           gpg --list-secret-keys --keyid-format LONG
 
       - name: Publish package
-        run: ./gradlew ${{ matrix.target }} --no-daemon
+        run: ./gradlew ${{ matrix.target }} --no-daemon --no-configuration-cache
         env:
           MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_USER }}
           MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_TOKEN }}
