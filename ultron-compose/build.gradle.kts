@@ -126,6 +126,17 @@ val ultronComposeJavadocJar by tasks.registering(Jar::class) {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "MavenCentral"
+            url = uri("https://central.sonatype.com/api/v1/publisher")
+            credentials {
+                username = System.getenv("MAVEN_CENTRAL_USERNAME") ?: project.findProperty("MAVEN_CENTRAL_USERNAME") as String?
+                password = System.getenv("MAVEN_CENTRAL_PASSWORD") ?: project.findProperty("MAVEN_CENTRAL_PASSWORD") as String?
+            }
+        }
+    }
+    
     publications {
         publications.withType<MavenPublication> {
             artifact(ultronComposeJavadocJar)
