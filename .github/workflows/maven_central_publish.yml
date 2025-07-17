@@ -6,8 +6,6 @@ on:
 
 jobs:
   publish:
-    env:
-
     strategy:
       matrix:
         include:
@@ -38,6 +36,7 @@ jobs:
           path: |
             ~/.konan
           key: ${{ runner.os }}-${{ hashFiles('**/.lock') }}
+
       - id: install-secret-key
         name: Install gpg secret key
         run: |
@@ -45,7 +44,7 @@ jobs:
           gpg --list-secret-keys --keyid-format LONG
 
       - name: Publish package
-        run: mvn --batch-mode -Dgpg.passphrase="${{ GPG_SECRET_KEY_PASSWORD }}" deploy -DskipTests
+        run: ./gradlew ${{ matrix.target }} --no-daemon
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USER }}
           MAVEN_PASSWORD: ${{ secrets.MAVEN_TOKEN }}
