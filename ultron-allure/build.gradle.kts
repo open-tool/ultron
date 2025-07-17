@@ -68,6 +68,11 @@ publishing {
                 username = System.getenv("MAVEN_CENTRAL_USERNAME") ?: project.findProperty("MAVEN_CENTRAL_USERNAME") as String?
                 password = System.getenv("MAVEN_CENTRAL_PASSWORD") ?: project.findProperty("MAVEN_CENTRAL_PASSWORD") as String?
             }
+            // Add staging profile ID for Maven Central
+            val stagingProfileId = System.getenv("OSSRH_STAGING_PROFILE_ID") ?: project.findProperty("OSSRH_STAGING_PROFILE_ID") as String?
+            if (stagingProfileId != null) {
+                extra["sonatype.stagingProfileId"] = stagingProfileId
+            }
         }
     }
     
