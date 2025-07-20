@@ -1,4 +1,4 @@
-name: Publish to Maven Central
+name: Publish
 
 permissions:
   contents: read
@@ -10,20 +10,7 @@ on:
 
 jobs:
   publish:
-    env:
-      MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_USER }}
-      MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_TOKEN }}
-      OSSRH_GPG_SECRET_KEY_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-      OSSRH_GPG_SECRET_KEY_ID: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
-      OSSRH_STAGING_PROFILE_ID: ${{ secrets.OSSRH_STAGING_PROFILE_ID }}
-
-    strategy:
-      matrix:
-        include:
-          - target: :ultron-common:publishAllPublicationsToMavenCentralRepository
-          - target: :ultron-compose:publishAllPublicationsToMavenCentralRepository
-          - target: :ultron-android:publishAllPublicationsToMavenCentralRepository
-          - target: :ultron-allure:publishAllPublicationsToMavenCentralRepository
+    name: Publish to Maven Central Portal
     runs-on: macos-latest
 
     steps:
@@ -39,23 +26,11 @@ jobs:
           java-version: '17'
           distribution: "zulu"
 
-      - name: Setup Gradle cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.konan
-          key: ${{ runner.os }}-${{ hashFiles('**/.lock') }}
-
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-          passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-
-      - name: Gradle publish
-        run: ./gradlew "${{ matrix.target }}" --no-configuration-cache 
+      - name: Publish to MavenCentral
+        run: ./gradlew publishToMavenCentral --no-configuration-cache
         env:
-          MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_USER }}
-          MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_TOKEN }}
-          SIGNING_KEY: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-          SIGNING_PASSWORD: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_USER }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_TOKEN }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}

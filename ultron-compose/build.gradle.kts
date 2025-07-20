@@ -1,4 +1,5 @@
 
+import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -9,9 +10,8 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.vanniktech.mavenPublish)
     id("org.jetbrains.dokka")
-    id("maven-publish")
-    id("signing")
 }
 
 group = project.findProperty("GROUP")!!
@@ -124,96 +124,41 @@ val ultronComposeJavadocJar by tasks.registering(Jar::class) {
     dependsOn(deleteDokkaOutputDir, tasks.dokkaHtml)
     from(dokkaOutputDir)
 }
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+    coordinates(artifactId = "ultron-compose")
 
-publishing {
-    repositories {
-        maven {
-            name = "MavenCentral"
-            url = uri("https://central.sonatype.com/api/v1/publisher")
-            credentials {
-                username = System.getenv("MAVEN_CENTRAL_USERNAME") ?: project.findProperty("MAVEN_CENTRAL_USERNAME") as String?
-                password = System.getenv("MAVEN_CENTRAL_PASSWORD") ?: project.findProperty("MAVEN_CENTRAL_PASSWORD") as String?
-            }
-            // Add staging profile ID for Maven Central
-            val stagingProfileId = System.getenv("OSSRH_STAGING_PROFILE_ID") ?: project.findProperty("OSSRH_STAGING_PROFILE_ID") as String?
-            if (stagingProfileId != null) {
-                extra["sonatype.stagingProfileId"] = stagingProfileId
-            }
-        }
-    }
-    
-    publications {
-        publications.withType<MavenPublication> {
-            artifact(ultronComposeJavadocJar)
+    pom {
+        name = "Ultron Common"
+        description = "Android & Compose Multiplatform UI testing framework"
+        url = "https://github.com/open-tool/ultron"
+        inceptionYear = "2021"
 
-            pom {
-                name.set("Ultron Compose")
-                description.set("Android & Compose Multiplatform UI testing framework")
-                url.set("https://github.com/open-tool/ultron")
-                inceptionYear.set("2021")
-
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-
-                issueManagement {
-                    system.set("GitHub Issues")
-                    url.set("https://github.com/open-tool/ultron/issues")
-                }
-
-                developers {
-                    developer {
-                        id.set("alex-tiurin")
-                        name.set("Aleksei Tiurin")
-                        url.set("https://github.com/open-tool")
-                    }
-                }
-
-                scm {
-                    connection.set("scm:git@github.com:open-tool/ultron.git")
-                    developerConnection.set("scm:git@github.com:open-tool/ultron.git")
-                    url.set("https://github.com/open-tool/ultron")
-                }
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
             }
         }
+
+        issueManagement {
+            system = "GitHub Issues"
+            url = "https://github.com/open-tool/ultron/issues"
+        }
+
+        developers {
+            developer {
+                id = "alex-tiurin"
+                name = "Aleksei Tiurin"
+                url = "https://github.com/open-tool"
+            }
+        }
+
+        scm {
+            url = "https://github.com/open-tool/ultron"
+            connection = "scm:git@github.com:open-tool/ultron.git"
+            developerConnection = "scm:git@github.com:open-tool/ultron.git"
+        }
     }
-}
-
-tasks.withType<PublishToMavenRepository>().configureEach {
-    dependsOn(tasks.withType<Sign>())
-    dependsOn(ultronComposeJavadocJar)
-    dependsOn(tasks.withType<Jar>())
-    mustRunAfter(tasks.withType<Sign>())
-}
-
-tasks.withType<PublishToMavenLocal>().configureEach {
-    dependsOn("signKotlinMultiplatformPublication")
-    dependsOn("signAndroidReleasePublication")
-    dependsOn("signDesktopPublication")
-    dependsOn("signIosArm64Publication")
-    dependsOn("signIosSimulatorArm64Publication")
-    dependsOn("signIosX64Publication")
-    dependsOn("signJsPublication")
-    dependsOn("signWasmJsPublication")
-    dependsOn("signMacosArm64Publication")
-    dependsOn("signMacosX64Publication")
-
-    mustRunAfter("signKotlinMultiplatformPublication")
-    mustRunAfter("signAndroidReleasePublication")
-    mustRunAfter("signDesktopPublication")
-    mustRunAfter("signIosArm64Publication")
-    mustRunAfter("signIosSimulatorArm64Publication")
-    mustRunAfter("signIosX64Publication")
-    mustRunAfter("signJsPublication")
-    mustRunAfter("signWasmJsPublication")
-    mustRunAfter("signMacosArm64Publication")
-    mustRunAfter("signMacosX64Publication")
-}
-signing {
-    println("Signing lib...")
-    useGpgCmd()
-    sign(publishing.publications)
 }
