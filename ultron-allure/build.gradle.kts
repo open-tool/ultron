@@ -35,9 +35,7 @@ android {
     }
 
     publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
+        // Publishing configuration is handled by mavenPublishing block
     }
 }
 dependencies {
