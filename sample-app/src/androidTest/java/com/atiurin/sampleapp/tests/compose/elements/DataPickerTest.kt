@@ -12,7 +12,7 @@ import com.atiurin.sampleapp.compose.screen.NavigationTestTags
 import com.atiurin.sampleapp.framework.utils.TimeUtils
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.sampleapp.utils.convertMillisToDate
-import com.atiurin.ultron.core.compose.createUltronComposeRule
+import com.atiurin.ultron.core.compose.createSimpleUltronComposeRule
 import com.atiurin.ultron.core.compose.nodeinteraction.UltronComposeSemanticsNodeInteraction
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
@@ -23,7 +23,7 @@ import org.junit.Test
 import java.util.concurrent.TimeUnit
 
 class DataPickerTest : BaseTest() {
-    private val composeRule = createUltronComposeRule<ComposeRouterActivity>()
+    private val composeRule = createSimpleUltronComposeRule<ComposeRouterActivity>()
     private val navigateRule = SetUpRule().add { hasTestTag(NavigationTestTags.DatePicker).click() }
     init {
         ruleSequence.add(composeRule, navigateRule)

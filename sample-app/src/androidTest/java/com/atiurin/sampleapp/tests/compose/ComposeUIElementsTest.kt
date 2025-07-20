@@ -30,7 +30,7 @@ import com.atiurin.ultron.core.common.options.ContentDescriptionContainsOption
 import com.atiurin.ultron.core.common.options.PerformCustomBlockOption
 import com.atiurin.ultron.core.common.options.TextContainsOption
 import com.atiurin.ultron.core.common.options.TextEqualsOption
-import com.atiurin.ultron.core.compose.createUltronComposeRule
+import com.atiurin.ultron.core.compose.createSimpleUltronComposeRule
 import com.atiurin.ultron.core.compose.nodeinteraction.UltronComposeSemanticsNodeInteraction
 import com.atiurin.ultron.core.compose.nodeinteraction.click
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType
@@ -99,7 +99,7 @@ class ComposeUIElementsTest : BaseTest() {
     val page = ComposeElementsPage
 
     @get:Rule
-    val composeRule = createUltronComposeRule<ComposeElementsActivity>()
+    val composeRule = createSimpleUltronComposeRule<ComposeElementsActivity>()
     val initialText = "Like count = 0"
     val expectedText = "Like count = 1"
 

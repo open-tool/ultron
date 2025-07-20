@@ -4,7 +4,6 @@ import androidx.test.espresso.matcher.ViewMatchers.Visibility
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.rule.ActivityTestRule
 import com.atiurin.sampleapp.MyApplication
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.MainActivity
@@ -19,6 +18,7 @@ import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
 import com.atiurin.ultron.extensions.withAssertion
 import com.atiurin.ultron.extensions.withTimeout
+import com.atiurin.ultron.testlifecycle.activity.UltronActivityRule
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
 import com.atiurin.ultron.testlifecycle.setupteardown.TearDown
@@ -42,7 +42,7 @@ class RecyclerViewTest : BaseTest() {
     }
 
     init {
-        ruleSequence.add(setUpRule, tearDownRule).addLast(ActivityTestRule(MainActivity::class.java))
+        ruleSequence.add(setUpRule, tearDownRule).addLast(UltronActivityRule(MainActivity::class.java))
     }
 
     val page = FriendsListPage
