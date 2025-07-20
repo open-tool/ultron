@@ -15,7 +15,6 @@ buildscript {
         classpath(Plugins.kotlinGradle)
         classpath(Plugins.androidToolsBuildGradle)
         classpath(Plugins.androidMavenGradle)
-        classpath(Plugins.publishPlugin)
         classpath(Plugins.dokka)
     }
 }

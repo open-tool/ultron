@@ -1,7 +1,6 @@
 import com.vanniktech.maven.publish.SonatypeHost
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -29,6 +28,7 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
+    @OptIn(ExperimentalWasmDsl::class)
     wasmJs() {
         browser()
         nodejs()
@@ -106,7 +106,7 @@ android {
     }
 }
 
-val dokkaOutputDir = buildDir.resolve("dokka")
+val dokkaOutputDir = layout.buildDirectory.dir("dokka").get().asFile
 
 tasks.dokkaHtml.configure {
     outputDirectory.set(file(dokkaOutputDir))
@@ -123,10 +123,18 @@ val ultronComposeJavadocJar by tasks.registering(Jar::class) {
     from(dokkaOutputDir)
 }
 
+// Configure all publications to use the same artifact ID
+afterEvaluate {
+    publishing.publications.withType<MavenPublication> {
+        groupId = project.findProperty("GROUP") as String
+        artifactId = "ultron-common"
+        version = project.findProperty("VERSION_NAME") as String
+    }
+}
+
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
-//    coordinates(artifactId = "ultron-common")
 
     pom {
         name = "Ultron Common"

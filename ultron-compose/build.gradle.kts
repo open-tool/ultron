@@ -1,9 +1,6 @@
-
 import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.compose.ExperimentalComposeLibrary
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -18,13 +15,11 @@ group = project.findProperty("GROUP")!!
 version = project.findProperty("VERSION_NAME")!!
 
 kotlin {
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
     compilerOptions {
         apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
     }
     androidTarget {
         publishLibraryVariants("release")
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
@@ -35,7 +30,6 @@ kotlin {
     iosX64()
     iosArm64()
     iosSimulatorArm64()
-    @OptIn(ExperimentalWasmDsl::class)
     wasmJs(){
         browser()
         nodejs()
