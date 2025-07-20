@@ -123,18 +123,10 @@ val ultronComposeJavadocJar by tasks.registering(Jar::class) {
     from(dokkaOutputDir)
 }
 
-// Configure all publications to use the same artifact ID
-afterEvaluate {
-    publishing.publications.withType<MavenPublication> {
-        groupId = project.findProperty("GROUP") as String
-        artifactId = "ultron-common"
-        version = project.findProperty("VERSION_NAME") as String
-    }
-}
-
 mavenPublishing {
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
     signAllPublications()
+    coordinates(artifactId = "ultron-common")
 
     pom {
         name = "Ultron Common"
