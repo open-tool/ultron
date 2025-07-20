@@ -1,7 +1,7 @@
 package com.atiurin.sampleapp.tests.testlifecycle
 
 import com.atiurin.sampleapp.activity.ComposeElementsActivity
-import com.atiurin.ultron.core.compose.createUltronComposeRule
+import com.atiurin.ultron.core.compose.createSimpleUltronComposeRule
 import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.testlifecycle.rulesequence.RuleSequence
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
@@ -20,7 +20,7 @@ class ParametrizedTest(private val testValue1: String, private val testValue2: S
     private var singleTestSetUpDone = false
     private var commonTearDownDone = false
     private var singleTestTearDownDone = false
-    private val activityRule = createUltronComposeRule<ComposeElementsActivity>()
+    private val activityRule = createSimpleUltronComposeRule<ComposeElementsActivity>()
 
     private val beforeEachRule = SetUpRule("Precondition before each test")
         .add {

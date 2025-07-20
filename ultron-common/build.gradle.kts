@@ -110,6 +110,10 @@ android {
 }
 
 val dokkaOutputDir = buildDir.resolve("dokka")
+dependencies {
+    implementation(libs.androidx.lifecycle.common.jvm)
+    implementation(libs.androidx.core.ktx)
+}
 
 tasks.dokkaHtml.configure {
     outputDirectory.set(file(dokkaOutputDir))

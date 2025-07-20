@@ -2,7 +2,6 @@ package com.atiurin.sampleapp.tests.espresso
 
 import android.view.View
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.UiBlockActivity
 import com.atiurin.sampleapp.data.repositories.CONTACTS
@@ -13,6 +12,7 @@ import com.atiurin.ultron.core.common.assertion.softAssertion
 import com.atiurin.ultron.core.espresso.UltronEspressoUiBlock
 import com.atiurin.ultron.extensions.withName
 import com.atiurin.ultron.extensions.withTimeout
+import com.atiurin.ultron.testlifecycle.activity.UltronActivityRule
 import org.hamcrest.Matcher
 import org.junit.Assert
 import org.junit.Rule
@@ -20,7 +20,7 @@ import org.junit.Test
 
 class UltronEspressoUiBlockTest : BaseTest() {
     @get:Rule
-    val activityRule = ActivityScenarioRule(UiBlockActivity::class.java)
+    val activityRule = UltronActivityRule(UiBlockActivity::class.java)
 
     @Test
     fun notUniqueUiElement_WithDeepSearch() {

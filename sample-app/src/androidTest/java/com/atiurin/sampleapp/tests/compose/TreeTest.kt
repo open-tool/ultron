@@ -6,7 +6,7 @@ import com.atiurin.sampleapp.activity.ComposeElementsActivity
 import com.atiurin.sampleapp.pages.ComposeElementsPage
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.allure.attachment.AttachUtil
-import com.atiurin.ultron.core.compose.createUltronComposeRule
+import com.atiurin.ultron.core.compose.createSimpleUltronComposeRule
 import com.atiurin.ultron.file.MimeType
 import com.atiurin.ultron.log.UltronLog
 import com.atiurin.ultron.utils.createCacheFile
@@ -14,7 +14,7 @@ import org.junit.Test
 
 class TreeTest : BaseTest() {
     val page = ComposeElementsPage
-    val composeRule = createUltronComposeRule<ComposeElementsActivity>()
+    val composeRule = createSimpleUltronComposeRule<ComposeElementsActivity>()
     init {
         ruleSequence.add(composeRule)
     }

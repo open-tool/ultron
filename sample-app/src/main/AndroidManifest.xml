@@ -62,6 +62,15 @@
         <activity
             android:name="com.atiurin.sampleapp.activity.ComposeSecondActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.atiurin.sampleapp.activity.BusyActivity"
+            android:exported="true"
+            android:theme="@style/WhiteBackgroundTheme">
+            <intent-filter android:priority="-100" >
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
