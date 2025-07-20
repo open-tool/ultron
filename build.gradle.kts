@@ -2,8 +2,8 @@ import org.jetbrains.compose.internal.utils.getLocalProperty
 
 buildscript {
     extra.apply {
-        set("RELEASE_REPOSITORY_URL", "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-        set("SNAPSHOT_REPOSITORY_URL", "https://s01.oss.sonatype.org/content/repositories/snapshots/")
+        set("RELEASE_REPOSITORY_URL", "https://central.sonatype.com/api/v1/publisher")
+        set("SNAPSHOT_REPOSITORY_URL", "https://central.sonatype.com/api/v1/publisher")
     }
 
     repositories {
@@ -15,7 +15,6 @@ buildscript {
         classpath(Plugins.kotlinGradle)
         classpath(Plugins.androidToolsBuildGradle)
         classpath(Plugins.androidMavenGradle)
-        classpath(Plugins.publishPlugin)
         classpath(Plugins.dokka)
     }
 }
@@ -28,23 +27,9 @@ plugins {
     alias(libs.plugins.jetbrainsCompose) apply false
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.compose.compiler) apply false
-    id("io.github.gradle-nexus.publish-plugin").version("2.0.0-rc-1")
     alias(libs.plugins.kotlinAndroid) apply false
+    alias(libs.plugins.vanniktech.mavenPublish) apply false
 }
-
-nexusPublishing {
-    repositories {
-        sonatype {
-            username
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
-            username.set(getLocalProperty("ossrhToken") ?: System.getenv("OSSRH_TOKEN"))
-            password.set(getLocalProperty("ossrhTokenPassword") ?: System.getenv("OSSRH_PASSWORD"))
-            stagingProfileId.set(getLocalProperty("sonatype.stagingProfileId") ?: System.getenv("OSSRH_STAGING_PROFILE_ID"))
-        }
-    }
-}
-
 
 allprojects {
     repositories {
