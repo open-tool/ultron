@@ -1,10 +1,10 @@
 package com.atiurin.sampleapp.tests
 
-import androidx.test.rule.ActivityTestRule
 import com.atiurin.sampleapp.activity.UiElementsActivity
+import com.atiurin.ultron.testlifecycle.activity.UltronActivityRule
 
 abstract class UiElementsTest : BaseTest() {
-    val activityRule = ActivityTestRule(UiElementsActivity::class.java)
+    val activityRule = UltronActivityRule(UiElementsActivity::class.java)
 
     init {
         ruleSequence.add(activityRule)

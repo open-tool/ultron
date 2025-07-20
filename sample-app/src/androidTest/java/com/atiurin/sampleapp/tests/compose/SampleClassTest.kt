@@ -3,7 +3,7 @@ package com.atiurin.sampleapp.tests.compose
 import androidx.compose.ui.test.hasTestTag
 import com.atiurin.sampleapp.activity.ComposeElementsActivity
 import com.atiurin.sampleapp.tests.BaseTest
-import com.atiurin.ultron.core.compose.createUltronComposeRule
+import com.atiurin.ultron.core.compose.createSimpleUltronComposeRule
 import com.atiurin.ultron.extensions.assertIsDisplayed
 import com.atiurin.ultron.extensions.withName
 import com.atiurin.ultron.extensions.withTimeout
@@ -13,7 +13,7 @@ import org.junit.Test
 
 class SampleClassTest : BaseTest() {
     @get:Rule
-    val composeRuleBase = createUltronComposeRule<ComposeElementsActivity>()
+    val composeRuleBase = createSimpleUltronComposeRule<ComposeElementsActivity>()
 
     @Test
     fun test() {

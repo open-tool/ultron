@@ -1,17 +1,17 @@
 package com.atiurin.sampleapp.tests.uiautomator
 
 import android.os.Build
-import androidx.test.rule.ActivityTestRule
 import com.atiurin.sampleapp.activity.MainActivity
 import com.atiurin.sampleapp.pages.UiObject2FriendsListPage
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.core.config.UltronConfig
+import com.atiurin.ultron.testlifecycle.activity.UltronActivityRule
 import org.junit.BeforeClass
 import org.junit.Test
 
 class UltronUiObject2ScrollTest : BaseTest() {
     init {
-        ruleSequence.addLast(ActivityTestRule(MainActivity::class.java))
+        ruleSequence.addLast(UltronActivityRule(MainActivity::class.java))
     }
 
     companion object {
