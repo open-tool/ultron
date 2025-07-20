@@ -12,6 +12,13 @@ jobs:
   publish:
     name: Publish to Maven Central Portal
     runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - target: :ultron-common:publishToMavenCentral
+          - target: :ultron-compose:publishToMavenCentral
+          - target: :ultron-android:publishToMavenCentral
+          - target: :ultron-allure:publishToMavenCentral
 
     steps:
       - name: Checkout
@@ -26,8 +33,13 @@ jobs:
           java-version: '17'
           distribution: "zulu"
 
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
+          passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
       - name: Publish to MavenCentral
-        run: ./gradlew publishToMavenCentral --no-configuration-cache
+        run: ./gradlew "${{ matrix.target }}" --no-configuration-cache
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_USER }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_TOKEN }}
