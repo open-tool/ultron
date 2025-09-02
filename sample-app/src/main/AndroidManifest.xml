@@ -62,6 +62,10 @@
         <activity
             android:name="com.atiurin.sampleapp.activity.ComposeSecondActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="com.atiurin.sampleapp.activity.ComposeInteropActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
