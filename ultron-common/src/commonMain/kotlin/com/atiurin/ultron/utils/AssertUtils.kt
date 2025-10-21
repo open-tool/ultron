@@ -14,6 +14,16 @@ object AssertUtils {
         }
         throw UltronAssertionException("Assertion '${desc.invoke()}' failed during $timeoutMs ms")
     }
+    fun <R> assertTrueAndValueInDesc(valueBlock: () -> R, assertionBlock: (R) -> Boolean, timeoutMs: Long = 5_000, desc: (R) -> String = { "" }) {
+        val finishTime = nowMs() + timeoutMs
+        var result = valueBlock()
+        while (nowMs() < finishTime){
+            if (assertionBlock(result)) return
+            result = valueBlock()
+        }
+        throw UltronAssertionException("Assertion '${desc.invoke(result)}' failed during $timeoutMs ms")
+    }
+
     fun <R> assertTrueAndReturn(resultContainer: R, block: (R) -> Boolean, timeoutMs: Long = 5_000, desc: String = ""): R {
         val finishTime = nowMs() + timeoutMs
         while (nowMs() < finishTime){

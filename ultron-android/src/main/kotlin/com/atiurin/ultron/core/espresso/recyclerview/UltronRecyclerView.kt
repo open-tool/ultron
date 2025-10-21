@@ -5,6 +5,7 @@ import android.view.View
 import androidx.annotation.IntegerRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
@@ -26,7 +27,7 @@ import org.hamcrest.TypeSafeMatcher
 
 /**
  *  Provides a set of interactions with RecyclerView list.
- *  @param recyclerViewMatcher help ot identify RecyclerView inside view hierarchy
+ *  @param recyclerViewInteraction help ot identify RecyclerView inside view hierarchy
  *  @param loadTimeoutMs specifies a time of waiting while RecyclerView items will be loaded
  *  @param itemSearchLimit set an amount of RecyclerView items to be researched for target item. There is no limit by default
  *  [itemSearchLimit] is applied for matcher search. If you're looking for RecyclerView item by position it isn't used.
@@ -34,12 +35,29 @@ import org.hamcrest.TypeSafeMatcher
  *  @param recyclerImpl specifies a recycler item child matcher implementation
  */
 open class UltronRecyclerView(
-    val recyclerViewMatcher: Matcher<View>,
+    val recyclerViewInteraction: UltronEspressoInteraction<ViewInteraction>,
     val loadTimeoutMs: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
     private val itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
     private var operationTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
     private val recyclerImpl: UltronRecyclerViewImpl = RECYCLER_VIEW_IMPLEMENTATION
 ) {
+    constructor(
+        recyclerViewMatcher: Matcher<View>,
+        loadTimeoutMs: Long = RECYCLER_VIEW_LOAD_TIMEOUT,
+        itemSearchLimit: Int = RECYCLER_VIEW_ITEM_SEARCH_LIMIT,
+        operationTimeoutMs: Long = RECYCLER_VIEW_OPERATIONS_TIMEOUT,
+        recyclerImpl: UltronRecyclerViewImpl = RECYCLER_VIEW_IMPLEMENTATION
+    ): this(
+        recyclerViewInteraction = UltronEspressoInteraction(onView(recyclerViewMatcher)),
+        loadTimeoutMs = loadTimeoutMs,
+        itemSearchLimit = itemSearchLimit,
+        operationTimeoutMs = operationTimeoutMs,
+        recyclerImpl = recyclerImpl
+    )
+
+    val recyclerViewMatcher: Matcher<View>
+        get() = recyclerViewInteraction.getInteractionMatcher() ?: throw UltronOperationException("RecyclerView matcher is not specified")
+
     private var recyclerView: RecyclerView? = null
 
     /**
@@ -61,7 +79,16 @@ open class UltronRecyclerView(
         scrollOffset: Int = 0
     ): T {
         waitItemsLoaded()
-        return UltronRecyclerViewItem.getInstance(this, matcher, autoScroll, scrollOffset)
+        return UltronRecyclerViewItem.getInstance(this, UltronEspressoInteraction(onView(matcher)), autoScroll, scrollOffset)
+    }
+
+    inline fun <reified T : UltronRecyclerViewItem> getItem(
+        interaction: UltronEspressoInteraction<ViewInteraction>,
+        autoScroll: Boolean = true,
+        scrollOffset: Int = 0
+    ): T {
+        waitItemsLoaded()
+        return UltronRecyclerViewItem.getInstance(this, interaction, autoScroll, scrollOffset)
     }
 
     /** @return [UltronRecyclerViewItem] subclass instance at position [position]
@@ -141,7 +168,7 @@ open class UltronRecyclerView(
             valueBlock = { getItemAdapterPositionAtIndex(matcher, index) },
             assertionBlock = { value -> value >= 0 },
             timeoutMs = getTimeout(),
-            desc = "RecyclerView($recyclerViewMatcher) has item matched '$matcher' with index $index"
+            desc = "RecyclerView(${recyclerViewInteraction.elementInfo.name}) has item matched '$matcher' with index $index"
         )
         return UltronRecyclerViewItem.getInstance(this, position, autoScroll, scrollOffset)
     }
@@ -164,7 +191,7 @@ open class UltronRecyclerView(
             valueBlock = { getItemsAdapterPositionList(matcher).lastOrNull() ?: -1 },
             assertionBlock = { value -> value >= 0 },
             timeoutMs = getTimeout(),
-            desc = "RecyclerView($recyclerViewMatcher) has last item matched '$matcher'"
+            desc = "RecyclerView(${recyclerViewInteraction.elementInfo.name}) has last item matched '$matcher'"
         )
         return UltronRecyclerViewItem.getInstance(this, position, autoScroll, scrollOffset)
     }
@@ -229,7 +256,7 @@ open class UltronRecyclerView(
             valueBlock = { getItemAdapterPositionAtIndex(matcher, index) },
             assertionBlock = { value -> value >= 0 },
             timeoutMs = getTimeout(),
-            desc = "RecyclerView($recyclerViewMatcher) has item matched '$matcher' with index $index"
+            desc = "RecyclerView(${recyclerViewInteraction.elementInfo.name}) has item matched '$matcher' with index $index"
         )
         return UltronRecyclerViewItem(this, position, autoScroll, scrollOffset)
     }
@@ -252,7 +279,7 @@ open class UltronRecyclerView(
             valueBlock = { getItemsAdapterPositionList(matcher).lastOrNull() ?: -1 },
             assertionBlock = { value -> value >= 0 },
             timeoutMs = getTimeout(),
-            desc = "RecyclerView($recyclerViewMatcher) has last item matched '$matcher'"
+            desc = "RecyclerView(${recyclerViewInteraction.elementInfo.name}) has last item matched '$matcher'"
         )
         return UltronRecyclerViewItem(this, position, autoScroll, scrollOffset)
     }
@@ -263,9 +290,9 @@ open class UltronRecyclerView(
      * in case of original RecyclerView in app under test is changed you have to call this method again to get an actual info
      * */
     open fun getRecyclerViewList(): RecyclerView {
-        recyclerViewMatcher.identifyRecyclerView(recyclerViewIdentifierMatcher())
+        recyclerViewInteraction.identifyRecyclerView(recyclerViewIdentifierMatcher())
         return recyclerView
-            ?: throw UltronOperationException("Couldn't find recyclerView with matcher $recyclerViewMatcher")
+            ?: throw UltronOperationException("Couldn't find recyclerView with '${recyclerViewInteraction.elementInfo.name}'")
     }
 
     /**
@@ -295,7 +322,7 @@ open class UltronRecyclerView(
     fun assertEmpty() {
         AssertUtils.assertTrue(
             { getSize() == 0 }, operationTimeoutMs,
-            { "RecyclerView($recyclerViewMatcher) has no items (actual size = ${getSize()})" }
+            { "RecyclerView(${recyclerViewInteraction.elementInfo.name}) has no items (actual size = ${getSize()})" }
         )
     }
 
@@ -305,7 +332,7 @@ open class UltronRecyclerView(
     fun assertNotEmpty() {
         AssertUtils.assertTrue(
             { getSize() > 0 }, operationTimeoutMs,
-            { "RecyclerView($recyclerViewMatcher) is NOT empty" }
+            { "RecyclerView(${recyclerViewInteraction.elementInfo.name}) is NOT empty" }
         )
     }
 
@@ -334,7 +361,7 @@ open class UltronRecyclerView(
         AssertUtils.assertTrue(
             { condition(getSize()) },
             operationTimeoutMs,
-            { "RecyclerView($recyclerViewMatcher) size expected to be $operatorSymbol $expected (actual size = ${getSize()})" }
+            { "RecyclerView(${recyclerViewInteraction.elementInfo.name}) size expected to be $operatorSymbol $expected (actual size = ${getSize()})" }
         )
     }
 
@@ -344,7 +371,7 @@ open class UltronRecyclerView(
     open fun assertHasItemAtPosition(position: Int) {
         AssertUtils.assertTrue(
             { getSize() >= position }, operationTimeoutMs,
-            { "Wait RecyclerView($recyclerViewMatcher) size >= $position (actual size = ${getSize()})" }
+            { "Wait RecyclerView(${recyclerViewInteraction.elementInfo.name}) size >= $position (actual size = ${getSize()})" }
         )
     }
 
@@ -358,7 +385,7 @@ open class UltronRecyclerView(
         AssertUtils.assertTrue(
             { !isItemExist(matcher) },
             timeoutMs,
-            { "RecyclerView($recyclerViewMatcher) has no item matched '$matcher'" }
+            { "RecyclerView(${recyclerViewInteraction.elementInfo.name}) has no item matched '$matcher'" }
         )
     }
 
@@ -372,53 +399,60 @@ open class UltronRecyclerView(
         AssertUtils.assertTrueWhileTime(
             { !isItemExist(matcher) },
             timeoutMs,
-            "RecyclerView($recyclerViewMatcher) has no item matched '$matcher'"
+            "RecyclerView(${recyclerViewInteraction.elementInfo.name}) has no item matched '$matcher'"
         )
     }
 
-    open fun isDisplayed() = apply { recyclerViewMatcher.withTimeout(getTimeout()).isDisplayed() }
+    open fun isDisplayed() = apply { recyclerViewInteraction.withTimeout(getTimeout()).isDisplayed() }
     open fun isNotDisplayed() =
-        apply { recyclerViewMatcher.withTimeout(getTimeout()).isNotDisplayed() }
+        apply { recyclerViewInteraction.withTimeout(getTimeout()).isNotDisplayed() }
 
-    open fun doesNotExist() = apply { recyclerViewMatcher.withTimeout(getTimeout()).doesNotExist() }
-    open fun isEnabled() = apply { recyclerViewMatcher.withTimeout(getTimeout()).isEnabled() }
-    open fun isNotEnabled() = apply { recyclerViewMatcher.withTimeout(getTimeout()).isNotEnabled() }
+    open fun doesNotExist() = apply { recyclerViewInteraction.withTimeout(getTimeout()).doesNotExist() }
+    open fun isEnabled() = apply { recyclerViewInteraction.withTimeout(getTimeout()).isEnabled() }
+    open fun isNotEnabled() = apply { recyclerViewInteraction.withTimeout(getTimeout()).isNotEnabled() }
     open fun hasContentDescription(contentDescription: String) =
         apply {
-            recyclerViewMatcher.withTimeout(getTimeout()).hasContentDescription(contentDescription)
+            recyclerViewInteraction.withTimeout(getTimeout()).hasContentDescription(contentDescription)
         }
 
     open fun hasContentDescription(resourceId: Int) =
-        apply { recyclerViewMatcher.withTimeout(getTimeout()).hasContentDescription(resourceId) }
+        apply { recyclerViewInteraction.withTimeout(getTimeout()).hasContentDescription(resourceId) }
 
     open fun hasContentDescription(charSequenceMatcher: Matcher<CharSequence>) =
         apply {
-            recyclerViewMatcher.withTimeout(getTimeout()).hasContentDescription(charSequenceMatcher)
+            recyclerViewInteraction.withTimeout(getTimeout()).hasContentDescription(charSequenceMatcher)
         }
 
     open fun contentDescriptionContains(text: String) =
-        apply { recyclerViewMatcher.withTimeout(getTimeout()).contentDescriptionContains(text) }
+        apply { recyclerViewInteraction.withTimeout(getTimeout()).contentDescriptionContains(text) }
 
     open fun assertMatches(matcher: Matcher<View>) =
-        apply { recyclerViewMatcher.withTimeout(getTimeout()).assertMatches(matcher) }
+        apply { recyclerViewInteraction.withTimeout(getTimeout()).assertMatches(matcher) }
 
 
     fun scrollToItem(itemMatcher: Matcher<View>, searchLimit: Int = this.itemSearchLimit, offset: Int = 0) = apply {
-        recyclerViewMatcher.withTimeout(getTimeout()).perform(
+        recyclerViewInteraction.withTimeout(getTimeout()).perform(
             viewAction = RecyclerViewScrollAction(itemMatcher, searchLimit, offset),
-            description = "Scroll RecyclerView '$recyclerViewMatcher' to item = '$itemMatcher' with searchLimit = $searchLimit and offset = $offset"
+            description = "Scroll RecyclerView '${recyclerViewInteraction.elementInfo.name}' to item = '$itemMatcher' with searchLimit = $searchLimit and offset = $offset"
+        )
+    }
+
+    fun scrollToItem(itemInteraction: UltronEspressoInteraction<ViewInteraction>, searchLimit: Int = this.itemSearchLimit, offset: Int = 0) = apply {
+        recyclerViewInteraction.withTimeout(getTimeout()).perform(
+            viewAction = RecyclerViewScrollAction(itemInteraction.getInteractionMatcher()!!, searchLimit, offset),
+            description = "Scroll RecyclerView '${recyclerViewInteraction.elementInfo.name}' to item with: '${itemInteraction.elementInfo.name}', searchLimit = $searchLimit and offset = $offset"
         )
     }
 
     @Deprecated("Use scrollToItem(itemMatcher, searchLimit, offset)")
-    fun scrollToIem(itemMatcher: Matcher<View>, searchLimit: Int = this.itemSearchLimit, offset: Int = 0) = scrollToItem(itemMatcher, searchLimit, offset)
+    fun scrollToIem(itemMatcher: Matcher<View>, searchLimit: Int = this.itemSearchLimit, offset: Int = 0) = scrollToItem(UltronEspressoInteraction(onView(itemMatcher)), searchLimit, offset)
 
     fun scrollToItem(position: Int, offset: Int = 0) {
         assertHasItemAtPosition(position)
         val positionToScroll = position + offset
-        recyclerViewMatcher.withTimeout(getTimeout()).perform(
+        recyclerViewInteraction.withTimeout(getTimeout()).perform(
             viewAction = RecyclerViewScrollToPositionViewAction(positionToScroll),
-            description = "RecyclerViewActions scrollToPosition $position with offset = $offset"
+            description = "Scroll RecyclerView '${recyclerViewInteraction.elementInfo.name}' to position $position with offset = $offset"
         )
     }
 
@@ -427,14 +461,15 @@ open class UltronRecyclerView(
      * */
     open fun withTimeout(timeoutMs: Long) =
         UltronRecyclerView(
-            this.recyclerViewMatcher,
+            this.recyclerViewInteraction,
             this.loadTimeoutMs,
             this.itemSearchLimit,
-            operationTimeoutMs = timeoutMs
+            operationTimeoutMs = timeoutMs,
+            this.recyclerImpl
         )
 
     open fun withResultHandler(resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit) =
-        recyclerViewMatcher.withResultHandler(resultHandler)
+        recyclerViewInteraction.withResultHandler(resultHandler)
 
     fun isItemExist(matcher: Matcher<View>): Boolean {
         return getItemAdapterPositionAtIndex(matcher, 0) >= 0
@@ -654,6 +689,10 @@ open class UltronRecyclerView(
                 return recyclerView == view
             }
         }
+    }
+
+    fun withName(name: String): UltronRecyclerView = apply {
+        recyclerViewInteraction.elementInfo.name = name
     }
 
     enum class SizeComparison {

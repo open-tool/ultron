@@ -10,8 +10,8 @@ import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewImpl
 import com.atiurin.ultron.core.espresso.recyclerview.UltronRecyclerViewItem
 import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
 import com.atiurin.ultron.custom.espresso.matcher.withSuitableRoot
-import com.atiurin.ultron.extensions.hasText
 import com.atiurin.ultron.extensions.isDisplayed
+import com.atiurin.ultron.extensions.withName
 import com.atiurin.ultron.page.Page
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
@@ -19,7 +19,7 @@ import org.junit.Assert
 
 object FriendsListPage : Page<FriendsListPage>() {
     val recycler = withRecyclerView(R.id.recycler_friends,
-        implementation = UltronRecyclerViewImpl.PERFORMANCE)
+        implementation = UltronRecyclerViewImpl.PERFORMANCE).withName("Friends list")
 
     fun assertPageDisplayed() = apply {
         step("Assert friends list page displayed") {
@@ -34,13 +34,15 @@ object FriendsListPage : Page<FriendsListPage>() {
     }
 
     class FriendRecyclerItem : UltronRecyclerViewItem() {
-        val name by child { withId(R.id.tv_name) }
-        val status by lazy { getChild(withId(R.id.tv_status)) }
-        val avatar by lazy { getChild(withId(R.id.avatar)) }
+        val name by child(withId(R.id.tv_name).withName("Friend name"))
+        val status by lazy { getChild(withId(R.id.tv_status)).withName("Status") }
+        val avatar by lazy { getChild(withId(R.id.avatar)).withName("Avatar") }
     }
 
     fun getListItem(contactName: String): FriendRecyclerItem {
-        return recycler.getItem(hasDescendant(allOf(withId(R.id.tv_name), withText(contactName))))
+        return recycler.getItem(
+            hasDescendant(allOf(withId(R.id.tv_name), withText(contactName))).withName("Friend '$contactName")
+        )
     }
 
     fun getListItem(positions: Int): FriendRecyclerItem {
