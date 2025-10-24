@@ -1,5 +1,6 @@
 package com.atiurin.ultron.core.espresso.action
 
+import android.graphics.Rect
 import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.View
@@ -13,7 +14,7 @@ import androidx.test.espresso.action.PrecisionDescriber
 import androidx.test.espresso.action.Press
 import androidx.test.espresso.action.Tap
 import androidx.test.espresso.action.Tapper
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayingAtLeast
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.util.HumanReadables
 import org.hamcrest.Matcher
 import java.util.Locale
@@ -37,14 +38,34 @@ class UltronCustomClickAction(
 ) : ViewAction {
 
     override fun getConstraints(): Matcher<View> {
-        return isDisplayingAtLeast(areaPercentage)
+        return ViewMatchers.withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)
     }
 
     override fun getDescription(): String {
-        return tapper.toString().lowercase(Locale.ROOT) + " click";
+        return tapper.toString().lowercase(Locale.ROOT) + " click"
     }
 
     override fun perform(uiController: UiController, view: View) {
+        if (!ViewMatchers.isDisplayingAtLeast(areaPercentage).matches(view)) {
+            val rect = Rect()
+            view.getDrawingRect(rect)
+            view.requestRectangleOnScreen(rect, true) // immediate is set to true, scrolling will not be animated.
+            uiController.loopMainThreadUntilIdle()
+        }
+
+        if (!ViewMatchers.isDisplayingAtLeast(areaPercentage).matches(view)) {
+            throw PerformException.Builder()
+                .withActionDescription(this.description)
+                .withViewDescription(HumanReadables.describe(view))
+                .withCause(
+                    java.lang.RuntimeException(
+                        "Auto Scroll to view was attempted, but view is not displayed at least <$areaPercentage> %"
+                    )
+                )
+                .build()
+        }
+
+
         val coordinates = coordinatesProvider
             .calculateCoordinates(view)
             .apply {
