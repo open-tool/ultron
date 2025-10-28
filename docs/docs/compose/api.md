@@ -13,7 +13,8 @@ fun <T> isSuccess(action: UltronComposeSemanticsNodeInteraction.() -> T): Boolea
 fun withAssertion(assertion: OperationAssertion)
 fun withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit)
 fun withUseUnmergedTree(value: Boolean) 
-fun withName(name: String) // specify custom name for UI element, it'll be visible in log and exception
+fun withName(name: String) // specify custom name for UI element, it'll be visible in log, exception, and step name for detailed allure report
+fun withDescription(description: String) // analog of fun withName(name: String) for matchers of UltronComposeList, UltronComposeListItem, and child of UltronComposeListItem
 fun withMetaInfo(meta: Any) // allows association of custom info with UI element
 
 //actions

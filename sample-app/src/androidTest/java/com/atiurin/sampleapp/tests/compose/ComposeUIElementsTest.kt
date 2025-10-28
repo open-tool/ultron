@@ -17,6 +17,7 @@ import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCou
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCounterContentDesc
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.likesCounterTextContainerContentDesc
 import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.simpleCheckbox
+import com.atiurin.sampleapp.activity.ComposeElementsActivity.Constants.statusText
 import com.atiurin.sampleapp.compose.RegionName
 import com.atiurin.sampleapp.framework.ultronext.ProgressBar
 import com.atiurin.sampleapp.framework.ultronext.getProgress
@@ -34,7 +35,9 @@ import com.atiurin.ultron.core.compose.createSimpleUltronComposeRule
 import com.atiurin.ultron.core.compose.nodeinteraction.UltronComposeSemanticsNodeInteraction
 import com.atiurin.ultron.core.compose.nodeinteraction.click
 import com.atiurin.ultron.core.compose.operation.ComposeOperationType
+import com.atiurin.ultron.core.compose.operation.UltronComposeCollectionInteraction.Companion.allNodes
 import com.atiurin.ultron.core.compose.operation.UltronComposeOperationParams
+import com.atiurin.ultron.core.compose.operation.assertSize
 import com.atiurin.ultron.core.compose.option.ComposeSwipeOption
 import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.extensions.assertContentDescriptionContains
@@ -788,5 +791,15 @@ class ComposeUIElementsTest : BaseTest() {
             Assert.assertTrue(message.contains("NotExistTestTag"))
         }
 
+    }
+
+    @Test
+    fun allNodesTest_invalidExpectedValue(){
+        AssertUtils.assertException { allNodes(hasTestTag(statusText)).assertSize(2, operationTimeoutMs = 1000) }
+    }
+
+    @Test
+    fun allNodesTest_correctExpectedValue(){
+        allNodes(hasTestTag(statusText)).assertSize(1)
     }
 }

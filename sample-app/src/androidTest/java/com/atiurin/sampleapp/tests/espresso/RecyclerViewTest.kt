@@ -14,9 +14,8 @@ import com.atiurin.sampleapp.pages.ChatPage
 import com.atiurin.sampleapp.pages.FriendsListPage
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.core.espresso.recyclerview.withRecyclerView
-import com.atiurin.ultron.extensions.hasText
-import com.atiurin.ultron.extensions.isDisplayed
 import com.atiurin.ultron.extensions.withAssertion
+import com.atiurin.ultron.extensions.withName
 import com.atiurin.ultron.extensions.withTimeout
 import com.atiurin.ultron.testlifecycle.activity.UltronActivityRule
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUp
@@ -49,7 +48,7 @@ class RecyclerViewTest : BaseTest() {
 
     @Test
     fun childTest() {
-        withRecyclerView(R.id.recycler_friends).item(0).getChild(withId(R.id.tv_status)).hasText(ContactRepositoty.getFirst().status)
+        withRecyclerView(R.id.recycler_friends).withName("Friends list").item(0).getChild(withId(R.id.tv_status).withName("Status")).hasText(ContactRepositoty.getFirst().status)
     }
 
     @Test

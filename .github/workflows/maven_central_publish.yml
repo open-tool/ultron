@@ -1,0 +1,48 @@
+name: Publish
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches:
+      - 'release/*'
+
+jobs:
+  publish:
+    name: Publish to Maven Central Portal
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        include:
+          - target: :ultron-common:publishToMavenCentral
+          - target: :ultron-compose:publishToMavenCentral
+          - target: :ultron-android:publishToMavenCentral
+          - target: :ultron-allure:publishToMavenCentral
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: "zulu"
+
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
+          passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+      - name: Publish to MavenCentral
+        run: ./gradlew "${{ matrix.target }}" --no-configuration-cache
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_USER }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_TOKEN }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_CONTENTS }}

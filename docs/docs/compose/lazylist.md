@@ -180,11 +180,11 @@ It's pretty much the same as [simple node api](../compose/api.md), but extends i
 Let's start with approaches that you can use without additional efforts. For example, you have identified `LazyList` in your tests code like
 
 ```kotlin
-val lazyList = composeList(listMatcher = hasTestTag("listTestTag"), ..)
+val lazyList = composeList(listMatcher = hasTestTag("listTestTag").withDescription(description = "List of contacts"), ..)
 
 class ComposeListItem : UltronComposeListItem() {
-    val name by lazy { getChild(hasTestTag(contactNameTestTag)) }
-    val status by lazy { getChild(hasTestTag(contactStatusTestTag)) }
+    val name by lazy { getChild(hasTestTag(contactNameTestTag).withDescription(description = "Contact name")) }
+    val status by lazy { getChild(hasTestTag(contactStatusTestTag).withDescription(description = "Contact status")) }
 }
 ```
 
@@ -209,7 +209,8 @@ lazyList.getLastVisibleItem<ComposeListItem>()
 A more stable way to find the item is to use `SemanticsMatcher`. It allows you to find the item not only on the screen.
 
 ```kotlin
-lazyList.item(hasAnyDescendant(hasText("Some unique text")) 
+val someText = "Some unique text"
+lazyList.item(hasAnyDescendant(hasText(someText).withDescription(description = someText)) 
 lazyList.getItem<ComposeListItem>(hasAnyDescendant(hasText("Some unique text")) 
 ```
 
