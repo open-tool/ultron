@@ -11,14 +11,14 @@ import com.atiurin.sampleapp.compose.getContactItemTestTagByPosition
 import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.ComposeListPage
-import com.atiurin.ultron.core.compose.createUltronComposeRule
+import com.atiurin.ultron.core.compose.createSimpleUltronComposeRule
 import com.atiurin.ultron.core.compose.list.composeList
 import org.junit.Rule
 import org.junit.Test
 
 class ComposeListWithPositionTestTagTest {
     @get:Rule
-    val composeRule = createUltronComposeRule<ComposeListWithPositionTestTagActivity>()
+    val composeRule = createSimpleUltronComposeRule<ComposeListWithPositionTestTagActivity>()
     val list = composeList(hasContentDescription(contactsListContentDesc), false)
     val composeListWithProperty = composeList(hasContentDescription(contactsListContentDesc), false, ListItemPositionPropertyKey)
 

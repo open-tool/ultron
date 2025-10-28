@@ -12,7 +12,7 @@ import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.sampleapp.tests.espresso.descriptionPrefix
 import com.atiurin.sampleapp.tests.espresso.сhildNameDesc
 import com.atiurin.ultron.core.common.assertion.softAssertion
-import com.atiurin.ultron.core.compose.createUltronComposeRule
+import com.atiurin.ultron.core.compose.createSimpleUltronComposeRule
 import com.atiurin.ultron.extensions.assertIsDisplayed
 import com.atiurin.ultron.extensions.assertTextContains
 import com.atiurin.ultron.extensions.withUseUnmergedTree
@@ -22,7 +22,7 @@ import org.junit.Test
 
 class UltronComposeUiBlockTest : BaseTest() {
     @get:Rule
-    val composeRule = createUltronComposeRule<ComposeElementsActivity>()
+    val composeRule = createSimpleUltronComposeRule<ComposeElementsActivity>()
 
     @Test
     fun noUniqueElementTest() {

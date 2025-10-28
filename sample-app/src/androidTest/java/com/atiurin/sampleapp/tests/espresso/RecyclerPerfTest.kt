@@ -6,7 +6,6 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
-import androidx.test.rule.ActivityTestRule
 import com.atiurin.sampleapp.MyApplication
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.MainActivity
@@ -15,12 +14,13 @@ import com.atiurin.sampleapp.framework.Log
 import com.atiurin.sampleapp.pages.FriendsListPage
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.extensions.isDisplayed
+import com.atiurin.ultron.testlifecycle.activity.UltronActivityRule
 import com.atiurin.ultron.testlifecycle.setupteardown.SetUpRule
 import org.junit.Test
 
 class RecyclerPerfTest : BaseTest() {
 
-    private val activityTestRule = ActivityTestRule(MainActivity::class.java)
+    private val activityTestRule = UltronActivityRule(MainActivity::class.java)
     private val timeoutRule = SetUpRule().add {
         MyApplication.CONTACTS_LOADING_TIMEOUT_MS = 0L
     }

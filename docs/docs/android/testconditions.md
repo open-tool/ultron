@@ -10,6 +10,8 @@ It is a feature that includes 3 parts
 - SetUpRule & TearDownRule
 - @SetUp @TearDown annotations
 
+Additional feature - UltronActivityRule for launch Activity before test and finish after
+
 RuleSequence + SetUps & TearDowns for tests = full control of your tests
 
 - control the execution of pre- and postconditions of each test
@@ -172,5 +174,20 @@ SetUpRule(name = "External step name").add {...}
 SetUpRule(name = "External step name").add(name = "Internal step name") { 
    //condition code
 }
+```
+
+## UltronActivityRule
+
+To start the activity you can use UltronActivityRule instead of `androidx.test.ext.junit.rules.ActivityScenarioRule`
+
+The rule has the following advantages:
+
+- finish all activities in RESUMED, PAUSED and STOPPED stage after test
+- does not await idle state for finish activity (fix infinity test execution in case AppNotIdleException)
+- has setup and teardown step in allure report
+
+```kotlin
+val activityRule = UltronActivityRule(YourActivity::class.java)
+ruleSequence.add(activityRule)
 ```
 
