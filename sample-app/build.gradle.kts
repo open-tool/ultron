@@ -9,7 +9,7 @@ android {
     compileSdk = 35
     defaultConfig {
         applicationId = "com.atiurin.sampleapp"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 35
         multiDexEnabled = true
         testInstrumentationRunner = "com.atiurin.sampleapp.framework.CustomTestRunner"

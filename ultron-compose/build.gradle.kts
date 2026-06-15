@@ -1,5 +1,4 @@
 import com.vanniktech.maven.publish.SonatypeHost
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -39,7 +38,6 @@ kotlin {
         nodejs()
     }
 
-    @OptIn(ExperimentalComposeLibrary::class)
     sourceSets {
         applyDefaultHierarchyTemplate()
         val commonMain by getting {
@@ -47,7 +45,7 @@ kotlin {
                 api(project(":ultron-common"))
                 implementation(kotlin("reflect"))
                 api(libs.kotlin.test)
-                api(compose.uiTest)
+                api(libs.compose.ui.test)
                 implementation(libs.atomicfu)
             }
         }
@@ -72,7 +70,7 @@ kotlin {
             dependsOn(jvmMain.get())
             dependencies {
                 api(project(":ultron-common"))
-                implementation(compose.uiTest)
+                implementation(libs.compose.ui.test)
             }
         }
         val nativeMain by getting { dependsOn(shared) }
@@ -99,7 +97,7 @@ android {
     compileSdk = 35
     namespace = "com.atiurin.ultron.compose"
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
         multiDexEnabled = true
     }
     compileOptions {
