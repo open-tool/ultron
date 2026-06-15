@@ -12,7 +12,7 @@ The release flow is:
 2. Review the generated release PR.
 3. Merge the release PR into `master`.
 4. CI creates tag `<version>` on the merge commit.
-5. CI starts the release workflow for that tag.
+5. CI dispatches the release workflow for that tag.
 6. CI creates the GitHub Release.
 7. CI sends the Telegram announcement.
 
@@ -49,7 +49,7 @@ The release workflow expects these secrets:
 - `TELEGRAM_BOT_TOKEN`
 - `TELEGRAM_CHAT_ID`
 
-The workflow uses `GITHUB_TOKEN` for tag creation, release workflow dispatch, and GitHub Release creation. The workflow permissions grant `contents: write` and `actions: write` where needed.
+The workflow uses `GITHUB_TOKEN` for tag creation, repository dispatch, and GitHub Release creation. The workflow permissions grant `contents: write` where needed.
 
 ## Telegram setup
 

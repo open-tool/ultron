@@ -4,18 +4,15 @@ on:
   push:
     tags:
       - '*.*.*'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: Release tag to publish
-        required: true
-        type: string
+  repository_dispatch:
+    types:
+      - ultron-release-tag-created
 
 permissions:
   contents: write
 
 concurrency:
-  group: ultron-release-${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref_name }}
+  group: ultron-release-${{ github.event_name == 'repository_dispatch' && github.event.client_payload.version || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -29,7 +26,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.version || github.ref }}
+          ref: ${{ github.event_name == 'repository_dispatch' && github.event.client_payload.version || github.ref }}
           fetch-depth: 0
 
       - name: Fetch master and tags
@@ -38,7 +35,7 @@ jobs:
       - name: Validate tag
         id: version
         env:
-          DISPATCH_VERSION: ${{ inputs.version || '' }}
+          DISPATCH_VERSION: ${{ github.event.client_payload.version || '' }}
         run: |
           VERSION="${GITHUB_REF_NAME}"
           if [[ -n "$DISPATCH_VERSION" ]]; then

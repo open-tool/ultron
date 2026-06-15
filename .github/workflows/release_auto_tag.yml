@@ -9,7 +9,6 @@ on:
 permissions:
   contents: write
   pull-requests: read
-  actions: write
 
 jobs:
   tag:
@@ -76,8 +75,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.release.outputs.version }}
-          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
-          gh workflow run maven_central_publish.yml \
-            --ref "$DEFAULT_BRANCH" \
-            --field "version=$VERSION"
+          gh api "repos/$GITHUB_REPOSITORY/dispatches" \
+            --method POST \
+            --field event_type=ultron-release-tag-created \
+            --field "client_payload[version]=$VERSION"
