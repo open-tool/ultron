@@ -1,0 +1,71 @@
+name: Release Auto Tag
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  tag:
+    name: Create release tag
+    if: ${{ github.event.pull_request.merged == true }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Detect release PR
+        id: release
+        run: |
+          HEAD_REF="${{ github.event.pull_request.head.ref }}"
+          if [[ "$HEAD_REF" != release/* ]]; then
+            echo "Non-release PR; no tag will be created."
+            echo "should_tag=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          VERSION="${HEAD_REF#release/}"
+          echo "should_tag=true" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout merge commit
+        if: ${{ steps.release.outputs.should_tag == 'true' }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: 0
+
+      - name: Fetch master and tags
+        if: ${{ steps.release.outputs.should_tag == 'true' }}
+        run: git fetch --force origin master:refs/remotes/origin/master --tags
+
+      - name: Collect changed files
+        if: ${{ steps.release.outputs.should_tag == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: gh pr diff "$PR_NUMBER" --name-only > "$RUNNER_TEMP/release-changed-files.txt"
+
+      - name: Validate merged release PR
+        if: ${{ steps.release.outputs.should_tag == 'true' }}
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          VERSION: ${{ steps.release.outputs.version }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          scripts/release/validate-release.sh release-pr \
+            --version "$VERSION" \
+            --branch "$HEAD_REF" \
+            --pr-title "$PR_TITLE" \
+            --changed-files "$RUNNER_TEMP/release-changed-files.txt"
+
+      - name: Create and push release tag
+        if: ${{ steps.release.outputs.should_tag == 'true' }}
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag "$VERSION"
+          git push origin "refs/tags/$VERSION"

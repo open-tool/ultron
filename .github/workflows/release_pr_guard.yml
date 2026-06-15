@@ -1,0 +1,51 @@
+name: Release PR Guard
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate:
+    name: Validate release PR
+    runs-on: ubuntu-22.04
+    steps:
+      # Source branches matching release/* are validated; other PRs pass as no-ops.
+      - name: Non-release PR
+        if: ${{ !startsWith(github.head_ref, 'release/') }}
+        run: echo "Non-release PR; release guard skipped."
+
+      - name: Checkout
+        if: ${{ startsWith(github.head_ref, 'release/') }}
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch tags
+        if: ${{ startsWith(github.head_ref, 'release/') }}
+        run: git fetch --force origin master:refs/remotes/origin/master --tags
+
+      - name: Collect changed files
+        if: ${{ startsWith(github.head_ref, 'release/') }}
+        run: |
+          git diff --name-only \
+            "${{ github.event.pull_request.base.sha }}" \
+            "${{ github.event.pull_request.head.sha }}" \
+            > "$RUNNER_TEMP/release-changed-files.txt"
+
+      - name: Validate release PR metadata
+        if: ${{ startsWith(github.head_ref, 'release/') }}
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          VERSION="${GITHUB_HEAD_REF#release/}"
+          scripts/release/validate-release.sh release-pr \
+            --version "$VERSION" \
+            --branch "$GITHUB_HEAD_REF" \
+            --pr-title "$PR_TITLE" \
+            --changed-files "$RUNNER_TEMP/release-changed-files.txt"

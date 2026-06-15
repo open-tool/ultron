@@ -1,44 +1,86 @@
-name: Publish
-
-permissions:
-  contents: read
+name: Release
 
 on:
   push:
-    branches:
-      - 'release/*'
+    tags:
+      - '*.*.*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ultron-release-${{ github.ref_name }}
+  cancel-in-progress: false
 
 jobs:
-  publish:
-    name: Publish to Maven Central Portal
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        include:
-          - target: :ultron-common:publishToMavenCentral
-          - target: :ultron-compose:publishToMavenCentral
-          - target: :ultron-android:publishToMavenCentral
-          - target: :ultron-allure:publishToMavenCentral
-
+  validate-tag:
+    name: Validate release tag
+    runs-on: ubuntu-22.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      prerelease: ${{ steps.version.outputs.prerelease }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch master and tags
+        run: git fetch --force origin master:refs/remotes/origin/master --tags
+
+      - name: Validate tag
+        id: version
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          scripts/release/validate-release.sh tag \
+            --version "$VERSION" \
+            --tag "$VERSION" \
+            --base origin/master
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if [[ "$VERSION" == *-* ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  publish-maven:
+    name: Publish to Maven Central Portal
+    needs: validate-tag
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: :ultron-common:publishAndReleaseToMavenCentral
+          - target: :ultron-compose:publishAndReleaseToMavenCentral
+          - target: :ultron-android:publishAndReleaseToMavenCentral
+          - target: :ultron-allure:publishAndReleaseToMavenCentral
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch master and tags
+        run: git fetch --force origin master:refs/remotes/origin/master --tags
+
+      - name: Validate tag before secrets
+        run: |
+          scripts/release/validate-release.sh tag \
+            --version "${{ needs.validate-tag.outputs.version }}" \
+            --tag "${{ needs.validate-tag.outputs.version }}" \
+            --base origin/master
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
       - name: Setup JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
-          distribution: "zulu"
+          distribution: zulu
 
-      - name: Import GPG key
-        uses: crazy-max/ghaction-import-gpg@v6
-        with:
-          gpg_private_key: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-          passphrase: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
-      - name: Publish to MavenCentral
+      - name: Publish and release to Maven Central
         run: ./gradlew "${{ matrix.target }}" --no-configuration-cache
         env:
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_USER }}
@@ -46,3 +88,70 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY_CONTENTS }}
+
+  github-release:
+    name: Create GitHub Release
+    needs:
+      - validate-tag
+      - publish-maven
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fail if release already exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.validate-tag.outputs.version }}
+        run: |
+          if gh release view "$VERSION" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "GitHub Release $VERSION already exists" >&2
+            exit 1
+          fi
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.validate-tag.outputs.version }}
+          PRERELEASE: ${{ needs.validate-tag.outputs.prerelease }}
+        run: |
+          NOTES="$(scripts/release/render-release-content.sh --version "$VERSION" --format github)"
+          args=()
+          if [[ "$PRERELEASE" == "true" ]]; then
+            args+=(--prerelease)
+          fi
+          gh release create "$VERSION" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$VERSION" \
+            --notes "$NOTES" \
+            --generate-notes \
+            --verify-tag \
+            "${args[@]}"
+
+  telegram:
+    name: Announce in Telegram
+    needs:
+      - validate-tag
+      - github-release
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Send Telegram message
+        env:
+          VERSION: ${{ needs.validate-tag.outputs.version }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          test -n "$TELEGRAM_BOT_TOKEN"
+          test -n "$TELEGRAM_CHAT_ID"
+          MESSAGE="$(scripts/release/render-release-content.sh --version "$VERSION" --format telegram-html)"
+          curl --fail --show-error --silent \
+            --request POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
+            --data-urlencode "parse_mode=HTML" \
+            --data-urlencode "disable_web_page_preview=true" \
+            --data-urlencode "text=${MESSAGE}"
