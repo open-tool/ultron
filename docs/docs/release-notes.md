@@ -7,6 +7,13 @@ title: Release notes
 
 This page summarizes Ultron releases from 2.5.1 onward. Older releases are available on the [GitHub Releases](https://github.com/open-tool/ultron/releases) page.
 
+## Version 2.6.3
+
+_Released June 15, 2026_ · [GitHub release](https://github.com/open-tool/ultron/releases/tag/2.6.3) · [Full changelog](https://github.com/open-tool/ultron/compare/2.6.2...2.6.3)
+
+- Fixed Compose Multiplatform 1.10 test API compatibility for `runUltronUiTest` and desktop Compose wrappers.
+- Added automated release preparation, tag-driven Maven Central publication, GitHub Release creation, and Telegram announcements.
+
 ## Version 2.6.2
 
 _Released October 29, 2025_ · [GitHub release](https://github.com/open-tool/ultron/releases/tag/2.6.2) · [Full changelog](https://github.com/open-tool/ultron/compare/2.6.1...2.6.2)
