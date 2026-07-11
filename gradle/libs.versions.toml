@@ -15,7 +15,7 @@ androidx-navigation = "2.7.0-alpha06"
 monitor = "1.7.2"
 uiTestJunit4Android = "1.10.0"
 lifecycleCommonJvm = "2.9.2"
-coreKtx = "1.6.1"
+coreKtx = "1.7.0"
 
 [libraries]
 androidx-ui-test-junit4-android = { module = "androidx.compose.ui:ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
