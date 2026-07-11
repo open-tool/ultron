@@ -52,6 +52,8 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 api(project(":ultron-common"))
+                api(Libs.androidXJunit)
+                implementation(Libs.espressoCore)
                 implementation(Libs.androidXRunner)
                 api(Libs.composeUiTest)
             }
