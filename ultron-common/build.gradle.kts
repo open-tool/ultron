@@ -52,6 +52,8 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
                 implementation(libs.androidx.monitor)
+                implementation(libs.androidx.lifecycle.common.jvm)
+                implementation(libs.androidx.core.ktx)
                 api(Libs.uiautomator)
                 api(Libs.junit)
             }

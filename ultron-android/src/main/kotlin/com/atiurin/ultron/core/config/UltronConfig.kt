@@ -179,6 +179,8 @@ object UltronConfig {
                 val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
                     UltronCommonConfig.testContext.wrapAnalyzerIfSoftAssertion(resultAnalyzer).analyze(it)
                 }
+
+                var autoScroll = false
             }
         }
 

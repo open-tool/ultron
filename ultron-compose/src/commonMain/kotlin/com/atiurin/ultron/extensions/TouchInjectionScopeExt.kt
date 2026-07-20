@@ -28,7 +28,7 @@ internal fun TouchInjectionScope.provideSwipeDownPosition(option: ComposeSwipeOp
     require(startY <= endY) {
         "startY=$startY needs to be less than or equal to endY=$endY"
     }
-    return SwipePosition(start = Offset(startX, startY), end = Offset(startY, endY))
+    return SwipePosition(start = Offset(startX, startY), end = Offset(endX, endY))
 }
 internal fun TouchInjectionScope.provideSwipeUpPosition(option: ComposeSwipeOption): SwipePosition {
     val startY = bottom + option.startYOffset
@@ -38,7 +38,7 @@ internal fun TouchInjectionScope.provideSwipeUpPosition(option: ComposeSwipeOpti
     require(startY >= endY) {
         "startY=$startY needs to be greater than or equal to endY=$endY"
     }
-    return SwipePosition(start = Offset(startX, startY), end = Offset(startY, endY))
+    return SwipePosition(start = Offset(startX, startY), end = Offset(endX, endY))
 }
 internal fun TouchInjectionScope.provideSwipeLeftPosition(option: ComposeSwipeOption): SwipePosition {
     val startY = centerY + option.startYOffset
@@ -48,7 +48,7 @@ internal fun TouchInjectionScope.provideSwipeLeftPosition(option: ComposeSwipeOp
     require(startX >= endX) {
         "startX=$startX needs to be greater than or equal to endX=$endX"
     }
-    return SwipePosition(start = Offset(startX, startY), end = Offset(startY, endY))
+    return SwipePosition(start = Offset(startX, startY), end = Offset(endX, endY))
 }
 internal fun TouchInjectionScope.provideSwipeRightPosition(option: ComposeSwipeOption): SwipePosition {
     val startY = centerY + option.startYOffset
@@ -58,7 +58,7 @@ internal fun TouchInjectionScope.provideSwipeRightPosition(option: ComposeSwipeO
     require(startX <= endX) {
         "startX=$startX needs to be less than or equal to endX=$endX"
     }
-    return SwipePosition(start = Offset(startX, startY), end = Offset(startY, endY))
+    return SwipePosition(start = Offset(startX, startY), end = Offset(endX, endY))
 }
 
 

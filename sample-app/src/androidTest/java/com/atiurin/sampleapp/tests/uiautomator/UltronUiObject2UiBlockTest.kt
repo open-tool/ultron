@@ -1,17 +1,17 @@
 package com.atiurin.sampleapp.tests.uiautomator
 
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.atiurin.sampleapp.activity.UiBlockActivity
 import com.atiurin.sampleapp.data.repositories.CONTACTS
 import com.atiurin.sampleapp.framework.utils.AssertUtils
 import com.atiurin.sampleapp.pages.uiblock.UiObject2UiBlockScreen
 import com.atiurin.sampleapp.tests.BaseTest
+import com.atiurin.ultron.testlifecycle.activity.UltronActivityRule
 import org.junit.Rule
 import org.junit.Test
 
 class UltronUiObject2UiBlockTest: BaseTest() {
     @get:Rule
-    val activityRule = ActivityScenarioRule(UiBlockActivity::class.java)
+    val activityRule = UltronActivityRule(UiBlockActivity::class.java)
 
     @Test
     fun notUniqueUiElement_WithDeepSearch(){

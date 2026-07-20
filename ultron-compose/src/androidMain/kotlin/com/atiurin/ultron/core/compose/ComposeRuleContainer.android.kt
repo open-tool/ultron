@@ -1,5 +1,6 @@
 package com.atiurin.ultron.core.compose
 
+import android.annotation.SuppressLint
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.TestContext
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -11,6 +12,7 @@ import androidx.compose.ui.test.junit4.createEmptyComposeRule
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import com.atiurin.ultron.exceptions.UltronException
 import com.atiurin.ultron.extensions.getProperty
+import com.atiurin.ultron.testlifecycle.activity.UltronActivityRule
 
 object ComposeRuleContainer {
     var rule: ComposeTestRule? = null
@@ -54,6 +56,13 @@ object ComposeRuleContainer {
  */
 inline fun <reified A : ComponentActivity> createUltronComposeRule(): AndroidComposeTestRule<ActivityScenarioRule<A>, A> {
     val rule = createAndroidComposeRule<A>()
+    ComposeRuleContainer.init(rule)
+    return rule
+}
+
+@SuppressLint("SuspiciousIndentation")
+inline fun <reified A : ComponentActivity> createSimpleUltronComposeRule(): com.atiurin.ultron.core.compose.activity.AndroidComposeTestRule<UltronActivityRule<A>, A> {
+    val rule = com.atiurin.ultron.core.compose.activity.createAndroidComposeRule(A::class.java)
     ComposeRuleContainer.init(rule)
     return rule
 }

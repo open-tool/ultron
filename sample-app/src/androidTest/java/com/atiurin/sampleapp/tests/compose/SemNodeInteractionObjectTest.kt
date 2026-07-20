@@ -5,7 +5,7 @@ import com.atiurin.sampleapp.activity.ComposeElementsActivity
 import com.atiurin.sampleapp.pages.ComposeElementsPage
 import com.atiurin.sampleapp.tests.BaseTest
 import com.atiurin.ultron.core.common.options.TextContainsOption
-import com.atiurin.ultron.core.compose.createUltronComposeRule
+import com.atiurin.ultron.core.compose.createSimpleUltronComposeRule
 import com.atiurin.ultron.core.compose.nodeinteraction.click
 import com.atiurin.ultron.core.compose.nodeinteraction.doubleClick
 import com.atiurin.ultron.core.compose.nodeinteraction.longClick
@@ -18,7 +18,7 @@ import org.junit.Test
 
 class SemNodeInteractionObjectTest : BaseTest() {
     @get:Rule
-    val composeRule = createUltronComposeRule<ComposeElementsActivity>()
+    val composeRule = createSimpleUltronComposeRule<ComposeElementsActivity>()
     val page = ComposeElementsPage
 
     @Test

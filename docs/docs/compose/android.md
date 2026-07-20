@@ -59,11 +59,11 @@ hasText("Welcome").assertIsDisplayed()
 
 `SemanticsMatcher` object is used in Android Compose testing framework to find a target node to interact with.
 
-To launch an Activity use `createUltronComposeRule<A>`
+To launch an Activity use `createUltronComposeRule<A>` or `createSimpleUltronComposeRule<A>`
 
 ```kotlin
 @get:Rule
 val composeTestRule = createUltronComposeRule<YourActivity>()
 ```
 
-
+`createSimpleUltronComposeRule<A>` used `UltronActivityRule` for launch and finish activity. You can read more in testconditions chapter

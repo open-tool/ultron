@@ -1,7 +1,6 @@
 package com.atiurin.sampleapp.tests.espresso
 
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.rule.ActivityTestRule
 import com.atiurin.sampleapp.R
 import com.atiurin.sampleapp.activity.MainActivity
 import com.atiurin.sampleapp.data.repositories.CONTACTS
@@ -12,11 +11,12 @@ import com.atiurin.ultron.custom.espresso.matcher.first
 import com.atiurin.ultron.custom.espresso.matcher.hierarchyNumber
 import com.atiurin.ultron.extensions.click
 import com.atiurin.ultron.extensions.hasText
+import com.atiurin.ultron.testlifecycle.activity.UltronActivityRule
 import org.junit.Test
 
 class CustomMatchersTest : BaseTest() {
 
-    private val activityTestRule = ActivityTestRule(MainActivity::class.java)
+    private val activityTestRule = UltronActivityRule(MainActivity::class.java)
 
     init {
         ruleSequence.addLast(activityTestRule)

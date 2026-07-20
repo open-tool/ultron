@@ -1,5 +1,6 @@
 package com.atiurin.ultron.core.espresso
 
+import android.graphics.Rect
 import android.view.View
 import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.NoMatchingViewException
@@ -10,14 +11,16 @@ import androidx.test.espresso.ViewAssertion
 import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.EspressoKey
 import androidx.test.espresso.action.GeneralLocation
+import androidx.test.espresso.action.Press
+import androidx.test.espresso.action.Swipe
 import androidx.test.espresso.action.Tap
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
 import com.atiurin.ultron.core.common.CommonOperationType
-import com.atiurin.ultron.core.common.ElementInfo
 import com.atiurin.ultron.core.common.DefaultElementInfo
+import com.atiurin.ultron.core.common.ElementInfo
 import com.atiurin.ultron.core.common.UltronOperationType
 import com.atiurin.ultron.core.common.assertion.DefaultOperationAssertion
 import com.atiurin.ultron.core.common.assertion.EmptyOperationAssertion
@@ -27,6 +30,9 @@ import com.atiurin.ultron.core.espresso.action.EspressoActionExecutor
 import com.atiurin.ultron.core.espresso.action.EspressoActionType
 import com.atiurin.ultron.core.espresso.action.UltronCustomClickAction
 import com.atiurin.ultron.core.espresso.action.UltronEspressoActionParams
+import com.atiurin.ultron.core.espresso.action.UltronSwipeAction
+import com.atiurin.ultron.core.espresso.action.UltronSwipeAction.Companion.EDGE_FUZZ_FACTOR
+import com.atiurin.ultron.core.espresso.action.UltronTypeTextAction
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionExecutor
 import com.atiurin.ultron.core.espresso.assertion.EspressoAssertionType
 import com.atiurin.ultron.core.espresso.assertion.UltronEspressoAssertionParams
@@ -50,7 +56,8 @@ class UltronEspressoInteraction<T>(
     val timeoutMs: Long? = null,
     val resultHandler: ((EspressoOperationResult<UltronEspressoOperation>) -> Unit)? = null,
     val assertion: OperationAssertion = EmptyOperationAssertion(),
-    val elementInfo: ElementInfo = DefaultElementInfo()
+    val elementInfo: ElementInfo = DefaultElementInfo(),
+    var autoScrollForAction: Boolean = UltronConfig.Espresso.ViewActionConfig.autoScroll
 ) {
     init {
         if (interaction !is ViewInteraction && interaction !is DataInteraction) throw UltronException(
@@ -120,6 +127,8 @@ class UltronEspressoInteraction<T>(
     fun withName(name: String) = apply { elementInfo.name = name }
 
     fun withMetaInfo(meta: Any) = apply { elementInfo.meta = meta }
+
+    fun withAutoScroll(autoscroll: Boolean) = apply { this.autoScrollForAction = autoscroll }
 
     // =========== CUSTOM CLICKS ============================
     private fun customClick(
@@ -219,7 +228,18 @@ class UltronEspressoInteraction<T>(
 
     fun click() = apply {
         executeAction(
-            operationBlock = getInteractionActionBlock(ViewActions.click()),
+            operationBlock = getInteractionActionBlock(
+                if (autoScrollForAction) {
+                    UltronCustomClickAction(
+                        tapper = Tap.SINGLE,
+                        coordinatesProvider = GeneralLocation.CENTER,
+                        areaPercentage = 90,
+                        precisionDescriber = Press.FINGER
+                    )
+                } else {
+                    ViewActions.click()
+                }
+            ),
             name = "Click to '${elementInfo.name}'",
             type = EspressoActionType.CLICK,
             description = "${interaction.simpleClassName()} action '${EspressoActionType.CLICK}' to '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
@@ -228,16 +248,38 @@ class UltronEspressoInteraction<T>(
 
     fun doubleClick() = apply {
         executeAction(
-            operationBlock = getInteractionActionBlock(ViewActions.doubleClick()),
+            operationBlock = getInteractionActionBlock(
+                if (autoScrollForAction) {
+                    UltronCustomClickAction(
+                        tapper = Tap.DOUBLE,
+                        coordinatesProvider = GeneralLocation.CENTER,
+                        areaPercentage = 90,
+                        precisionDescriber = Press.FINGER
+                    )
+                } else {
+                    ViewActions.doubleClick()
+                }
+            ),
             name = "DoubleClick to '${elementInfo.name}'",
-            type = EspressoActionType.CLICK,
+            type = EspressoActionType.DOUBLE_CLICK,
             description = "${interaction.simpleClassName()} action '${EspressoActionType.DOUBLE_CLICK}' to '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 
     fun longClick() = apply {
         executeAction(
-            operationBlock = getInteractionActionBlock(ViewActions.longClick()),
+            operationBlock = getInteractionActionBlock(
+                if (autoScrollForAction) {
+                    UltronCustomClickAction(
+                        tapper = Tap.LONG,
+                        coordinatesProvider = GeneralLocation.CENTER,
+                        areaPercentage = 90,
+                        precisionDescriber = Press.FINGER
+                    )
+                } else {
+                    ViewActions.longClick()
+                }
+            ),
             name = "LongClick to '${elementInfo.name}'",
             type = EspressoActionType.LONG_CLICK,
             description = "${interaction.simpleClassName()} action '${EspressoActionType.LONG_CLICK}' to '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
@@ -246,7 +288,22 @@ class UltronEspressoInteraction<T>(
 
     fun typeText(text: String) = apply {
         executeAction(
-            operationBlock = getInteractionActionBlock(ViewActions.typeText(text)),
+            operationBlock = getInteractionActionBlock(
+                if (autoScrollForAction) {
+                    UltronTypeTextAction(
+                        stringToBeTyped = text,
+                        tapToFocus = true,
+                        clickAction = UltronCustomClickAction(
+                            tapper = Tap.SINGLE,
+                            coordinatesProvider = GeneralLocation.CENTER,
+                            areaPercentage = 90,
+                            precisionDescriber = Press.FINGER
+                        )
+                    )
+                } else {
+                    ViewActions.typeText(text)
+                }
+            ),
             name = "Type text '$text' to '${elementInfo.name}'",
             type = EspressoActionType.TYPE_TEXT,
             description = "${interaction.simpleClassName()} action '${EspressoActionType.TYPE_TEXT}' '$text' to '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
@@ -300,7 +357,24 @@ class UltronEspressoInteraction<T>(
 
     fun swipeLeft() = apply {
         executeAction(
-            operationBlock = getInteractionActionBlock(ViewActions.swipeLeft()),
+            operationBlock = getInteractionActionBlock(
+                ViewActions.actionWithAssertions(
+                    if (autoScrollForAction) {
+                        UltronSwipeAction(
+                            swiper = Swipe.FAST,
+                            startCoordinatesProvider = GeneralLocation.translate(
+                                GeneralLocation.CENTER_RIGHT,
+                                -EDGE_FUZZ_FACTOR,
+                                0f
+                            ),
+                            endCoordinatesProvider = GeneralLocation.CENTER_LEFT,
+                            precisionDescriber = Press.FINGER
+                        )
+                    } else {
+                        ViewActions.swipeLeft()
+                    }
+                )
+            ),
             name = "SwipeLeft with '${elementInfo.name}'",
             type = EspressoActionType.SWIPE_LEFT,
             description = "${interaction.simpleClassName()} action '${EspressoActionType.SWIPE_LEFT}' of '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
@@ -309,7 +383,24 @@ class UltronEspressoInteraction<T>(
 
     fun swipeRight() = apply {
         executeAction(
-            operationBlock = getInteractionActionBlock(ViewActions.swipeRight()),
+            operationBlock = getInteractionActionBlock(
+                ViewActions.actionWithAssertions(
+                    if (autoScrollForAction) {
+                        UltronSwipeAction(
+                            swiper = Swipe.FAST,
+                            startCoordinatesProvider = GeneralLocation.translate(
+                                GeneralLocation.CENTER_LEFT,
+                                EDGE_FUZZ_FACTOR,
+                                0f
+                            ),
+                            endCoordinatesProvider = GeneralLocation.CENTER_RIGHT,
+                            precisionDescriber = Press.FINGER
+                        )
+                    } else {
+                        ViewActions.swipeRight()
+                    }
+                )
+            ),
             name = "SwipeRight with '${elementInfo.name}'",
             type = EspressoActionType.SWIPE_RIGHT,
             description = "${interaction.simpleClassName()} action '${EspressoActionType.SWIPE_RIGHT}' of '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
@@ -318,7 +409,24 @@ class UltronEspressoInteraction<T>(
 
     fun swipeUp() = apply {
         executeAction(
-            operationBlock = getInteractionActionBlock(ViewActions.swipeUp()),
+            operationBlock = getInteractionActionBlock(
+                ViewActions.actionWithAssertions(
+                    if (autoScrollForAction) {
+                        UltronSwipeAction(
+                            swiper = Swipe.FAST,
+                            startCoordinatesProvider = GeneralLocation.translate(
+                                GeneralLocation.BOTTOM_CENTER,
+                                0f,
+                                -EDGE_FUZZ_FACTOR
+                            ),
+                            endCoordinatesProvider = GeneralLocation.TOP_CENTER,
+                            precisionDescriber = Press.FINGER
+                        )
+                    } else {
+                        ViewActions.swipeUp()
+                    }
+                )
+            ),
             name = "SwipeUp with '${elementInfo.name}'",
             type = EspressoActionType.SWIPE_UP,
             description = "${interaction.simpleClassName()} action '${EspressoActionType.SWIPE_UP}' of '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
@@ -327,7 +435,24 @@ class UltronEspressoInteraction<T>(
 
     fun swipeDown() = apply {
         executeAction(
-            operationBlock = getInteractionActionBlock(ViewActions.swipeDown()),
+            operationBlock = getInteractionActionBlock(
+                ViewActions.actionWithAssertions(
+                    if (autoScrollForAction) {
+                        UltronSwipeAction(
+                            swiper = Swipe.FAST,
+                            startCoordinatesProvider = GeneralLocation.translate(
+                                GeneralLocation.TOP_CENTER,
+                                0f,
+                                EDGE_FUZZ_FACTOR
+                            ),
+                            endCoordinatesProvider = GeneralLocation.BOTTOM_CENTER,
+                            precisionDescriber = Press.FINGER
+                        )
+                    } else {
+                        ViewActions.swipeDown()
+                    }
+                )
+            ),
             name = "SwipeDown with '${elementInfo.name}'",
             type = EspressoActionType.SWIPE_DOWN,
             description = "${interaction.simpleClassName()} action '${EspressoActionType.SWIPE_DOWN}' of '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
@@ -381,6 +506,12 @@ class UltronEspressoInteraction<T>(
         val actionParams = params ?: getDefaultActionParams()
         val viewAction = object : AnonymousViewAction(actionParams) {
             override fun perform(uiController: UiController, view: View) {
+                if (autoScrollForAction) {
+                    val rect = Rect()
+                    view.getDrawingRect(rect)
+                    view.requestRectangleOnScreen(rect, true) // immediate is set to true, scrolling will not be animated.
+                    uiController.loopMainThreadUntilIdle()
+                }
                 block(uiController, view)
                 uiController.loopMainThreadUntilIdle()
             }
@@ -437,6 +568,22 @@ class UltronEspressoInteraction<T>(
             name = "IsDisplayed of '${elementInfo.name}'",
             type = EspressoAssertionType.IS_DISPLAYED,
             description = "${interaction.simpleClassName()} assertion '${EspressoAssertionType.IS_DISPLAYED}' of '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
+        )
+    }
+
+    /**
+     * Assert ui element has effective visibility = VISIBLE
+     */
+    fun isVisible() = apply {
+        executeAssertion(
+            operationBlock = getInteractionAssertionBlock(
+                ViewMatchers.withEffectiveVisibility(
+                    ViewMatchers.Visibility.VISIBLE
+                )
+            ),
+            name = "IsVisible of '${elementInfo.name}'",
+            type = EspressoAssertionType.IS_VISIBLE,
+            description = "${interaction.simpleClassName()} assertion '${EspressoAssertionType.IS_VISIBLE}' of '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getAssertionTimeout()} ms"
         )
     }
 

@@ -1,16 +1,17 @@
 object Versions {
-    const val kotlin = "2.1.21"
+    const val kotlin = "2.2.21"
     const val androidToolsBuildGradle = "8.3.1"
     const val androidMavenGradlePlugin = "2.1"
     const val dokkaPlugin = "1.9.20"
 
     const val recyclerView = "1.2.1"
-    const val espresso = "3.6.1"
+    const val espresso = "3.7.0"
     const val uiautomator = "2.2.0"
     const val accessibility = "4.0.0"
     const val hamcrestCore = "2.2"
     const val compose = "1.7.0"
-    const val androidXTest = "1.4.0"
+    const val composeUiTest = "1.10.0"
+    const val androidXTest = "1.7.0"
     const val junit = "4.13.2"
     const val allure = "2.4.0"
     //sample-app
@@ -27,7 +28,7 @@ object Versions {
     const val mockito = "3.9.0"
     const val activityCompose = "1.8.2"
 
-    const val junitExt = "1.1.2"
+    const val junitExt = "1.3.0"
 }
 
 object Plugins {
@@ -49,7 +50,7 @@ object Libs {
     val hamcrestCore = "org.hamcrest:hamcrest-core:${Versions.hamcrestCore}"
     val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
     val androidXRunner = "androidx.test:runner:${Versions.androidXTest}"
-    val composeUiTest = "androidx.compose.ui:ui-test-junit4:${Versions.compose}"
+    val composeUiTest = "androidx.compose.ui:ui-test-junit4:${Versions.composeUiTest}"
     val junit = "junit:junit:${Versions.junit}"
     // allure
     val allureCommon = "io.qameta.allure:allure-kotlin-commons:${Versions.allure}"
