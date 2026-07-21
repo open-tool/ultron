@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,7 +13,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="com.atiurin.sampleapp.activity.SplashActivity"
+            android:name=".activity.XmlAndComposeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.SplashActivity"
             android:exported="true"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -22,52 +26,52 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.atiurin.sampleapp.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.atiurin.sampleapp.activity.UiBlockActivity"
+            android:name=".activity.UiBlockActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.atiurin.sampleapp.activity.ChatActivity"
+            android:name=".activity.ChatActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.atiurin.sampleapp.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name="com.atiurin.sampleapp.activity.ProfileActivity"
+            android:name=".activity.ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.atiurin.sampleapp.activity.UiElementsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name="com.atiurin.sampleapp.activity.WebViewActivity"
+            android:name=".activity.UiElementsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.atiurin.sampleapp.activity.CustomClicksActivity"
+            android:name=".activity.WebViewActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.atiurin.sampleapp.activity.ComposeElementsActivity"
+            android:name=".activity.CustomClicksActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.atiurin.sampleapp.activity.ComposeRouterActivity"
+            android:name=".activity.ComposeElementsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.atiurin.sampleapp.activity.ComposeListActivity"
+            android:name=".activity.ComposeRouterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.atiurin.sampleapp.activity.ComposeListWithPositionTestTagActivity"
+            android:name=".activity.ComposeListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.atiurin.sampleapp.activity.ComposeSecondActivity"
+            android:name=".activity.ComposeListWithPositionTestTagActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.atiurin.sampleapp.activity.BusyActivity"
+            android:name=".activity.ComposeSecondActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.BusyActivity"
             android:exported="true"
             android:theme="@style/WhiteBackgroundTheme">
-            <intent-filter android:priority="-100" >
+            <intent-filter android:priority="-100">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

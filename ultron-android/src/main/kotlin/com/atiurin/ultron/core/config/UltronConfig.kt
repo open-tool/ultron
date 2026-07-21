@@ -175,6 +175,7 @@ object UltronConfig {
                     AmbiguousViewMatcherException::class.java,
                     UltronOperationException::class.java
                 )
+                var isExceptionAllowed: (exception: Throwable) -> Boolean = { false }
 
                 val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
                     UltronCommonConfig.testContext.wrapAnalyzerIfSoftAssertion(resultAnalyzer).analyze(it)
@@ -196,6 +197,7 @@ object UltronConfig {
                     AssertionFailedError::class.java,
                     AmbiguousViewMatcherException::class.java
                 )
+                var isExceptionAllowed: (exception: Throwable) -> Boolean = { false }
                 val resultHandler: (EspressoOperationResult<UltronEspressoOperation>) -> Unit = {
                     UltronCommonConfig.testContext.wrapAnalyzerIfSoftAssertion(resultAnalyzer).analyze(it)
                 }
@@ -212,6 +214,9 @@ object UltronConfig {
                     AssertionFailedError::class.java,
                     RuntimeException::class.java
                 )
+
+                var isExceptionAllowed: (exception: Throwable) -> Boolean = { false }
+
                 val resultHandler: (WebOperationResult<WebInteractionOperation<*>>) -> Unit = {
                     UltronCommonConfig.testContext.wrapAnalyzerIfSoftAssertion(resultAnalyzer).analyze(it)
                 }
@@ -261,6 +266,7 @@ object UltronConfig {
                     UiObjectNotFoundException::class.java,
                     NullPointerException::class.java,
                 )
+                var isExceptionAllowed: (exception: Throwable) -> Boolean = { false }
                 val resultHandler: (UiAutomatorOperationResult<UiAutomatorUiSelectorOperation>) -> Unit = {
                     UltronCommonConfig.testContext.wrapAnalyzerIfSoftAssertion(Espresso.resultAnalyzer).analyze(it)
                 }
@@ -278,6 +284,7 @@ object UltronConfig {
                     UiObjectNotFoundException::class.java,
                     NullPointerException::class.java,
                 )
+                var isExceptionAllowed: (exception: Throwable) -> Boolean = { false }
                 val resultHandler: (UiAutomatorOperationResult<UiAutomatorOperation>) -> Unit = {
                     UltronCommonConfig.testContext.wrapAnalyzerIfSoftAssertion(Espresso.resultAnalyzer).analyze(it)
                 }

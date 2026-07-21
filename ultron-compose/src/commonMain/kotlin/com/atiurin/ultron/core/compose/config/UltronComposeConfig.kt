@@ -76,6 +76,8 @@ object UltronComposeConfig {
         UltronException::class,
     )
 
+    var isExceptionAllowed: (exception: Throwable) -> Boolean = { false }
+
     @Deprecated(
         message = "Listeners storage moved to UltronCommonConfig",
         replaceWith = ReplaceWith(expression = "UltronCommonConfig.addListener(Listener)")

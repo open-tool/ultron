@@ -37,6 +37,14 @@ UltronComposeConfig.apply {
     useUnmergedTree = true // set up this value as a default for all SemanticNodeInteractions
 }
 ```
+Provide settings for allowed exceptions
+```kotlin
+UltronComposeConfig.allowedExceptions.add(SomeException::class)
+```
+for detailed exception analysis
+```kotlin
+UltronComposeConfig.isExceptionAllowed = { exception -> /*some boolean logic*/ }
+```
 
 ### UltronCommonConfig
 ***
@@ -93,6 +101,11 @@ Provide settings for allowed exceptions and result handlers.
 UltronConfig.Espresso.ViewActionConfig.allowedExceptions.add(CustomViewException::class.java)
 UltronConfig.Espresso.ViewAssertionConfig.allowedExceptions.add(CustomViewException::class.java)
 ```
+for detailed exception analysis
+```kotlin
+UltronConfig.Espresso.ViewActionConfig.isExceptionAllowed = { exception -> /*some boolean logic*/ }
+UltronConfig.Espresso.ViewAssertionConfig.isExceptionAllowed = { exception -> /*some boolean logic*/ }
+```
 
 - `UltronConfig.Espresso.WebInteractionOperationConfig` nested Object:
 
@@ -101,6 +114,10 @@ Provides settings for allowed exceptions and result handlers.
 
 ```kotlin
 UltronConfig.Espresso.WebInteractionOperationConfig.allowedExceptions.add(CustomJSException::class.java)
+```
+for detailed exception analysis
+```kotlin
+UltronConfig.Espresso.WebInteractionOperationConfig.isExceptionAllowed = { exception -> /*some boolean logic*/ }
 ```
 
 - `UltronConfig.UiAutomator` nested Object:
