@@ -12,4 +12,8 @@ internal class EspressoActionExecutor(
     override fun getAllowedExceptions(operation: Operation): List<KClass<out Throwable>> {
         return UltronConfig.Espresso.ViewActionConfig.allowedExceptions.map { it.kotlin }
     }
+
+    override var isExceptionAllowed: (exception: Throwable) -> Boolean = { exception ->
+        UltronConfig.Espresso.ViewActionConfig.isExceptionAllowed(exception)
+    }
 }

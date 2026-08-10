@@ -6,7 +6,7 @@ import com.atiurin.ultron.core.config.UltronConfig
 import kotlin.reflect.KClass
 
 internal class WebInteractionOperationExecutor<T>(
-    operation: WebInteractionOperation<T>
+    operation: WebInteractionOperation<T>,
 ) : WebOperationExecutor<WebInteractionOperation<T>>(operation) {
     override fun getAllowedExceptions(operation: Operation): List<KClass<out Throwable>> {
         return UltronConfig.Espresso.WebInteractionOperationConfig.allowedExceptions.map {
@@ -16,4 +16,8 @@ internal class WebInteractionOperationExecutor<T>(
 
     override val descriptor: ResultDescriptor
         get() = ResultDescriptor()
+
+    override var isExceptionAllowed: (exception: Throwable) -> Boolean = { exception ->
+        UltronConfig.Espresso.WebInteractionOperationConfig.isExceptionAllowed.invoke(exception)
+    }
 }

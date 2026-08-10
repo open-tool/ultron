@@ -22,6 +22,9 @@ internal class ComposeOperationExecutor(
             UltronComposeConfig.doBetweenOperationRetry(operation, testEnvironment)
         }
     }
+    override var isExceptionAllowed: (exception: Throwable) -> Boolean = { exception ->
+        UltronComposeConfig.isExceptionAllowed(exception)
+    }
     override fun generateResult(
         success: Boolean,
         exceptions: List<Throwable>,
