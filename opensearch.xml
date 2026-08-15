@@ -4,8 +4,8 @@
   <ShortName>Ultron</ShortName>
   <Description>Search Ultron</Description>
   <InputEncoding>UTF-8</InputEncoding>
-  <Image width="16" height="16" type="image/x-icon">https://ultron.github.io/ultron/img/favicon.ico</Image>
-  <Url type="text/html" method="get" template="https://ultron.github.io/ultron/search?q={searchTerms}"/>
-  <Url type="application/opensearchdescription+xml" rel="self" template="https://ultron.github.io/ultron/opensearch.xml" />
-  <moz:SearchForm>https://ultron.github.io/ultron/</moz:SearchForm>
+  <Image width="16" height="16" type="image/x-icon">https://open-tool.github.io/ultron/img/favicon.ico</Image>
+  <Url type="text/html" method="get" template="https://open-tool.github.io/ultron/search?q={searchTerms}"/>
+  <Url type="application/opensearchdescription+xml" rel="self" template="https://open-tool.github.io/ultron/opensearch.xml" />
+  <moz:SearchForm>https://open-tool.github.io/ultron/</moz:SearchForm>
 </OpenSearchDescription>
