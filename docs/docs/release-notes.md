@@ -7,6 +7,14 @@ title: Release notes
 
 This page summarizes Ultron releases from 2.5.1 onward. Older releases are available on the [GitHub Releases](https://github.com/open-tool/ultron/releases) page.
 
+## Version 2.6.4
+
+_Released August 15, 2026_ · [GitHub release](https://github.com/open-tool/ultron/releases/tag/2.6.4) · [Full changelog](https://github.com/open-tool/ultron/compare/2.6.3...2.6.4)
+
+- Fixed UiAutomator backend regressions: `legacySetText` no longer crashes on editable fields, `UltronConfig.UiAutomator.uiDevice` is initialized lazily, and hierarchy dumps are more resilient. [#138](https://github.com/open-tool/ultron/pull/138)
+- Fixed Allure screenshot attachment to fail gracefully instead of attaching an empty file when both screenshoters fail.
+- Updated AndroidX Test dependencies: Espresso 3.7.0, androidx.test 1.7.0, junit-ext 1.3.0. [#136](https://github.com/open-tool/ultron/pull/136)
+
 ## Version 2.6.3
 
 _Released June 15, 2026_ · [GitHub release](https://github.com/open-tool/ultron/releases/tag/2.6.3) · [Full changelog](https://github.com/open-tool/ultron/compare/2.6.2...2.6.3)
