@@ -13,6 +13,7 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
     val pollingTimeout: Long
     val descriptor: ResultDescriptor
     var doBetweenOperationRetry: () -> Unit
+    var isExceptionAllowed: (exception: Throwable) -> Boolean
 
     fun getAllowedExceptions(operation: Operation): List<KClass<out Throwable>>
 
@@ -53,6 +54,13 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
         return exceptionClasses.any { it == exceptionClass }
     }
 
+    fun isRetryAllowed(
+        exception: Throwable,
+        exceptionClasses: List<KClass<out Throwable>>
+    ): Boolean {
+        return isExceptionInList(exception, exceptionClasses) || isExceptionAllowed.invoke(exception)
+    }
+
     fun execOperation(operationDuration: Long, previousResult: OpRes?): OpRes {
         var isSuccess: Boolean = false
         val description = StringBuilder()
@@ -69,7 +77,7 @@ interface OperationExecutor<Op : Operation, OpRes : OperationResult<Op>> {
                     if (!isSuccess) {
                         val error =
                             result.exception ?: UltronException("Create an issue to ULTRON project")
-                        if (isExceptionInList(error, getAllowedExceptions(operation))) {
+                        if (isRetryAllowed(error, getAllowedExceptions(operation))) {
                             if (!exceptions.any { it.simpleClassName() == error.simpleClassName() && it.message == error.message }) {
                                 exceptions.add(error)
                             }

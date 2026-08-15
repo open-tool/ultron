@@ -11,4 +11,8 @@ class UiAutomatorUiSelectorOperationExecutor(
     override fun getAllowedExceptions(operation: Operation): List<KClass<out Throwable>> {
         return UltronConfig.UiAutomator.UiObjectConfig.allowedExceptions.map { it.kotlin }
     }
+
+    override var isExceptionAllowed: (exception: Throwable) -> Boolean = { exception ->
+        UltronConfig.UiAutomator.UiObjectConfig.isExceptionAllowed(exception)
+    }
 }
