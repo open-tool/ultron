@@ -20,6 +20,16 @@ html_escape() {
     -e 's/>/\&gt;/g'
 }
 
+# Telegram accepts a small HTML subset, so inline Markdown from the notes has
+# to be converted instead of being sent verbatim. Runs after html_escape, whose
+# entities do not collide with the Markdown delimiters matched here.
+markdown_inline_to_html() {
+  sed -E \
+    -e 's/\[([^]]+)\]\(([^)]+)\)/<a href="\2">\1<\/a>/g' \
+    -e 's/`([^`]+)`/<code>\1<\/code>/g' \
+    -e 's/\*\*([^*]+)\*\*/<b>\1<\/b>/g'
+}
+
 extract_section() {
   local file="$1"
   local version="$2"
@@ -95,7 +105,7 @@ case "$format" in
     if [[ -n "$highlights" ]]; then
       while IFS= read -r line; do
         [[ -z "$line" ]] && continue
-        printf '• %s\n' "$(printf '%s' "$line" | html_escape)"
+        printf '• %s\n' "$(printf '%s' "$line" | html_escape | markdown_inline_to_html)"
       done <<<"$highlights"
     else
       printf '• See the GitHub Release for details.\n'

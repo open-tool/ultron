@@ -59,6 +59,18 @@ assert_version_file() {
   [[ "$found" == "$version" ]] || fail "VERSION_NAME is '$found', expected '$version'"
 }
 
+release_notes_section() {
+  local file="$1"
+  local version="$2"
+  awk -v version="$version" '
+    $0 == "## Version " version { capture = 1; next }
+    capture && /^## Version / { exit }
+    capture { print }
+  ' "$file"
+}
+
+# The same highlights are published to the docs site, the GitHub Release body
+# and the Telegram announcement, so unreviewed placeholders must never merge.
 assert_release_notes() {
   local repo="$1"
   local version="$2"
@@ -66,6 +78,15 @@ assert_release_notes() {
   file="$(repo_file "$repo" "docs/docs/release-notes.md")"
   [[ -f "$file" ]] || fail "missing docs/docs/release-notes.md"
   grep -qx "## Version $version" "$file" || fail "missing release notes heading for $version"
+
+  local section
+  section="$(release_notes_section "$file" "$version")"
+  local highlights
+  highlights="$(printf '%s\n' "$section" | grep '^- ' || true)"
+  [[ -n "$highlights" ]] || fail "release notes for $version contain no highlights"
+  if printf '%s\n' "$highlights" | grep -qi 'TODO'; then
+    fail "release notes for $version still contain a TODO highlight"
+  fi
 }
 
 assert_branch_matches() {
