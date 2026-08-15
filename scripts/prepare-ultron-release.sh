@@ -8,7 +8,10 @@ VALIDATOR="$DEFAULT_REPO/scripts/release/validate-release.sh"
 usage() {
   cat >&2 <<'EOF'
 Usage:
-  scripts/prepare-ultron-release.sh [--dry-run] [--repo <repo>] <version>
+  scripts/prepare-ultron-release.sh [--dry-run] [--control-desc] [--repo <repo>] <version>
+
+  --control-desc  review every drafted highlight interactively and optionally
+                  add a free-form release comment
 
 Creates a reviewable release PR. It never publishes Maven artifacts, creates
 tags, creates GitHub Releases, or sends Telegram messages.
@@ -123,20 +126,156 @@ collect_changes() {
   '
 }
 
+pull_request_changes() {
+  local repo="$1"
+  local previous="$2"
+  git -C "$repo" rev-parse -q --verify "$previous^{commit}" >/dev/null 2>&1 || return 0
+  collect_changes "$repo" "$previous..HEAD" | awk -F '\t' '$1 != ""'
+}
+
+# The pull request link is always derived from the number, never edited.
+format_highlight_line() {
+  local number="$1"
+  local title="$2"
+  title="${title%"${title##*[![:space:]]}"}"
+  case "$title" in
+    *.|*!|*\?) ;;
+    *) title="$title." ;;
+  esac
+  if [[ -n "$number" ]]; then
+    printf '%s [#%s](%s/pull/%s)' "- $title" "$number" "$REPO_URL" "$number"
+  else
+    printf '%s' "- $title"
+  fi
+}
+
 format_highlights() {
   local repo="$1"
   local previous="$2"
-  local range="$previous..HEAD"
-  git -C "$repo" rev-parse -q --verify "$previous^{commit}" >/dev/null 2>&1 || return 0
-  collect_changes "$repo" "$range" | awk -v repo_url="$REPO_URL" '
-    BEGIN { FS = "\t" }
-    $1 == "" { next }
-    {
-      title = $2
-      if (title !~ /[.!?]$/) title = title "."
-      print "- " title " [#" $1 "](" repo_url "/pull/" $1 ")"
-    }
-  '
+  local number title
+  while IFS=$'\t' read -r number title; do
+    [[ -n "$title" ]] || continue
+    format_highlight_line "$number" "$title"
+    printf '\n'
+  done < <(pull_request_changes "$repo" "$previous")
+}
+
+# Prompts talk to the terminal directly, so the surrounding command
+# substitutions and pipes do not swallow the interaction. Both endpoints are
+# overridable to keep the interactive flow testable.
+PROMPT_INPUT="${RELEASE_PROMPT_INPUT:-/dev/tty}"
+PROMPT_OUTPUT="${RELEASE_PROMPT_OUTPUT:-/dev/tty}"
+
+prompt_say() {
+  printf '%s' "$1" >>"$PROMPT_OUTPUT"
+}
+
+prompt_tty() {
+  local answer=""
+  prompt_say "$1"
+  IFS= read -r answer <&3 || true
+  printf '%s' "$answer"
+}
+
+require_tty() {
+  [[ -r "$PROMPT_INPUT" ]] || fail "--control-desc requires an interactive terminal"
+}
+
+# Asks about every change the draft would contain. Answers: keep it as drafted,
+# replace the description, or drop the entry. The pull request reference is not
+# editable, only the wording in front of it.
+review_highlights() {
+  local repo="$1"
+  local previous="$2"
+  local -a lines=()
+  local number title answer replacement
+
+  {
+    printf '\n'
+    printf 'Reviewing drafted release highlights.\n'
+    printf 'For each entry: [Enter] keep, "e" edit description, "d" drop.\n'
+  } >>"$PROMPT_OUTPUT"
+
+  while IFS=$'\t' read -r number title; do
+    [[ -n "$title" ]] || continue
+    printf '\n#%s %s\n' "$number" "$title" >>"$PROMPT_OUTPUT"
+    answer="$(prompt_tty 'keep / edit / drop [K/e/d]: ')"
+    case "$answer" in
+      d|D)
+        printf '  dropped\n' >>"$PROMPT_OUTPUT"
+        continue
+        ;;
+      e|E)
+        replacement="$(prompt_tty '  new description: ')"
+        while [[ -z "${replacement//[[:space:]]/}" ]]; do
+          printf '  description must not be empty\n' >>"$PROMPT_OUTPUT"
+          replacement="$(prompt_tty '  new description: ')"
+        done
+        title="$replacement"
+        ;;
+    esac
+    lines+=("$(format_highlight_line "$number" "$title")")
+  done < <(pull_request_changes "$repo" "$previous")
+
+  # Commits without a pull request are excluded by default; they are usually
+  # release plumbing rather than user-facing changes.
+  # Only the title is read here: a leading tab would be swallowed as IFS
+  # whitespace, so the empty number column is dropped by awk instead.
+  while IFS= read -r title; do
+    [[ -n "$title" ]] || continue
+    printf '\n(no pull request) %s\n' "$title" >>"$PROMPT_OUTPUT"
+    answer="$(prompt_tty 'add to release notes? [y/N]: ')"
+    case "$answer" in
+      y|Y)
+        replacement="$(prompt_tty "  description [$title]: ")"
+        [[ -n "${replacement//[[:space:]]/}" ]] && title="$replacement"
+        lines+=("$(format_highlight_line "" "$title")")
+        ;;
+    esac
+  done < <(collect_changes "$repo" "$previous..HEAD" --first-parent --no-merges | awk -F '\t' '$1 == "" { print $2 }')
+
+  # Guarded expansion keeps this working with the bash 3.2 shipped on macOS.
+  if [[ -n "${lines[*]+set}" ]]; then
+    printf '%s\n' "${lines[@]}"
+  fi
+}
+
+# An optional free-form paragraph shown above the highlights. It reaches the
+# docs site, the GitHub Release body and the Telegram announcement.
+review_release_comment() {
+  local comment
+  {
+    printf '\n'
+    printf 'Optional release comment, shown above the highlights.\n'
+    printf 'Leave empty to skip it.\n'
+  } >>"$PROMPT_OUTPUT"
+  comment="$(prompt_tty 'comment: ')"
+  if [[ -n "${comment//[[:space:]]/}" ]]; then
+    printf '%s' "$comment"
+  fi
+}
+
+build_release_body() {
+  local repo="$1"
+  local previous="$2"
+  RELEASE_NOTE=""
+  if [[ "$control_desc_mode" == "1" ]]; then
+    require_tty
+    # A single descriptor keeps the read position across all prompts.
+    exec 3<"$PROMPT_INPUT"
+    RELEASE_HIGHLIGHTS="$(review_highlights "$repo" "$previous")"
+    RELEASE_NOTE="$(review_release_comment)"
+    exec 3<&-
+    if [[ -z "$RELEASE_HIGHLIGHTS" ]]; then
+      fail "no release highlights were kept; release notes cannot be empty"
+    fi
+  else
+    RELEASE_HIGHLIGHTS="$(format_highlights "$repo" "$previous")"
+    if [[ -z "$RELEASE_HIGHLIGHTS" ]]; then
+      RELEASE_HIGHLIGHTS="- TODO: Replace with reviewed release highlight."
+    fi
+  fi
+  export RELEASE_HIGHLIGHTS RELEASE_NOTE
 }
 
 # Only the first-parent chain is walked here: commits that belong to a merged
@@ -153,9 +292,8 @@ insert_release_notes() {
   local repo="$1"
   local version="$2"
   local previous="$3"
-  # History is read from the real checkout, which differs from the target
-  # directory during a dry run.
-  local git_repo="${4:-$repo}"
+  # RELEASE_HIGHLIGHTS and RELEASE_NOTE are prepared once by build_release_body,
+  # so the interactive review never runs twice.
   local file="$repo/docs/docs/release-notes.md"
   local date_text
   date_text="$(release_date)"
@@ -164,18 +302,17 @@ insert_release_notes() {
     fail "release notes already contain version $version"
   fi
 
-  RELEASE_HIGHLIGHTS="$(format_highlights "$git_repo" "$previous")"
-  if [[ -z "$RELEASE_HIGHLIGHTS" ]]; then
-    RELEASE_HIGHLIGHTS="- TODO: Replace with reviewed release highlight."
-  fi
-  export RELEASE_HIGHLIGHTS
-
   awk -v version="$version" -v previous="$previous" -v date_text="$date_text" '
-    function print_section() {
+    function print_section(  note) {
       print "## Version " version
       print ""
       print "_Released " date_text "_ · [GitHub release](https://github.com/open-tool/ultron/releases/tag/" version ") · [Full changelog](https://github.com/open-tool/ultron/compare/" previous "..." version ")"
       print ""
+      note = ENVIRON["RELEASE_NOTE"]
+      if (note != "") {
+        print note
+        print ""
+      }
       count = split(ENVIRON["RELEASE_HIGHLIGHTS"], highlights, "\n")
       for (i = 1; i <= count; i++) {
         if (highlights[i] != "") print highlights[i]
@@ -195,7 +332,6 @@ insert_release_notes() {
     }
   ' "$file" >"$file.tmp"
   mv "$file.tmp" "$file"
-  unset RELEASE_HIGHLIGHTS
 }
 
 write_pr_body() {
@@ -269,6 +405,8 @@ print_unlinked_changes() {
   local repo="$1"
   local previous="$2"
   local unlinked
+  # Already offered entry by entry during the interactive review.
+  [[ "$control_desc_mode" == "1" ]] && return 0
   unlinked="$(unlinked_changes "$repo" "$previous")"
   [[ -n "$unlinked" ]] || return 0
   echo
@@ -286,7 +424,7 @@ dry_run() {
   cp "$repo/gradle.properties" "$tmp/gradle.properties"
   cp "$repo/docs/docs/release-notes.md" "$tmp/docs/docs/release-notes.md"
   update_version_file "$tmp" "$version"
-  insert_release_notes "$tmp" "$version" "$previous" "$repo"
+  insert_release_notes "$tmp" "$version" "$previous"
   write_pr_body "$repo" "$version" "$previous" "$tmp/pr-body.md"
 
   echo "Release $version dry run"
@@ -307,6 +445,7 @@ dry_run() {
 
 repo="$DEFAULT_REPO"
 dry_run_mode=0
+control_desc_mode=0
 version=""
 
 while [[ $# -gt 0 ]]; do
@@ -317,6 +456,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --dry-run)
       dry_run_mode=1
+      shift
+      ;;
+    --control-desc)
+      control_desc_mode=1
       shift
       ;;
     -h|--help)
@@ -348,6 +491,7 @@ assert_master_ready "$repo"
 release_branch="release/$version"
 assert_release_branch_absent "$repo" "$release_branch"
 previous="$(previous_release_ref "$repo")"
+build_release_body "$repo" "$previous"
 
 if [[ "$dry_run_mode" == "1" ]]; then
   dry_run "$repo" "$version" "$previous"

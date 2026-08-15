@@ -166,4 +166,39 @@ assert_output_contains "telegram render" '<code>setText</code>' "$telegram_outpu
 assert_output_contains "telegram render" '<a href="https://github.com/open-tool/ultron/pull/42">#42</a>' "$telegram_output"
 assert_output_not_contains "telegram render" '\[#42\]' "$telegram_output"
 
+# The checks above edited tracked files; the script requires a clean worktree.
+git -C "$work_repo" checkout --quiet -- .
+
+# Interactive review: edit the drafted description, skip the plumbing commit,
+# and add a free-form release comment.
+answers="$SANDBOX/answers.txt"
+printf 'e\nImprove failure handling with allowed exceptions config\nn\nShipping a smaller maintenance release.\n' >"$answers"
+control_output="$(RELEASE_PROMPT_INPUT="$answers" RELEASE_PROMPT_OUTPUT=/dev/null \
+  "$ROOT_DIR/scripts/prepare-ultron-release.sh" --dry-run --control-desc --repo "$work_repo" 2.0.0)"
+assert_output_contains "control-desc" \
+  "- Improve failure handling with allowed exceptions config. \[#42\](https://github.com/open-tool/ultron/pull/42)" \
+  "$control_output"
+# The drafted wording is replaced, the pull request reference is not editable.
+assert_output_not_contains "control-desc" "- Retry allowed config" "$control_output"
+assert_output_contains "control-desc" "Shipping a smaller maintenance release." "$control_output"
+
+# Keeping every default answer must reproduce the non-interactive draft.
+printf '\n\n\n' >"$answers"
+control_default_output="$(RELEASE_PROMPT_INPUT="$answers" RELEASE_PROMPT_OUTPUT=/dev/null \
+  "$ROOT_DIR/scripts/prepare-ultron-release.sh" --dry-run --control-desc --repo "$work_repo" 2.0.0)"
+assert_output_contains "control-desc defaults" "- Retry allowed config. \[#42\]" "$control_default_output"
+
+# Dropping every entry must fail instead of producing empty release notes.
+printf 'd\nn\n\n' >"$answers"
+if RELEASE_PROMPT_INPUT="$answers" RELEASE_PROMPT_OUTPUT=/dev/null \
+  "$ROOT_DIR/scripts/prepare-ultron-release.sh" --dry-run --control-desc --repo "$work_repo" 2.0.0 >/dev/null 2>&1; then
+  fail "prepare-ultron-release.sh accepted empty release notes"
+fi
+
+# The release comment has to reach Telegram too, not only the docs section.
+printf '# Release notes\n\n## Version 2.0.0\n\nShipping a smaller maintenance release.\n\n- Fixed a crash. [#42](https://github.com/open-tool/ultron/pull/42)\n' \
+  >"$work_repo/docs/docs/release-notes.md"
+telegram_note="$("$ROOT_DIR/scripts/release/render-release-content.sh" --repo "$work_repo" --version 2.0.0 --format telegram-html)"
+assert_output_contains "telegram note" "Shipping a smaller maintenance release." "$telegram_note"
+
 echo "release workflow tests passed"

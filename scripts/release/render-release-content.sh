@@ -54,6 +54,18 @@ extract_highlights() {
   '
 }
 
+# The optional free-form release comment: every section line that is neither the
+# metadata line nor a highlight.
+extract_note() {
+  awk '
+    /^_Released/ { next }
+    /^- / { next }
+    /^[[:space:]]*$/ { next }
+    /^## / { next }
+    { print }
+  '
+}
+
 repo="."
 version=""
 format=""
@@ -100,6 +112,14 @@ case "$format" in
   telegram-html)
     release_url="https://github.com/open-tool/ultron/releases/tag/$version"
     printf '<b>Ultron %s</b>\n\n' "$(printf '%s' "$version" | html_escape)"
+    note="$(printf '%s\n' "$section" | extract_note)"
+    if [[ -n "$note" ]]; then
+      while IFS= read -r line; do
+        [[ -z "$line" ]] && continue
+        printf '%s\n' "$(printf '%s' "$line" | html_escape | markdown_inline_to_html)"
+      done <<<"$note"
+      printf '\n'
+    fi
     printf '<b>Highlights</b>\n'
     highlights="$(printf '%s\n' "$section" | extract_highlights | sed 's/^- //')"
     if [[ -n "$highlights" ]]; then
