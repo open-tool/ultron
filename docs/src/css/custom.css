@@ -20,26 +20,47 @@
 
 :root {
   --ifm-color-primary: #233a60;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-color-primary-dark: #1f3456;
+  --ifm-color-primary-darker: #1d3151;
+  --ifm-color-primary-darkest: #182843;
+  --ifm-color-primary-light: #27406a;
+  --ifm-color-primary-lighter: #29436f;
+  --ifm-color-primary-lightest: #2f4d7d;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  /* Ultron brand tokens */
+  --ultron-navy: #233a60;
+  --ultron-accent: #a31d1d;
+  --ultron-accent-soft: rgba(163, 29, 29, 0.1);
+  --ultron-surface: #ffffff;
+  --ultron-surface-alt: #f5f7fa;
+  --ultron-border: rgba(35, 58, 96, 0.14);
+  --ultron-muted: #56617a;
+  --ultron-hero-glow: rgba(35, 58, 96, 0.14);
+  --ultron-grid: rgba(35, 58, 96, 0.07);
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #5a85cf;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
+  --ifm-color-primary: #7ba3e0;
+  --ifm-color-primary-dark: #5d8dd8;
+  --ifm-color-primary-darker: #4e83d4;
+  --ifm-color-primary-darkest: #2f66bb;
+  --ifm-color-primary-light: #99b9e8;
+  --ifm-color-primary-lighter: #a8c3ec;
+  --ifm-color-primary-lightest: #d5e2f6;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+  --ultron-navy: #7ba3e0;
+  --ultron-accent: #e86a6a;
+  --ultron-accent-soft: rgba(232, 106, 106, 0.14);
+  --ultron-surface: #1c1e21;
+  --ultron-surface-alt: #202429;
+  --ultron-border: rgba(255, 255, 255, 0.12);
+  --ultron-muted: #a3adc2;
+  --ultron-hero-glow: rgba(123, 163, 224, 0.14);
+  --ultron-grid: rgba(255, 255, 255, 0.05);
 }
 
 [data-theme='light'] img[src$='#gh-dark-mode-only'],
