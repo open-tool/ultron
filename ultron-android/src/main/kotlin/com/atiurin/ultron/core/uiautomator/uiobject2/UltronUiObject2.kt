@@ -2,7 +2,10 @@ package com.atiurin.ultron.core.uiautomator.uiobject2
 
 import android.graphics.Point
 import android.graphics.Rect
+import android.view.KeyEvent
+import android.view.accessibility.AccessibilityNodeInfo
 import androidx.annotation.IntegerRes
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.Direction
@@ -307,7 +310,7 @@ class UltronUiObject2 internal constructor(
      * */
     fun legacySetText(text: String) = apply {
         executeAction(
-            actionBlock = { uiObject2ProviderBlock()!!.legacySetText(text) },
+            actionBlock = { uiObject2ProviderBlock()!!.legacySetTextSafely(text) },
             name = "LegacySetText of ${elementInfo.name} to '$text'",
             type = UiAutomatorActionType.LEGACY_SET_TEXT,
             description = "UiObject2 action '${UiAutomatorActionType.LEGACY_SET_TEXT}' in ${elementInfo.name} to '$text' during $timeoutMs ms"
@@ -812,6 +815,49 @@ class UltronUiObject2 internal constructor(
                 )
             ), resultHandler
         )
+    }
+
+    private fun UiObject2.legacySetTextSafely(text: String) {
+        val isEditable = isEditableNode()
+        try {
+            legacySetText(text)
+        } catch (error: NullPointerException) {
+            // UiAutomator 2.2.0 can crash when its "Select all" lookup returns null.
+            if (isEditable && error.isLegacySelectAllFailure()) {
+                legacySetTextWithKeyEvents(text)
+            } else {
+                throw error
+            }
+        }
+    }
+
+    private fun UiObject2.legacySetTextWithKeyEvents(text: String) {
+        click()
+        UltronConfig.UiAutomator.uiDevice.apply {
+            waitForIdle()
+            pressKeyCode(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON)
+            pressDelete()
+            waitForIdle()
+        }
+        if (text.isNotEmpty()) {
+            InstrumentationRegistry.getInstrumentation().sendStringSync(text)
+        }
+        UltronConfig.UiAutomator.uiDevice.waitForIdle()
+    }
+
+    private fun UiObject2.isEditableNode(): Boolean {
+        return runCatching { accessibilityNodeInfo().isEditable }.getOrDefault(false)
+    }
+
+    private fun UiObject2.accessibilityNodeInfo(): AccessibilityNodeInfo {
+        val method = UiObject2::class.java.getDeclaredMethod("getAccessibilityNodeInfo")
+        method.isAccessible = true
+        return method.invoke(this) as AccessibilityNodeInfo
+    }
+
+    private fun NullPointerException.isLegacySelectAllFailure(): Boolean {
+        return message?.contains("androidx.test.uiautomator.UiObject2.click()") == true &&
+            stackTrace.any { it.className == UiObject2::class.java.name && it.methodName == "legacySetText" }
     }
 
     companion object {

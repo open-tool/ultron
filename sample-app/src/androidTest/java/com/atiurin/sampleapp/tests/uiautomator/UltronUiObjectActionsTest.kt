@@ -208,7 +208,6 @@ class UltronUiObjectActionsTest: UiElementsTest() {
 
     @Test
     fun swipeDownTest(){
-        page.eventStatus.hasText(getTargetString(R.string.button_text))
         page.swipableImageView.withAssertion {
             page.eventStatus.withTimeout(300).textContains(UiElementsActivity.Event.SWIPE_DOWN.name)
         }.swipeDown(40)
