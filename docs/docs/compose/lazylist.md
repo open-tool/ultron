@@ -40,6 +40,8 @@ object ContactsListPage : Page<ContactsListPage >() {
 ### `UltronComposeList` API
 ```kotlin
 withTimeout(timeoutMs: Long) // defines a timeout for all operations 
+withDescription(description: String) // custom list name shown in logs, exceptions and Allure steps
+registerItem { CustomListItem() } // register an item class, required for Compose Multiplatform only
 //assertions
 fun assertIsDisplayed() 
 fun assertIsNotDisplayed()
@@ -50,12 +52,17 @@ fun assertContentDescriptionContains(expected: String, option: ContentDescriptio
 fun assertNotEmpty()
 fun assertEmpty()
 fun assertVisibleItemsCount(expected: Int) 
+fun assertMatches(matcher: SemanticsMatcher)
+fun assertItemDoesNotExist(itemMatcher: SemanticsMatcher)
 
 //item providers for simple UltronComposeListItem
 fun item(matcher: SemanticsMatcher): UltronComposeListItem
 fun visibleItem(index: Int): UltronComposeListItem
 fun firstVisibleItem(): UltronComposeListItem
 fun lastVisibleItem(): UltronComposeListItem
+// position based providers, require `positionPropertyKey` (see the section below)
+fun item(position: Int): UltronComposeListItem
+fun firstItem(): UltronComposeListItem
 
 // ----- item providers for UltronComposeListItem subclasses -----
 // following methods return a generic type T which is a subclass of UltronComposeListItem
@@ -63,9 +70,16 @@ fun getItem(matcher: SemanticsMatcher): T
 fun getVisibleItem(index: Int): T
 fun getFirstVisibleItem(): T 
 fun getLastVisibleItem(): T
+// position based providers, require `positionPropertyKey`
+fun getItem(position: Int): T
+fun getFirstItem(): T
 
-//interaction provider
+//interaction providers - return UltronComposeSemanticsNodeInteraction instead of a list item
 visibleChild(matcher: SemanticsMatcher)  // provides an interaction on visible matched item
+onItem(matcher: SemanticsMatcher)        // interaction on the matched item, scrolls to it
+onVisibleItem(index: Int)                // interaction on the visible item at [index]
+onItemChild(itemMatcher: SemanticsMatcher, childMatcher: SemanticsMatcher)
+onVisibleItemChild(index: Int, childMatcher: SemanticsMatcher)
 
 //actions
 fun getVisibleItemsCount(): Int
@@ -210,8 +224,8 @@ A more stable way to find the item is to use `SemanticsMatcher`. It allows you t
 
 ```kotlin
 val someText = "Some unique text"
-lazyList.item(hasAnyDescendant(hasText(someText).withDescription(description = someText)) 
-lazyList.getItem<ComposeListItem>(hasAnyDescendant(hasText("Some unique text")) 
+lazyList.item(hasAnyDescendant(hasText(someText)).withDescription(description = someText))
+lazyList.getItem<ComposeListItem>(hasAnyDescendant(hasText("Some unique text")))
 ```
 
 ***

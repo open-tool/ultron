@@ -1,33 +1,93 @@
 .features {
+  padding: 4.5rem 0;
+  width: 100%;
+}
+
+.heading {
+  max-width: 44rem;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: var(--ultron-accent-soft);
+  color: var(--ultron-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin-bottom: 0;
+  font-size: clamp(1.6rem, 3.4vw, 2.3rem);
+  letter-spacing: -0.015em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 1.25rem;
+}
+
+/* Keep the six cards as two even rows instead of a ragged 4 + 2 */
+@media screen and (min-width: 997px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card {
   display: flex;
+  flex-direction: column;
+  padding: 1.6rem;
+  border: 1px solid var(--ultron-border);
+  border-radius: 12px;
+  background: var(--ultron-surface);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 200ms ease, box-shadow 200ms ease,
+    border-color 200ms ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 14px 30px -20px rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  color: inherit;
+}
+
+.icon {
+  display: inline-flex;
   align-items: center;
-  padding: 2rem 0;
-  width: 100%;
-}
-
-.featureSvg {
-  height: 150px;
-  width: 150px;
-  padding: 10px;
-  overflow: 'hidden';
-  display: 'flex';
   justify-content: center;
-}
-
-.imageContainer {
-  width: 150px;
-  height: 150px;
-  /* display: flex; */
-  padding: 10px;
-  margin-left: auto;
-  margin-right: auto;
-
-  /* overflow: hidden; */
-}
-
-.imageContainer img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-bottom: 1rem;
   border-radius: 10px;
+  background: var(--ultron-surface-alt);
+  border: 1px solid var(--ultron-border);
+  color: var(--ifm-color-primary);
+}
+
+.icon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.cardTitle {
+  margin-bottom: 0.5rem;
+  font-size: 1.12rem;
+}
+
+.cardDescription {
+  margin-bottom: 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--ultron-muted);
 }

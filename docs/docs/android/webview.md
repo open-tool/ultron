@@ -38,7 +38,7 @@ selectFrameByIdOrName(idOrName: String, ..): WindowReference     // selects a su
 ```
 
 ### UltronWebElement
-`UltronWebElement` has a list of factory methods that help us to create an instance of UltronWebElement. Full list is here - [UltronWebElement](https://github.com/open-tool/ultron/blob/603150ab12a703a19245ad08a48b036ce562dfd8/ultron/src/main/java/com/atiurin/ultron/core/espressoweb/webelement/UltronWebElement.kt#L311)
+`UltronWebElement` has a list of factory methods that help us to create an instance of UltronWebElement: `className`, `cssSelector`, `id`, `linkText`, `name`, `partialLinkText`, `tagName`, `xpath` and `element`. Full list is here - [UltronWebElement](https://github.com/open-tool/ultron/blob/master/ultron-android/src/main/kotlin/com/atiurin/ultron/core/espressoweb/webelement/UltronWebElement.kt)
 
 ```kotlin
 import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion.id
@@ -46,7 +46,7 @@ import com.atiurin.ultron.core.espressoweb.webelement.UltronWebElement.Companion
 
 id("text_input").webKeys("Ultron")
 className("css_button").webClick()
-xpath("some_xpath_link").hasAttribute("href", "https://github.com/alex-tiurin/ultron")
+xpath("some_xpath_link").hasAttribute("href", "https://github.com/open-tool/ultron")
 ```
 It's preferable to use `id` or `xpath` to create `UltronWebElement` instance because they provide very profitable method `hasAttribute`
 
@@ -66,7 +66,8 @@ webClick()                                    // simulates the javascript events
 containsText(String)                          // asserts that DOM element contains visible text beneath it self 
 exists()                                      // asserts that element exists in webView
 hasText(String)                               // asserts that DOM element has visible text beneath it self
-hasAttribute(String, Matcher<String>)         // assert any html attribute value
+hasAttribute(String, Matcher<String>)         // assert any html attribute value, available for `id()` and `xpath()` elements only
+hasAttribute(String, String)                  // the same with an exact expected value
 assertThat(WebAssertion)                      // use any webAssertion to assert it safely 
 
 isSuccess(block: UltronWebElement.() -> Unit) // transforms any action or assertion to Boolean value 
@@ -90,12 +91,17 @@ classNames("link").getElements()
         }
    }?.webClick()
 ```
-It has only 2 usable methods
+Its api
 
 ```kotlin
 getElements(): List<UltronWebElement>
 getSize(): Int
+//------ general ------ 
+withTimeout(timeoutMs: Long)                  // set custom timeout
+withResultHandler(resultHandlerBlock)         // provides the ability to process operation result in custom way
 ```
+
+Instances are created with the plural factory methods: `classNames`, `cssSelectors`, `ids`, `linkTexts`, `names`, `partialLinkTexts`, `tagNames`, `xpaths` and `elements`.
 ## Boolean operation result
 
 There is `isSuccess` method that allows us to get the result of any operation as boolean value. In case of false it could be executed to long (5 sec by default). So it reasonable to specify custom timeout for some operations.

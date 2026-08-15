@@ -24,7 +24,7 @@ RuleSequence + SetUps & TearDowns for tests = full control of your tests
 This rule is a modern replacement of JUnit 4 *RuleChain*. It allows to control an order of rules execution.
 
 The RuleChain is not flexible. It is unpleasant to use RuleChain especially with class inheritance. That's why
-[RuleSequence](https://github.com/alex-tiurin/ultron/blob/master/ultron/src/main/java/com/atiurin/ultron/testlifecycle/rulesequence/RuleSequence.kt)
+[RuleSequence](https://github.com/open-tool/ultron/blob/master/ultron-common/src/androidMain/kotlin/com/atiurin/ultron/testlifecycle/rulesequence/RuleSequence.kt)
 has been created.
 
 The order of rules execution depends on its addition order.
@@ -58,10 +58,10 @@ class DemoTest : BaseTest() {
 **Note**: while using `RuleSequence`(as it was with `RuleChain`) you don't need to specify `@get:Rule` annotation for other rules.
 
 Full code sample:
-- [BaseTest](https://github.com/alex-tiurin/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/BaseTest.kt)
-- [DemoEspressoTest](https://github.com/alex-tiurin/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/espresso/DemoEspressoTest.kt)
+- [BaseTest](https://github.com/open-tool/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/BaseTest.kt)
+- [DemoEspressoTest](https://github.com/open-tool/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/espresso/DemoEspressoTest.kt)
 
-To learn more about order of rules execution see [Deep dive into rules order with RuleSequence](https://github.com/alex-tiurin/ultron/wiki/Deep-dive-into-rules-order-with-RuleSequence)
+To learn more about order of rules execution see [Deep dive into rules order with RuleSequence](https://github.com/open-tool/ultron/wiki/Deep-dive-into-rules-order-with-RuleSequence)
 
 
 ## SetUpRule

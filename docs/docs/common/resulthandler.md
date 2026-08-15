@@ -9,7 +9,7 @@ sidebar_position: 7
 Let's loot at the example
 
 ```kotlin
-object SomePage : Page<SomePage>{
+object SomePage : Page<SomePage>() {
     private val espressoElement = withId(R.id.espressoId)
     private val espressoWebViewElement = xpath("some_xpath")
     private val uiautomatorElement = byResId(R.id.uiatomatorId)

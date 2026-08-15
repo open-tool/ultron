@@ -76,7 +76,7 @@ composeList(hasTestTag(contactsListTestTag))
 _Espresso_
 
 ```kotlin
-onView(withId(R.id.send_button)).check(isDisplayed()).perform(click())
+onView(withId(R.id.send_button)).check(matches(isDisplayed())).perform(click())
 ```
 _Ultron_
 

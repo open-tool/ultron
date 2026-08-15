@@ -19,13 +19,14 @@ dependencies {
     api(Libs.espressoWeb)
     api(Libs.accessibility)
     api(Libs.hamcrestCore)
-    api(Libs.uiautomator)
 }
 ```
 
+UI Automator comes from `ultron-common` (its android source set declares `api(Libs.uiautomator)`), so it is available transitively as well.
+
 If you need another Espresso library in dependencies. It's better to use the same Espresso version as Ultron. 
 
-Now - [Ultron Espresso verion](https://github.com/open-tool/ultron/blob/master/buildSrc/src/main/kotlin/Versions.kt#L9) is `3.6.1`. 
+Now - [Ultron Espresso verion](https://github.com/open-tool/ultron/blob/master/buildSrc/src/main/kotlin/Versions.kt) is `3.7.0`. 
 
 ## Allure Dependencies
 

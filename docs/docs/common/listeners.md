@@ -80,7 +80,7 @@ abstract class BaseTest {
 
 Basically we already know how to add new listener. But there are other options to configure Ultron listeners.
 
-First of all Ultron by default already has [LogLifecycleListener](https://github.com/alex-tiurin/ultron/blob/master/ultron/src/main/java/com/atiurin/ultron/listeners/LogLifecycleListener.kt) that writes some usable info to logcat.
+First of all Ultron by default already has [LogLifecycleListener](https://github.com/open-tool/ultron/blob/master/ultron-common/src/commonMain/kotlin/com/atiurin/ultron/listeners/LogLifecycleListener.kt) that writes some usable info to logcat.
 
 ### Lifecycles
 
@@ -135,7 +135,7 @@ abstract class BaseTest {
 
 ## UltronRunListener
 
-Allows you to add listener for Test Lifecycle. See [RunListener](https://github.com/open-tool/ultron/blob/master/ultron/src/main/java/com/atiurin/ultron/runner/RunListener.kt).
+Allows you to add listener for Test Lifecycle. See [RunListener](https://github.com/open-tool/ultron/blob/master/ultron-common/src/androidMain/kotlin/com/atiurin/ultron/runner/RunListener.kt).
 
 It is available in case you use `ultron-allure` and set `testInstrumentationRunner`.
 

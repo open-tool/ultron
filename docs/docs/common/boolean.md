@@ -7,7 +7,7 @@ sidebar_position: 5
 While using the **Ultron** framework you always can get the result of any operation as boolean value. 
 
 ```kotlin
-object SomePage : Page<SomePage>{
+object SomePage : Page<SomePage>() {
     private val composeElement = hasTestTag("some_tag")
     private val espressoElement = withId(R.id.espressoId)
     private val espressoWebViewElement = xpath("some_xpath")
