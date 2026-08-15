@@ -45,6 +45,7 @@ fun doubleClickTopRight(option: DoubleClickOption? = null)
 fun doubleClickBottomCenter(option: DoubleClickOption? = null)
 fun doubleClickBottomLeft(option: DoubleClickOption? = null)
 fun doubleClickBottomRight(option: DoubleClickOption? = null)
+fun swipe(option: ComposeSwipeOption)
 fun swipeDown(option: ComposeSwipeOption? = null)
 fun swipeUp(option: ComposeSwipeOption? = null)
 fun swipeLeft(option: ComposeSwipeOption? = null)
@@ -72,10 +73,13 @@ fun collapse()
 fun expand()
 fun dismiss()
 fun setProgress(value: Float)
-fun captureToImage(): ImageBitmap
+fun captureToImage(): ImageBitmap // Android only
+fun printToLog(tag: String, maxDepth: Int = Int.MAX_VALUE) // dump the semantics subtree to log
 
 fun performMouseInput(block: MouseInjectionScope.() -> Unit)
 fun performSemanticsAction(key: SemanticsPropertyKey<AccessibilityAction<() -> Boolean>>) 
+fun performCustomAccessibilityActionWithLabel(label: String)
+fun performCustomAccessibilityActionWithLabelMatching(predicateDescription: String? = null, labelPredicate: (label: String) -> Boolean)
 fun perform(params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> Unit)
 fun <T> execute(params: UltronComposeOperationParams? = null, block: (SemanticsNodeInteraction) -> T): T
 
@@ -97,6 +101,7 @@ fun assertIsSelectable()
 fun assertIsOn() 
 fun assertIsOff() 
 fun assertIsToggleable() 
+fun assertIsIndeterminate() 
 fun assertHasClickAction() 
 fun assertHasNoClickAction() 
 fun assertTextEquals(vararg expected: String, option: TextEqualsOption? = null)

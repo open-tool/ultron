@@ -60,7 +60,10 @@ object FriendsListPage : Page<FriendsListPage>() {
 ```kotlin
 // ----- assertions -----
 assertEmpty()                                 // Asserts RecyclerView has no item
-assertSize(expected: Int)                     // Asserts RecyclerView list has [expected] items count during
+assertNotEmpty()                              // Asserts RecyclerView has at least one item
+// Asserts items count. [comparison] allows EQUAL, LESS, MORE etc instead of a strict match
+// SizeComparison: EQUAL, GREATER_THAN, LESS_THAN, GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL
+assertSize(expected: Int, comparison: SizeComparison = SizeComparison.EQUAL)
 assertHasItemAtPosition(position: Int)        // Asserts RecyclerView list has item at [position]
 assertMatches(matcher: Matcher<View>)         // Assert RecyclerView matches custom condition
 assertItemNotExist(matcher: Matcher<View>, timeoutMs: Long) // watch java doc to understand how it works
@@ -99,6 +102,20 @@ getLastItem(..): T
 getItemMatched(matcher: Matcher<View>, index: Int, ..): T
 getFirstItemMatched(matcher: Matcher<View>, ..): T
 getLastItemMatched(matcher: Matcher<View>, ..): T
+
+// ----- general -----
+isEmpty(): Boolean
+getSize(): Int
+getLastPosition(): Int
+isItemExist(matcher: Matcher<View>): Boolean
+waitItemsLoaded(recyclerView: RecyclerView = .., minItemsCount: Int = 1)  // wait until the list is loaded
+scrollToItem(itemMatcher: Matcher<View>, searchLimit: Int = .., offset: Int = 0)
+scrollToItem(position: Int, offset: Int = 0)
+getItemsAdapterPositionList(matcher: Matcher<View>, limitAmountOfMatchedItems: Int = -1): List<Int>
+getItemAdapterPositionAtIndex(itemMatcher: Matcher<View>, index: Int): Int
+getViewHolderList(itemMatcher: Matcher<View>): List<RecyclerView.ViewHolder>
+getViewHolderAtPosition(position: Int): RecyclerView.ViewHolder?
+withName(name: String)                        // custom list name shown in logs, exceptions and Allure steps
 ```
 ## UltronRecyclerViewItem
 
@@ -207,6 +224,9 @@ getViewHolder(): RecyclerView.ViewHolder?
 getChild(childMatcher: Matcher<View>): Matcher<View> //return matcher to a child element
 withTimeout(timeoutMs: Long) //set custom timeout for the next operation
 withResultHandler(..) // allows you to process action on item by your own way
+withAssertion(assertion: OperationAssertion) // define custom assertion of action success
+withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit)
+withSuitableRoot() // pick the root where the item actually lives, see the [withSuitableRoot doc](rootview.md)
 
 // click options
 clickTopLeft(offsetX: Int = 0, offsetY: Int = 0)

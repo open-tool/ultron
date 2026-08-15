@@ -9,7 +9,7 @@ sidebar_position: 1
 Simple espresso operation looks like this
 
 ```kotlin
-onView(withId(R.id.send_button)).check(isDisplayed()).perform(click())
+onView(withId(R.id.send_button)).check(matches(isDisplayed())).perform(click())
 ```
 the same with **Ultron**
 
@@ -42,12 +42,18 @@ perform(params: UltronEspressoActionParams? = null, block: (uiController: UiCont
 getText() : String?
 getContentDescription() : String?
 getDrawable() : Drawable?
+getView() : View                         // returns the matched View
+getViewForcibly() : View                 // returns the View even if it's not in the current root
+performOnView(action: View.() -> Unit)   // run any code on the matched View
+performOnViewForcibly(action: View.() -> Unit)
 
 //------ assertions ------ 
 exists()
 doesNotExist()
+doesNotExistInAnyVisibleRoot()           // assert the view is absent in every visible root
 isDisplayed()
 isNotDisplayed()
+isVisible()
 isCompletelyDisplayed()
 isDisplayingAtLeast(percentage: Int)
 doesNotExist()
@@ -84,6 +90,12 @@ withTimeout(timeoutMs: Long)                     // set custom timeout for opera
 withResultHandler(resultHandlerBlock)            // set custom result handler and process operation result 
 withAssertion(assertion: OperationAssertion)     // define custom assertion of action success
 withAssertion(name: String = "", isListened: Boolean = false, block: () -> Unit)
+withName(name: String)                           // custom element name shown in logs, exceptions and Allure steps
+withMetaInfo(meta: Any)                          // associate any custom info with the element
+withAutoScroll(autoscroll: Boolean)              // scroll to the view before an action
+withSuitableRoot()                               // pick the root where the element actually lives, see the [withSuitableRoot doc](rootview.md)
+inRoot(rootMatcher: Matcher<Root>)               // restrict the search to a specific root
+isSuccess(operation: UltronEspressoInteraction<T>.() -> Any): Boolean // get the result of any operation as Boolean
 
 //------ custom clicks ------
 clickTopLeft(offsetX: Int, offsetY: Int)
@@ -154,21 +166,21 @@ if (isButtonDisplayed) {
 
 To execute any operation inside dialog or popup with espresso you have to specify correct root element
 ```kotlin
-onView(withText("OK"))).inRoot(isDialog()).perform(click())
+onView(withText("OK")).inRoot(isDialog()).perform(click())
 onView(withText("Cancel")).inRoot(isPlatformPopup()).perform(click())
 ```
 Here is a point we need to put our minds on.
 
 **Ultron extends not only `Matcher<View>` object but also `ViewInteraction` and `DataInteraction` objects**
 
-`onView(withText("OK"))).inRoot(isDialog())` returns _ViewInteraction_. Therefore it's possible to use Ultron operations with dialogs.
+`onView(withText("OK")).inRoot(isDialog())` returns _ViewInteraction_. Therefore it's possible to use Ultron operations with dialogs.
 
 So the best way would be a following
 
 ```kotlin
 object DialogPage : Page<DialogPage>() {
-    val okButton = onView(withText(R.string.ok_button))).inRoot(isDialog())
-    val cancelButton = onView(withText(R.string.cancel_button))).inRoot(isDialog())
+    val okButton = onView(withText(R.string.ok_button)).inRoot(isDialog())
+    val cancelButton = onView(withText(R.string.cancel_button)).inRoot(isDialog())
 }
 ...
 fun someUserStepInsideSomePage(){
@@ -228,4 +240,4 @@ getText() : String?
 getContentDescription() : String?
 getDrawable() : Drawable?
 ```
-And you are able to get any other property. There is an example how it could be done - [GetTextAction](https://github.com/alex-tiurin/ultron/blob/master/ultron/src/main/java/com/atiurin/ultron/custom/espresso/action/GetTextAction.kt)
+And you are able to get any other property. There is an example how it could be done - [GetTextAction](https://github.com/open-tool/ultron/blob/master/ultron-android/src/main/kotlin/com/atiurin/ultron/custom/espresso/action/GetTextAction.kt)

@@ -272,8 +272,8 @@ Add the block to the screen.
 ```kotlin
 object SomeUiAutomatorScreen : Screen<SomeUiAutomatorScreen>(){
     val card = UiAutomatorContactCard(
-       blockDesc="SomeUiAutomatorScreen contact card",
-       blockSelector=bySelector(R.id.card)
+       blockDesc = "SomeUiAutomatorScreen contact card",
+       blockSelector = { bySelector(R.id.card) }
     )
     
     fun assertContactCard(contact: Contact){
@@ -302,7 +302,7 @@ class UiAutomatorProfileBlock(blockDesc: String, blockSelector: () -> BySelector
    : UltronUiObject2UiBlock(blockDesc, blockSelector){
     val card = child(
         selector = bySelector(R.id.card),
-        description = "Contact card of '$desc'",
+        description = "Contact card of '$blockDesc'",
         uiBlockFactory = { desc, selector ->
             UiAutomatorContactCard(desc, selector)
         }

@@ -6,7 +6,7 @@ sidebar_position: 1
 
 Ultron can generate artifacts for Allure report only for Android UI tests. 
 
-Just set Ultron `testInstrumentationRunner` in your app build.gradle file ([example build.gradle.kts](https://github.com/open-tool/ultron/blob/master/sample-app/build.gradle.kts#L14))
+Just set Ultron `testInstrumentationRunner` in your app build.gradle file ([example build.gradle.kts](https://github.com/open-tool/ultron/blob/master/sample-app/build.gradle.kts))
 
 ```kotlin
 android {
@@ -15,7 +15,7 @@ android {
         ...
     }
 ```
-and apply recommended config in your BaseTest class ([example BaseTest](https://github.com/open-tool/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/BaseTest.kt#L31)).
+and apply recommended config in your BaseTest class ([example BaseTest](https://github.com/open-tool/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/BaseTest.kt)).
 
 ```kotlin
 @BeforeClass @JvmStatic
@@ -132,9 +132,11 @@ generate following marked steps
 
 The framework has special methods to write your artifacts into report.
 
-`createCacheFile` - creates temp file to write the content ([see InstrumentationUtil.kt](https://github.com/open-tool/ultron/blob/master/ultron/src/main/java/com/atiurin/ultron/utils/InstrumentationUtil.kt))\
+`createCacheFile` - creates temp file to write the content ([see InstrumentationUtil.android.kt](https://github.com/open-tool/ultron/blob/master/ultron-common/src/androidMain/kotlin/com/atiurin/ultron/utils/InstrumentationUtil.android.kt))\
 
 `AttachUtil.attachFile(...)` - to attach file to report [see AttachUtil](https://github.com/open-tool/ultron/blob/master/ultron-allure/src/main/java/com/atiurin/ultron/allure/attachment/AttachUtil.kt)
+
+The `mimeType` param accepts Ultron [MimeType](https://github.com/open-tool/ultron/blob/master/ultron-common/src/commonMain/kotlin/com/atiurin/ultron/file/MimeType.kt) value, not a raw string.
 
 You method can looks like
 
@@ -145,7 +147,7 @@ fun addMyArtifactToAllure(){
     val fileName = AttachUtil.attachFile(
         name = "file_name.xml",
         file = tempFile,
-        mimeType = "text/xml"
+        mimeType = MimeType.XML
     )
 }
 ```
@@ -155,8 +157,8 @@ fun addMyArtifactToAllure(){
 
 You can attach artifact using 2 types of Ultron listeners:
 
-- [UltronLifecycleListener](https://github.com/open-tool/ultron/blob/master/ultron/src/main/java/com/atiurin/ultron/listeners/UltronLifecycleListener.kt) - once Ultron operation finished with any result. Sample - [ScreenshotAttachListener.kt](https://github.com/open-tool/ultron/blob/master/ultron-allure/src/main/java/com/atiurin/ultron/allure/listeners/ScreenshotAttachListener.kt)
+- [UltronLifecycleListener](https://github.com/open-tool/ultron/blob/master/ultron-common/src/commonMain/kotlin/com/atiurin/ultron/listeners/UltronLifecycleListener.kt) - once Ultron operation finished with any result. Sample - [ScreenshotAttachListener.kt](https://github.com/open-tool/ultron/blob/master/ultron-allure/src/main/java/com/atiurin/ultron/allure/listeners/ScreenshotAttachListener.kt)
 
-- [UltronRunListener](https://github.com/open-tool/ultron/blob/master/ultron/src/main/java/com/atiurin/ultron/runner/UltronRunListener.kt) which is inherited from [RunListener](https://github.com/open-tool/ultron/blob/master/ultron/src/main/java/com/atiurin/ultron/runner/RunListener.kt). This type can be used to add artifact in different test lifecycle state. Sample - [WindowHierarchyAttachRunListener.kt](https://github.com/open-tool/ultron/blob/master/ultron-allure/src/main/java/com/atiurin/ultron/allure/runner/WindowHierarchyAttachRunListener.kt)
+- [UltronRunListener](https://github.com/open-tool/ultron/blob/master/ultron-common/src/androidMain/kotlin/com/atiurin/ultron/runner/UltronRunListener.kt) which is inherited from [RunListener](https://github.com/open-tool/ultron/blob/master/ultron-common/src/androidMain/kotlin/com/atiurin/ultron/runner/RunListener.kt). This type can be used to add artifact in different test lifecycle state. Sample - [WindowHierarchyAttachRunListener.kt](https://github.com/open-tool/ultron/blob/master/ultron-allure/src/main/java/com/atiurin/ultron/allure/runner/WindowHierarchyAttachRunListener.kt)
 
 Refer to the [Listeners doc page](../common/listeners.md) for details.

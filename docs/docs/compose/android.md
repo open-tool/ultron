@@ -67,3 +67,5 @@ val composeTestRule = createUltronComposeRule<YourActivity>()
 ```
 
 `createSimpleUltronComposeRule<A>` used `UltronActivityRule` for launch and finish activity. You can read more in testconditions chapter
+
+If the test creates its own compose host (for example, launches an Activity after dependencies are injected), use `createEmptyUltronComposeRule()`. It doesn't create a host and therefore provides no `setContent` method.

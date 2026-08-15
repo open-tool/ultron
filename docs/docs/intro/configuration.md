@@ -11,7 +11,7 @@ Each library of the framework has it's own config onject.
 - `UltronAllureConfig` - ultron-allure
 - `UltronCommonConfig` - inside each library
 
-You can use recommended configuration and just apply it in **BaseTest** class ([sample](https://github.com/open-tool/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/BaseTest.kt#L29)) :
+You can use recommended configuration and just apply it in **BaseTest** class ([sample](https://github.com/open-tool/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/BaseTest.kt)) :
 
 ```kotlin
 @BeforeClass
@@ -55,6 +55,8 @@ UltronCommonConfig.apply {
     logToFile = true
     operationTimeoutMs = 10_000
     logDateFormat = "MM-dd HH:mm:ss.SSS"
+    isListenersOn = true                  // turn all lifecycle listeners on/off
+    resultAnalyzer = CustomResultAnalyzer() // default analyzer for all modules
 }
 ```
 
@@ -62,7 +64,12 @@ It also gives an API to add/remove operations listeners
 
 ```kotlin
 UltronCommonConfig.addListener(CustomListener())
+UltronCommonConfig.removeListener(CustomListener::class)
+// exclude an operation type from all listeners
+UltronCommonConfig.operationsExcludedFromListeners.add(CustomUltronOperations.ASSERT_HAS_ANY_CHILD)
 ```
+
+`UltronCommonConfig.testContext` holds the current [UltronTest](../common/ultrontest.md) context, including the soft assertion analyzer.
 
 ### UltronConfig 
 ***
@@ -86,6 +93,8 @@ Provides settings related to timeouts, view matchers, result analyzers, and acti
 UltronConfig.Espresso.RECYCLER_VIEW_LOAD_TIMEOUT = 20_000
 UltronConfig.Espresso.RECYCLER_VIEW_OPERATIONS_TIMEOUT = 10_000
 UltronConfig.Espresso.RECYCLER_VIEW_ITEM_SEARCH_LIMIT = 100
+// STANDARD (default) or PERFORMANCE, see the RecyclerView doc for the difference
+UltronConfig.Espresso.RECYCLER_VIEW_IMPLEMENTATION = UltronRecyclerViewImpl.PERFORMANCE
 UltronConfig.Espresso.INCLUDE_VIEW_HIERARCHY_TO_EXCEPTION = true // false by default
 UltronConfig.Espresso.setResultAnalyzer { operationResult ->
     // set custom operations result analyzer 
@@ -100,6 +109,7 @@ Provide settings for allowed exceptions and result handlers.
 ```kotlin
 UltronConfig.Espresso.ViewActionConfig.allowedExceptions.add(CustomViewException::class.java)
 UltronConfig.Espresso.ViewAssertionConfig.allowedExceptions.add(CustomViewException::class.java)
+UltronConfig.Espresso.ViewActionConfig.autoScroll = true // scroll to the view before any action, false by default
 ```
 for detailed exception analysis
 ```kotlin
