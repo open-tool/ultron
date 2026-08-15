@@ -5,52 +5,39 @@
 
 <div align="center">
 
+[![Maven Central][maven-badge]][maven]
+[![CI][ci-badge]][ci]
 [![Documentation][documentation-badge]][documentation]
-[![Releases][releases-badge]][releases]
 [![Telegram][telegram-badge]][telegram]
+[![License][license-badge]][license]
 
 </div>
 
-Ultron is the simplest framework to develop UI tests for **Android** & **Compose Multiplatform**.
+Ultron is a UI testing framework for **Android** and **Compose Multiplatform**. It is built on top of Espresso, Espresso Web, UI Automator and the Compose UI testing API, and gives you a syntax you actually want to write — with stability, logging and reporting built into every action and assertion.
 
-It's constructed upon the Espresso, UI Automator and Compose UI testing frameworks. Ultron introduces a range of remarkable new features. Furthermore, Ultron puts you in complete control of your tests!
+**Targets:** Android · iOS · Desktop (JVM) · Web (JS & wasmJs) · macOS
 
-You don't need to learn any new classes or special syntax. All magic actions and assertions are provided from crunch. Ultron can be easially customised and extended. Wish you exclusively stable tests!
+## Why Ultron
 
-## What are the benefits of using the framework?
+- **Stable by design** — every operation retries itself until it succeeds or the timeout expires, and only for the exceptions you allow
+- **Concise syntax** — the operation names you already know, without the ceremony around them
+- **[Page Object][docs-page] and [UI Blocks][docs-uiblock]** — describe elements inside their parent block instead of the whole screen
+- **[Lists without pain][docs-lazylist]** — RecyclerView and Compose LazyList items addressed by matcher, index or position, scrolling handled for you
+- **[Allure report][docs-allure] out of the box** — steps, screenshots and view hierarchy attached automatically (Android only)
+- **[Test lifecycle control][docs-ultrontest]** — preconditions per test class *and* per single test, plus soft assertions
+- **[Extendable][docs-extension]** — add your own operations as Kotlin extensions and they inherit retries, logging and reporting
 
-- Page/Screen Object pattern support
-- Exceptional simplification for [**Compose UI tests**](https://open-tool.github.io/ultron/docs/compose/index)
-- Out-of-the-box generation of [**Allure report**](https://open-tool.github.io/ultron/docs/common/allure) (Now, for Android UI tests only)
-- A straightforward and expressive syntax
-- Ensured **Stability** for all actions and assertions
-- Complete control over every action and assertion
-- Incredible interaction with lists: [**RecyclerView**](./android/recyclerview.md) and [**Compose LazyList**](https://open-tool.github.io/ultron/docs/compose/lazylist).
-- An **Architectural** approach to developing UI tests (search "Best practice")
-- An incredible mechanism for setups and teardowns (You can even set up preconditions for a single test within a test class, without affecting the others)
-- [The ability to effortlessly extend the framework with your own operations](https://open-tool.github.io/ultron/docs/common/extension)
-- Accelerated UI Automator operations
-- Ability to monitor each stage of operation execution with [Listeners](https://open-tool.github.io/ultron/docs/common/listeners)
-- [Custom operation assertions](https://open-tool.github.io/ultron/docs/common/customassertion)
+## A few words about syntax
 
-***
-### Documentation
-The framework offers an excellent [documentation](https://open-tool.github.io/ultron/docs/) that addresses the majority of significant usage scenarios.
+#### Compose
 
-### A few words about syntax
-
-The standard syntax provided by Google is intricate and not intuitive. This is especially evident when dealing with **LazyList** and **RecyclerView** interactions.
-
-Let's explore some examples:
-
-#### 1. Simple compose operation (refer to the doc [here](https://open-tool.github.io/ultron/docs/compose/index))
-
-_Compose framework_
+_Compose UI testing API_
 
 ```kotlin
 composeTestRule.onNode(hasTestTag("Continue")).performClick()
 composeTestRule.onNodeWithText("Welcome").assertIsDisplayed()
 ```
+
 _Ultron_
 
 ```kotlin
@@ -58,44 +45,25 @@ hasTestTag("Continue").click()
 hasText("Welcome").assertIsDisplayed()
 ```
 
-#### 2. Compose list operation (refer to the [doc](https://open-tool.github.io/ultron/docs/compose/lazylist))
+Note the missing `composeTestRule`: Ultron operations work in **any** class, so Page Objects need no test rule passed around. See the [Compose doc][docs-compose].
 
-_Compose framework_
-
-```kotlin
-val itemMatcher = hasText(contact.name)
-composeRule
-    .onNodeWithTag(contactsListTestTag)
-    .performScrollToNode(itemMatcher)
-    .onChildren()
-    .filterToOne(itemMatcher)
-    .assertTextContains(contact.name)
-```
-
-_Ultron_
-
-```kotlin
-composeList(hasTestTag(contactsListTestTag))
-    .item(hasText(contact.name))
-    .assertTextContains(contact.name)
-```
-#### 3. Simple Espresso assertion and action.
+#### Espresso
 
 _Espresso_
 
 ```kotlin
-onView(withId(R.id.send_button)).check(isDisplayed()).perform(click())
+onView(withId(R.id.send_button)).check(matches(isDisplayed())).perform(click())
 ```
+
 _Ultron_
 
 ```kotlin
 withId(R.id.send_button).isDisplayed().click()
 ```
-This presents a cleaner approach. Ultron's operation names mirror Espresso's, while also providing additional operations.
 
-Refer to the [doc](https://open-tool.github.io/ultron/docs/android/espress) for further details.
+See the [Espresso doc][docs-espresso].
 
-#### 4. Action on RecyclerView list item
+#### Lists
 
 _Espresso_
 
@@ -107,8 +75,9 @@ onView(withId(R.id.recycler_friends))
                 hasDescendant(withText("Janice")),
                 click()
             )
-        )
+    )
 ```
+
 _Ultron_
 
 ```kotlin
@@ -117,164 +86,118 @@ withRecyclerView(R.id.recycler_friends)
     .click()
 ```
 
-Explore the [doc](https://open-tool.github.io/ultron/docs/android/espress) to unveil Ultron's magic with RecyclerView interactions.
+The same applies to Compose lists — see [RecyclerView][docs-recyclerview] and [Compose LazyList][docs-lazylist].
 
-#### 5. Espresso WebView operations
-
-_Espresso_
-
-```kotlin
-onWebView()
-    .withElement(findElement(Locator.ID, "text_input"))
-    .perform(webKeys(newTitle))
-    .withElement(findElement(Locator.ID, "button1"))
-    .perform(webClick())
-    .withElement(findElement(Locator.ID, "title"))
-    .check(webMatches(getText(), containsString(newTitle)))
-```
-
-_Ultron_
-
-```kotlin
-id("text_input").webKeys(newTitle)
-id("button1").webClick()
-id("title").hasText(newTitle)
-```
-
-Refer to the [doc](https://open-tool.github.io/ultron/docs/android/webview) for more details.
-
-#### 6. UI Automator operations
-
-_UI Automator_
-
-```kotlin
-val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-device
-    .findObject(By.res("com.atiurin.sampleapp:id", "button1"))
-    .click()
-```
-
-_Ultron_
-
-```kotlin
-byResId(R.id.button1).click() 
-```
-Refer to the [doc](https://open-tool.github.io/ultron/docs/android/uiautomator)
-***
-### Acquiring the result of any operation as Boolean value
-
-```kotlin
-val isButtonDisplayed = withId(R.id.button).isSuccess { isDisplayed() }
-if (isButtonDisplayed) {
-    //do some reasonable actions
-}
-```
-***
-### Why are all Ultron actions and assertions more stable?
-
-The framework captures a list of specified exceptions and attempts to repeat the operation during a timeout period (default is 5 seconds). Of course, you have the ability to customize the list of handled exceptions. You can also set a custom timeout for any operation.
-
-```kotlin
-withId(R.id.result).withTimeout(10_000).hasText("Passed")
-```
-***
-## 3 steps to develop a test using Ultron
-
-We advocate for a proper test framework architecture, division of responsibilities between layers, and other best practices. Therefore, when using Ultron, we recommend the following approach:
-
-1. Create a Page Object and specify screen UI elements as `Matcher<View>` objects.
-
-```kotlin
-object ChatPage : Page<ChatPage>() {
-    private val messagesList = withId(R.id.messages_list)
-    private val clearHistoryBtn = withText("Clear history")
-    private val inputMessageText = withId(R.id.message_input_text)
-    private val sendMessageBtn = withId(R.id.send_button)
-}
-```
-
-It's recommended to make all Page Objects as `object` and descendants of Page class.
-This allows for the utilization of convenient Kotlin features. It also helps you to keep Page Objects stateless.
-
-2. Describe user step methods in Page Object.
-
-```kotlin
-object ChatPage : Page<ChatPage>() {
-    fun sendMessage(text: String) = apply {
-        inputMessageText.typeText(text)
-        sendMessageBtn.click()
-        getMessageListItem(text).text
-             .isDisplayed()
-             .hasText(text)
-    }
-
-    fun clearHistory() = apply {
-        openContextualActionModeOverflowMenu()
-        clearHistoryBtn.click()
-    }
-}
-```
-Refer to the full code sample [ChatPage.class](https://github.com/open-tool/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/pages/ChatPage.kt)
-
-3. Call user steps in test
-
-```kotlin
-    @Test
-    fun friendsItemCheck(){
-        FriendsListPage {
-            assertName("Janice")
-            assertStatus("Janice","Oh. My. God")
-        }
-    }
-    @Test
-    fun sendMessage(){
-        FriendsListPage.openChat("Janice")
-        ChatPage {
-            clearHistory()
-            sendMessage("test message")
-        }
-    }
-```
-Refer to the full code sample [DemoEspressoTest.class](https://github.com/open-tool/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/espresso/DemoEspressoTest.kt)
-
-In essence, your project's architecture will look like this:
-
-[acrchitecture](https://github.com/open-tool/ultron/assets/12834123/b0882d34-a18d-4f1f-959b-f75796d11036)
-
-***
-## Allure report
-
-Ultron has built in support to generate artifacts for Allure reports. Just apply the recommended configuration and set testIntrumentationRunner.
-
-For the complete guide, refer to the [Allure description](https://open-tool.github.io/ultron/docs/common/allure)
-
-```kotlin
-@BeforeClass @JvmStatic
-fun setConfig() {
-    UltronConfig.applyRecommended()
-    UltronAllureConfig.applyRecommended()
-    UltronComposeConfig.applyRecommended() 
-}
-```
-![allure](https://github.com/open-tool/ultron/assets/12834123/c05c813a-ece6-45e6-a04f-e1c92b82ffb1)
-
-![allure compose](https://github.com/open-tool/ultron/assets/12834123/1f751f3d-fc58-4874-a850-acd9181bfb70)
+More comparisons, including Espresso Web and UI Automator, are on the [project page][documentation].
 
 ## Add Ultron to your project
 
-Gradle
-```groovy
+The framework has three libraries — take the ones you need:
+
+| Artifact | What for |
+|---|---|
+| `com.atiurin:ultron-compose` | Compose UI tests, both for Android apps and Compose Multiplatform |
+| `com.atiurin:ultron-android` | Native Android UI tests: Espresso, Espresso Web, UI Automator |
+| `com.atiurin:ultron-allure` | Allure report artifacts for Android UI tests |
+
+All of them are published to Maven Central — the latest version is on the badge above.
+
+Android instrumented tests:
+
+```kotlin
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    androidTestImplementation 'com.atiurin:ultron-android:<latest_version>'
-    androidTestImplementation 'com.atiurin:ultron-allure:<latest_version>'
-    androidTestImplementation 'com.atiurin:ultron-compose:<latest_version>'
+    androidTestImplementation("com.atiurin:ultron-compose:$ultronVersion")
+    androidTestImplementation("com.atiurin:ultron-android:$ultronVersion")
+    androidTestImplementation("com.atiurin:ultron-allure:$ultronVersion")
 }
 ```
-Please, read [gradle dependencies management](https://open-tool.github.io/ultron/docs/intro/dependencies) doc.
+
+Compose Multiplatform tests:
+
+```kotlin
+kotlin {
+    sourceSets {
+        commonTest.dependencies {
+            implementation("com.atiurin:ultron-compose:$ultronVersion")
+        }
+    }
+}
+```
+
+Read the [dependencies management doc][docs-dependencies] for details.
+
+## Your first test
+
+**Compose Multiplatform** — replace `runComposeUiTest` with `runUltronUiTest` and interact with `SemanticsMatcher` directly:
+
+```kotlin
+class ExampleTest {
+    @Test
+    fun myTest() = runUltronUiTest {
+        setContent {
+            App()
+        }
+        hasTestTag("text").assertTextEquals("Hello")
+        hasTestTag("button").click()
+        hasTestTag("text").assertTextEquals("Compose")
+    }
+}
+```
+
+**Android** — describe the screen once, then read your tests like scenarios:
+
+```kotlin
+object ChatPage : Page<ChatPage>() {
+    private val messageInput = withId(R.id.message_input_text)
+    private val sendButton = withId(R.id.send_button)
+
+    fun sendMessage(text: String) = apply {
+        messageInput.typeText(text)
+        sendButton.click()
+    }
+}
+
+class ChatTest {
+    @Test
+    fun sendMessage() {
+        FriendsListPage.openChat("Janice")
+        ChatPage.sendMessage("test message")
+    }
+}
+```
+
+Full samples live in [`sample-app`][sample-app] (Android) and [`composeApp`][compose-app] (multiplatform) — they are the framework's own integration tests.
+
+## Why are Ultron tests more stable?
+
+Ultron doesn't execute an operation once and hope for the best. It repeats the operation during a timeout (5 seconds by default) while the failure is in the list of allowed exceptions — an unexpected failure still fails fast.
+
+```kotlin
+// waits and retries until the text appears
+withId(R.id.result).hasText("Passed")
+
+// a slow screen? ask for more time on this operation only
+withId(R.id.result).withTimeout(10_000).hasText("Passed")
+
+// any operation as a Boolean, no try/catch needed
+val isButtonDisplayed = withId(R.id.button).isSuccess { isDisplayed() }
+```
+
+You can also assert that an action actually had an effect and repeat it otherwise — see [custom assertions][docs-customassertion].
+
+## Documentation
+
+The framework offers an extensive [documentation][documentation] that addresses the majority of usage scenarios. Good places to start:
+
+- [Connect to project][docs-connect] and [Configuration][docs-configuration]
+- [Compose][docs-compose] · [Espresso][docs-espresso] · [UI Automator][docs-uiautomator] · [WebView][docs-webview]
+- [UltronTest lifecycle][docs-ultrontest] · [UI Blocks][docs-uiblock] · [Listeners][docs-listeners] · [Allure][docs-allure]
+
+Questions and feedback are welcome in the [Telegram chat][telegram].
 
 <!--
 Link References
@@ -282,8 +205,32 @@ Link References
 
 [telegram-badge]:https://img.shields.io/badge/Chat-Telegram-0088CC?style=for-the-badge
 [documentation-badge]:https://img.shields.io/badge/Documentation-233a60?style=for-the-badge
-[releases-badge]:https://img.shields.io/github/release/open-tool/ultron.svg?style=for-the-badge
+[maven-badge]:https://img.shields.io/maven-central/v/com.atiurin/ultron-compose?style=for-the-badge&label=Maven%20Central&color=233a60
+[ci-badge]:https://img.shields.io/github/actions/workflow/status/open-tool/ultron/ci-pipeline.yml?branch=master&style=for-the-badge&label=CI
+[license-badge]:https://img.shields.io/github/license/open-tool/ultron?style=for-the-badge&color=233a60
 
 [telegram]:https://t.me/ultron_framework
 [documentation]:https://open-tool.github.io/ultron/
-[releases]:https://github.com/open-tool/ultron/releases
+[maven]:https://central.sonatype.com/search?q=g:com.atiurin
+[ci]:https://github.com/open-tool/ultron/actions/workflows/ci-pipeline.yml
+[license]:https://github.com/open-tool/ultron/blob/master/LICENSE
+
+[docs-connect]:https://open-tool.github.io/ultron/docs/intro/connect
+[docs-dependencies]:https://open-tool.github.io/ultron/docs/intro/dependencies
+[docs-configuration]:https://open-tool.github.io/ultron/docs/intro/configuration
+[docs-compose]:https://open-tool.github.io/ultron/docs/compose/
+[docs-lazylist]:https://open-tool.github.io/ultron/docs/compose/lazylist
+[docs-espresso]:https://open-tool.github.io/ultron/docs/android/espress
+[docs-recyclerview]:https://open-tool.github.io/ultron/docs/android/recyclerview
+[docs-uiautomator]:https://open-tool.github.io/ultron/docs/android/uiautomator
+[docs-webview]:https://open-tool.github.io/ultron/docs/android/webview
+[docs-allure]:https://open-tool.github.io/ultron/docs/common/allure
+[docs-ultrontest]:https://open-tool.github.io/ultron/docs/common/ultrontest
+[docs-uiblock]:https://open-tool.github.io/ultron/docs/common/uiblock
+[docs-listeners]:https://open-tool.github.io/ultron/docs/common/listeners
+[docs-extension]:https://open-tool.github.io/ultron/docs/common/extension
+[docs-customassertion]:https://open-tool.github.io/ultron/docs/common/customassertion
+[docs-page]:https://open-tool.github.io/ultron/docs/
+
+[sample-app]:https://github.com/open-tool/ultron/tree/master/sample-app
+[compose-app]:https://github.com/open-tool/ultron/tree/master/composeApp
