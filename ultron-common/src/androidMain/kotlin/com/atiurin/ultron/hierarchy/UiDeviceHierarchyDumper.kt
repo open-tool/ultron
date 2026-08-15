@@ -6,7 +6,9 @@ import com.atiurin.ultron.log.UltronLog
 import java.io.File
 
 class UiDeviceHierarchyDumper : HierarchyDumper {
-    private val uiDevice: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+    private val uiDevice: UiDevice
+        get() = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
     override fun dumpFullWindowHierarchy(file: File): HierarchyDumpResult {
         var isSuccess = false
         runCatching {

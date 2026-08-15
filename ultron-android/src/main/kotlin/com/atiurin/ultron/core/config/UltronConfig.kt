@@ -3,12 +3,14 @@ package com.atiurin.ultron.core.config
 import android.annotation.SuppressLint
 import android.view.View
 import android.webkit.WebView
+import androidx.test.espresso.Espresso as AndroidXEspresso
 import androidx.test.espresso.AmbiguousViewMatcherException
 import androidx.test.espresso.DaggerBaseLayerComponent
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.base.ActiveRootLister
+import androidx.test.espresso.base.DefaultFailureHandler
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.internal.platform.os.ControlledLooper
@@ -73,6 +75,12 @@ object UltronConfig {
     private fun modify() {
         Espresso.ACTION_TIMEOUT = params.operationTimeoutMs
         Espresso.ASSERTION_TIMEOUT = params.operationTimeoutMs
+        AndroidXEspresso.setFailureHandler(
+            DefaultFailureHandler(
+                InstrumentationRegistry.getInstrumentation().targetContext,
+                false
+            )
+        )
         UiAutomator.OPERATION_TIMEOUT = params.operationTimeoutMs
         UltronCommonConfig.addListener(LogLifecycleListener())
         UltronLog.addLogger(UltronLogcatLogger())
@@ -236,7 +244,14 @@ object UltronConfig {
                 }
             }
 
-            var uiDevice: UiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+            private var cachedUiDevice: UiDevice? = null
+
+            var uiDevice: UiDevice
+                get() = cachedUiDevice
+                    ?: UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).also { cachedUiDevice = it }
+                set(value) {
+                    cachedUiDevice = value
+                }
 
             fun setTimeout(timeoutMs: Long) {
                 Configurator.getInstance().apply {
