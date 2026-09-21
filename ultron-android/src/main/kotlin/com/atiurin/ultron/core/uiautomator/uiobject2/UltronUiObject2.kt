@@ -2,10 +2,9 @@ package com.atiurin.ultron.core.uiautomator.uiobject2
 
 import android.graphics.Point
 import android.graphics.Rect
-import android.view.KeyEvent
+import android.os.Build
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.annotation.IntegerRes
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.BySelector
 import androidx.test.uiautomator.Direction
@@ -22,6 +21,7 @@ import com.atiurin.ultron.core.uiautomator.UiAutomatorActionType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorAssertionType
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperation
 import com.atiurin.ultron.core.uiautomator.UiAutomatorOperationResult
+import com.atiurin.ultron.core.uiautomator.UiAutomatorTextCheck
 import com.atiurin.ultron.core.uiautomator.UltronUiAutomatorLifecycle
 import com.atiurin.ultron.exceptions.UltronAssertionException
 import com.atiurin.ultron.extensions.getBySelector
@@ -285,42 +285,77 @@ class UltronUiObject2 internal constructor(
         )
     }
 
-    /** Clears the text content if object is an editable field. */
+    /**
+     * Clears the text content of an editable field.
+     *
+     * Fails when the field text is not empty afterwards (an empty field that shows its hint counts
+     * as empty), so a non-editable object is reported instead of silently ignored.
+     */
     fun clear() = apply {
         executeAction(
-            actionBlock = { uiObject2ProviderBlock()!!.clear() },
+            actionBlock = {
+                uiObject2ProviderBlock()!!.setTextAndVerify("")
+            },
             name = "Clear of ${elementInfo.name}",
             type = UiAutomatorActionType.CLEAR_TEXT,
             description = "UiObject2 action '${UiAutomatorActionType.CLEAR_TEXT}' in ${elementInfo.name} during $timeoutMs ms"
         )
     }
 
-    /** Add the text content if object is an editable field. */
+    /**
+     * Appends [text] to the text content of an editable field.
+     *
+     * The current text is read once, on the first attempt that finds the object; every retry then
+     * sets `current + text`, so a retry never appends twice. An empty field that shows its hint is
+     * treated as empty (UiAutomator reports the hint as its text). Limitation: a field whose own text
+     * is exactly equal to its hint is indistinguishable from an empty one through the public
+     * `UiObject2` API and is treated as empty too.
+     *
+     * Fails when the field text is not `current + text` afterwards, so a non-editable object or a
+     * field that rejected the input is reported instead of silently ignored.
+     */
     fun addText(text: String) = apply {
+        var base: String? = null
         executeAction(
-            actionBlock = { uiObject2ProviderBlock()!!.text += text },
+            actionBlock = {
+                val uiObject2 = uiObject2ProviderBlock()!!
+                val current = base ?: UiAutomatorTextCheck.textWithoutHint(uiObject2.text, uiObject2.hintOrNull())
+                    .also { UiAutomatorTextCheck.requireReadable(uiObject2.className, it, uiObject2.isPasswordField()) }
+                    .also { base = it }
+                uiObject2.setTextAndVerify(current + text)
+            },
             name = "AddText of ${elementInfo.name} to '$text'",
             type = UiAutomatorActionType.ADD_TEXT,
             description = "UiObject2 action '${UiAutomatorActionType.ADD_TEXT}' = '$text' to ${elementInfo.name} during $timeoutMs ms"
         )
     }
 
-    /** Set the text content by sending individual key codes.
-     * @throws NullPointerException if you are trying to apply it on uneditable object
-     * */
+    /**
+     * Sets the text content of an editable field — the same as [replaceText].
+     *
+     * Since 2.6.6 this no longer types key codes: UiAutomator 2.3.0 removed the hidden
+     * `UiObject2.legacySetText` it relied on. It fails when the field text is not [text] afterwards.
+     */
     fun legacySetText(text: String) = apply {
         executeAction(
-            actionBlock = { uiObject2ProviderBlock()!!.legacySetTextSafely(text) },
+            actionBlock = { uiObject2ProviderBlock()!!.setTextAndVerify(text) },
             name = "LegacySetText of ${elementInfo.name} to '$text'",
             type = UiAutomatorActionType.LEGACY_SET_TEXT,
             description = "UiObject2 action '${UiAutomatorActionType.LEGACY_SET_TEXT}' in ${elementInfo.name} to '$text' during $timeoutMs ms"
         )
     }
 
-    /** Sets the text content if object is an editable field. */
+    /**
+     * Sets the text content of an editable field.
+     *
+     * Fails when the field text is not [text] afterwards, so a non-editable object or a field that
+     * rejected the input is reported instead of silently ignored.
+     */
     fun replaceText(text: String) = apply {
         executeAction(
-            actionBlock = { uiObject2ProviderBlock()!!.text = text },
+            actionBlock = {
+                uiObject2ProviderBlock()!!.setTextAndVerify(text)
+            },
             name = "ReplaceText of ${elementInfo.name} to '$text'",
             type = UiAutomatorActionType.REPLACE_TEXT,
             description = "UiObject2 action '${UiAutomatorActionType.REPLACE_TEXT}' in ${elementInfo.name} to '$text' during $timeoutMs ms"
@@ -817,48 +852,30 @@ class UltronUiObject2 internal constructor(
         )
     }
 
-    private fun UiObject2.legacySetTextSafely(text: String) {
-        val isEditable = isEditableNode()
-        try {
-            legacySetText(text)
-        } catch (error: NullPointerException) {
-            // UiAutomator 2.2.0 can crash when its "Select all" lookup returns null.
-            if (isEditable && error.isLegacySelectAllFailure()) {
-                legacySetTextWithKeyEvents(text)
-            } else {
-                throw error
-            }
-        }
+    private fun UiObject2.setTextAndVerify(value: String) {
+        text = value
+        UiAutomatorTextCheck.verify(
+            className,
+            expected = value,
+            actual = text,
+            hint = hintOrNull(),
+            isPassword = isPasswordField(),
+        )
     }
 
-    private fun UiObject2.legacySetTextWithKeyEvents(text: String) {
-        click()
-        UltronConfig.UiAutomator.uiDevice.apply {
-            waitForIdle()
-            pressKeyCode(KeyEvent.KEYCODE_A, KeyEvent.META_CTRL_ON)
-            pressDelete()
-            waitForIdle()
-        }
-        if (text.isNotEmpty()) {
-            InstrumentationRegistry.getInstrumentation().sendStringSync(text)
-        }
-        UltronConfig.UiAutomator.uiDevice.waitForIdle()
-    }
-
-    private fun UiObject2.isEditableNode(): Boolean {
-        return runCatching { accessibilityNodeInfo().isEditable }.getOrDefault(false)
-    }
-
-    private fun UiObject2.accessibilityNodeInfo(): AccessibilityNodeInfo {
+    /**
+     * `UiObject2` has no public access to `AccessibilityNodeInfo.isPassword`, so the node is read from
+     * its private `getAccessibilityNodeInfo()`. When that is unavailable the field is treated as a
+     * plain one: the text is then compared exactly, which fails visibly rather than passing silently.
+     */
+    private fun UiObject2.isPasswordField(): Boolean = runCatching {
         val method = UiObject2::class.java.getDeclaredMethod("getAccessibilityNodeInfo")
         method.isAccessible = true
-        return method.invoke(this) as AccessibilityNodeInfo
-    }
+        (method.invoke(this) as AccessibilityNodeInfo).isPassword
+    }.getOrDefault(false)
 
-    private fun NullPointerException.isLegacySelectAllFailure(): Boolean {
-        return message?.contains("androidx.test.uiautomator.UiObject2.click()") == true &&
-            stackTrace.any { it.className == UiObject2::class.java.name && it.methodName == "legacySetText" }
-    }
+    private fun UiObject2.hintOrNull(): String? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) hint else null
 
     companion object {
         /** value from [UiObject2.DEFAULT_SWIPE_SPEED] */

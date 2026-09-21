@@ -1,6 +1,8 @@
 package com.atiurin.ultron.core.uiautomator.uiobject
 
 import android.graphics.Rect
+import android.os.Build
+import android.view.accessibility.AccessibilityNodeInfo
 import androidx.annotation.IntegerRes
 import androidx.test.uiautomator.UiObject
 import androidx.test.uiautomator.UiObjectNotFoundException
@@ -240,13 +242,30 @@ class UltronUiObject internal constructor(
     }
 
     /**
-     * Why legacyAddText? Because it actually not replacing the text in textField it adds to the existing one
-     * In case you would like to replace text use [replaceText]
+     * Appends [text] to the text content of an editable field.
+     *
+     * Since 2.6.6 this sets `current + text` through the accessibility set-text action instead of
+     * typing key codes: UiAutomator 2.3.0 removed the hidden `UiObject.legacySetText` it relied on.
+     * An empty field that shows its hint is treated as empty. The current text is read once, so a
+     * retry never appends twice, and the operation fails when the field text is not `current + text`
+     * afterwards. In case you would like to replace text use [replaceText].
      */
     fun legacyAddText(text: String) = apply {
+        var base: String? = null
         executeOperation(
             operationBlock = {
-                uiObjectProviderBlock().legacySetText(text)
+                val uiObject = uiObjectProviderBlock()
+                val current = base ?: UiAutomatorTextCheck.textWithoutHint(uiObject.text, uiObject.hintOrNull())
+                    .also { UiAutomatorTextCheck.requireReadable(uiObject.className, it, uiObject.isPasswordField()) }
+                    .also { base = it }
+                uiObject.setText(current + text)
+                UiAutomatorTextCheck.verify(
+                    uiObject.className,
+                    expected = current + text,
+                    actual = uiObject.text,
+                    hint = uiObject.hintOrNull(),
+                    isPassword = uiObject.isPasswordField(),
+                )
                 true
             },
             name = "LegacySetText of ${elementInfo.name} to '$text'",
@@ -254,6 +273,21 @@ class UltronUiObject internal constructor(
             description = "UiObject action '${UiAutomatorActionType.LEGACY_SET_TEXT}' of ${elementInfo.name} to '$text' during $timeoutMs ms"
         )
     }
+
+    /**
+     * `UiObject` has no public access to its node; it comes from the protected
+     * `findAccessibilityNodeInfo(long)` (API for subclasses). Null when it is unavailable.
+     */
+    private fun UiObject.accessibilityNodeOrNull(): AccessibilityNodeInfo? = runCatching {
+        val method = UiObject::class.java.getDeclaredMethod("findAccessibilityNodeInfo", Long::class.javaPrimitiveType)
+        method.isAccessible = true
+        method.invoke(this, 0L) as AccessibilityNodeInfo?
+    }.getOrNull()
+
+    private fun UiObject.hintOrNull(): String? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) accessibilityNodeOrNull()?.hintText?.toString() else null
+
+    private fun UiObject.isPasswordField(): Boolean = accessibilityNodeOrNull()?.isPassword ?: false
 
     fun click() = apply {
         executeOperation(

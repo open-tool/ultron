@@ -261,7 +261,8 @@ class UltronUiObject2ActionsTest : UiElementsTest() {
     @Test
     fun clear_UneditableObject() {
         val btnText = getTargetString(R.string.button_text)
-        page.button.hasText(btnText).clear().hasText(btnText)
+        AssertUtils.assertException { page.button.withTimeout(100).clear() }
+        page.button.hasText(btnText)
     }
 
     @Test
@@ -283,7 +284,8 @@ class UltronUiObject2ActionsTest : UiElementsTest() {
     @Test
     fun addText_toUneditableObject() {
         val btnText = getTargetString(R.string.button_text)
-        page.button.addText("some new text").hasText(btnText)
+        AssertUtils.assertException { page.button.withTimeout(100).addText("some new text") }
+        page.button.hasText(btnText)
     }
 
     @Test
@@ -323,7 +325,8 @@ class UltronUiObject2ActionsTest : UiElementsTest() {
     @Test
     fun replaceText_toUneditableObject() {
         val btnText = getTargetString(R.string.button_text)
-        page.button.replaceText("some new text").hasText(btnText)
+        AssertUtils.assertException { page.button.withTimeout(100).replaceText("some new text") }
+        page.button.hasText(btnText)
     }
 
     @Test
