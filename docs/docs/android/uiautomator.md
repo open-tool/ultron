@@ -96,7 +96,7 @@ longClick()
 clear()                                        // Clears the text content of an editable field
 addText(text: String)                          // Appends text to the text content of an editable field
 legacySetText(text: String)                    // Same as replaceText (no longer types key codes since 2.6.6)
-replaceText(text: String)                      // Sets the text content of an editable field
+replaceText(text: String, verify: Boolean = true) // Sets the text content of an editable field; verify = false skips the result check
 drag(dest: Point, speed: Int = DEFAULT_DRAG_SPEED) // Drags object to the specified location
 pinchClose(percent: Float, speed: Int = DEFAULT_PINCH_SPEED) // Performs a pinch close gesture on this object
 pinchOpen(percent: Float, speed: Int = DEFAULT_PINCH_SPEED)  // Performs a pinch open gesture on this object
@@ -182,6 +182,8 @@ The check takes into account how UI Automator reports text fields:
 - `addText` reads the current text once and sets `current + text` on every retry, so a retry never appends twice.
 
 `legacySetText` (`UltronUiObject2`) and `legacyAddText` (`UltronUiObject`) used to type key codes through the hidden `legacySetText` of UI Automator, which UI Automator 2.3.0 removed. Since 2.6.6 they use the set-text action: `legacySetText` behaves as `replaceText`, and `legacyAddText` appends as `addText` does. Ultron 2.6.6 depends on UI Automator 2.3.0.
+
+For a custom field whose reported text never equals the text that was set (a custom mask, formatting), call `replaceText(text, verify = false)`: the check is skipped and the action succeeds as soon as the text is set, even if the object ignored it.
 
 ## Best practice
 

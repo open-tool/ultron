@@ -76,6 +76,17 @@ class UltronUiObject2TextVerificationTest : BaseTest() {
     }
 
     @Test
+    fun replaceText_withoutVerify_passesEvenIfTextIsNotSet() {
+        loginButton.replaceText("machine", verify = false)
+    }
+
+    @Test
+    fun replaceText_withVerify_failsIfTextIsNotSet() {
+        val error = runCatching { loginButton.withTimeout(100).replaceText("machine") }.exceptionOrNull()
+        Assert.assertNotNull("replaceText with verification on a button must fail", error)
+    }
+
+    @Test
     fun addText_toUneditableObject_failsNamingExpectedActualAndClass() {
         val error = runCatching { loginButton.withTimeout(100).addText("machine") }.exceptionOrNull()
         Assert.assertNotNull("addText on a button must fail", error)

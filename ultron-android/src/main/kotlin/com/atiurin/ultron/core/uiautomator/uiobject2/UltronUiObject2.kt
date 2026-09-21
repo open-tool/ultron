@@ -350,11 +350,17 @@ class UltronUiObject2 internal constructor(
      *
      * Fails when the field text is not [text] afterwards, so a non-editable object or a field that
      * rejected the input is reported instead of silently ignored.
+     *
+     * @param verify pass `false` to skip that check, e.g. for a custom field whose reported text
+     * never equals the text set (a custom mask or formatting). The action then succeeds as soon as
+     * the text is set, even if the object ignored it.
      */
-    fun replaceText(text: String) = apply {
+    @JvmOverloads
+    fun replaceText(text: String, verify: Boolean = true) = apply {
         executeAction(
             actionBlock = {
-                uiObject2ProviderBlock()!!.setTextAndVerify(text)
+                val uiObject2 = uiObject2ProviderBlock()!!
+                if (verify) uiObject2.setTextAndVerify(text) else uiObject2.text = text
             },
             name = "ReplaceText of ${elementInfo.name} to '$text'",
             type = UiAutomatorActionType.REPLACE_TEXT,
