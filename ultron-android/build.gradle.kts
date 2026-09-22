@@ -34,6 +34,9 @@ android {
 }
 
 dependencies {
+    testImplementation(Libs.junit)
+    testImplementation(Libs.robolectric)
+    testImplementation(Libs.mockito)
     api(project(":ultron-common"))
     implementation(Libs.kotlinReflect)
     implementation(Libs.kotlinStdlib)
