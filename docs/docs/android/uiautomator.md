@@ -93,10 +93,10 @@ getContentDescription(): String?               // return the content description
 //actions
 click(duration: Long = 0)                      // A basic click is a touch down and touch up over the same point with no delay.
 longClick()
-clear()                                        // Clears the text content if object is an editable field
-addText(text: String)                          // Add the text content if object is an editable field
-legacySetText(text: String)                    // Set the text content by sending individual key codes
-replaceText(text: String)                      // Set the text content if object is an editable field
+clear()                                        // Clears the text content of an editable field
+addText(text: String)                          // Appends text to the text content of an editable field
+legacySetText(text: String)                    // Same as replaceText (no longer types key codes since 2.6.6)
+replaceText(text: String, verify: Boolean = true) // Sets the text content of an editable field; verify = false skips the result check
 drag(dest: Point, speed: Int = DEFAULT_DRAG_SPEED) // Drags object to the specified location
 pinchClose(percent: Float, speed: Int = DEFAULT_PINCH_SPEED) // Performs a pinch close gesture on this object
 pinchOpen(percent: Float, speed: Int = DEFAULT_PINCH_SPEED)  // Performs a pinch open gesture on this object
@@ -166,6 +166,24 @@ ui(uiSelector: UiSelector): UltronUiObject
 ```
 
 It has all methods of standart UiObject and also provide a lot of new features. As `UltronUiObject` has almost the same api as `UltronUiObject2` we don't list it.
+
+## Text actions are verified
+
+`addText`, `replaceText`, `clear` and `legacySetText` of `UltronUiObject2`, and `legacyAddText` of `UltronUiObject`, succeed only when the object's text becomes the expected value. UI Automator's own `setText` does not report a refused set-text action, so previously a text action on a non-editable object (a button, a layout that wraps the real field) passed without changing anything. Now such an action is retried until the operation timeout and then fails with the expected and the actual text and the object's class:
+
+```
+Text of android.widget.LinearLayout was expected to become 'machine' but is ''
+```
+
+The check takes into account how UI Automator reports text fields:
+
+- An empty field reports its hint as its text. `addText` treats it as empty, and `clear` accepts it. A field whose own text is exactly equal to its hint is treated as empty too.
+- A password field (the node's `isPassword` flag, set by Android for a `PasswordTransformationMethod`) reports its displayed, masked text. Its text is compared by length only, whatever the mask character is. `addText` refuses to append to a non-empty password field because its current text cannot be read back; use `replaceText`. A field masked by a custom transformation that is not a `PasswordTransformationMethod` is not flagged as a password by Android, so its text is compared exactly and the action fails with the masked value in the message.
+- `addText` reads the current text once and sets `current + text` on every retry, so a retry never appends twice.
+
+`legacySetText` (`UltronUiObject2`) and `legacyAddText` (`UltronUiObject`) used to type key codes through the hidden `legacySetText` of UI Automator, which UI Automator 2.3.0 removed. Since 2.6.6 they use the set-text action: `legacySetText` behaves as `replaceText`, and `legacyAddText` appends as `addText` does. Ultron 2.6.6 depends on UI Automator 2.3.0.
+
+For a custom field whose reported text never equals the text that was set (a custom mask, formatting), call `replaceText(text, verify = false)`: the check is skipped and the action succeeds as soon as the text is set, even if the object ignored it.
 
 ## Best practice
 

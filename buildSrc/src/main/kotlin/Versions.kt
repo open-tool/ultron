@@ -6,7 +6,7 @@ object Versions {
 
     const val recyclerView = "1.2.1"
     const val espresso = "3.7.0"
-    const val uiautomator = "2.2.0"
+    const val uiautomator = "2.3.0"
     const val accessibility = "4.0.0"
     const val hamcrestCore = "2.2"
     const val compose = "1.7.0"
