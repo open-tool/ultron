@@ -7,6 +7,14 @@ title: Release notes
 
 This page summarizes Ultron releases from 2.5.1 onward. Older releases are available on the [GitHub Releases](https://github.com/open-tool/ultron/releases) page.
 
+## Version 2.6.6
+
+_Released October 10, 2026_ · [GitHub release](https://github.com/open-tool/ultron/releases/tag/2.6.6) · [Full changelog](https://github.com/open-tool/ultron/compare/2.6.5...2.6.6)
+
+- UI Automator text actions are verified: `clear`, `addText`, `replaceText` and `legacySetText` of `UltronUiObject2` and `legacyAddText` of `UltronUiObject` now fail when the field text does not become the expected value instead of passing silently on a non-editable object. `replaceText(text, verify = false)` skips the check. [#143](https://github.com/open-tool/ultron/pull/143)
+- Redesigned the documentation landing page and aligned the API reference with the actual framework API. [#141](https://github.com/open-tool/ultron/pull/141)
+- Updated UI Automator to 2.3.0. Its hidden `legacySetText` is gone, so `legacySetText` now behaves as `replaceText` and `legacyAddText` appends through the set-text action; neither types key codes any more.
+
 ## Version 2.6.5
 
 _Released August 15, 2026_ · [GitHub release](https://github.com/open-tool/ultron/releases/tag/2.6.5) · [Full changelog](https://github.com/open-tool/ultron/compare/2.6.4...2.6.5)
