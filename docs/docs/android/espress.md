@@ -34,6 +34,9 @@ swipeRight()
 swipeUp()
 swipeDown()
 scrollTo()
+scrollDown()
+scrollUp()
+dismiss()
 perform(viewAction: ViewAction)          // execute custom espresso action as Ultron one
 perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit)
 <T> execute(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> T): T
@@ -241,3 +244,26 @@ getContentDescription() : String?
 getDrawable() : Drawable?
 ```
 And you are able to get any other property. There is an example how it could be done - [GetTextAction](https://github.com/open-tool/ultron/blob/master/ultron-android/src/main/kotlin/com/atiurin/ultron/custom/espresso/action/GetTextAction.kt)
+### Native scrolling and dismissal
+
+Import `com.atiurin.ultron.extensions.scrollDown`, `scrollUp`, or `dismiss` to invoke the
+widget's accessibility action through the normal Espresso operation pipeline:
+
+```kotlin
+withId(R.id.settings_list).scrollDown()
+withId(R.id.settings_list).scrollUp()
+withId(R.id.design_bottom_sheet).dismiss()
+```
+
+These extensions support `Matcher<View>`, `ViewInteraction`, `DataInteraction`,
+`UltronEspressoInteraction`, `UltronRecyclerView`, and `UltronRecyclerViewItem`.
+Existing interaction roots, timeouts, result handlers and listeners are preserved.
+Scrolling advances one native widget page in the requested vertical direction; it is
+not a swipe gesture or `scrollTo()` an element. Horizontal-only widgets are rejected.
+
+The matched widget is preferred. Otherwise a single visible descendant exposing the
+action is used, then the nearest supporting ancestor (for example, a sheet containing
+the matched content). Multiple candidates, an unavailable action (including a scroll
+boundary), or a widget rejecting the action produce an operation failure. Dismissal
+requires a widget that exposes `ACTION_DISMISS`, such as a dismissible bottom sheet;
+it does not fall back to Back or an outside tap.
