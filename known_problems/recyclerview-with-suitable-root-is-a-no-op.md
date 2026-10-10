@@ -1,8 +1,7 @@
 # `withSuitableRoot()` on `UltronRecyclerView` / `UltronRecyclerViewItem` is a no-op
 
-Found 2026-09-23 while chasing a 30-second hang in the Assertum recorder
-(`assertum/test-generation-problems/case-listitemchild-command-hangs-until-host-restart.md`).
-Affects ultron 2.6.6 (`fad8607`); not fixed in ultron yet.
+Found 2026-09-23 while chasing a 30-second hang of a RecyclerView item child click in an app
+that shows a second window. Affects ultron 2.6.6 (`fad8607`); not fixed in ultron yet.
 
 ## What is wrong
 
@@ -64,8 +63,9 @@ Make the root part of the RecyclerView's state and derive every interaction from
    RecyclerView item child clicked through `withSuitableRoot()`; it must not enter the
    `RootViewPicker` back-off. The sample app has the RecyclerView screens for it.
 
-## Workaround used in the recorder
+## Workaround
 
-`assertum/genatest-studio/recorderclient/.../ViewOperationExecutor.kt` (`rootedRecyclerView`,
-`recyclerItem`, `recyclerItemChild`) builds the `UltronRecyclerView` from an already-rooted
-interaction and re-pins the item / child matchers with `onView(...).withSuitableRoot()` itself.
+Until the fix lands, pin the root yourself: build the `UltronRecyclerView` from an interaction that
+is already rooted (`UltronRecyclerView(onView(matcher).withSuitableRoot())`) and reach the item and
+its child through `onView(itemMatcher).withSuitableRoot()` / `onView(childMatcher).withSuitableRoot()`
+instead of `item(...)` / `getChild(...)`.
