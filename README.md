@@ -21,7 +21,7 @@ You don't need to learn any new classes or special syntax. All magic actions and
 
 - Page/Screen Object pattern support
 - Exceptional simplification for [**Compose UI tests**](https://open-tool.github.io/ultron/docs/compose/index)
-- Out-of-the-box generation of [**Allure report**](https://open-tool.github.io/ultron/docs/common/allure) (Now, for Android UI tests only)
+- Out-of-the-box generation of [**Allure report**](https://open-tool.github.io/ultron/docs/common/allure) for Android UI tests and for Compose Multiplatform tests (desktop, iOS, macOS, browser)
 - A straightforward and expressive syntax
 - Ensured **Stability** for all actions and assertions
 - Complete control over every action and assertion
@@ -259,6 +259,8 @@ fun setConfig() {
 ![allure](https://github.com/open-tool/ultron/assets/12834123/c05c813a-ece6-45e6-a04f-e1c92b82ffb1)
 
 ![allure compose](https://github.com/open-tool/ultron/assets/12834123/1f751f3d-fc58-4874-a850-acd9181bfb70)
+
+For Compose Multiplatform tests (desktop, iOS, macOS, js/wasmJs) the same `ultron-allure` module writes Allure 2 results itself; call `UltronAllureConfig.applyRecommended()` once and run tests through `runUltronUiTest`. See [Allure for Compose Multiplatform](https://open-tool.github.io/ultron/docs/common/allure-multiplatform).
 
 ## Add Ultron to your project
 

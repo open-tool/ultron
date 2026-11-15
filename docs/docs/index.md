@@ -16,7 +16,7 @@ You don't need to learn any new classes or special syntax. All magic actions and
 
 - Page/Screen Object pattern support
 - Exceptional simplification for [**Compose UI tests**](compose/index.md)
-- Out-of-the-box generation of [**Allure report**](./common/allure.md) (Now, for Android UI tests only)
+- Out-of-the-box generation of [**Allure report**](./common/allure.md) for Android UI tests and for [Compose Multiplatform tests](./common/allure-multiplatform.md)
 - A straightforward and expressive syntax
 - Ensured **Stability** for all actions and assertions
 - Complete control over every action and assertion
@@ -238,7 +238,7 @@ In essence, your project's architecture will look like this:
 
 Ultron has built in support to generate artifacts for Allure reports. Just apply the recommended configuration and set testIntrumentationRunner. 
 
-For the complete guide, refer to the [Allure description](./common/allure.md)
+For the complete guide, refer to the [Allure description](./common/allure.md). Compose Multiplatform tests (desktop, iOS, macOS, js, wasmJs) use the same module — see [Allure for Compose Multiplatform](./common/allure-multiplatform.md).
 
 ```kotlin
 @BeforeClass @JvmStatic

@@ -30,17 +30,19 @@ Now - [Ultron Espresso verion](https://github.com/open-tool/ultron/blob/master/b
 
 ## Allure Dependencies
 
-The `com.atiurin:ultron-allure:<latest_version>` library provides all Allure dependencies.
+The `com.atiurin:ultron-allure:<latest_version>` library is multiplatform. Its Android variant provides all Allure dependencies:
 
 ```kotlin
-dependencies {
-    api(Libs.allureAndroid)
-    api(Libs.allureCommon)
-    api(Libs.allureModel)
-    api(Libs.allureJunit4)
-    api(Libs.espressoCore)
+androidMain.dependencies {
+    api(libs.allure.kotlin.android)   // io.qameta.allure:allure-kotlin-android:2.4.0
+    api(libs.allure.kotlin.commons)
+    api(libs.allure.kotlin.model)
+    api(libs.allure.kotlin.junit4)
+    api(libs.androidx.espresso.core)
 }
 ```
+
+The other targets (desktop, iOS, macOS, js, wasmJs) depend on `ultron-common`, `ultron-compose` and `compose-ui-test` and write Allure 2 result files themselves; the writer adds `kotlinx-serialization-json` on those targets only (`okio` and `kotlinx-datetime` come with `ultron-common` on every target). The Android variant has exactly the dependencies listed above, nothing from the Compose Multiplatform writer.
 
 ## Compose Dependencies
 

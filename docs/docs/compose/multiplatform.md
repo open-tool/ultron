@@ -6,6 +6,8 @@ sidebar_position: 1
 
 > Multiplatform support is in Alpha state.
 
+Allure reports for multiplatform tests are covered in [Allure for Compose Multiplatform](../common/allure-multiplatform.md).
+
 Compose Multiplatform provides robust tools for building and testing UI components across various platforms. One significant aspect of this is the ability to write and run common tests for your UI elements ([official doc sample](https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html#write-and-run-common-tests)).
 
 ### `runComposeUiTest` vs `runUltronUiTest`

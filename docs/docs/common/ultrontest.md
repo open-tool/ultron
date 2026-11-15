@@ -81,10 +81,10 @@ class SampleUltronFlowTest : UltronTest() {
 
 ### Key Methods
 
-- **`beforeFirstTest`**: Code executed once before all tests in a class.
+- **`beforeFirstTest`**: Code executed once before all tests in a class. The class is identified by its qualified name where the platform knows it (JVM, Android, Native) and by the simple name on js/wasmJs, so two classes with the same simple name in different packages each run their own `beforeFirstTest`; earlier versions keyed on the simple name and ran it once for both.
 - **`beforeTest`**: Code executed before each test.
 - **`afterTest`**: Code executed after each test.
-- **`test`**: Executes a test with options to suppress pre-test or post-test actions.
+- **`test`**: Executes a test with an optional name and options to suppress pre-test or post-test actions.
 
 ### Key Features of the `test` Method
 
@@ -96,6 +96,23 @@ class SampleUltronFlowTest : UltronTest() {
 
 - **Lifecycle Management:**
   It invokes `beforeTest` and `afterTest` methods around your test logic unless explicitly suppressed.
+
+- **Browsers (js / wasmJs):**
+  `test { }` returns `UltronTestResult`: `Unit` on JVM, Android and Native, a promise in the browser. Return it from the test function, `@Test fun login() = test { go { runUltronUiTest { } } }`, and the same test works on every Compose Multiplatform target: in the browser `test { }` waits for the `runUltronUiTest` started in a block before it runs the next block and `afterTest`, and a failure of the UI code fails the test. Call `runUltronUiTest` once per block.
+
+- **Failures in `beforeTest` and `afterTest`:**
+  If the common `beforeTest` throws, that exception is the test's failure: the `before`, `go` and `after` blocks are skipped, `afterTest` still runs (unless suppressed), test listeners see the test closed with the `beforeTest` exception, and `test` rethrows it. If `afterTest` throws too, its exception is dropped in favour of the original one (it is neither rethrown nor logged); an `afterTest` exception is rethrown only when nothing failed before it.
+  This differs from Ultron 2.6.6 and earlier: there an exception from `beforeTest` left `test` immediately, and `afterTest` did not run.
+
+- **Test Name:**
+  The `name: String? = null` parameter gives the test a human-readable name that reporters receive through `UltronTestListener.beforeTest`. The Allure module for Compose Multiplatform uses it as the test name on every target, ahead of the JVM method name (see [Allure for Compose Multiplatform](./allure-multiplatform-reference.md#ultrontest-lifecycle)).
+  ```kotlin
+  @Test
+  fun loginTest() = test(name = "login with valid credentials") {
+      go { /* ... */ }
+  }
+  ```
+  `name` comes after the two boolean flags, so positional calls written for earlier versions with a trailing lambda, such as `test(true) { }` or `test(true, false) { }`, keep compiling and mean what they meant. The one shape that no longer compiles is a lambda passed as the third positional argument inside the parentheses, `test(false, false, { ... })`: that position is `name` now, so move the lambda outside the parentheses or name it, `configureTestBlock = { ... }`. Pass `name` by name: `test(name = "...") { }` or `test(suppressCommonBefore = true, name = "...") { }`. Binary compatibility is kept as well: the previous three-parameter signature stays as a hidden overload, so test code compiled against an older `ultron-common` keeps running without a rebuild. Because that overload is hidden, Java callers do not see it and use the four-argument form: `test(false, false, null, block)` (or a name instead of `null`).
 ---
 
 ### Purpose of `before`, `go`, and `after`
@@ -161,6 +178,25 @@ class SampleTest {
 - **Manual Verification:** If `failOnException` is set to `false`, you can explicitly verify all caught exceptions at the end of the test using `verifySoftAssertions()`.
 
 This approach ensures granular control over how exceptions are handled and reported, making it easier to analyze and debug test failures.
+
+---
+
+## Listening to the test lifecycle
+
+Register an `UltronTestListener` to observe `test { }` and its `before`, `go` and `after` blocks. Listener exceptions are logged and do not fail the test. Callbacks receive the qualified class name on JVM, Android and Native, and the simple name on JS/Wasm. `beforeTest` also receives the optional test name.
+
+For listeners that track individual executions, use the overloads accepting `ActiveTest`. They identify the invocation even when a timed-out test finishes late. `UltronTestListeners.activeTest` exposes the current invocation, and `ActiveTest.enclosing` identifies a nested call.
+
+```kotlin
+UltronTestListeners.register(object : UltronTestListener {
+    override val id = "timing"
+    override fun afterBlock(testClass: String, block: TestBlock, throwable: Throwable?) {
+        UltronLog.info("$testClass $block finished, failed = ${throwable != null}")
+    }
+})
+```
+
+The Allure module for Compose Multiplatform uses these events to open the report entry at `test { }`, group it under the class and show `before` / `after` as steps; a `test { }` nested in another one joins the outer one's result. See [UltronTest lifecycle](./allure-multiplatform-reference.md#ultrontest-lifecycle) in the Allure Multiplatform reference.
 
 ---
 

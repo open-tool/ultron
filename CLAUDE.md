@@ -15,13 +15,13 @@ Public docs: https://open-tool.github.io/ultron/ — the Docusaurus source is `d
 | `ultron-common` | KMP (android, desktop jvm, ios, macos, js, wasmJs) | Operation execution core, config, listeners, logging, `Page`/`Screen`, `UltronTest` context |
 | `ultron-android` | Android library (JVM only) | Espresso, Espresso Web, UI Automator, RecyclerView support; `UltronConfig` |
 | `ultron-compose` | KMP (same targets as common) | Compose semantics interactions, LazyList/`UltronComposeList`, `UltronComposeConfig`, `runUltronUiTest` |
-| `ultron-allure` | Android library | Allure artifacts generation: screenshots, view hierarchy, steps, listeners, runner |
+| `ultron-allure` | KMP (same targets as common) | Allure reporting behind one `expect`/`actual` `UltronAllureConfig`. `androidMain`: allure-kotlin pipeline for instrumented tests (screenshots, view hierarchy, run listeners, `UltronAllureTestRunner`, `screenrecord` video). `commonMain`: `expect` config, `AllureAttachStrategy`, `step { }`. `skikoMain`: own Allure 2 JSON writer for Compose Multiplatform tests (steps from operations, screenshot/semantics attachments, APNG frame recording in `video/`, `UltronTest` lifecycle); in-memory results on js/wasmJs (collected by `composeApp`'s `collectWasmAllureResults`) |
 | `sample-app` | Android app | Demo app + `androidTest` suite — the real integration tests for `ultron-android`/`ultron-allure` |
 | `composeApp` | KMP app | Demo app + multiplatform tests for `ultron-compose` |
 
-Dependency direction: `ultron-android`, `ultron-compose`, `ultron-allure` all depend on `ultron-common` via `api`. Nothing depends on the sample apps.
+Dependency direction: `ultron-android`, `ultron-compose`, `ultron-allure` all depend on `ultron-common` via `api`; `ultron-allure`'s Skiko source set additionally depends on `ultron-compose` (its Android variant does not). Nothing depends on the sample apps.
 
-Sources live in `src/commonMain|androidMain|jvmMain|nativeMain|jsWasmMain|shared` for KMP modules and `src/main/kotlin` (or `src/main/java` for allure) for the Android-only ones. The `shared` source dir is an extra hand-wired source set — check the module's `build.gradle.kts` before adding files there.
+Sources live in `src/commonMain|androidMain|jvmMain|nativeMain|jsWasmMain|skikoMain|shared` for KMP modules and `src/main/kotlin` for the Android-only one (`ultron-android`). `ultron-common` and `ultron-compose` have an extra hand-wired `shared` source set — check the module's `build.gradle.kts` before adding files there.
 
 ## Build & test commands
 
@@ -36,7 +36,7 @@ Gradle wrapper, JDK 17, `org.gradle.configuration-cache=true` is on.
           compileKotlinIosArm64 compileKotlinIosSimulatorArm64 compileKotlinJs compileKotlinWasmJs
 
 # Unit tests (JVM)
-./gradlew :ultron-compose:test :ultron-android:test :ultron-allure:test
+./gradlew :ultron-compose:test :ultron-android:test :ultron-allure:test :ultron-allure:desktopTest :ultron-common:desktopTest :composeApp:desktopTest :ultron-allure:jsNodeTest
 ./gradlew :ultron-android:test --tests "*SomeTest*"          # single test class
 
 # Multiplatform tests of composeApp

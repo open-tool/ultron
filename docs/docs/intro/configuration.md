@@ -9,6 +9,7 @@ Each library of the framework has it's own config onject.
 - `UltronComposeConfig` - ultron-compose
 - `UltronConfig` - ultron-android
 - `UltronAllureConfig` - ultron-allure
+  `UltronAllureConfig` is one object for every target; its Android-only and Compose-Multiplatform-only members are listed on the [Allure for Compose Multiplatform](../common/allure-multiplatform-reference.md#configuration) page
 - `UltronCommonConfig` - inside each library
 
 You can use recommended configuration and just apply it in **BaseTest** class ([sample](https://github.com/open-tool/ultron/blob/master/sample-app/src/androidTest/java/com/atiurin/sampleapp/tests/BaseTest.kt)) :

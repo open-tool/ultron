@@ -73,6 +73,12 @@
   margin-top: 2rem;
 }
 
+.reportLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+}
+
 .heroInstall {
   max-width: 640px;
   margin: 2.25rem auto 0;
