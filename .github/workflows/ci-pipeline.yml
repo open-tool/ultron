@@ -17,4 +17,7 @@ jobs:
         java-version: '17'
 
     - name: Compile framework
-      run: ./gradlew compileDebugKotlin compileDebugKotlinAndroid compileKotlinDesktop compileKotlinIosArm64 compileKotlinIosSimulatorArm64 compileKotlinJs compileKotlinWasmJs
+      run: ./gradlew compileDebugKotlin compileDebugKotlinAndroid compileKotlinDesktop compileKotlinIosArm64 compileKotlinIosSimulatorArm64 compileKotlinJs compileKotlinWasmJs :sample-app:compileDebugAndroidTestKotlin
+
+    - name: Unit tests
+      run: ./gradlew :ultron-compose:test :ultron-android:test :ultron-allure:test :ultron-allure:desktopTest :ultron-common:desktopTest :composeApp:desktopTest :ultron-allure:jsNodeTest
