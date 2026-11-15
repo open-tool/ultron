@@ -7,6 +7,10 @@ kotlinxCoroutinesCore = "1.10.2"
 kotlinxDatetime = "0.7.1"
 compose-plugin = "1.10.0"
 okio = "3.11.0"
+jcodec = "0.2.5"
+# The skiko that compose-plugin brings; only ultron-allure's desktop tests name it, for the native library.
+skiko = "0.9.37.3"
+kotlinxSerialization = "1.8.1"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -16,6 +20,9 @@ monitor = "1.7.2"
 uiTestJunit4Android = "1.10.0"
 lifecycleCommonJvm = "2.9.2"
 coreKtx = "1.7.0"
+allure-kotlin = "2.4.0"
+espresso = "3.7.0"
+junit = "4.13.2"
 
 [libraries]
 androidx-ui-test-junit4-android = { module = "androidx.compose.ui:ui-test-junit4-android", version.ref = "uiTestJunit4Android" }
@@ -35,6 +42,8 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+jcodec = { module = "org.jcodec:jcodec", version.ref = "jcodec" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
 androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
 androidx-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
@@ -42,6 +51,12 @@ androidx-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecy
 androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-lifecycle-common-jvm = { group = "androidx.lifecycle", name = "lifecycle-common-jvm", version.ref = "lifecycleCommonJvm" }
 androidx-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreKtx" }
+androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
+allure-kotlin-commons = { module = "io.qameta.allure:allure-kotlin-commons", version.ref = "allure-kotlin" }
+allure-kotlin-model = { module = "io.qameta.allure:allure-kotlin-model", version.ref = "allure-kotlin" }
+allure-kotlin-junit4 = { module = "io.qameta.allure:allure-kotlin-junit4", version.ref = "allure-kotlin" }
+allure-kotlin-android = { module = "io.qameta.allure:allure-kotlin-android", version.ref = "allure-kotlin" }
+junit = { module = "junit:junit", version.ref = "junit" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -51,4 +66,5 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 vanniktech-mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.30.0" }

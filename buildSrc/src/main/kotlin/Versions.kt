@@ -13,7 +13,6 @@ object Versions {
     const val composeUiTest = "1.10.0"
     const val androidXTest = "1.7.0"
     const val junit = "4.13.2"
-    const val allure = "2.4.0"
     //sample-app
 
     const val coroutines = "1.4.2"
@@ -52,11 +51,6 @@ object Libs {
     val androidXRunner = "androidx.test:runner:${Versions.androidXTest}"
     val composeUiTest = "androidx.compose.ui:ui-test-junit4:${Versions.composeUiTest}"
     val junit = "junit:junit:${Versions.junit}"
-    // allure
-    val allureCommon = "io.qameta.allure:allure-kotlin-commons:${Versions.allure}"
-    val allureModel = "io.qameta.allure:allure-kotlin-model:${Versions.allure}"
-    val allureJunit4 = "io.qameta.allure:allure-kotlin-junit4:${Versions.allure}"
-    val allureAndroid = "io.qameta.allure:allure-kotlin-android:${Versions.allure}"
 
     // sample-app
     val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"

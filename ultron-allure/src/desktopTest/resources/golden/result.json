@@ -1,0 +1,39 @@
+{
+  "uuid": "11111111-2222-3333-4444-555555555555",
+  "historyId": "4a1c6f2e9b3d7a85",
+  "fullName": "com.example.LoginTest.loginShowsError",
+  "name": "loginShowsError",
+  "status": "failed",
+  "statusDetails": { "message": "Expected 'Error' but was 'Hello'", "trace": "AssertionError: Expected 'Error'\n  at LoginTest.kt:12" },
+  "stage": "finished",
+  "start": 1000,
+  "stop": 2000,
+  "steps": [
+    {
+      "name": "click on button",
+      "status": "passed",
+      "stage": "finished",
+      "start": 1100,
+      "stop": 1200,
+      "steps": [
+        { "name": "wait for idle", "status": "passed", "stage": "finished", "start": 1110, "stop": 1150, "steps": [], "attachments": [] }
+      ],
+      "attachments": []
+    },
+    {
+      "name": "assert text",
+      "status": "failed",
+      "statusDetails": { "message": "Expected 'Error' but was 'Hello'" },
+      "stage": "finished",
+      "start": 1300,
+      "stop": 1900,
+      "steps": [],
+      "attachments": [
+        { "name": "screenshot_assert text", "source": "aaaa-attachment.png", "type": "image/png" }
+      ]
+    }
+  ],
+  "attachments": [],
+  "parameters": [ { "name": "target", "value": "desktop" } ],
+  "labels": [ { "name": "framework", "value": "ultron" } ]
+}

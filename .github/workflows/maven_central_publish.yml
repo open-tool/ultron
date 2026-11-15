@@ -63,7 +63,7 @@ jobs:
           - target: :ultron-common:publishAndReleaseToMavenCentral
           - target: :ultron-compose:publishAndReleaseToMavenCentral
           - target: :ultron-android:publishAndReleaseToMavenCentral
-          - target: :ultron-allure:publishAndReleaseToMavenCentral
+          - target: :ultron-allure:publishAndReleaseToMavenCentral # KMP since 2026-10: publishes the android, desktop, native and web variants
     steps:
       - name: Checkout
         uses: actions/checkout@v4
