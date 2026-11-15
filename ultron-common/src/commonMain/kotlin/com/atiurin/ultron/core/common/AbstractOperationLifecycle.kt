@@ -3,6 +3,7 @@ package com.atiurin.ultron.core.common
 import com.atiurin.ultron.core.config.UltronCommonConfig
 import com.atiurin.ultron.listeners.AbstractListenersContainer
 import com.atiurin.ultron.listeners.UltronLifecycleListener
+import com.atiurin.ultron.log.UltronLog
 
 abstract class AbstractOperationLifecycle : AbstractListenersContainer<UltronLifecycleListener>() {
 
@@ -37,6 +38,21 @@ abstract class AbstractOperationLifecycle : AbstractListenersContainer<UltronLif
         }
         resultHandler(operationResult)
         return operationResult
+    }
+
+    /**
+     * Executors call this between retry iterations; same listener set and exclusions as [execute]. Only the
+     * [UltronLifecycleListener.betweenRetries] call is guarded: a listener that throws there is logged with its
+     * stack trace and skipped, because the hook runs inside the retry loop, where an exception would abort the
+     * operation being waited for. The guard is `runCatching`, so it swallows `Error`s too (an `OutOfMemoryError`
+     * from a screenshot, an `AssertionError`), not only exceptions. The other listener callbacks are not guarded.
+     */
+    fun notifyBetweenRetries(operation: Operation) {
+        if (operation.type in UltronCommonConfig.operationsExcludedFromListeners || !UltronCommonConfig.isListenersOn) return
+        (getListeners() + UltronCommonConfig.getListeners()).forEach { listener ->
+            runCatching { listener.betweenRetries(operation) }
+                .onFailure { UltronLog.error("Listener '${listener.id}' failed between retries of '${operation.name}'", it) }
+        }
     }
 
 }
