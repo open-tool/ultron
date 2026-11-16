@@ -246,24 +246,27 @@ getDrawable() : Drawable?
 And you are able to get any other property. There is an example how it could be done - [GetTextAction](https://github.com/open-tool/ultron/blob/master/ultron-android/src/main/kotlin/com/atiurin/ultron/custom/espresso/action/GetTextAction.kt)
 ### Native scrolling and dismissal
 
-Import `com.atiurin.ultron.extensions.scrollDown`, `scrollUp`, or `dismiss` to invoke the
-widget's accessibility action through the normal Espresso operation pipeline:
+`scrollDown()`, `scrollUp()` and `dismiss()` invoke the accessibility action of the matched
+view itself through the normal Ultron operation pipeline:
 
 ```kotlin
 withId(R.id.settings_list).scrollDown()
 withId(R.id.settings_list).scrollUp()
-withId(R.id.design_bottom_sheet).dismiss()
+isAssignableFrom(Snackbar.SnackbarLayout::class.java).dismiss()
 ```
 
-These extensions support `Matcher<View>`, `ViewInteraction`, `DataInteraction`,
-`UltronEspressoInteraction`, `UltronRecyclerView`, and `UltronRecyclerViewItem`.
-Existing interaction roots, timeouts, result handlers and listeners are preserved.
-Scrolling advances one native widget page in the requested vertical direction; it is
-not a swipe gesture or `scrollTo()` an element. Horizontal-only widgets are rejected.
+They are available for `Matcher<View>`, `ViewInteraction`, `DataInteraction`,
+`UltronEspressoInteraction`, `UltronRecyclerView` and `UltronRecyclerViewItem`.
 
-The matched widget is preferred. Otherwise a single visible descendant exposing the
-action is used, then the nearest supporting ancestor (for example, a sheet containing
-the matched content). Multiple candidates, an unavailable action (including a scroll
-boundary), or a widget rejecting the action produce an operation failure. Dismissal
-requires a widget that exposes `ACTION_DISMISS`, such as a dismissible bottom sheet;
-it does not fall back to Back or an outside tap.
+- The action is performed on the matched view only. Match the scrollable widget or the
+  dismissible widget itself (e.g. the Snackbar layout or the bottom sheet), not its content.
+- `scrollDown()` / `scrollUp()` scroll vertically. How far is defined by the widget (a
+  `RecyclerView` scrolls about one screen). It is neither a swipe gesture nor `scrollTo()`.
+  Horizontal-only widgets are not supported.
+- `dismiss()` requires a widget that exposes `ACTION_DISMISS`. It does not fall back to
+  Back or an outside tap.
+
+The operation fails with a distinct message when the view cannot scroll further in the
+requested direction (the list boundary), when it does not expose the action, or when the
+widget rejects it. As any other Ultron action it is retried until the operation timeout
+expires; use `withTimeout(..)` to fail faster at a known boundary.

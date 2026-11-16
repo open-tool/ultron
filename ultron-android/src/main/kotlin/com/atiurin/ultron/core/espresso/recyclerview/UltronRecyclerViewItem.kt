@@ -125,6 +125,9 @@ open class UltronRecyclerViewItem {
     fun swipeLeft() = apply { this.getInteraction().swipeLeft() }
     fun swipeRight() = apply { this.getInteraction().swipeRight() }
     fun swipeUp() = apply { this.getInteraction().swipeUp() }
+    fun scrollDown() = apply { this.getInteraction().scrollDown() }
+    fun scrollUp() = apply { this.getInteraction().scrollUp() }
+    fun dismiss() = apply { this.getInteraction().dismiss() }
     fun perform(action: ViewAction) = apply { this.getInteraction().perform(action) }
 
     //assertions

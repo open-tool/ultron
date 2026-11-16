@@ -80,6 +80,9 @@ fun Matcher<View>.swipeRight() = UltronEspressoInteraction(onView(this)).swipeRi
 fun Matcher<View>.swipeUp() = UltronEspressoInteraction(onView(this)).swipeUp()
 fun Matcher<View>.swipeDown() = UltronEspressoInteraction(onView(this)).swipeDown()
 fun Matcher<View>.scrollTo() = UltronEspressoInteraction(onView(this)).scrollTo()
+fun Matcher<View>.scrollDown() = UltronEspressoInteraction(onView(this)).scrollDown()
+fun Matcher<View>.scrollUp() = UltronEspressoInteraction(onView(this)).scrollUp()
+fun Matcher<View>.dismiss() = UltronEspressoInteraction(onView(this)).dismiss()
 fun Matcher<View>.perform(viewAction: ViewAction, description: String = "") =
     UltronEspressoInteraction(onView(this)).perform(viewAction, description)
 
