@@ -14,7 +14,7 @@ pluginManagement {
 }
 
 
-//rootProject.name = "Ultron"
+rootProject.name = "ultron"
 include(":sample-app")
 include(":ultron-android")
 include(":ultron-compose")

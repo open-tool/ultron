@@ -13,7 +13,7 @@ build/
 /captures
 .externalNativeBuild
 /allure-results
-/.kotlin
+.kotlin/
 
 # Xcode
 xcuserdata/

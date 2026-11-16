@@ -17,12 +17,16 @@ import com.atiurin.ultron.extensions.withAssertion
 import com.atiurin.ultron.extensions.withTimeout
 import com.atiurin.ultron.extensions.withUseUnmergedTree
 import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @OptIn(ExperimentalTestApi::class)
 class BaseInteractionTest {
+    @BeforeTest
+    fun allure() = AllureTestSetup.ensure()
+
     @Test
     fun test() = runUltronUiTest {
         setContent {

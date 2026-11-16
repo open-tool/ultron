@@ -17,8 +17,31 @@ fun runDesktopUltronUiTest(
     runTestContext: CoroutineContext = EmptyCoroutineContext,
     testTimeout: Duration = Duration.INFINITE,
     block: suspend SkikoComposeUiTest.() -> Unit
-): TestResult {
-    return runSkikoComposeUiTest(
+): TestResult = runDesktopUltronUiTestNamed(null, width, height, effectContext, runTestContext, testTimeout, block)
+
+/** Same as [runDesktopUltronUiTest], with an explicit [testName] handed to registered [UltronTestRunHook]s. */
+@OptIn(ExperimentalTestApi::class)
+fun runDesktopUltronUiTest(
+    testName: String,
+    width: Int = 1024,
+    height: Int = 768,
+    effectContext: CoroutineContext = EmptyCoroutineContext,
+    runTestContext: CoroutineContext = EmptyCoroutineContext,
+    testTimeout: Duration = Duration.INFINITE,
+    block: suspend SkikoComposeUiTest.() -> Unit
+): TestResult = runDesktopUltronUiTestNamed(testName, width, height, effectContext, runTestContext, testTimeout, block)
+
+@OptIn(ExperimentalTestApi::class)
+private fun runDesktopUltronUiTestNamed(
+    testName: String?,
+    width: Int,
+    height: Int,
+    effectContext: CoroutineContext,
+    runTestContext: CoroutineContext,
+    testTimeout: Duration,
+    block: suspend SkikoComposeUiTest.() -> Unit
+): TestResult =
+    runSkikoComposeUiTest(
         size = Size(width.toFloat(), height.toFloat()),
         effectContext = effectContext,
         runTestContext = runTestContext,
@@ -31,6 +54,5 @@ fun runDesktopUltronUiTest(
                 density = this.density
             )
         )
-        this.block()
+        UltronTestRunHooks.around(testName) { this.block() }
     }
-}

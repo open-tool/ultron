@@ -39,5 +39,8 @@ enum class MimeType(val extension: String, val value: String) {
     /** YAML */
     YAML(".yaml", "text/yaml"),
 
-    XML(".xml", "text/xml")
+    XML(".xml", "text/xml"),
+
+    /** MP4 video (H.264), the type Allure plays inline. Last, so the ordinals of the older entries stay. */
+    VIDEO_MP4(".mp4", "video/mp4")
 }

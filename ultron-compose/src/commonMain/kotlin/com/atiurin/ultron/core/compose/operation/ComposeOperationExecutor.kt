@@ -21,6 +21,7 @@ internal class ComposeOperationExecutor(
         withComposeTestEnvironment { testEnvironment ->
             UltronComposeConfig.doBetweenOperationRetry(operation, testEnvironment)
         }
+        UltronComposeOperationLifecycle.notifyBetweenRetries(operation)
     }
     override var isExceptionAllowed: (exception: Throwable) -> Boolean = { exception ->
         UltronComposeConfig.isExceptionAllowed(exception)

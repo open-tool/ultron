@@ -1,3 +1,4 @@
+import java.util.Base64
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
@@ -12,6 +13,23 @@ plugins {
 }
 
 kotlin {
+    // Allure test configuration differs per platform (see AllureTestSetup): `skikoTest` holds the actual for
+    // desktop, iOS, js and wasmJs, `androidSharedTest` the one shared by the Android unit and instrumented
+    // test source sets. Extending the template keeps the default iosMain/iosTest wiring intact.
+    applyDefaultHierarchyTemplate {
+        common {
+            group("skiko") {
+                withJvm()
+                withNative()
+                withJs()
+                withWasmJs()
+            }
+            group("androidShared") {
+                withAndroidTarget()
+            }
+        }
+    }
+
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
@@ -35,7 +53,14 @@ kotlin {
         }
     }
     js(IR){
-        browser()
+        browser {
+            testTask(Action {
+                useKarma {
+                    useChromeHeadless()
+                    useConfigDirectory(project.projectDir.resolve("karma.config.d").resolve("js"))
+                }
+            })
+        }
     }
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs(){
@@ -71,6 +96,10 @@ kotlin {
             implementation(libs.compose.ui.test)
             implementation(kotlin("test"))
             implementation(project(":ultron-compose"))
+            implementation(project(":ultron-allure"))
+        }
+        iosTest.dependencies {
+            implementation(libs.okio) // reads Allure results back from the host directory
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -84,6 +113,7 @@ kotlin {
         @OptIn(ExperimentalWasmDsl::class)
         wasmJs()
         val wasmJsTest by getting
+
     }
 }
 
@@ -132,6 +162,55 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 
+
+// The Allure results directories are outputs of the test tasks: with org.gradle.caching=true an UP-TO-DATE or
+// FROM-CACHE test task runs no test, and without the declaration it would also leave no results behind.
+// Each target has its own subdirectory of build/allure-results and declares only that one: declaring the parent
+// would overlap with the other targets' outputs, which disables caching and makes the tasks stale for each other.
+tasks.named<Test>("desktopTest") {
+    val results = layout.buildDirectory.dir("allure-results/desktop")
+    environment("ULTRON_ALLURE_RESULTS_DIR", results.get().asFile.absolutePath)
+    outputs.dir(results)
+}
+
+// Kotlin/Native simulator tests run through `simctl spawn`, which forwards only SIMCTL_CHILD_* variables.
+tasks.withType<org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest>().configureEach {
+    val results = layout.buildDirectory.dir("allure-results/ios")
+    environment("SIMCTL_CHILD_ULTRON_ALLURE_RESULTS_DIR", results.get().asFile.absolutePath)
+    outputs.dir(results)
+}
+
+// Browser tests keep Allure results in memory and print every file to the console the moment it is written
+// (see karma.config.d/<target>); Karma stores the console in build/karma-console-<target>.log and the
+// collect task decodes the lines back into files. Karma appends to that log, so the test task starts from an
+// empty one, and the collect task starts from an empty directory: a run never shows results of an earlier one.
+listOf("js" to "jsBrowserTest", "wasm" to "wasmJsBrowserTest").forEach { (target, browserTestTask) ->
+    // Karma's basePath lives under the root project's build dir, so the config.d script writes there.
+    val log = rootProject.layout.buildDirectory.file("karma-console-$target.log")
+    val collect = tasks.register("collect${target.replaceFirstChar { it.uppercase() }}AllureResults") {
+        val out = layout.buildDirectory.dir("allure-results/$target")
+        inputs.files(log).optional()
+        outputs.dir(out)
+        doLast {
+            val source = log.get().asFile
+            val targetDir = out.get().asFile.apply { deleteRecursively(); mkdirs() }
+            if (!source.isFile) { logger.lifecycle("No Karma console log at $source, nothing to collect"); return@doLast }
+            val line = Regex("ULTRON_ALLURE_RESULT (\\S+) ([A-Za-z0-9+/=]+)")
+            val written = mutableSetOf<String>()
+            source.forEachLine { l ->
+                line.find(l)?.let { m ->
+                    targetDir.resolve(m.groupValues[1]).writeBytes(Base64.getDecoder().decode(m.groupValues[2]))
+                    written += m.groupValues[1]
+                }
+            }
+            logger.lifecycle("Collected ${written.size} Allure result files from the browser into $targetDir")
+        }
+    }
+    tasks.matching { it.name == browserTestTask }.configureEach {
+        doFirst { log.get().asFile.delete() }
+        finalizedBy(collect)
+    }
+}
 
 compose.desktop {
     application {

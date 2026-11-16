@@ -130,7 +130,7 @@ const ARTIFACTS = [
   {
     name: 'ultron-allure',
     description:
-      'Allure report artifacts: steps, screenshots and view hierarchy on failure.',
+      'Allure reports on every target: Android instrumented tests and Compose Multiplatform tests on desktop, iOS, macOS and web.',
     to: '/docs/common/allure',
   },
 ];
@@ -325,12 +325,16 @@ function AllureSection() {
           <div>
             <span className={styles.eyebrow}>Reporting</span>
             <Heading as="h2" className={styles.sectionTitle}>
-              Allure report out of the box
+              Allure report out of the box, on every platform
             </Heading>
             <p className={styles.sectionSubtitle}>
-              Add <code>ultron-allure</code>, apply the recommended config and
-              every operation becomes a report step — with screenshots, view
-              hierarchy and logs attached on failure. No manual instrumentation.
+              <code>ultron-allure</code> is a Kotlin Multiplatform library: one
+              artifact and one <code>UltronAllureConfig</code> for Android
+              instrumented tests and for Compose Multiplatform tests on desktop,
+              iOS, macOS, js and wasmJs. Apply the recommended config and every
+              operation becomes a report step — with screenshots, semantics or
+              view hierarchy and a video of the test attached on failure. No
+              manual instrumentation.
             </p>
             <CodeBlock language="kotlin">
               {`@BeforeClass
@@ -341,9 +345,14 @@ fun setConfig() {
     UltronComposeConfig.applyRecommended()
 }`}
             </CodeBlock>
-            <Link className={styles.textLink} to="/docs/common/allure">
-              Read the Allure guide →
-            </Link>
+            <div className={styles.reportLinks}>
+              <Link className={styles.textLink} to="/docs/common/allure">
+                Allure for Android →
+              </Link>
+              <Link className={styles.textLink} to="/docs/common/allure-multiplatform">
+                Allure for Compose Multiplatform →
+              </Link>
+            </div>
           </div>
         </div>
       </div>

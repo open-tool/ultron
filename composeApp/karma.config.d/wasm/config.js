@@ -3,10 +3,19 @@
 
 const path = require("path");
 
-config.browserConsoleLogOptions.level = "debug";
-
 const basePath = config.basePath;
 const projectPath = path.resolve(basePath, "..", "..", "..", "..");
+
+// Browser console goes to a file as well: Ultron Allure results have no file system in the browser and
+// are printed as `ULTRON_ALLURE_RESULT <file> <base64>` lines, which `collectWasmAllureResults` decodes.
+config.browserConsoleLogOptions = {
+    level: "debug",
+    terminal: false, // multi-megabyte base64 lines belong in the file, not in Gradle's stdout
+    path: path.resolve(projectPath, "build", "karma-console-wasm.log"),
+};
+// The video sample deliberately runs for several seconds; mocha's default per-test timeout is 2 s.
+config.client = config.client || {};
+config.client.mocha = Object.assign({}, config.client.mocha, {timeout: 60000});
 const generatedAssetsPath = path.resolve(projectPath, "build", "karma-webpack-out")
 
 const debug = message => console.log(`[karma-config] ${message}`);
