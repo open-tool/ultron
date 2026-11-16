@@ -2,6 +2,7 @@ package com.atiurin.ultron.core.espresso
 
 import android.graphics.Rect
 import android.view.View
+import android.view.accessibility.AccessibilityNodeInfo
 import androidx.test.espresso.DataInteraction
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.Root
@@ -18,6 +19,7 @@ import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
+import com.atiurin.ultron.custom.espresso.action.NativeAccessibilityAction
 import com.atiurin.ultron.core.common.CommonOperationType
 import com.atiurin.ultron.core.common.DefaultElementInfo
 import com.atiurin.ultron.core.common.ElementInfo
@@ -465,6 +467,36 @@ class UltronEspressoInteraction<T>(
             name = "ScrollTo with '${elementInfo.name}'",
             type = EspressoActionType.SCROLL,
             description = "${interaction.simpleClassName()} action '${EspressoActionType.SCROLL}' of '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
+        )
+    }
+
+    /** Scrolls the matched View one step down using its own accessibility action. It's not a swipe gesture. */
+    fun scrollDown() = apply {
+        executeAction(
+            operationBlock = getInteractionActionBlock(NativeAccessibilityAction(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD, "scroll down")),
+            name = "ScrollDown with '${elementInfo.name}'",
+            type = EspressoActionType.SCROLL,
+            description = "${interaction.simpleClassName()} action 'SCROLL_DOWN' of '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
+        )
+    }
+
+    /** Scrolls the matched View one step up using its own accessibility action. It's not a swipe gesture. */
+    fun scrollUp() = apply {
+        executeAction(
+            operationBlock = getInteractionActionBlock(NativeAccessibilityAction(AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD, "scroll up")),
+            name = "ScrollUp with '${elementInfo.name}'",
+            type = EspressoActionType.SCROLL,
+            description = "${interaction.simpleClassName()} action 'SCROLL_UP' of '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
+        )
+    }
+
+    /** Dismisses the matched View (e.g. Snackbar, dismissible bottom sheet) using its own accessibility action. */
+    fun dismiss() = apply {
+        executeAction(
+            operationBlock = getInteractionActionBlock(NativeAccessibilityAction(AccessibilityNodeInfo.ACTION_DISMISS, "dismiss")),
+            name = "Dismiss '${elementInfo.name}'",
+            type = EspressoActionType.DISMISS,
+            description = "${interaction.simpleClassName()} action '${EspressoActionType.DISMISS}' of '${elementInfo.name}' with root '${getInteractionRootMatcher()}' during ${getActionTimeout()} ms"
         )
     }
 

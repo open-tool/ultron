@@ -403,6 +403,12 @@ open class UltronRecyclerView(
         )
     }
 
+    /** Scrolls the list one step down using RecyclerView's own accessibility action. */
+    open fun scrollDown() = apply { recyclerViewInteraction.withTimeout(getTimeout()).scrollDown() }
+    /** Scrolls the list one step up using RecyclerView's own accessibility action. */
+    open fun scrollUp() = apply { recyclerViewInteraction.withTimeout(getTimeout()).scrollUp() }
+    open fun dismiss() = apply { recyclerViewInteraction.withTimeout(getTimeout()).dismiss() }
+
     open fun isDisplayed() = apply { recyclerViewInteraction.withTimeout(getTimeout()).isDisplayed() }
     open fun isNotDisplayed() =
         apply { recyclerViewInteraction.withTimeout(getTimeout()).isNotDisplayed() }

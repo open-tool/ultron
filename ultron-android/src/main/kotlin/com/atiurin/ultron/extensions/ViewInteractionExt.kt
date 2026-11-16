@@ -101,6 +101,9 @@ fun ViewInteraction.swipeRight() = UltronEspressoInteraction(this).swipeRight()
 fun ViewInteraction.swipeUp() = UltronEspressoInteraction(this).swipeUp()
 fun ViewInteraction.swipeDown() = UltronEspressoInteraction(this).swipeDown()
 fun ViewInteraction.scrollTo() = UltronEspressoInteraction(this).scrollTo()
+fun ViewInteraction.scrollDown() = UltronEspressoInteraction(this).scrollDown()
+fun ViewInteraction.scrollUp() = UltronEspressoInteraction(this).scrollUp()
+fun ViewInteraction.dismiss() = UltronEspressoInteraction(this).dismiss()
 fun ViewInteraction.perform(viewAction: ViewAction, description: String = "") =
     UltronEspressoInteraction(this).perform(viewAction, description)
 

@@ -34,6 +34,9 @@ swipeRight()
 swipeUp()
 swipeDown()
 scrollTo()
+scrollDown()
+scrollUp()
+dismiss()
 perform(viewAction: ViewAction)          // execute custom espresso action as Ultron one
 perform(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> Unit)
 <T> execute(params: UltronEspressoActionParams? = null, block: (uiController: UiController, view: View) -> T): T
@@ -241,3 +244,29 @@ getContentDescription() : String?
 getDrawable() : Drawable?
 ```
 And you are able to get any other property. There is an example how it could be done - [GetTextAction](https://github.com/open-tool/ultron/blob/master/ultron-android/src/main/kotlin/com/atiurin/ultron/custom/espresso/action/GetTextAction.kt)
+### Native scrolling and dismissal
+
+`scrollDown()`, `scrollUp()` and `dismiss()` invoke the accessibility action of the matched
+view itself through the normal Ultron operation pipeline:
+
+```kotlin
+withId(R.id.settings_list).scrollDown()
+withId(R.id.settings_list).scrollUp()
+isAssignableFrom(Snackbar.SnackbarLayout::class.java).dismiss()
+```
+
+They are available for `Matcher<View>`, `ViewInteraction`, `DataInteraction`,
+`UltronEspressoInteraction`, `UltronRecyclerView` and `UltronRecyclerViewItem`.
+
+- The action is performed on the matched view only. Match the scrollable widget or the
+  dismissible widget itself (e.g. the Snackbar layout or the bottom sheet), not its content.
+- `scrollDown()` / `scrollUp()` scroll vertically. How far is defined by the widget (a
+  `RecyclerView` scrolls about one screen). It is neither a swipe gesture nor `scrollTo()`.
+  Horizontal-only widgets are not supported.
+- `dismiss()` requires a widget that exposes `ACTION_DISMISS`. It does not fall back to
+  Back or an outside tap.
+
+The operation fails with a distinct message when the view cannot scroll further in the
+requested direction (the list boundary), when it does not expose the action, or when the
+widget rejects it. As any other Ultron action it is retried until the operation timeout
+expires; use `withTimeout(..)` to fail faster at a known boundary.
